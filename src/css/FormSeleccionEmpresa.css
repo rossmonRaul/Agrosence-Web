@@ -1,0 +1,19 @@
+.custom-select {
+    width: 100%;
+    padding: 0.375rem 2.25rem 0.375rem 0.75rem;
+    font-size: 1rem;
+    line-height: 1.5;
+    border: 1px solid #ced4da;
+    border-radius: 0.25rem;
+    background-color: #fff;
+    margin-bottom: 20px;
+
+}
+
+.form-container-fse {
+
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: left;
+}
