@@ -2,12 +2,13 @@ import React, { useState } from 'react';
 import Paso1 from '../crearCuenta/DatosPersonales.tsx';
 import Paso2 from '../crearCuenta/DatosEmpresa.tsx';
 import { InsertarUsuario } from '../../servicios/ServicioUsuario.ts';
+import Swal from 'sweetalert2';
 
 
 const CrearCuentaMultipaso: React.FC = () => {
   const [step, setStep] = useState<number>(1);
   const [formData, setFormData] = useState<any>({
-    usuario: '',
+    identificacion: '',
     email: '',
     contrasena: '',
     contrasenaConfirmar: '',
@@ -35,7 +36,7 @@ const CrearCuentaMultipaso: React.FC = () => {
 
   const handleSubmit = async () => {
     const datos = {
-      usuario: formData.usuario,
+      identificacion: formData.identificacion,
       correo: formData.email,
       contrasena: formData.contrasena,
       idEmpresa: formData.empresa,
@@ -44,9 +45,22 @@ const CrearCuentaMultipaso: React.FC = () => {
     };
 
     const resultado = await InsertarUsuario(datos);
-    console.log("Agregar");
-    console.log(resultado);
 
+
+    if(parseInt(resultado.indicador) === 0){
+      Swal.fire({
+        icon: 'success',
+        title: '¡Gracias por su registro! ',
+        text: 'Cuenta creada con éxito.',
+      });
+    }else{
+      Swal.fire({
+        icon: 'error',
+        title: 'Error al crear la cuenta.',
+        text: resultado.mensaje,
+      });
+    };
+    
   };
 
   switch (step) {

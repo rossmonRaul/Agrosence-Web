@@ -2,6 +2,7 @@
 import './App.css'
 //import { InsertarUsuario, ObtenerUsuarios } from './servicios/ServicioUsuario';
 import Login from './pages/LoginPage';
+import { ProveedorUsuarios } from './context/ContextoUsuario';
 
 
 
@@ -54,8 +55,10 @@ function App() {
   );*/
 
   return (
-    
+    <ProveedorUsuarios>
       <Login />
+    </ProveedorUsuarios>
+      
      
     
   );
