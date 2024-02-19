@@ -1,68 +1,48 @@
-//import React, { useState, ChangeEvent } from 'react';
 import './App.css'
-//import { InsertarUsuario, ObtenerUsuarios } from './servicios/ServicioUsuario';
-import Login from './pages/LoginPage';
-import { ProveedorUsuarios } from './context/ContextoUsuario';
+import { BrowserRouter, Navigate, Route } from 'react-router-dom';
+import { PrivateRoutes, PublicRoutes } from './models/routes';
+import { AuthGuard, RolGuard } from './guards';
+import { RoutesWithNotFound } from './utilities';
+import { Suspense, lazy } from 'react';
+import { Provider } from 'react-redux';
+import Store from './redux/Store';
+import { Roles } from './models';
+import { Dashboard } from './pages/private';
+import { Spinner } from 'reactstrap';
 
 
+const Login = lazy(() => import('./pages/LoginPage'));
+const Private = lazy(() => import('./pages/private/Private'));
+const AdministacionAdministradores = lazy(() => import('./pages/private/CrearUsuarioSA/CrearUsuarioSA'))
 
 function App() {
-  /*
-  const [count, setCount] = useState<number>(0);
-  const [usuarios, setUsuarios] = useState<any[]>([]);
-  const [ValorInput, setValorInput] = useState<string>('');
-
-
-  const handleInputChange = (event: ChangeEvent<HTMLInputElement>) => {
-    setValorInput(event.target.value);
-  };
-
-  const handleClick = async () => {
-    try {
-      const resultado = await ObtenerUsuarios();
-      setUsuarios(resultado);
-      console.log(resultado);
-    } catch (error) {
-      console.error('Error al obtener usuarios:', error);
-    }
-  };
-
-  const onClickAgregar = async () => {
-    var Nombre = ValorInput;
-    const datos = {
-      Nombre: Nombre
-    };
-    const resultado = await InsertarUsuario(datos);
-    console.log("Agregar");
-    console.log(resultado);
-    console.log("Agregar");ñ
-  };
-
   return (
-    <>
-      <div className="card">
-        <button onClick={onClickAgregar}>
-          Agregar
-        </button>
-        <input type="text" name="AgregarNombre" id="AgregarNombre" value={ValorInput} onChange={handleInputChange} />
-      </div>
-      <div className="card">
-        <button onClick={handleClick}>
-          obtener
-        </button>
-      </div>
-    </>
-  );*/
+    <Suspense fallback={<Spinner color="success">Cargando...</Spinner>}>
+      <Provider store={Store}>
+    <BrowserRouter>
 
-  return (
-    <ProveedorUsuarios>
-      <Login />
-    </ProveedorUsuarios>
-      
-     
+    <RoutesWithNotFound>
+        <Route path="/" element={<Navigate to={PrivateRoutes.PRIVATE} />} />
+        <Route path={PublicRoutes.LOGIN} element={<Login />} />
     
-  );
+        
+        
+        <Route element={<AuthGuard privateValidation={true} />}>
+          <Route path={`${PrivateRoutes.PRIVATE}/*`} element={<Private />} />
+        </Route>
 
+        <Route element={<RolGuard rol={Roles.SuperAdmin} />}>
+            <Route path={PrivateRoutes.DASHBOARD} element={<Dashboard />} />
+            <Route path={PrivateRoutes.CREARUSUARIOSA} element={<AdministacionAdministradores />} />
+        </Route>
+        
+      
+      </RoutesWithNotFound>
+     
+    </BrowserRouter>
+    </Provider>
+    </Suspense>
+  );
 }
 
 export default App;

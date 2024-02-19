@@ -1,11 +1,17 @@
 // Código JSX para la página de login
-import React, { useState } from 'react';
-import { FormGroup, Label, Input, Button, Col, FormFeedback} from 'reactstrap';
-import CrearCuentaMultipaso from '../components/crearCuenta/CrearCuentaMultiPaso.tsx'; // Importa el componente de creación de cuenta
+import React, { useEffect, useState } from 'react';
+import { FormGroup, Label, Input, Button, Col, FormFeedback } from 'reactstrap';
 import '../css/LoginPage.css';
 import { ValidarUsuario } from '../servicios/ServicioUsuario.ts';
-import { useUser } from '../context/ContextoUsuario.tsx'; 
 import Swal from 'sweetalert2';
+import { useDispatch } from 'react-redux';
+import { UserKey, createUser, resetUser } from '../redux/state/User.ts';
+import { useNavigate } from 'react-router-dom';
+import { clearLocalStorage } from '../utilities/LocalStorageUtility.tsx';
+import { PrivateRoutes, PublicRoutes } from '../models/routes.ts';
+import CrearCuentaUsuario from '../components/crearcuentausuario/CrearCuentaUsuario.tsx';
+
+
 
 interface FormData {
   usuario: string;
@@ -18,15 +24,15 @@ const FormularioInicioSesion: React.FC<{
   toggleForm: () => void;
   formData: FormData;
   handleInputChange: (event: React.ChangeEvent<HTMLInputElement>) => void;
-  handleInputBlur: (fieldName: string) => void; 
-  errors: Record<string, string>; 
+  handleInputBlur: (fieldName: string) => void;
+  errors: Record<string, string>;
 }> = ({ onSubmit, toggleForm, formData, handleInputChange, handleInputBlur, errors }) => {
   const handleSubmit = (event: React.FormEvent) => {
     event.preventDefault();
     onSubmit(formData);
   };
 
-  
+
 
   return (
     <>
@@ -80,7 +86,7 @@ const FormularioInicioSesion: React.FC<{
 };
 
 const FormularioCrearCuenta: React.FC<{
- 
+
   toggleForm: () => void;
   formData: FormData;
   handleInputChange: (event: React.ChangeEvent<HTMLInputElement>) => void;
@@ -89,11 +95,11 @@ const FormularioCrearCuenta: React.FC<{
     event.preventDefault();
     toggleForm();
   };
-  
+
   return (
     <>
       <form onSubmit={handleSubmit}>
-        <CrearCuentaMultipaso/>
+        <CrearCuentaUsuario  toggleForm={toggleForm}/>
       </form>
       <div className='container-btn-crear-iniciar'>
         <p >¿Ya tienes una cuenta? <Button color="link" onClick={toggleForm}>Iniciar Sesión</Button></p>
@@ -110,16 +116,21 @@ const Login: React.FC = () => {
   });
 
   const [isLoggedIn, setIsLoggedIn] = useState(false);
-  const { setUser } = useUser();
+
+  useEffect(() => {
+    clearLocalStorage(UserKey);
+    dispatch(resetUser());
+    navigate(`/${PublicRoutes.LOGIN}`, { replace: true });
+  }, []);
+
+  const dispatch = useDispatch();
+  const navigate = useNavigate();
 
   const toggleForm = () => {
-    localStorage.removeItem('selectedEmpresa');
-    localStorage.removeItem('selectedFinca');
-    localStorage.removeItem('selectedParcela');
     setFormData(prevState => ({
       ...prevState,
       mostrarCrearCuenta: !prevState.mostrarCrearCuenta
-      
+
     }));
   };
 
@@ -131,7 +142,7 @@ const Login: React.FC = () => {
     }));
   };
 
-  const [errors, setErrors] = useState<Record<string, string>>({ usuario: '', contrasena: ''});
+  const [errors, setErrors] = useState<Record<string, string>>({ usuario: '', contrasena: '' });
 
   const handleSubmitConValidacion = () => {
     // Validar campos antes de enviar los datos al servidor
@@ -175,38 +186,37 @@ const Login: React.FC = () => {
       identificacion: formData.usuario,
       contrasena: formData.contrasena
     };
-  
-    console.log('Datos del formulario de inicio de sesión:', formDataLogin);
-    
-    const usuarioEncontrado = await ValidarUsuario(formDataLogin);
-  
-    if (usuarioEncontrado.mensaje === "Usuario no encontrado.") {
-      Swal.fire({
-        icon: 'error',
-        text: 'Credenciales incorrectas',
-      });
-    }else if (usuarioEncontrado.mensaje === "Usuario encontrado.") {
-      setIsLoggedIn(true);
-      setUser({
-        identificacion: usuarioEncontrado.usuario,
-        email: usuarioEncontrado.correo,
-        idFinca: usuarioEncontrado.idFinca,
-        idParcela: usuarioEncontrado.idParcela,
-        idEmpresa: usuarioEncontrado.idEmpresa
-      });
-    }else{
-      Swal.fire({
-        icon: 'error',
-        title: '¡Oops!',
-        text: usuarioEncontrado.mensaje,
-      });
+
+    try {
+      const usuarioEncontrado = await ValidarUsuario(formDataLogin);
+
+      if (usuarioEncontrado.mensaje === "Usuario no encontrado.") {
+        Swal.fire({
+          icon: 'error',
+          text: 'Credenciales incorrectas',
+        });
+      } else if (usuarioEncontrado.mensaje === "Usuario encontrado.") {
+        dispatch(createUser(usuarioEncontrado))
+        navigate(`/${PrivateRoutes.PRIVATE}`, { replace: true });
+        setIsLoggedIn(true);
+      } else {
+        Swal.fire({
+          icon: 'error',
+          title: '¡Oops!',
+          text: usuarioEncontrado.mensaje,
+        });
+      }
+    } catch (error) {
+
     }
+
   };
-  
+
 
 
   return (
-    <div className="container">
+    <div className={`container ${isLoggedIn ? '' : 'login-bg'}`}>
+    <div className="container-lg">
       <div className="form-container">
         {formData.mostrarCrearCuenta ? (
           <FormularioCrearCuenta
@@ -225,6 +235,7 @@ const Login: React.FC = () => {
           />
         )}
       </div>
+    </div>
     </div>
   );
 };

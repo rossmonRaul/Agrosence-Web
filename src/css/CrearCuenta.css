@@ -1,0 +1,45 @@
+.btn-styled {
+    border-radius: 5px;
+    padding: 8px 16px;
+    background-color: #548454;
+    border: 1px solid #548454;
+    color: #fff;
+    width: calc(100% - 0px);
+    cursor: pointer;
+    transition: background-color 0.3s ease-in-out;
+   margin-top: 5px;
+}
+
+.invalid-feedback {
+    /* Estilos para el mensaje de error */
+    display: block;
+    width: 100%;
+    font-size: 80%;
+    color: #dc3545;
+    margin-top: -15px;
+    margin-bottom: 2px;
+}
+
+
+.input-styled {
+    /* Estilos base para los inputs */
+    border-radius: 5px;
+    border: 1px solid #548454;
+    min-height: 25px;
+    width: calc(100% - 0px);
+    box-sizing: border-box;
+    padding: 8px;
+    color: #000;
+    margin-bottom: 20px;
+
+    line-height: 1.5;
+
+    background-color: #fff;
+    background-clip: padding-box;
+    transition: border-color 0.15s ease-in-out, box-shadow 0.15s ease-in-out;
+}
+
+.input-error {
+    /* Estilos para resaltar los inputs con errores */
+    border-color: #dc3545 !important;
+}
