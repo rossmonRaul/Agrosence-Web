@@ -9,26 +9,29 @@ import '../../css/FormSeleccionEmpresa.css'
 interface Option {
     idEmpresa: number;
     nombre: string;
+    contrasena: string,
+    contrasenaConfirmar: string
 }
 
 interface AdministradorSeleccionadoProps {
     identificacion: string;
-    correo: string;
     empresa: string;
+    onEdit: () => void;
 }
 
-const EditarCuentaAdministrador: React.FC<AdministradorSeleccionadoProps> = ({ identificacion, correo, empresa })  => {
+const EditarCuentaAdministrador: React.FC<AdministradorSeleccionadoProps> = ({ identificacion, empresa, onEdit }) => {
 
     const [empresas, setEmpresas] = useState<Option[]>([]);
 
-    const [selectedEmpresa, setSelectedEmpresa] = useState<string>(() => empresa || '');
+    const [selectedEmpresa, setSelectedEmpresa] = useState<string>(() => empresa);
 
-    const [errors, setErrors] = useState<Record<string, string>>({ identificacion: '', email: '', empresa: '' });
+    const [errors, setErrors] = useState<Record<string, string>>({ identificacion: '', email: '', empresa: '', contrasena:'' , nuevaContrasena: ''});
 
     const [formData, setFormData] = useState<any>({
         identificacion: '',
-        email: '',
-        empresa: ''
+        contrasena: '',
+        empresa: '',
+        contrasenaConfirmar: ''
     });
 
     const handleInputChange = (event: React.ChangeEvent<HTMLInputElement>) => {
@@ -39,23 +42,37 @@ const EditarCuentaAdministrador: React.FC<AdministradorSeleccionadoProps> = ({ i
         }));
     };
 
-
     useEffect(() => {
         const obtenerEmpresas = async () => {
             try {
 
                 const empresasResponse = await ObtenerEmpresas();
                 // Obtener todas las fincas y parcelas de una vez
-                
+
                 setEmpresas(empresasResponse);
-                
+
             } catch (error) {
                 console.error('Error al obtener las empresas:', error);
             }
         };
-  
+
         obtenerEmpresas();
     }, []);
+
+
+    useEffect(() => {
+
+        // Actualizar el formData cuando las props cambien
+        setFormData({
+            identificacion: identificacion,
+            empresa: empresa,
+            contrasena: '',
+            contrasenaConfirmar: ''
+        });
+    }, [identificacion, empresa]);
+
+
+
 
 
     const handleSubmitConValidacion = () => {
@@ -69,22 +86,31 @@ const EditarCuentaAdministrador: React.FC<AdministradorSeleccionadoProps> = ({ i
             newErrors.identificacion = '';
         }
 
-        
-        // Validar correo no vacío y con formato válido
-        const correoPattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-        if (!formData.email.trim()) {
-            newErrors.email = 'El correo es requerido';
-        } else if (!correoPattern.test(formData.email)) {
-            newErrors.email = 'El correo no es válido';
-        } else {
-            newErrors.email = '';
+
+        if (formData.contrasena.trim()) {
+            if (formData.contrasena.length < 8) {
+                newErrors.contrasena = 'La contraseña debe tener al menos 8 caracteres';
+            } else if (!/[A-Z]/.test(formData.contrasena)) {
+                newErrors.contrasena = 'La contraseña debe contener al menos una mayúscula';
+            } else if (!/[^A-Za-z0-9]/.test(formData.contrasena)) {
+                newErrors.contrasena = 'La contraseña debe contener al menos un caracter especial';
+            } else if (formData.contrasena !== formData.contrasenaConfirmar) {
+                newErrors.contrasenaConfirmar = 'Las contraseñas no coinciden';
+            } else if (!formData.contrasenaConfirmar.trim()) {
+                newErrors.contrasenaConfirmar = 'La contraseña es requerida';
+            } else {
+                newErrors.contrasenaConfirmar = '';
+                newErrors.contrasena = '';
+            }
         }
+
+
 
         if (!selectedEmpresa) {
             newErrors.empresa = 'Debe seleccionar una empresa';
-          } else {
+        } else {
             newErrors.empresa = '';
-          }
+        }
 
         // Actualizar los errores
         setErrors(newErrors);
@@ -101,31 +127,37 @@ const EditarCuentaAdministrador: React.FC<AdministradorSeleccionadoProps> = ({ i
     const handleSubmit = async () => {
         const datos = {
             identificacion: formData.identificacion,
-            correo: formData.email,
-            empresa: selectedEmpresa
+            contrasena: formData.contrasena,
+            idEmpresa: selectedEmpresa
         };
         try {
+
             const resultado = await ActualizarUsuarioAdministrador(datos);
+            console.log(datos)
+            console.log(resultado)
 
-
-            if (parseInt(resultado.indicador) === 0) {
+            if (parseInt(resultado.indicador) === 1) {
                 Swal.fire({
                     icon: 'success',
-                    title: '¡Gracias por su registro! ',
-                    text: 'Cuenta creada con éxito.',
+                    title: '¡Usuario Actuzalizado! ',
+                    text: 'Usuario actualizado con éxito.',
                 });
             } else {
                 Swal.fire({
                     icon: 'error',
-                    title: 'Error al crear la cuenta.',
+                    title: 'Error al actualizar el usuario.',
                     text: resultado.mensaje,
                 });
             };
+
+            if (onEdit) {
+                onEdit();
+            }
         } catch (error) {
 
         }
 
-
+        
     };
 
     const handleInputBlur = (fieldName: string) => {
@@ -141,7 +173,14 @@ const EditarCuentaAdministrador: React.FC<AdministradorSeleccionadoProps> = ({ i
     const handleEmpresaChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
         const value = e.target.value;
         setSelectedEmpresa(value);
-      };
+
+    };
+
+    const empresaSeleccionada = empresas.find(empresa => {
+        console.log('Empresa ID:', empresa.idEmpresa);
+        console.log('Selected Empresa:', selectedEmpresa);
+        return Number(empresa.idEmpresa) === Number(selectedEmpresa);
+    });
 
     return (
         <div>
@@ -153,8 +192,7 @@ const EditarCuentaAdministrador: React.FC<AdministradorSeleccionadoProps> = ({ i
                         id="identificacion"
                         name="identificacion"
                         placeholder="Identificación"
-                        defaultValue={identificacion}
-                        value={formData.Identificación}
+                        value={formData.identificacion || identificacion}
                         onChange={handleInputChange}
                         readOnly
                         onBlur={() => handleInputBlur('identificacion')} // Manejar blur para quitar el mensaje de error
@@ -165,30 +203,52 @@ const EditarCuentaAdministrador: React.FC<AdministradorSeleccionadoProps> = ({ i
                 </Col>
             </FormGroup>
             <FormGroup row>
-                <Label for="email" sm={2} className="input-label">Correo electrónico</Label>
+                <Label for="contrasena" sm={2} className="input-label">Contraseña</Label>
                 <Col sm={12}>
                     <Input
-                        type="email"
-                        id="email"
-                        name="email"
-                        placeholder="alguien@ejemplo.com"
-                        defaultValue={correo}
-                        value={formData.email}
+                        type="password"
+                        id="contrasena"
+                        name="contrasena"
+                        placeholder="Ingrese su contraseña"
+                        value={formData.contrasena}
                         onChange={handleInputChange}
-                        onBlur={() => handleInputBlur('email')} // Manejar blur para quitar el mensaje de error
-                        className={errors.email ? 'input-styled input-error' : 'input-styled'} // Aplicar clase 'is-invalid' si hay un error
+                        onBlur={() => handleInputBlur('contrasena')} // Manejar blur para quitar el mensaje de error
+                        className={errors.contrasena ? 'input-styled input-error' : 'input-styled'} // Aplicar clase 'is-invalid' si hay un error
                     />
-                    <FormFeedback>{errors.email}</FormFeedback>
+                    <FormFeedback>{errors.contrasena}</FormFeedback>
+                </Col>
+            </FormGroup>
+            <FormGroup row>
+                <Label for="contrasenaConfirmar" sm={2} className="input-label">Repetir contraseña</Label>
+                <Col sm={12}>
+                    <Input
+                        type="password"
+                        id="contrasenaConfirmar"
+                        name="contrasenaConfirmar"
+                        placeholder="Repita su contraseña"
+                        value={formData.contrasenaConfirmar}
+                        onChange={handleInputChange}
+                        onBlur={() => handleInputBlur('contrasenaConfirmar')} // Manejar blur para quitar el mensaje de error
+                        className={errors.contrasenaConfirmar ? 'input-styled input-error' : 'input-styled'} // Aplicar clase 'input-error' si hay un error
+                    />
+                    <FormFeedback>{errors.contrasenaConfirmar}</FormFeedback>
                 </Col>
             </FormGroup>
             <FormGroup>
                 <Label htmlFor="empresas" className="input-label">Empresa</Label>
-                <select className="custom-select" id="empresas" value={selectedEmpresa} onChange={handleEmpresaChange}>
+                <select className="custom-select" id="empresas" value={empresaSeleccionada?.idEmpresa || ''} onChange={handleEmpresaChange}>
                     <option key="default-empresa" value="">Seleccione...</option>
                     {empresas.map((empresa) => (
-                        <option key={`${empresa.idEmpresa}-${empresa.nombre}`} value={empresa.idEmpresa}>{empresa.nombre}</option>
+                        <option
+                            key={`${empresa.idEmpresa}-${empresa.nombre}`}
+                            value={empresa.idEmpresa}
+                        >
+                            {empresa.nombre}
+                        </option>
                     ))}
                 </select>
+
+
                 {errors.empresa && <FormFeedback>{errors.empresa}</FormFeedback>}
             </FormGroup>
             <FormGroup row>

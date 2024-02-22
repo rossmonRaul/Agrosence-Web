@@ -2,45 +2,53 @@ import { useEffect, useState } from "react";
 import { Logout } from "../../../components/logout"
 import Sidebar from "../../../components/sidebar/Sidebar"
 import '../../../css/AdministacionAdministradores.css'
+import '../../../css/Modal.css'
 import TableResponsive from "../../../components/table/table.tsx";
 import BordeSuperior from "../../../components/bordesuperior/BordeSuperior.tsx";
-import Modal from "../../../components/modal/Modal.tsx"
-import { CambiarEstadoUsuario, ObtenerUsuariosAdministradores } from "../../../servicios/ServicioUsuario.ts";
-import CrearCuentaAdministrador from "../../../components/crearcuentaadministrador/CrearCuentaAdministrador.tsx";
-import EditarCuentaAdministrador from "../../../components/crearcuentaadministrador/EditarCuentaAdministrador.tsx";
-import Swal from "sweetalert2";
+import { ObtenerUsuariosSinAsignar } from "../../../servicios/ServicioUsuario.ts";
+import { useSelector } from "react-redux";
+import { AppStore } from "../../../redux/Store.ts";
 import Topbar from "../../../components/topbar/Topbar.tsx";
+import Modal from "../../../components/modal/Modal.tsx" 
+import AsignarFincaParcela from "../../../components/asignarfincaparcela/AsignarFincaParcela.tsx";
 
 
 
 
-function CrearCuentaSA() {
-
-  const [modalInsertar, setModalInsertar] = useState(false);
-  const [modalEditar, setModalEditar] = useState(false);
+function AsignarUsuarios() {
   const [filtroIdentificacion, setFiltroIdentificacion] = useState('')
-  const abrirCerrarModalInsertar = () => {
-    setModalInsertar(!modalInsertar);
+  const [modalAsignar, setModalAsignar] = useState(false);
+
+
+  const abrirCerrarModalAsignar = () => {
+    setModalAsignar(!modalAsignar);
   }
+
 
 
   const [selectedUsuario, setSelectedUsuario] = useState({
     identificacion: '',
     correo: '',
     idEmpresa: '',
+    estado: 0,
+    idParcela: 0,
+    idFinca: 0
   });
 
 
-
-  const openModal = (administrador: any) => {
-    setSelectedUsuario(administrador);
-    abrirCerrarModalEditar();
+  const openModalAsignar = (user: any) => {
+    setSelectedUsuario(user);
+    abrirCerrarModalAsignar();
   };
 
 
+ 
 
+  const userState = useSelector((store: AppStore) => store.user);
 
-  const [usuariosAdministradores, setUsuariosAdministradores] = useState<any[]>([]);
+  
+
+  const [usuariosNoAsignados, setUsuariosNoAsignados] = useState<any[]>([]);
   const [usuariosFiltrados, setUsuariosFiltrados] = useState<any[]>([]);
 
   useEffect(() => {
@@ -49,21 +57,21 @@ function CrearCuentaSA() {
 
   const obtenerUsuarios = async () => {
     try {
-      const usuarios = await ObtenerUsuariosAdministradores();
+      const usuarios = await ObtenerUsuariosSinAsignar();
       const usuariosConSEstado = usuarios.map((usuario: any) => ({
         ...usuario,
         sEstado: usuario.estado === 1 ? 'Activo' : 'Inactivo',
       }));
-      setUsuariosAdministradores(usuariosConSEstado);
+      setUsuariosNoAsignados(usuariosConSEstado);
       setUsuariosFiltrados(usuariosConSEstado); // Inicialmente, los datos filtrados son los mismos que los datos originales
     } catch (error) {
-      console.error('Error al obtener usuarios administradores:', error);
+      console.error('Error al obtener usuarios:', error);
     }
   };
 
   useEffect(() => {
     filtrarUsuarios();
-  }, [filtroIdentificacion, usuariosAdministradores]); // Ejecutar cada vez que el filtro o los datos originales cambien
+  }, [filtroIdentificacion, usuariosNoAsignados]); // Ejecutar cada vez que el filtro o los datos originales cambien
 
   const handleChangeFiltro = (e: React.ChangeEvent<HTMLInputElement>) => {
     setFiltroIdentificacion(e.target.value);
@@ -71,34 +79,51 @@ function CrearCuentaSA() {
 
   const filtrarUsuarios = () => {
     const usuariosFiltrados = filtroIdentificacion
-      ? usuariosAdministradores.filter((usuario: any) =>
+      ? usuariosNoAsignados.filter((usuario: any) =>
         usuario.identificacion.includes(filtroIdentificacion)
       )
-      : usuariosAdministradores;
+      : usuariosNoAsignados;
     setUsuariosFiltrados(usuariosFiltrados);
   };
 
-  const toggleStatus = async (user: any) => {
+
+
+  {/** 
+  const toggleStatus = (user: any) => {
     Swal.fire({
-      title: "Actualizar",
+      title: "Asignar",
       text: "¿Estás seguro de que deseas actualizar el estado del usuario: " + user.identificacion + "?",
       icon: "warning",
-      showCancelButton: true,
-      confirmButtonText: "Sí",
-      cancelButtonText: "No"
+      showCancelButton: true, // Mostrar el botón de cancelar
+      confirmButtonText: "Sí", // Texto del botón de confirmación
+      cancelButtonText: "No" // Texto del botón de cancelar
     }).then(async (result) => {
       if (result.isConfirmed) {
+
+
         try {
-          
+          const estado = user.estado === 1 ? 0 : 1;
           const datos = {
             identificacion: user.identificacion,
+            empresa: user.idEmpresa,
+            idRol: 4,
+            estado: estado,
+            idFinca: selectedUsuario.idFinca,
+            idParcela: selectedUsuario.idParcela
           };
-          
-          const resultado = await CambiarEstadoUsuario(datos);
+
+
+          const resultado = await ActualizarAsignarUsuario(datos);
 
           if (parseInt(resultado.indicador) === 1) {
-            
-            await obtenerUsuarios();
+            const nuevosUsuarios = usuariosNoAsignados.map(usuario => {
+              if (usuario.identificacion === user.identificacion) {
+                return { ...usuario, estado: estado, sEstado: estado === 1 ? 'Activo' : 'Inactivo' };
+              }
+              return usuario;
+            });
+
+            setUsuariosNoAsignados(nuevosUsuarios);
 
             Swal.fire({
               icon: 'success',
@@ -112,49 +137,34 @@ function CrearCuentaSA() {
               text: resultado.mensaje,
             });
           };
+
         } catch (error) {
           Swal.fire("Error al asignar al usuario", "", "error");
         }
       }
     });
+  };*/}
+
+  const handleAsignar = async () => {
+    await obtenerUsuarios();
+    abrirCerrarModalAsignar();
   };
-
-
-  const abrirCerrarModalEditar = () => {
-    setModalEditar(!modalEditar);
-  }
 
   const columns = [
     { key: 'identificacion', header: 'Identificación' },
     { key: 'correo', header: 'Correo' },
-    { key: 'empresa', header: 'Empresa' },
     { key: 'sEstado', header: 'Estado' },
     { key: 'acciones', header: 'Acciones', actions: true } // Columna para acciones
   ];
 
 
-  const handleEditarUsuario = async () => {
-    // Lógica para editar el usuario
-    // Después de editar exitosamente, actualiza la lista de usuarios administradores
-    await obtenerUsuarios();
-    abrirCerrarModalEditar();
-  };
-
-  const handleAgregarUsuario = async () => {
-    // Lógica para editar el usuario
-    // Después de editar exitosamente, actualiza la lista de usuarios administradores
-    await obtenerUsuarios();
-    abrirCerrarModalInsertar();
-  };
 
   return (
     <Sidebar>
-
       <div className="main-container">
         <Topbar />
-        <BordeSuperior text="Administradores" />
+        <BordeSuperior text="Asignar Usuarios" />
         <div className="content">
-          <button onClick={() => abrirCerrarModalInsertar()} className="btn-crear">Crear Administrador</button>
           <div className="filtro-container">
             <label htmlFor="filtroIdentificacion">Filtrar por identificación:</label>
             <input
@@ -166,45 +176,29 @@ function CrearCuentaSA() {
               className="form-control"
             />
           </div>
-          <TableResponsive columns={columns} data={usuariosFiltrados} openModal={openModal} toggleStatus={toggleStatus} btnActionName={"Editar"} />
+          <TableResponsive columns={columns} data={usuariosFiltrados} openModal={openModalAsignar} btnActionName={"Asignar"} />
           <Logout />
         </div>
       </div>
 
 
       <Modal
-        isOpen={modalInsertar}
-        toggle={abrirCerrarModalInsertar}
-        title="Insertar Administrador"
-        onCancel={abrirCerrarModalInsertar}
+        isOpen={modalAsignar}
+        toggle={abrirCerrarModalAsignar}
+        title="Asignar Finca y Parcela"
+        onCancel={abrirCerrarModalAsignar}
       >
         <div className='form-container'>
           <div className='form-group'>
-            <CrearCuentaAdministrador
-              onAdd={handleAgregarUsuario}
-            />
+            <AsignarFincaParcela
+              onEdit={handleAsignar}
+              idEmpresa= {userState.idEmpresa} 
+              identificacion={selectedUsuario.identificacion}            />
           </div>
         </div>
       </Modal>
 
-
-      <Modal
-        isOpen={modalEditar}
-        toggle={abrirCerrarModalEditar}
-        title="Editar Administrador"
-        onCancel={abrirCerrarModalEditar}
-      >
-        <div className='form-container'>
-          <div className='form-group'>
-            <EditarCuentaAdministrador
-              identificacion={selectedUsuario.identificacion}
-              empresa={selectedUsuario.idEmpresa}
-              onEdit={handleEditarUsuario}
-            />
-          </div>
-        </div>
-      </Modal>
     </Sidebar>
   )
 }
-export default CrearCuentaSA
+export default AsignarUsuarios

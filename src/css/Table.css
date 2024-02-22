@@ -13,7 +13,13 @@
     text-align: center;
   }
 
+  .btn-desvincular{
+    background-color: rgb(255, 8, 0);
+    color: #ddd;
+    min-width: 80px;
+    margin-left: 10px;
 
+  }
   .btn-edit{
     margin-right: 10px;
     background-color: rgb(44, 140, 219);

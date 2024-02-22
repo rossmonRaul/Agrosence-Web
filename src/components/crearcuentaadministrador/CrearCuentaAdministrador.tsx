@@ -11,13 +11,17 @@ interface Option {
     nombre: string;
 }
 
-const CrearCuentaAdministrador: React.FC = () => {
+interface AgregarAdministradorProps {
+    onAdd: () => void;
+}
+
+const CrearCuentaAdministrador: React.FC<AgregarAdministradorProps> = ({ onAdd }) => {
 
     const [empresas, setEmpresas] = useState<Option[]>([]);
 
     const [selectedEmpresa, setSelectedEmpresa] = useState<string>();
 
-    const [errors, setErrors] = useState<Record<string, string>>({ identificacion: '', contrasena: '', contrasenaConfirmar: '', email: '', empresa: ''});
+    const [errors, setErrors] = useState<Record<string, string>>({ identificacion: '', contrasena: '', contrasenaConfirmar: '', email: '', empresa: '' });
 
     const [formData, setFormData] = useState<any>({
         identificacion: '',
@@ -33,14 +37,14 @@ const CrearCuentaAdministrador: React.FC = () => {
 
                 const empresasResponse = await ObtenerEmpresas();
                 // Obtener todas las fincas y parcelas de una vez
-                
+
                 setEmpresas(empresasResponse);
-                
+
             } catch (error) {
                 console.error('Error al obtener las empresas:', error);
             }
         };
-  
+
         obtenerEmpresas();
     }, []);
 
@@ -64,12 +68,20 @@ const CrearCuentaAdministrador: React.FC = () => {
             newErrors.identificacion = '';
         }
 
-        // Validar contraseña no vacía
+        
+        // Validar contraseña
         if (!formData.contrasena.trim()) {
             newErrors.contrasena = 'La contraseña es requerida';
+        } else if (formData.contrasena.length < 8) {
+            newErrors.contrasena = 'La contraseña debe tener al menos 8 caracteres';
+        } else if (!/[!@#$%^&*(),.?":{}|<>]/.test(formData.contrasena)) {
+            newErrors.contrasena = 'La contraseña debe contener al menos un carácter especial';
+        } else if (!/[A-Z]/.test(formData.contrasena)) {
+            newErrors.contrasena = 'La contraseña debe contener al menos una letra mayúscula';
         } else {
             newErrors.contrasena = '';
         }
+
 
         // Validar que las contraseñas coincidan
         if (formData.contrasena !== formData.contrasenaConfirmar) {
@@ -94,9 +106,9 @@ const CrearCuentaAdministrador: React.FC = () => {
 
         if (!selectedEmpresa) {
             newErrors.empresa = 'Debe seleccionar una empresa';
-          } else {
+        } else {
             newErrors.empresa = '';
-          }
+        }
 
         // Actualizar los errores
         setErrors(newErrors);
@@ -115,8 +127,11 @@ const CrearCuentaAdministrador: React.FC = () => {
             identificacion: formData.identificacion,
             correo: formData.email,
             contrasena: formData.contrasena,
-            empresa: selectedEmpresa
+            idEmpresa: selectedEmpresa
         };
+
+        console.log(datos)
+
         try {
             const resultado = await InsertarUsuarioAdministrador(datos);
             if (parseInt(resultado.indicador) === 0) {
@@ -132,6 +147,10 @@ const CrearCuentaAdministrador: React.FC = () => {
                     text: resultado.mensaje,
                 });
             };
+
+            if (onAdd) {
+                onAdd();
+            }
         } catch (error) {
 
         }
@@ -152,7 +171,7 @@ const CrearCuentaAdministrador: React.FC = () => {
     const handleEmpresaChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
         const value = e.target.value;
         setSelectedEmpresa(value);
-      };
+    };
 
     return (
         <div>

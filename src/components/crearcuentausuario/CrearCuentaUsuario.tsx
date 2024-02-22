@@ -5,15 +5,15 @@ import Swal from 'sweetalert2';
 
 
 
-const CrearCuentaUsuario:  React.FC<{ toggleForm: () => void }> = (props)  => {
-    
-    const [errors, setErrors] = useState<Record<string, string>>({ identificacion: '', contrasena: '', contrasenaConfirmar: '', email: '' });
+const CrearCuentaUsuario: React.FC<{ toggleForm: () => void }> = (props) => {
+
+  const [errors, setErrors] = useState<Record<string, string>>({ identificacion: '', contrasena: '', contrasenaConfirmar: '', email: '' });
 
   const [formData, setFormData] = useState<any>({
     identificacion: '',
     email: '',
     contrasena: '',
-    contrasenaConfirmar:''
+    contrasenaConfirmar: ''
   });
 
   const handleInputChange = (event: React.ChangeEvent<HTMLInputElement>) => {
@@ -25,7 +25,7 @@ const CrearCuentaUsuario:  React.FC<{ toggleForm: () => void }> = (props)  => {
   };
 
 
-  const handleSubmitConValidacion = () =>{
+  const handleSubmitConValidacion = () => {
     // Validar campos antes de avanzar al siguiente paso
     const newErrors: Record<string, string> = {};
 
@@ -39,6 +39,12 @@ const CrearCuentaUsuario:  React.FC<{ toggleForm: () => void }> = (props)  => {
     // Validar contraseña no vacía
     if (!formData.contrasena.trim()) {
       newErrors.contrasena = 'La contraseña es requerida';
+    } else if (formData.contrasena.length < 8) {
+      newErrors.contrasena = 'La contraseña debe tener al menos 8 caracteres';
+    } else if (!/[!@#$%^&*(),.?":{}|<>]/.test(formData.contrasena)) {
+      newErrors.contrasena = 'La contraseña debe contener al menos un carácter especial';
+    } else if (!/[A-Z]/.test(formData.contrasena)) {
+      newErrors.contrasena = 'La contraseña debe contener al menos una letra mayúscula';
     } else {
       newErrors.contrasena = '';
     }
@@ -52,7 +58,7 @@ const CrearCuentaUsuario:  React.FC<{ toggleForm: () => void }> = (props)  => {
       newErrors.contrasenaConfirmar = '';
     }
 
-    
+
 
     // Validar correo no vacío y con formato válido
     const correoPattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
@@ -69,7 +75,7 @@ const CrearCuentaUsuario:  React.FC<{ toggleForm: () => void }> = (props)  => {
 
     // Avanzar al siguiente paso si no hay errores
     if (Object.values(newErrors).every(error => error === '')) {
-        handleSubmit();
+      handleSubmit();
     }
 
 
@@ -82,29 +88,29 @@ const CrearCuentaUsuario:  React.FC<{ toggleForm: () => void }> = (props)  => {
       correo: formData.email,
       contrasena: formData.contrasena,
     };
-try {
-    const resultado = await InsertarUsuario(datos);
+    try {
+      const resultado = await InsertarUsuario(datos);
 
 
-    if(parseInt(resultado.indicador) === 0){
-      Swal.fire({
-        icon: 'success',
-        title: '¡Gracias por su registro! ',
-        text: 'Cuenta creada con éxito.',
-      });
-      props.toggleForm()
-    }else{
-      Swal.fire({
-        icon: 'error',
-        title: 'Error al crear la cuenta.',
-        text: resultado.mensaje,
-      });
-    };
-} catch (error) {
-    
-}
-    
-    
+      if (parseInt(resultado.indicador) === 0) {
+        Swal.fire({
+          icon: 'success',
+          title: '¡Gracias por su registro! ',
+          text: 'Cuenta creada con éxito.',
+        });
+        props.toggleForm()
+      } else {
+        Swal.fire({
+          icon: 'error',
+          title: 'Error al crear la cuenta.',
+          text: resultado.mensaje,
+        });
+      };
+    } catch (error) {
+
+    }
+
+
   };
 
   const handleInputBlur = (fieldName: string) => {
@@ -117,7 +123,7 @@ try {
     }
   };
 
-  
+
   return (
     <div>
       <h2>Crear una Cuenta</h2>
@@ -133,7 +139,7 @@ try {
             onChange={handleInputChange}
             onBlur={() => handleInputBlur('identificacion')} // Manejar blur para quitar el mensaje de error
             className={errors.identificacion ? 'input-styled input-error' : 'input-styled'} // Aplicar clase 'is-invalid' si hay un error
-            
+
           />
           <FormFeedback>{errors.identificacion}</FormFeedback>
         </Col>

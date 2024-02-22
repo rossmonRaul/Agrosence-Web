@@ -3,19 +3,25 @@
     padding:0;
     text-decoration: none;
 }
+
 .container{
     display:flex;
+    margin-left: 50px;
+    transition: all 0.5s;
 }
 main{
     width: 100%;
 }
-.sidebar{
+.sidebar {
     background: #ffffff;
     color: #000;
     height: 100vh;
     width: 200px;
     transition: all 0.5s;
     box-shadow: 0 0 20px rgba(0, 0, 0, 0.1);
+    position: fixed; /* Hacer que la barra lateral sea fija */
+    top: 0; /* Fijarla en la parte superior */
+    left: 0; /* Fijarla en el lado izquierdo */
 }
 .top-section{
     display: flex;
@@ -27,7 +33,7 @@ main{
 }
 .bars{
     display: flex;
-    font-size: 25px;
+    font-size: 22px;
     margin-left: 50px;
 }
 .link{
@@ -39,17 +45,17 @@ main{
     
 }
 .link:hover{
-    background: #c4dca4  ;
+    background: #c4dca475  ;
     color: #000;
     transition: all 0.5s;
 }
 .active{
-    background:  #c4dca4  ;
+    background:  #c4dca475  ;
     color: #000;
 }
 .icon{
     color: #a4cc64;
-    font-size: 20px;
+    font-size: 22px;
 }
 
 .link-text{
@@ -70,8 +76,8 @@ main{
 @media screen and (max-width: 768px) {
     
     .sidebar {
-      width: 100%;
-
+        width: 200px; /* Ancho fijo para pantallas más grandes */
+        height: 100vh;
     }
   
     .bars {

@@ -1,9 +1,11 @@
 import React, { useState } from 'react';
 import { NavLink, useLocation } from 'react-router-dom';
-import { FaBars, FaUserAlt, FaRegChartBar, FaCommentAlt, FaShoppingBag, FaThList, FaTh } from "react-icons/fa";
+import { FaBars, FaUserAlt, FaRegChartBar, FaCommentAlt, FaShoppingBag, FaThList, FaTh, FaUserCog } from "react-icons/fa";
 import '../../css/Sidebar.css';
 import { useSelector } from 'react-redux';
 import { AppStore } from '../../redux/Store';
+import { IoBusiness } from 'react-icons/io5';
+import { GiBarn } from 'react-icons/gi';
 
 interface MenuItem {
     path: string;
@@ -33,6 +35,12 @@ const Sidebar = ({ children }: { children: React.ReactNode }) => {
             path: "/",
             name: "Dashboard",
             icon: <FaTh />,
+            roles: [1, 2]
+        },
+        {
+            path: "/administrarempresas",
+            name: "Empresas",
+            icon: <IoBusiness />,
             roles: [1]
         },
         {
@@ -40,6 +48,24 @@ const Sidebar = ({ children }: { children: React.ReactNode }) => {
             name: "Administrar Administradores",
             icon: <FaUserAlt />,
             roles: [1]
+        },
+        {
+            path: "/asignarempresa",
+            name: "Asignar Usuario Nuevo",
+            icon: <FaUserAlt />,
+            roles: [2]
+        },
+        {
+            path: "/asignarfincaparcela",
+            name: "Asignar Finca y Parcela",
+            icon: <GiBarn />,
+            roles: [2]
+        },
+        {
+            path: "/administrarusuariosasignados",
+            name: "Matenimiento Usuarios Asignados",
+            icon: <FaUserCog />,
+            roles: [2]
         },
         {
             path: "/analytics",
@@ -98,7 +124,9 @@ const Sidebar = ({ children }: { children: React.ReactNode }) => {
     const userState = useSelector((store: AppStore) => store.user);
 
     return (
-        <div className="container">
+       
+        <div style={{ marginLeft: isOpen ? "200px" : "50px" }} className="container">
+            
             <div style={{ width: isOpen ? "200px" : "50px" }} className="sidebar">
                 <div className="top-section">
                     <h1 style={{ display: isOpen ? "block" : "none" }} className="logo">Logo</h1>

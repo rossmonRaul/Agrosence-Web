@@ -7,6 +7,30 @@ export const ObtenerUsuariosAdministradores = async () => {
     return await ProcesarDatosApi('GET', url, '');
 }
 
+export const ObtenerUsuariosSinAsignar = async () => {
+    //const url = `${controlador}/ObtenerUsuarios`;
+    const url = `http://localhost:5271/api/v1.0/${controlador}/ObtenerUsuariosPorRol4`;
+    return await ProcesarDatosApi('GET', url, '');
+}
+
+export const ObtenerUsuariosAsignados = async (data: any) => {
+    //const url = `${controlador}/ObtenerUsuarios`;
+    const url = `http://localhost:5271/api/v1.0/${controlador}/ObtenerUsuariosPorRol3`;
+    return await ProcesarDatosApi('POST', url, data);
+}
+
+export const ObtenerUsuariosPorEmpresa = async (data: any) => {
+    //const url = `${controlador}/ObtenerUsuarios`;
+    const url = `http://localhost:5271/api/v1.0/${controlador}/ObtenerUsuariosPorIdEmpresa`;
+    return await ProcesarDatosApi('POST', url, data);
+}
+
+export const ObtenerUsuariosPorFinca = async (data: any) => {
+    //const url = `${controlador}/ObtenerUsuarios`;
+    const url = `http://localhost:5271/api/v1.0/${controlador}/ObtenerUsuariosPorRol3`;
+    return await ProcesarDatosApi('POST', url, data);
+}
+
 export const InsertarUsuario = async (data: any) => {
     const url = `http://localhost:5271/api/v1.0/${controlador}/InsertarUsuario`;
     return await ProcesarDatosApi('POST', url, data);
@@ -23,6 +47,48 @@ export const ValidarUsuario = async (data: any) => {
 }
 
 export const ActualizarUsuarioAdministrador = async (data: any) => {
+    const url = `http://localhost:5271/api/v1.0/${controlador}/ActualizarUsuarioAdministrador`;
+    return await ProcesarDatosApi('PUT', url, data);
+}
+
+export const ActualizarAsignarUsuario = async (data: any) => {
     const url = `http://localhost:5271/api/v1.0/${controlador}/ActualizarUsuario`;
+    return await ProcesarDatosApi('PUT', url, data);
+}
+
+
+export const AsignarFincaParcelaUsuario = async (data: any) => {
+    const url = `http://localhost:5271/api/v1.0/${controlador}/ActualizarUsuario`;
+    return await ProcesarDatosApi('PUT', url, data);
+}
+
+
+export const AsignarEmpresaFincaParcelaUsuario = async (data: any) => {
+    const url = `http://localhost:5271/api/v1.0/${controlador}/AsignarEmpresaFincaYParcela`;
+    return await ProcesarDatosApi('PUT', url, data);
+}
+
+export const CambiarEstadoUsuario = async (data: any) => {
+    const url = `http://localhost:5271/api/v1.0/${controlador}/CambiarEstadoUsuario`;
+    return await ProcesarDatosApi('PUT', url, data);
+}
+
+export const CambiarEstadoUsuarioFincaParcela = async (data: any) => {
+    const url = `http://localhost:5271/api/v1.0/${controlador}/CambiarEstadoUsuarioFincaParcela`;
+    return await ProcesarDatosApi('PUT', url, data);
+}
+
+export const EditarFincaParsela = async (data: any) => {
+    const url = `http://localhost:5271/api/v1.0/${controlador}/AsignarFincaParcela`;
+    return await ProcesarDatosApi('PUT', url, data);
+}
+
+export const AsignarNuevaFincaParsela = async (data: any) => {
+    const url = `http://localhost:5271/api/v1.0/${controlador}/AsignarNuevaFincaParcela`;
+    return await ProcesarDatosApi('PUT', url, data);
+}
+
+export const CambiarContrasenaUsuarios = async (data: any) => {
+    const url = `http://localhost:5271/api/v1.0/${controlador}/ActualizarContrasenaUsuario`;
     return await ProcesarDatosApi('PUT', url, data);
 }

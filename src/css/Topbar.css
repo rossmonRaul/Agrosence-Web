@@ -1,0 +1,76 @@
+.top-bar {
+    background: #ffffff;
+    color: #000000;
+    box-shadow: 20 0 0px rgba(0, 0, 0, 0.418);
+    display: flex;
+    justify-content: flex-end;
+    flex-direction: row;
+    width: 100%;
+    top: 0;
+    left: 0;
+    min-height: 50px;
+    border-bottom: #000000;
+}
+
+
+.user-info {
+    display: flex;
+    align-items: center;
+    margin-right: 10px;
+}
+
+.user-name {
+    display: flex;
+    align-items: center;
+    margin-right: 10px;
+}
+
+.user-avatar {
+    width: 40px; /* Tamaño del avatar del usuario */
+    height: 40px;
+    border-radius: 50%; /* Para hacer un círculo */
+    margin-right: 10px; /* Espaciado entre el avatar y el nombre del usuario */
+    background-image: url('../img/user.png');  
+    background-size: cover;
+    position: relative;
+}
+
+.notifications {
+    margin-right: 20px; /* Espaciado entre el nombre del usuario y el icono de notificaciones */
+}
+
+.avatar-options {
+    position: absolute;
+    top: 100%;
+    left: 0;
+    transform: translateY(5px); /* Ajusta la distancia vertical */
+    background: #fff;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    padding: 10px;
+    z-index: 1;
+}
+
+.notifications {
+    position: relative;
+}
+
+.notification-list {
+    position: absolute;
+    top: calc(100% + 5px);
+    right: 0;
+    background: #fff;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    padding: 10px;
+    z-index: 1;
+}
+
+.notification-list ul {
+    list-style: none;
+    padding: 0;
+}
+
+.notification-list ul li {
+    margin-bottom: 5px;
+}

@@ -5,23 +5,21 @@ import '../../../css/AdministacionAdministradores.css'
 import TableResponsive from "../../../components/table/table.tsx";
 import BordeSuperior from "../../../components/bordesuperior/BordeSuperior.tsx";
 import Modal from "../../../components/modal/Modal.tsx"
-import { CambiarEstadoUsuario, ObtenerUsuariosAdministradores } from "../../../servicios/ServicioUsuario.ts";
-import CrearCuentaAdministrador from "../../../components/crearcuentaadministrador/CrearCuentaAdministrador.tsx";
-import EditarCuentaAdministrador from "../../../components/crearcuentaadministrador/EditarCuentaAdministrador.tsx";
+import {  CambiarEstadoUsuario, ObtenerUsuariosPorEmpresa } from "../../../servicios/ServicioUsuario.ts";
 import Swal from "sweetalert2";
 import Topbar from "../../../components/topbar/Topbar.tsx";
+import CambiarContrasenaAsignados from "../../../components/asignarfincaparcela/CambiarContrasenaAsignados.tsx";
+import { useSelector } from "react-redux";
+import { AppStore } from "../../../redux/Store.ts";
 
 
 
 
-function CrearCuentaSA() {
+function MantenimientoUsuariosAsignados() {
 
-  const [modalInsertar, setModalInsertar] = useState(false);
   const [modalEditar, setModalEditar] = useState(false);
   const [filtroIdentificacion, setFiltroIdentificacion] = useState('')
-  const abrirCerrarModalInsertar = () => {
-    setModalInsertar(!modalInsertar);
-  }
+  const userLoginState = useSelector((store: AppStore) => store.user);
 
 
   const [selectedUsuario, setSelectedUsuario] = useState({
@@ -32,15 +30,15 @@ function CrearCuentaSA() {
 
 
 
-  const openModal = (administrador: any) => {
-    setSelectedUsuario(administrador);
+  const openModal = (usuario: any) => {
+    setSelectedUsuario(usuario);
     abrirCerrarModalEditar();
   };
 
 
 
 
-  const [usuariosAdministradores, setUsuariosAdministradores] = useState<any[]>([]);
+  const [usuariosAsignados, setUsuariosAsignados] = useState<any[]>([]);
   const [usuariosFiltrados, setUsuariosFiltrados] = useState<any[]>([]);
 
   useEffect(() => {
@@ -49,21 +47,24 @@ function CrearCuentaSA() {
 
   const obtenerUsuarios = async () => {
     try {
-      const usuarios = await ObtenerUsuariosAdministradores();
+      const datos={
+        idEmpresa: userLoginState.idEmpresa,
+      }
+      const usuarios = await ObtenerUsuariosPorEmpresa(datos);
       const usuariosConSEstado = usuarios.map((usuario: any) => ({
         ...usuario,
         sEstado: usuario.estado === 1 ? 'Activo' : 'Inactivo',
       }));
-      setUsuariosAdministradores(usuariosConSEstado);
+      setUsuariosAsignados(usuariosConSEstado);
       setUsuariosFiltrados(usuariosConSEstado); // Inicialmente, los datos filtrados son los mismos que los datos originales
     } catch (error) {
-      console.error('Error al obtener usuarios administradores:', error);
+      console.error('Error al obtener usuarios Asignados:', error);
     }
   };
 
   useEffect(() => {
     filtrarUsuarios();
-  }, [filtroIdentificacion, usuariosAdministradores]); // Ejecutar cada vez que el filtro o los datos originales cambien
+  }, [filtroIdentificacion, usuariosAsignados]); // Ejecutar cada vez que el filtro o los datos originales cambien
 
   const handleChangeFiltro = (e: React.ChangeEvent<HTMLInputElement>) => {
     setFiltroIdentificacion(e.target.value);
@@ -71,10 +72,10 @@ function CrearCuentaSA() {
 
   const filtrarUsuarios = () => {
     const usuariosFiltrados = filtroIdentificacion
-      ? usuariosAdministradores.filter((usuario: any) =>
+      ? usuariosAsignados.filter((usuario: any) =>
         usuario.identificacion.includes(filtroIdentificacion)
       )
-      : usuariosAdministradores;
+      : usuariosAsignados;
     setUsuariosFiltrados(usuariosFiltrados);
   };
 
@@ -127,7 +128,6 @@ function CrearCuentaSA() {
   const columns = [
     { key: 'identificacion', header: 'Identificación' },
     { key: 'correo', header: 'Correo' },
-    { key: 'empresa', header: 'Empresa' },
     { key: 'sEstado', header: 'Estado' },
     { key: 'acciones', header: 'Acciones', actions: true } // Columna para acciones
   ];
@@ -135,26 +135,20 @@ function CrearCuentaSA() {
 
   const handleEditarUsuario = async () => {
     // Lógica para editar el usuario
-    // Después de editar exitosamente, actualiza la lista de usuarios administradores
+    // Después de editar exitosamente, actualiza la lista de usuarios Asignados
     await obtenerUsuarios();
     abrirCerrarModalEditar();
   };
 
-  const handleAgregarUsuario = async () => {
-    // Lógica para editar el usuario
-    // Después de editar exitosamente, actualiza la lista de usuarios administradores
-    await obtenerUsuarios();
-    abrirCerrarModalInsertar();
-  };
+
 
   return (
     <Sidebar>
 
       <div className="main-container">
         <Topbar />
-        <BordeSuperior text="Administradores" />
+        <BordeSuperior text="Mantenimiento Usuarios Asignados" />
         <div className="content">
-          <button onClick={() => abrirCerrarModalInsertar()} className="btn-crear">Crear Administrador</button>
           <div className="filtro-container">
             <label htmlFor="filtroIdentificacion">Filtrar por identificación:</label>
             <input
@@ -171,40 +165,24 @@ function CrearCuentaSA() {
         </div>
       </div>
 
-
-      <Modal
-        isOpen={modalInsertar}
-        toggle={abrirCerrarModalInsertar}
-        title="Insertar Administrador"
-        onCancel={abrirCerrarModalInsertar}
-      >
-        <div className='form-container'>
-          <div className='form-group'>
-            <CrearCuentaAdministrador
-              onAdd={handleAgregarUsuario}
-            />
-          </div>
-        </div>
-      </Modal>
-
-
       <Modal
         isOpen={modalEditar}
         toggle={abrirCerrarModalEditar}
-        title="Editar Administrador"
+        title="Editar Usuario"
         onCancel={abrirCerrarModalEditar}
       >
         <div className='form-container'>
           <div className='form-group'>
-            <EditarCuentaAdministrador
+            <CambiarContrasenaAsignados
               identificacion={selectedUsuario.identificacion}
-              empresa={selectedUsuario.idEmpresa}
               onEdit={handleEditarUsuario}
             />
           </div>
         </div>
       </Modal>
+
+
     </Sidebar>
   )
 }
-export default CrearCuentaSA
+export default MantenimientoUsuariosAsignados
