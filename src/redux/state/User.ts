@@ -1,6 +1,6 @@
 import {createSlice} from "@reduxjs/toolkit";
 import { Roles, UserInfo } from "../../models";
-import { clearLocalStorage, persisLocalStorage } from "../../utilities";
+import { clearSessionStorage, persisSessionStorage } from "../../utilities";
 
 
 export const EmptyUserState: UserInfo= {
@@ -21,16 +21,16 @@ export const userSlice = createSlice({
     initialState: localStorage.getItem('user') ? JSON.parse(localStorage.getItem('user') as string) : EmptyUserState,
     reducers:{
         createUser: (state, action) => {
-            persisLocalStorage<UserInfo>(UserKey,action.payload);
+            persisSessionStorage<UserInfo>(UserKey,action.payload);
             return action.payload;
         },
         updateUser: (state, action) =>  {
             const result = {...state, ...action.payload};
-            persisLocalStorage<UserInfo>(UserKey,result);
+            persisSessionStorage<UserInfo>(UserKey,result);
             return result;
         },
         resetUser: () => {
-            clearLocalStorage(UserKey);
+            clearSessionStorage(UserKey);
             return EmptyUserState;
         }
     }

@@ -7,7 +7,7 @@ import Swal from 'sweetalert2';
 import { useDispatch } from 'react-redux';
 import { UserKey, createUser, resetUser } from '../redux/state/User.ts';
 import { useNavigate } from 'react-router-dom';
-import { clearLocalStorage } from '../utilities/LocalStorageUtility.tsx';
+import { clearSessionStorage } from '../utilities/SessionStorageUtility.tsx';
 import { PrivateRoutes, PublicRoutes } from '../models/routes.ts';
 import CrearCuentaUsuario from '../components/crearcuentausuario/CrearCuentaUsuario.tsx';
 
@@ -118,7 +118,7 @@ const Login: React.FC = () => {
   const [isLoggedIn, setIsLoggedIn] = useState(false);
 
   useEffect(() => {
-    clearLocalStorage(UserKey);
+    clearSessionStorage(UserKey);
     dispatch(resetUser());
     navigate(`/${PublicRoutes.LOGIN}`, { replace: true });
   }, []);

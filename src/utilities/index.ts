@@ -1,2 +1,2 @@
 export {default as RoutesWithNotFound } from './RoutesWithNotFound';
-export * from './LocalStorageUtility';
+export * from './SessionStorageUtility';

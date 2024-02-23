@@ -1,6 +1,6 @@
 import { useNavigate } from "react-router-dom";
 import { UserKey, resetUser } from "../../redux/state/User"
-import { clearLocalStorage } from "../../utilities"
+import { clearSessionStorage } from "../../utilities"
 import { PublicRoutes } from "../../models/routes";
 import { useDispatch } from "react-redux";
 import '../../css/Logout.css';
@@ -20,7 +20,7 @@ function Logout() {
             cancelButtonText: "No" // Texto del botón de cancelar
         }).then((result) => {
             if (result.isConfirmed) {
-                clearLocalStorage(UserKey);
+                clearSessionStorage(UserKey);
                 dispatch(resetUser());
                 navigate(`/${PublicRoutes.LOGIN}`, { replace: true });
             }
