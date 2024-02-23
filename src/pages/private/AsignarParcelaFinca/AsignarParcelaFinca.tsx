@@ -167,7 +167,7 @@ function AsignarParcelaFinca() {
         <Sidebar>
             <div className="main-container">
                 <Topbar/>
-                <BordeSuperior text="Asignar Parcela y Finca" />
+                <BordeSuperior text="Asignar Finca y Parcela" />
                 <div className="content">
                 <button onClick={() => abrirCerrarModalAsignar()} className="btn-crear">Asignar Finca y Parcela</button>
                     <div className="filtro-container">

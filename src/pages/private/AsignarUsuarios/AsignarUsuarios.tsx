@@ -9,7 +9,7 @@ import { useSelector } from "react-redux";
 import { AppStore } from "../../../redux/Store.ts";
 import Topbar from "../../../components/topbar/Topbar.tsx";
 import Modal from "../../../components/modal/Modal.tsx" 
-import AsignarFincaParcela from "../../../components/asignarfincaparcela/AsignarFincaParcela.tsx";
+import AsignarEmpresa from "../../../components/asignarempresa/AsignarEmpresa.tsx";
 
 
 
@@ -189,7 +189,7 @@ function AsignarUsuarios() {
       >
         <div className='form-container'>
           <div className='form-group'>
-            <AsignarFincaParcela
+            <AsignarEmpresa
               onEdit={handleAsignar}
               idEmpresa= {userState.idEmpresa} 
               identificacion={selectedUsuario.identificacion}            

@@ -4,7 +4,7 @@ import '../../css/FormSeleccionEmpresa.css'
 import { ObtenerParcelas } from '../../servicios/ServicioParcelas';
 import { ObtenerFincas } from '../../servicios/ServicioFincas';
 import Swal from 'sweetalert2';
-import { EditarFincaParsela } from '../../servicios/ServicioUsuario';
+import { AsignarEmpresaFincaParcelaUsuario } from '../../servicios/ServicioUsuario';
 import '../../css/CrearCuenta.css'
 
 
@@ -24,7 +24,7 @@ interface Option {
     idFinca: number;
 }
 
-const AsignarFincaParcela: React.FC<Props> = ({ idEmpresa, onEdit, identificacion, idFinca, idUsuarioFincasParcelas}) => {
+const AsignarEmpresa: React.FC<Props> = ({ idEmpresa, onEdit, identificacion, idFinca, idUsuarioFincasParcelas}) => {
     const [errors, setErrors] = useState<Record<string, string>>({ finca: '', parcela: ''});
 
     const [formData, setFormData] = useState<any>({
@@ -148,7 +148,7 @@ const AsignarFincaParcela: React.FC<Props> = ({ idEmpresa, onEdit, identificacio
 
             
 
-            const resultado = await EditarFincaParsela(datos);
+            const resultado = await AsignarEmpresaFincaParcelaUsuario(datos);
 
             if (parseInt(resultado.indicador) === 1) {
                 Swal.fire({
@@ -205,4 +205,4 @@ const AsignarFincaParcela: React.FC<Props> = ({ idEmpresa, onEdit, identificacio
     );
 }
 
-export default AsignarFincaParcela;
+export default AsignarEmpresa;
