@@ -193,12 +193,25 @@ const Login: React.FC = () => {
       if (usuarioEncontrado.mensaje === "Usuario no encontrado.") {
         Swal.fire({
           icon: 'error',
-          text: 'Credenciales incorrectas',
+          title: '¡Credenciales incorrectas!',
+          text: 'Los datos del usuario ingresado no existen',
         });
       } else if (usuarioEncontrado.mensaje === "Usuario encontrado.") {
         dispatch(createUser(usuarioEncontrado))
         navigate(`/${PrivateRoutes.PRIVATE}`, { replace: true });
         setIsLoggedIn(true);
+      } else if (usuarioEncontrado.mensaje === "Credenciales incorrectas.") {
+        Swal.fire({
+          icon: 'error',
+          title: '¡Credenciales incorrectas!',
+          text: 'Los datos del usuario ingresado son incorrectas',
+        });
+      } if (usuarioEncontrado.mensaje === "Usuario o empresa inactivos.") {
+        Swal.fire({
+          icon: 'error',
+          title: 'No puedes iniciar sesión',
+          text: 'Usuario o empresa inactivos',
+        });
       } else {
         Swal.fire({
           icon: 'error',

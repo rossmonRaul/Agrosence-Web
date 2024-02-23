@@ -5,9 +5,10 @@ import TableResponsive from "../../../components/table/table.tsx";
 import BordeSuperior from "../../../components/bordesuperior/BordeSuperior.tsx";
 import Modal from "../../../components/modal/Modal.tsx";
 import Topbar from "../../../components/topbar/Topbar.tsx";
-import { ObtenerEmpresas } from "../../../servicios/ServicioEmpresas.ts";
+import { CambiarEstadoEmpresas, ObtenerEmpresas } from "../../../servicios/ServicioEmpresas.ts";
 import EditarEmpresa from "../../../components/empresa/EditarEmpresa.tsx";
 import CrearEmpresa from "../../../components/empresa/CrearEmpresa.tsx";
+import Swal from "sweetalert2";
 
 
 
@@ -78,7 +79,6 @@ function AdministrarEmpresas() {
     };
 
 
-{/** 
     const toggleStatus = (empresa: any) => {
         Swal.fire({
             title: "Cambiar Estado",
@@ -92,33 +92,29 @@ function AdministrarEmpresas() {
 
 
                 try {
-                    const estado = empresa.estado === 1 ? 0 : 1;
+                    
                     const datos = {
                         idEmpresa: empresa.idEmpresa,
-                        estado: estado
+                        nombre: empresa.nombre
                     };
 
-                    const resultado = await ActualizarAsignarUsuario(datos);
+                    const resultado = await CambiarEstadoEmpresas(datos);
 
                     if (parseInt(resultado.indicador) === 1) {
-                        const nuevasEmpresas = empresas.map(empresa => {
-                            if (empresa.nombre === empresa.nombre) {
-                                return { ...empresa, estado: estado, sEstado: estado === 1 ? 'Activo' : 'Inactivo' };
-                            }
-                            return empresa;
-                        });
-
-                        setEmpresa(nuevasEmpresas);
+                        
 
                         Swal.fire({
                             icon: 'success',
                             title: '¡Estado Actualizado! ',
                             text: 'Actualización exitosa.',
                         });
+
+                        await obtenerEmpresas();
+
                     } else {
                         Swal.fire({
                             icon: 'error',
-                            title: 'Error al actualziar el estado.',
+                            title: 'Error al actualizar el estado.',
                             text: resultado.mensaje,
                         });
                     };
@@ -129,7 +125,7 @@ function AdministrarEmpresas() {
             }
         });
     };
-*/}
+
 
     const handleEditarEmpresa = async () => {
         await obtenerEmpresas();
@@ -143,7 +139,7 @@ function AdministrarEmpresas() {
 
     const columns = [
         { key: 'nombre', header: 'Nombre Empresa' },
-        { key: 'estado', header: 'Estado' },
+        { key: 'sEstado', header: 'Estado' },
         { key: 'acciones', header: 'Acciones', actions: true } // Columna para acciones
     ];
 
@@ -167,7 +163,7 @@ function AdministrarEmpresas() {
                             className="form-control"
                         />
                     </div>
-                    <TableResponsive columns={columns} data={empresasFiltrados} openModal={openModal}  btnActionName={"Editar"} />
+                    <TableResponsive columns={columns} data={empresasFiltrados} openModal={openModal}  btnActionName={"Editar"} toggleStatus={toggleStatus} />
    
                 </div>
             </div>
