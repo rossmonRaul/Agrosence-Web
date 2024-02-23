@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { NavLink, useLocation } from 'react-router-dom';
-import { FaBars, FaUserAlt, FaRegChartBar, FaCommentAlt, FaShoppingBag, FaThList, FaTh, FaUserCog } from "react-icons/fa";
+import { FaBars, FaUserAlt, FaTh, FaUserCog } from "react-icons/fa";
 import '../../css/Sidebar.css';
 import { useSelector } from 'react-redux';
 import { AppStore } from '../../redux/Store';
@@ -35,7 +35,7 @@ const Sidebar = ({ children }: { children: React.ReactNode }) => {
             path: "/",
             name: "Dashboard",
             icon: <FaTh />,
-            roles: [1, 2]
+            roles: [1, 2, 3, 4]
         },
         {
             path: "/administrarempresas",
@@ -68,34 +68,10 @@ const Sidebar = ({ children }: { children: React.ReactNode }) => {
             roles: [2]
         },
         {
-            path: "/analytics",
-            name: "Analytics",
-            icon: <FaRegChartBar />,
-            roles: [3], // Mostrar solo para el rol de administrador
-        },
-        {
-            path: "/comment",
-            name: "Comment",
-            icon: <FaCommentAlt />,
-            roles: [3], // Mostrar para los roles de administrador y moderador
-        },
-        {
-            path: "/product",
-            name: "Product",
-            icon: <FaShoppingBag />,
-            roles: [3]
-        },
-        {
-            path: "/productList",
-            name: "Product List",
-            icon: <FaThList />,
-            roles: [3],
-        },
-        {
             path: "#", // Utiliza "#" como un enlace que no lleva a ninguna parte
             name: "Pages",
             icon: <i className="fas fa-fw fa-folder"></i>,
-            roles: [3],
+            roles: [0],
             children: [
                 {
                     path: "/login",

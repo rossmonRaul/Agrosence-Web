@@ -99,14 +99,14 @@
 }
 
 /* Estilos para hacer la tabla responsive con barra de desplazamiento */
-@media screen and (max-width: 600px) {
+@media screen and (max-width: 768px) {
     .table-container {
       overflow-x: auto; /* Agregar desplazamiento horizontal */
       width: 100%; /* Asegurarse de que el contenedor se ajuste al ancho de la pantalla */
     }
   
     .table {
-      min-width: 600px; /* Ancho mínimo de la tabla para permitir el desplazamiento horizontal */
+      min-width: 768px; /* Ancho mínimo de la tabla para permitir el desplazamiento horizontal */
     }
 
     .pagination{

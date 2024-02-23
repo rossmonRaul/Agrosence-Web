@@ -40,16 +40,18 @@
 }
 
 .avatar-options {
-    position: absolute;
-    top: 100%;
-    left: 0;
-    transform: translateY(5px); /* Ajusta la distancia vertical */
+    position: absolute; /* Mantén la posición absoluta */
+    top: 100%; /* Coloca el elemento debajo del padre */
+    right: 0; /* Alinea el elemento con el borde derecho del padre */
     background: #fff;
     border: 1px solid #ccc;
     border-radius: 5px;
     padding: 10px;
     z-index: 1;
+    width: max-content; /* Ajusta el ancho al contenido */
+    white-space: nowrap; /* Evita que el contenido se rompa en múltiples líneas */
 }
+
 
 .notifications {
     position: relative;
@@ -74,3 +76,38 @@
 .notification-list ul li {
     margin-bottom: 5px;
 }
+
+
+/* Estilos para pantallas más pequeñas */
+@media (max-width: 768px) {
+    .top-bar {
+        justify-content: flex-end; /* Alinea los elementos al final */
+        flex-direction: row; /* Mantén la dirección de fila */
+        
+    }
+
+    .user-info {
+        margin-left: auto; /* Empuja los elementos a la derecha */
+        margin-right: 10px; /* Agrega un poco de espacio entre el avatar y las notificaciones */
+    }
+
+    .user-avatar {
+        margin-left: 10px; /* Espaciado entre el avatar y las notificaciones */
+        margin-right: 0; /* Elimina el margen derecho */
+    }
+
+    .notifications {
+        margin-left: 0; /* Elimina el margen izquierdo */
+        margin-right: 0; /* Elimina el margen derecho */
+        
+    }
+
+    .avatar-options {
+        position: absolute;
+    }
+
+    .notification-list {
+        margin-top: 10px; /* Agrega un margen superior */
+    }
+}
+

@@ -13,7 +13,7 @@ interface Props {
     identificacion: string;
     idFinca?: number;
     onEdit: () => void;
-    idUsuarioFincasParcelas: number;
+    idUsuarioFincasParcelas?: number;
 }
 
 // Interfaz para el formato de los datos recibidos de la API

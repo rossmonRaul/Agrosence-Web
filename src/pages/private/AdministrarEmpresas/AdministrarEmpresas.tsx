@@ -1,7 +1,6 @@
 import { useEffect, useState } from "react";
-import { Logout } from "../../../components/logout"
-import Sidebar from "../../../components/sidebar/Sidebar"
-import '../../../css/AdministacionAdministradores.css'
+import Sidebar from "../../../components/sidebar/Sidebar";
+import '../../../css/AdministacionAdministradores.css';
 import TableResponsive from "../../../components/table/table.tsx";
 import BordeSuperior from "../../../components/bordesuperior/BordeSuperior.tsx";
 import Modal from "../../../components/modal/Modal.tsx";
@@ -143,8 +142,7 @@ function AdministrarEmpresas() {
     };
 
     const columns = [
-        { key: 'idEmpresa', header: 'Empresa' },
-        { key: 'nombre', header: 'Nombre' },
+        { key: 'nombre', header: 'Nombre Empresa' },
         { key: 'estado', header: 'Estado' },
         { key: 'acciones', header: 'Acciones', actions: true } // Columna para acciones
     ];
@@ -170,7 +168,7 @@ function AdministrarEmpresas() {
                         />
                     </div>
                     <TableResponsive columns={columns} data={empresasFiltrados} openModal={openModal}  btnActionName={"Editar"} />
-                    <Logout />
+   
                 </div>
             </div>
 

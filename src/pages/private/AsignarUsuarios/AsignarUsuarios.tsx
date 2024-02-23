@@ -1,5 +1,4 @@
 import { useEffect, useState } from "react";
-import { Logout } from "../../../components/logout"
 import Sidebar from "../../../components/sidebar/Sidebar"
 import '../../../css/AdministacionAdministradores.css'
 import '../../../css/Modal.css'
@@ -177,7 +176,7 @@ function AsignarUsuarios() {
             />
           </div>
           <TableResponsive columns={columns} data={usuariosFiltrados} openModal={openModalAsignar} btnActionName={"Asignar"} />
-          <Logout />
+
         </div>
       </div>
 
@@ -193,7 +192,8 @@ function AsignarUsuarios() {
             <AsignarFincaParcela
               onEdit={handleAsignar}
               idEmpresa= {userState.idEmpresa} 
-              identificacion={selectedUsuario.identificacion}            />
+              identificacion={selectedUsuario.identificacion}            
+              />
           </div>
         </div>
       </Modal>

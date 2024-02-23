@@ -1,5 +1,4 @@
 import { useEffect, useState } from "react";
-import { Logout } from "../../../components/logout"
 import Sidebar from "../../../components/sidebar/Sidebar"
 import '../../../css/AdministacionAdministradores.css'
 import TableResponsive from "../../../components/table/table.tsx";
@@ -161,7 +160,7 @@ function MantenimientoUsuariosAsignados() {
             />
           </div>
           <TableResponsive columns={columns} data={usuariosFiltrados} openModal={openModal} toggleStatus={toggleStatus} btnActionName={"Editar"} />
-          <Logout />
+
         </div>
       </div>
 
