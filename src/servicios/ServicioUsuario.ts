@@ -32,7 +32,7 @@ export const ObtenerUsuariosPorFinca = async (data: any) => {
 }
 
 export const InsertarUsuario = async (data: any) => {
-    const url = `http://localhost:5271/api/v1.0/${controlador}/InsertarUsuario`;
+    const url = `http://localhost:5271/api/v1.0/${controlador}/GuardarUsuario`;
     return await ProcesarDatosApi('POST', url, data);
 }
 
