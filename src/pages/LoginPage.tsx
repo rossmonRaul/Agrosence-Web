@@ -206,7 +206,7 @@ const Login: React.FC = () => {
           title: '¡Credenciales incorrectas!',
           text: 'Los datos del usuario ingresado son incorrectas',
         });
-      } if (usuarioEncontrado.mensaje === "Usuario o empresa inactivos.") {
+      } else if (usuarioEncontrado.mensaje === "Usuario o empresa inactivos.") {
         Swal.fire({
           icon: 'error',
           title: 'No puedes iniciar sesión',

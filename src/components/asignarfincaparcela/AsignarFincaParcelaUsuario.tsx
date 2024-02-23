@@ -70,7 +70,6 @@ const AsignarFincaParcelaUsuario: React.FC<Props> = ({ onAdd, idEmpresa }) => {
             try {
                 const identificacionesResponse = await ObtenerUsuariosPorEmpresa(data);
                 setIdentificaciones(identificacionesResponse);
-                console.log(identificaciones)
             } catch (error) {
                 console.error('Error al obtener las identificaciones:', error);
             }
@@ -180,7 +179,7 @@ const AsignarFincaParcelaUsuario: React.FC<Props> = ({ onAdd, idEmpresa }) => {
             idParcela: parseInt(formData.parcela),
         };
 
-        console.log(datos)
+
         try {
 
             const resultado = await AsignarNuevaFincaParsela(datos);

@@ -53,8 +53,6 @@ const CrearEmpresa: React.FC<AgregarEmpresa>= ({ onAdd }) => {
         try {
 
             const resultado = await GuardarEmpresas(datos);
-            console.log(datos)
-            console.log(resultado)
 
             if (parseInt(resultado.indicador) === 1) {
                 Swal.fire({

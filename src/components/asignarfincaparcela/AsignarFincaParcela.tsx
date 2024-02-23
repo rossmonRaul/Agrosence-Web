@@ -144,8 +144,6 @@ const AsignarFincaParcela: React.FC<Props> = ({ idEmpresa, onEdit, identificacio
             idUsuario: idUsuarioFincasParcelas
         };
 
-        console.log(datos)
-
         try {
 
             const resultado = await EditarFincaParsela(datos);

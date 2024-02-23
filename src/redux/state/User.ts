@@ -9,7 +9,7 @@ export const EmptyUserState: UserInfo= {
     idFinca: 0,
     idParcela: 0,
     idEmpresa: 0,
-    rol: Roles.UsuarioSinLogeo,
+    idRol: Roles.UsuarioSinLogeo,
     estado: 0
 };
 
