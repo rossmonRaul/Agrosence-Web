@@ -36,6 +36,8 @@ const CambiarContrasenaAsignados: React.FC<Props> = ({ onEdit, identificacion })
                 newErrors.contrasenaConfirmar = 'Las contraseñas no coinciden';
             } else if (!formData.contrasenaConfirmar.trim()) {
                 newErrors.contrasenaConfirmar = 'La contraseña es requerida';
+            } else if (!/\d/.test(formData.contrasena)) {
+                newErrors.contrasena = 'La contraseña debe contener al menos un número';
             } else {
                 newErrors.contrasenaConfirmar = '';
                 newErrors.contrasena = '';

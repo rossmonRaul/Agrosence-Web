@@ -7,7 +7,7 @@ import Modal from "../../../components/modal/Modal.tsx"
 import {  CambiarEstadoUsuario, ObtenerUsuariosPorEmpresa } from "../../../servicios/ServicioUsuario.ts";
 import Swal from "sweetalert2";
 import Topbar from "../../../components/topbar/Topbar.tsx";
-import CambiarContrasenaAsignados from "../../../components/asignarfincaparcela/CambiarContrasenaAsignados.tsx";
+import CambiarContrasenaAsignados from "../../../components/cambiarcontrasenaasignados/CambiarContrasenaAsignados.tsx";
 import { useSelector } from "react-redux";
 import { AppStore } from "../../../redux/Store.ts";
 

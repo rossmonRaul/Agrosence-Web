@@ -25,7 +25,7 @@ const EditarCuentaAdministrador: React.FC<AdministradorSeleccionadoProps> = ({ i
 
     const [selectedEmpresa, setSelectedEmpresa] = useState<string>(() => empresa);
 
-    const [errors, setErrors] = useState<Record<string, string>>({ identificacion: '', email: '', empresa: '', contrasena:'' , nuevaContrasena: ''});
+    const [errors, setErrors] = useState<Record<string, string>>({ identificacion: '', email: '', empresa: '', contrasena: '', nuevaContrasena: '' });
 
     const [formData, setFormData] = useState<any>({
         identificacion: '',
@@ -98,6 +98,8 @@ const EditarCuentaAdministrador: React.FC<AdministradorSeleccionadoProps> = ({ i
                 newErrors.contrasenaConfirmar = 'Las contraseñas no coinciden';
             } else if (!formData.contrasenaConfirmar.trim()) {
                 newErrors.contrasenaConfirmar = 'La contraseña es requerida';
+            } else if (!/\d/.test(formData.contrasena)) {
+                newErrors.contrasena = 'La contraseña debe contener al menos un número';
             } else {
                 newErrors.contrasenaConfirmar = '';
                 newErrors.contrasena = '';
@@ -157,7 +159,7 @@ const EditarCuentaAdministrador: React.FC<AdministradorSeleccionadoProps> = ({ i
 
         }
 
-        
+
     };
 
     const handleInputBlur = (fieldName: string) => {

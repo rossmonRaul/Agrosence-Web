@@ -72,15 +72,18 @@ const CrearCuentaAdministrador: React.FC<AgregarAdministradorProps> = ({ onAdd }
         // Validar contraseña
         if (!formData.contrasena.trim()) {
             newErrors.contrasena = 'La contraseña es requerida';
-        } else if (formData.contrasena.length < 8) {
+          } else if (formData.contrasena.length < 8) {
             newErrors.contrasena = 'La contraseña debe tener al menos 8 caracteres';
-        } else if (!/[!@#$%^&*(),.?":{}|<>]/.test(formData.contrasena)) {
+          } else if (!/[!@#$%^&*(),.?":{}|<>]/.test(formData.contrasena)) {
             newErrors.contrasena = 'La contraseña debe contener al menos un carácter especial';
-        } else if (!/[A-Z]/.test(formData.contrasena)) {
+          } else if (!/[A-Z]/.test(formData.contrasena)) {
             newErrors.contrasena = 'La contraseña debe contener al menos una letra mayúscula';
-        } else {
+          } else if (!/\d/.test(formData.contrasena)) {
+            newErrors.contrasena = 'La contraseña debe contener al menos un número';
+          } else {
             newErrors.contrasena = '';
-        }
+          }
+          
 
 
         // Validar que las contraseñas coincidan

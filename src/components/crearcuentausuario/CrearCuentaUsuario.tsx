@@ -45,9 +45,12 @@ const CrearCuentaUsuario: React.FC<{ toggleForm: () => void }> = (props) => {
       newErrors.contrasena = 'La contraseña debe contener al menos un carácter especial';
     } else if (!/[A-Z]/.test(formData.contrasena)) {
       newErrors.contrasena = 'La contraseña debe contener al menos una letra mayúscula';
+    } else if (!/\d/.test(formData.contrasena)) {
+      newErrors.contrasena = 'La contraseña debe contener al menos un número';
     } else {
       newErrors.contrasena = '';
     }
+    
 
     // Validar que las contraseñas coincidan
     if (formData.contrasena !== formData.contrasenaConfirmar) {
