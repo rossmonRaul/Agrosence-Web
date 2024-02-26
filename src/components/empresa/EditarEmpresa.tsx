@@ -85,7 +85,7 @@ const EditarEmpresa: React.FC<Props> = ({ idEmpresa, nombrebase, onEdit }) => {
             if (parseInt(resultado.indicador) === 1) {
                 Swal.fire({
                     icon: 'success',
-                    title: '¡Empresa Actuzalizada! ',
+                    title: '¡Empresa Actualizada! ',
                     text: 'Empresa actualizada con éxito.',
                 });
             } else {
