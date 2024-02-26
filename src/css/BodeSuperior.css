@@ -1,6 +1,5 @@
 .top-border {
-    position: relative; 
-    background-image: url('../img/BordeSuperior.jpg');   
+    position: relative;  
     top: 0;
     left: 0;
     background-size: cover;
@@ -8,7 +7,17 @@
     display: flex;
     align-items: center;
     width: 100%;
+    animation: changeBackground 20s infinite ease-in-out; 
 }
+
+@keyframes changeBackground {
+    0% { background-image: url('../img/BordeSuperior.jpg'); }
+    25% { background-image: url('../img/BordeSuperior.jpg'); } 
+    50% { background-image: url('../img/BordeSuperior2.jpg'); }
+    75% { background-image: url('../img/BordeSuperior3.jpg'); }
+    100% { background-image: url('../img/BordeSuperior.jpg'); }
+}
+
 
 .top-border::before {
     content: ""; 
