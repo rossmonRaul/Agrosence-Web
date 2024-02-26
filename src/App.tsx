@@ -10,7 +10,7 @@ import { Roles } from './models';
 import { Dashboard } from './pages/private';
 import { Spinner } from 'reactstrap';
 
-
+// Importar componentes con lazy loading
 const Login = lazy(() => import('./pages/LoginPage'));
 const Private = lazy(() => import('./pages/private/Private'));
 const AdministacionAdministradores = lazy(() => import('./pages/private/CrearUsuarioSA/CrearUsuarioSA'))
@@ -21,38 +21,42 @@ const MantenimientoUsuariosAsignados = lazy(() => import('./pages/private/Manten
 
 function App() {
   return (
+    // Suspense para manejar la carga de componentes lazy
     <Suspense fallback={<Spinner color="success">Cargando...</Spinner>}>
+      {/* Proveedor del store de Redux */}
       <Provider store={Store}>
-    <BrowserRouter>
+        {/* Enrutador principal */}
+        <BrowserRouter>
+          {/* Rutas con NotFound handling */}
+          <RoutesWithNotFound>
+            {/* Ruta por defecto redirige a la ruta privada */}
+            <Route path="/" element={<Navigate to={PrivateRoutes.PRIVATE} />} />
+            {/* Ruta pública para el inicio de sesión */}
+            <Route path={PublicRoutes.LOGIN} element={<Login />} />
 
-    <RoutesWithNotFound>
-        <Route path="/" element={<Navigate to={PrivateRoutes.PRIVATE} />} />
-        <Route path={PublicRoutes.LOGIN} element={<Login />} />
-    
-        
-        
-        <Route element={<AuthGuard privateValidation={true} />}>
-          <Route path={`${PrivateRoutes.PRIVATE}/*`} element={<Private />} />
-        </Route>
+            {/* Ruta con guardia de autenticación */}
+            <Route element={<AuthGuard privateValidation={true} />}>
+              {/* Rutas privada */}
+              <Route path={`${PrivateRoutes.PRIVATE}/*`} element={<Private />} />
+            </Route>
 
-        <Route element={<RolGuard rol={Roles.SuperAdmin} />}>
-            <Route path={PrivateRoutes.DASHBOARD} element={<Dashboard />} />
-            <Route path={PrivateRoutes.CREARUSUARIOSA} element={<AdministacionAdministradores />} />
-            <Route path={PrivateRoutes.ADMINISTRAREMPRESAS} element={<AdministrarEmpresas />} />
-        </Route>
+            {/* Rutas accesibles solo para el rol de SuperAdmin */}
+            <Route element={<RolGuard rol={Roles.SuperAdmin} />}>
+              <Route path={PrivateRoutes.DASHBOARD} element={<Dashboard />} />
+              <Route path={PrivateRoutes.CREARUSUARIOSA} element={<AdministacionAdministradores />} />
+              <Route path={PrivateRoutes.ADMINISTRAREMPRESAS} element={<AdministrarEmpresas />} />
+            </Route>
 
-        <Route element={<RolGuard rol={Roles.Admin} />}>
-            <Route path={PrivateRoutes.DASHBOARD} element={<Dashboard />} />
-            <Route path={PrivateRoutes.ASIGNAREMPRESA} element={<AsignarEmpresa />} />
-            <Route path={PrivateRoutes.ASIGNARFINCAPARCELA} element={<AsignarFincaParcela />} />
-            <Route path={PrivateRoutes.MATENIMIENTOUSUARIOSASIGNADOS} element={<MantenimientoUsuariosAsignados />} />
-        </Route>
-        
-      
-      </RoutesWithNotFound>
-     
-    </BrowserRouter>
-    </Provider>
+            {/* Rutas accesibles solo para el rol de Admin */}
+            <Route element={<RolGuard rol={Roles.Admin} />}>
+              <Route path={PrivateRoutes.DASHBOARD} element={<Dashboard />} />
+              <Route path={PrivateRoutes.ASIGNAREMPRESA} element={<AsignarEmpresa />} />
+              <Route path={PrivateRoutes.ASIGNARFINCAPARCELA} element={<AsignarFincaParcela />} />
+              <Route path={PrivateRoutes.MATENIMIENTOUSUARIOSASIGNADOS} element={<MantenimientoUsuariosAsignados />} />
+            </Route>
+          </RoutesWithNotFound>
+        </BrowserRouter>
+      </Provider>
     </Suspense>
   );
 }

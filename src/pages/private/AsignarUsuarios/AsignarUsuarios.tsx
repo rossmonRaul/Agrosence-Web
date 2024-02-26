@@ -1,3 +1,7 @@
+/**
+ * Página para asignar usuarios a empresas.
+ * Permite ver, filtrar y asignar usuarios a empresas, fincas y parcelas.
+ */
 import { useEffect, useState } from "react";
 import Sidebar from "../../../components/sidebar/Sidebar"
 import '../../../css/AdministacionAdministradores.css'
@@ -11,28 +15,34 @@ import Topbar from "../../../components/topbar/Topbar.tsx";
 import Modal from "../../../components/modal/Modal.tsx" 
 import AsignarEmpresa from "../../../components/asignarempresa/AsignarEmpresa.tsx";
 
-
-
-
+/**
+ * Componente funcional que representa la página para asignar usuarios a empresas.
+ */
 function AsignarUsuarios() {
-  const [filtroIdentificacion, setFiltroIdentificacion] = useState('')
-  const [modalAsignar, setModalAsignar] = useState(false);
+   // Estado para el filtro por identificación de usuario
+   const [filtroIdentificacion, setFiltroIdentificacion] = useState('')
+   // Estado para controlar la apertura y cierre del modal de asignación
+   const [modalAsignar, setModalAsignar] = useState(false);
+   // Estado para almacenar la información del usuario seleccionado para asignar
+   const [selectedUsuario, setSelectedUsuario] = useState({
+     identificacion: '',
+     correo: '',
+     idEmpresa: '',
+     estado: 0,
+     idParcela: 0,
+     idFinca: 0
+   });
+   // Estado para almacenar el estado de sesión del usuario
+   const userState = useSelector((store: AppStore) => store.user);
+   // Estado para almacenar todos los usuarios no asignados
+   const [usuariosNoAsignados, setUsuariosNoAsignados] = useState<any[]>([]);
+   // Estado para almacenar los usuarios no asignados filtrados
+   const [usuariosFiltrados, setUsuariosFiltrados] = useState<any[]>([]);
 
 
   const abrirCerrarModalAsignar = () => {
     setModalAsignar(!modalAsignar);
   }
-
-
-
-  const [selectedUsuario, setSelectedUsuario] = useState({
-    identificacion: '',
-    correo: '',
-    idEmpresa: '',
-    estado: 0,
-    idParcela: 0,
-    idFinca: 0
-  });
 
 
   const openModalAsignar = (user: any) => {
@@ -41,15 +51,8 @@ function AsignarUsuarios() {
   };
 
 
- 
 
-  const userState = useSelector((store: AppStore) => store.user);
-
-  
-
-  const [usuariosNoAsignados, setUsuariosNoAsignados] = useState<any[]>([]);
-  const [usuariosFiltrados, setUsuariosFiltrados] = useState<any[]>([]);
-
+ // Obtener los usuarios no asignados al cargar la página
   useEffect(() => {
     obtenerUsuarios();
   }, []); // Ejecutar solo una vez al montar el componente
@@ -85,65 +88,6 @@ function AsignarUsuarios() {
     setUsuariosFiltrados(usuariosFiltrados);
   };
 
-
-
-  {/** 
-  const toggleStatus = (user: any) => {
-    Swal.fire({
-      title: "Asignar",
-      text: "¿Estás seguro de que deseas actualizar el estado del usuario: " + user.identificacion + "?",
-      icon: "warning",
-      showCancelButton: true, // Mostrar el botón de cancelar
-      confirmButtonText: "Sí", // Texto del botón de confirmación
-      cancelButtonText: "No" // Texto del botón de cancelar
-    }).then(async (result) => {
-      if (result.isConfirmed) {
-
-
-        try {
-          const estado = user.estado === 1 ? 0 : 1;
-          const datos = {
-            identificacion: user.identificacion,
-            empresa: user.idEmpresa,
-            idRol: 4,
-            estado: estado,
-            idFinca: selectedUsuario.idFinca,
-            idParcela: selectedUsuario.idParcela
-          };
-
-
-          const resultado = await ActualizarAsignarUsuario(datos);
-
-          if (parseInt(resultado.indicador) === 1) {
-            const nuevosUsuarios = usuariosNoAsignados.map(usuario => {
-              if (usuario.identificacion === user.identificacion) {
-                return { ...usuario, estado: estado, sEstado: estado === 1 ? 'Activo' : 'Inactivo' };
-              }
-              return usuario;
-            });
-
-            setUsuariosNoAsignados(nuevosUsuarios);
-
-            Swal.fire({
-              icon: 'success',
-              title: '¡Estado Actualizado! ',
-              text: 'Actualización exitosa.',
-            });
-          } else {
-            Swal.fire({
-              icon: 'error',
-              title: 'Error al actualziar el estado.',
-              text: resultado.mensaje,
-            });
-          };
-
-        } catch (error) {
-          Swal.fire("Error al asignar al usuario", "", "error");
-        }
-      }
-    });
-  };*/}
-
   const handleAsignar = async () => {
     await obtenerUsuarios();
     abrirCerrarModalAsignar();
@@ -155,8 +99,6 @@ function AsignarUsuarios() {
     { key: 'sEstado', header: 'Estado' },
     { key: 'acciones', header: 'Acciones', actions: true } // Columna para acciones
   ];
-
-
 
   return (
     <Sidebar>
@@ -180,7 +122,6 @@ function AsignarUsuarios() {
         </div>
       </div>
 
-
       <Modal
         isOpen={modalAsignar}
         toggle={abrirCerrarModalAsignar}
@@ -197,7 +138,6 @@ function AsignarUsuarios() {
           </div>
         </div>
       </Modal>
-
     </Sidebar>
   )
 }

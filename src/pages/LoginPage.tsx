@@ -1,4 +1,7 @@
-// Código JSX para la página de login
+/**
+ * Página de inicio de sesión que permite a los usuarios autenticarse en la aplicación.
+ * Proporciona un formulario para ingresar credenciales de usuario y permite alternar entre el inicio de sesión y la creación de una cuenta.
+ */
 import React, { useEffect, useState } from 'react';
 import { FormGroup, Label, Input, Button, Col, FormFeedback } from 'reactstrap';
 import '../css/LoginPage.css';
@@ -11,14 +14,18 @@ import { clearSessionStorage } from '../utilities/SessionStorageUtility.tsx';
 import { PrivateRoutes, PublicRoutes } from '../models/routes.ts';
 import CrearCuentaUsuario from '../components/crearcuentausuario/CrearCuentaUsuario.tsx';
 
-
-
+/**
+ * Interfaz para el estado del formulario de inicio de sesión.
+ */
 interface FormData {
   usuario: string;
   contrasena: string;
   mostrarCrearCuenta: boolean;
 }
 
+/**
+ * Componente funcional que representa el formulario de inicio de sesión.
+ */
 const FormularioInicioSesion: React.FC<{
   onSubmit: (formData: FormData) => void;
   toggleForm: () => void;
@@ -31,8 +38,6 @@ const FormularioInicioSesion: React.FC<{
     event.preventDefault();
     onSubmit(formData);
   };
-
-
 
   return (
     <>
@@ -85,8 +90,10 @@ const FormularioInicioSesion: React.FC<{
   );
 };
 
+/**
+ * Componente funcional que representa el formulario de creación de cuenta.
+ */
 const FormularioCrearCuenta: React.FC<{
-
   toggleForm: () => void;
   formData: FormData;
   handleInputChange: (event: React.ChangeEvent<HTMLInputElement>) => void;
@@ -108,6 +115,9 @@ const FormularioCrearCuenta: React.FC<{
   );
 };
 
+/**
+ * Página de inicio de sesión que permite a los usuarios autenticarse en la aplicación.
+ */
 const Login: React.FC = () => {
   const [formData, setFormData] = useState<FormData>({
     usuario: '',
@@ -126,6 +136,9 @@ const Login: React.FC = () => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
 
+  /**
+   * Alternar entre mostrar el formulario de inicio de sesión y el formulario de creación de cuenta.
+   */
   const toggleForm = () => {
     setFormData(prevState => ({
       ...prevState,
@@ -134,6 +147,9 @@ const Login: React.FC = () => {
     }));
   };
 
+  /**
+   * Manejar cambios en los campos de entrada del formulario.
+   */
   const handleInputChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = event.target;
     setFormData(prevState => ({
@@ -142,8 +158,12 @@ const Login: React.FC = () => {
     }));
   };
 
+  // Almacenar errores
   const [errors, setErrors] = useState<Record<string, string>>({ usuario: '', contrasena: '' });
 
+   
+  // Manejar la validación del formulario de inicio de sesión.
+  
   const handleSubmitConValidacion = () => {
     // Validar campos antes de enviar los datos al servidor
     const newErrors: Record<string, string> = {};
@@ -181,6 +201,7 @@ const Login: React.FC = () => {
     }
   };
 
+  // Manejar el envío del formulario de inicio de sesión.
   const handleLoginSubmit = async () => {
     const formDataLogin = {
       identificacion: formData.usuario,
@@ -189,7 +210,6 @@ const Login: React.FC = () => {
 
     try {
       const usuarioEncontrado = await ValidarUsuario(formDataLogin);
-
       if (usuarioEncontrado.mensaje === "Usuario no encontrado.") {
         Swal.fire({
           icon: 'error',
@@ -220,12 +240,9 @@ const Login: React.FC = () => {
         });
       }
     } catch (error) {
-
+      console.log(error);
     }
-
   };
-
-
 
   return (
     <div className={`container ${isLoggedIn ? '' : 'login-bg'}`}>

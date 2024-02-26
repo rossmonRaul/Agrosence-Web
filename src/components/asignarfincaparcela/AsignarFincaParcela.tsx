@@ -7,7 +7,7 @@ import Swal from 'sweetalert2';
 import { EditarFincaParsela } from '../../servicios/ServicioUsuario';
 import '../../css/CrearCuenta.css'
 
-
+// Definición de las propiedades que espera recibir el componente
 interface Props {
     idEmpresa: number;
     identificacion: string;
@@ -24,25 +24,27 @@ interface Option {
     idFinca: number;
 }
 
+// Componente funcional principal
 const AsignarFincaParcela: React.FC<Props> = ({ idEmpresa, onEdit, identificacion, idFinca, idUsuarioFincasParcelas}) => {
+     // Estado para almacenar los errores de validación del formulario
     const [errors, setErrors] = useState<Record<string, string>>({ finca: '', parcela: ''});
 
+    // Estado para almacenar los datos del formulario
     const [formData, setFormData] = useState<any>({
         idFinca: 0,
         idParcela: 0,
     });
 
     // Estados para almacenar los datos obtenidos de la API
-
     const [fincas, setFincas] = useState<Option[]>([]);
     const [parcelas, setParcelas] = useState<Option[]>([]);
 
 
     // Estado para almacenar la selección actual de cada select
-
     const [selectedFinca, setSelectedFinca] = useState<string>(() => idFinca ? idFinca.toString() : '');
     const [selectedParcela, setSelectedParcela] = useState<string>('');
 
+    // Efectos para obtener las fincas y parcelas al cargar el componente
     useEffect(() => {
         const obtenerFincas = async () => {
             try {
@@ -52,12 +54,8 @@ const AsignarFincaParcela: React.FC<Props> = ({ idEmpresa, onEdit, identificacio
                 console.error('Error al obtener las fincas:', error);
             }
         };
-
         obtenerFincas();
-
-
     }, []);
-
 
     useEffect(() => {
         const obtenerParcelas = async () => {
@@ -68,10 +66,7 @@ const AsignarFincaParcela: React.FC<Props> = ({ idEmpresa, onEdit, identificacio
                 console.error('Error al obtener las parcelas:', error);
             }
         };
-
         obtenerParcelas();
-
-
     }, []);
 
 
@@ -82,6 +77,7 @@ const AsignarFincaParcela: React.FC<Props> = ({ idEmpresa, onEdit, identificacio
     const filteredParcelas = parcelas.filter(parcela => parcela.idFinca === parseInt(selectedFinca));
 
 
+     // Funciónes para manejar el cambio de la selección de finca y parcela
     const handleFincaChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
         const value = e.target.value;
         setSelectedFinca(value);
@@ -94,7 +90,6 @@ const AsignarFincaParcela: React.FC<Props> = ({ idEmpresa, onEdit, identificacio
     };
 
     useEffect(() => {
-
         // Actualizar el formData cuando las props cambien
         setFormData({
             idEmpresa: idEmpresa,
@@ -105,7 +100,6 @@ const AsignarFincaParcela: React.FC<Props> = ({ idEmpresa, onEdit, identificacio
     const handleSubmitConValidacion = () => {
         // Validar campos antes de enviar los datos al servidor
         const newErrors: Record<string, string> = {};
-
 
         // Validar selección de finca
         if (!selectedFinca) {
@@ -135,6 +129,7 @@ const AsignarFincaParcela: React.FC<Props> = ({ idEmpresa, onEdit, identificacio
     };
 
 
+    // Función para manejar el envío del formulario
     const handleSubmit = async () => {
         const datos = {
             idFinca: parseInt(formData.finca),
@@ -143,10 +138,7 @@ const AsignarFincaParcela: React.FC<Props> = ({ idEmpresa, onEdit, identificacio
             identificacion: identificacion,
             idUsuario: idUsuarioFincasParcelas
         };
-
         try {
-
-            
 
             const resultado = await EditarFincaParsela(datos);
 
@@ -168,12 +160,11 @@ const AsignarFincaParcela: React.FC<Props> = ({ idEmpresa, onEdit, identificacio
                 onEdit();
             }
         } catch (error) {
-
+            console.log(error);
         }
-
-
     };
 
+     // Renderizado del componente
     return (
         <div>
             <div className="form-container-fse">

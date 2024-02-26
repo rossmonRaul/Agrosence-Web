@@ -20,7 +20,6 @@
     margin-bottom: 2px;
 }
 
-
 .input-styled {
     /* Estilos base para los inputs */
     border-radius: 5px;
@@ -31,9 +30,7 @@
     padding: 8px;
     color: #000;
     margin-bottom: 20px;
-
     line-height: 1.5;
-
     background-color: #fff;
     background-clip: padding-box;
     transition: border-color 0.15s ease-in-out, box-shadow 0.15s ease-in-out;

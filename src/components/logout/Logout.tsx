@@ -6,11 +6,17 @@ import { useDispatch } from "react-redux";
 import '../../css/Logout.css';
 import Swal from "sweetalert2";
 
+/**
+ * Componente funcional para cerrar sesión de usuario.
+ */
 function Logout() {
-    const navigate = useNavigate();
-    const dispatch = useDispatch();
+    const navigate = useNavigate(); // Hook de react-router-dom para la navegación
+    const dispatch = useDispatch(); // Hook de react-redux para despachar acciones
+    /**
+     * Función para manejar el evento de cierre de sesión.
+     * Muestra un mensaje de confirmación antes de cerrar la sesión.
+     */
     const logOut = () => {
-
         Swal.fire({
             title: "Cerrar Sesión",
             text: "¿Estás seguro de que deseas cerrar la sesión?",
@@ -25,7 +31,6 @@ function Logout() {
                 navigate(`/${PublicRoutes.LOGIN}`, { replace: true });
             }
         });
-        
     };
 
     return <button className="btn-cerrar-sesion" onClick={logOut}>Log Out</button>;

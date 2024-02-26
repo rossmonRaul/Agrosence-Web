@@ -5,55 +5,68 @@ import Swal from 'sweetalert2';
 import '../../css/CrearCuenta.css'
 import { GuardarEmpresas } from '../../servicios/ServicioEmpresas';
 
+// Interfaz para las propiedades del componente AgregarEmpresa
 interface AgregarEmpresa {
     onAdd: () => void;
 }
 
+// Componente funcional CrearEmpresa
+const CrearEmpresa: React.FC<AgregarEmpresa> = ({ onAdd }) => {
 
-const CrearEmpresa: React.FC<AgregarEmpresa>= ({ onAdd }) => {
-    const [errors, setErrors] = useState<Record<string, string>>({nombre: ''});
+    // Estado para almacenar los errores de validación del formulario
+    const [errors, setErrors] = useState<Record<string, string>>({ nombre: '' });
 
+    // Estado para almacenar los datos del formulario
     const [formData, setFormData] = useState<any>({
         idEmpresa: 0,
         nombre: ''
     });
 
+    // Función para manejar cambios en los inputs del formulario
+    const handleInputChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+        const { name, value } = event.target;
+        setFormData((prevState: FormData) => ({
+            ...prevState,
+            [name]: value
+        }));
+    };
 
+    // Función para manejar el blur de los inputs y eliminar mensajes de error
+    const handleInputBlur = (fieldName: string) => {
+        // Eliminar el mensaje de error para el campo cuando el identificacion comienza a escribir en él
+        if (errors[fieldName]) {
+            setErrors((prevErrors: any) => ({
+                ...prevErrors,
+                [fieldName]: ''
+            }));
+        }
+    };
+
+    // Función para manejar el envío del formulario con validación
     const handleSubmitConValidacion = () => {
         // Validar campos antes de enviar los datos al servidor
         const newErrors: Record<string, string> = {};
-
-
         if (!formData.nombre.trim()) {
             newErrors.nombre = 'El nombre es requerido';
         } else {
             newErrors.nombre = '';
         }
-
-
-
         // Actualizar los errores
         setErrors(newErrors);
-
         // Si no hay errores, enviar los datos al servidor
         if (Object.values(newErrors).every(error => error === '')) {
-
             // Llamar a la función handleSubmit para enviar los datos al servidor
             handleSubmit();
         }
     };
 
-
+    // Función para manejar el envío del formulario
     const handleSubmit = async () => {
         const datos = {
             nombre: formData.nombre
         };
-
-
         try {
-
             const resultado = await GuardarEmpresas(datos);
-
             if (parseInt(resultado.indicador) === 1) {
                 Swal.fire({
                     icon: 'success',
@@ -67,35 +80,15 @@ const CrearEmpresa: React.FC<AgregarEmpresa>= ({ onAdd }) => {
                     text: resultado.mensaje,
                 });
             };
-
-            
         } catch (error) {
-
+            console.log(error)
         }
-
         if (onAdd) {
             onAdd();
         }
     };
 
-    const handleInputChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-        const { name, value } = event.target;
-        setFormData((prevState: FormData) => ({
-            ...prevState,
-            [name]: value
-        }));
-    };
-
-    const handleInputBlur = (fieldName: string) => {
-        // Eliminar el mensaje de error para el campo cuando el identificacion comienza a escribir en él
-        if (errors[fieldName]) {
-            setErrors((prevErrors: any) => ({
-                ...prevErrors,
-                [fieldName]: ''
-            }));
-        }
-    };
-
+    // Renderizado del componente
     return (
         <div>
             <div className="form-container-fse">

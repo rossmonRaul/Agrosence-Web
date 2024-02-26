@@ -1,3 +1,8 @@
+/**
+ * Página para administrar las empresas.
+ * Permite ver, filtrar, editar y cambiar el estado de las empresas.
+ */
+
 import { useEffect, useState } from "react";
 import Sidebar from "../../../components/sidebar/Sidebar";
 import '../../../css/AdministacionAdministradores.css';
@@ -10,42 +15,31 @@ import EditarEmpresa from "../../../components/empresa/EditarEmpresa.tsx";
 import CrearEmpresa from "../../../components/empresa/CrearEmpresa.tsx";
 import Swal from "sweetalert2";
 
-
-
-
+// Componente funcional que representa la página de administración de empresas.
 function AdministrarEmpresas() {
+    // Estado para el filtro por nombre de empresa
     const [filtroNombre, setFiltroNombre] = useState('')
+     // Estado para controlar la apertura y cierre del modal de edición
     const [modalEditar, setModalEditar] = useState(false);
+    // Estado para controlar la apertura y cierre del modal de inserción
     const [modalInsertar, setModalInsertar] = useState(false);
-
-
-    const abrirCerrarModalInsertar = () => {
-        setModalInsertar(!modalInsertar);
-    }
-
+    // Estado para controlar la apertura y cierre del modal de inserción
     const [selectedEmpresa, setSelectedEmpresa] = useState({
         idEmpresa: '',
         nombre: ''
     });
-
-    const abrirCerrarModalEditar = () => {
-        setModalEditar(!modalEditar);
-    }
-
-
-    const openModal = (empresa: any) => {
-        setSelectedEmpresa(empresa);
-        abrirCerrarModalEditar();
-    };
-
-
+     // Estado para almacenar todas las empresas
     const [empresas, setEmpresa] = useState<any[]>([]);
+    // Estado para almacenar las empresas filtradas
     const [empresasFiltrados, setEmpresasFiltrados] = useState<any[]>([]);
 
+
+    // Obtener las empresas al cargar la página
     useEffect(() => {
         obtenerEmpresas();
     }, []); // Ejecutar solo una vez al montar el componente
 
+    // Función para obtener todas las empresas
     const obtenerEmpresas = async () => {
         try {
             const empresas = await ObtenerEmpresas();
@@ -61,14 +55,17 @@ function AdministrarEmpresas() {
         }
     };
 
+    // Filtrar las empresas cada vez que cambie el filtro de nombre
     useEffect(() => {
         filtrarEmpresas();
     }, [filtroNombre, empresas]); // Ejecutar cada vez que el filtro o los datos originales cambien
 
+    // Función para manejar el cambio en el filtro de nombre
     const handleChangeFiltro = (e: React.ChangeEvent<HTMLInputElement>) => {
         setFiltroNombre(e.target.value);
     };
 
+    // Función para filtrar las empresas por nombre
     const filtrarEmpresas = () => {
         const empresaFiltrados = filtroNombre
             ? empresas.filter((empresa: any) =>
@@ -78,7 +75,23 @@ function AdministrarEmpresas() {
         setEmpresasFiltrados(empresaFiltrados);
     };
 
+    // Funciones para manejar la apertura y cierre de los modales
+    const abrirCerrarModalInsertar = () => {
+        setModalInsertar(!modalInsertar);
+    }
 
+    
+    const abrirCerrarModalEditar = () => {
+        setModalEditar(!modalEditar);
+    }
+
+
+    const openModal = (empresa: any) => {
+        setSelectedEmpresa(empresa);
+        abrirCerrarModalEditar();
+    };
+
+     // Función para cambiar el estado de una empresa
     const toggleStatus = (empresa: any) => {
         Swal.fire({
             title: "Cambiar Estado",
@@ -89,28 +102,19 @@ function AdministrarEmpresas() {
             cancelButtonText: "No" // Texto del botón de cancelar
         }).then(async (result) => {
             if (result.isConfirmed) {
-
-
                 try {
-                    
                     const datos = {
                         idEmpresa: empresa.idEmpresa,
                         nombre: empresa.nombre
                     };
-
                     const resultado = await CambiarEstadoEmpresas(datos);
-
                     if (parseInt(resultado.indicador) === 1) {
-                        
-
                         Swal.fire({
                             icon: 'success',
                             title: '¡Estado Actualizado! ',
                             text: 'Actualización exitosa.',
                         });
-
                         await obtenerEmpresas();
-
                     } else {
                         Swal.fire({
                             icon: 'error',
@@ -118,7 +122,6 @@ function AdministrarEmpresas() {
                             text: resultado.mensaje,
                         });
                     };
-
                 } catch (error) {
                     Swal.fire("Error al asignar al usuario", "", "error");
                 }
@@ -126,7 +129,7 @@ function AdministrarEmpresas() {
         });
     };
 
-
+    // Funciónes para manejar la edición y la adicion de una empresa (actualizar tabla)
     const handleEditarEmpresa = async () => {
         await obtenerEmpresas();
         abrirCerrarModalEditar();
@@ -137,13 +140,12 @@ function AdministrarEmpresas() {
         abrirCerrarModalInsertar();
     };
 
+    // Definición de las columnas de la tabl
     const columns = [
         { key: 'nombre', header: 'Nombre Empresa' },
         { key: 'sEstado', header: 'Estado' },
         { key: 'acciones', header: 'Acciones', actions: true } // Columna para acciones
     ];
-
-
 
     return (
         <Sidebar>

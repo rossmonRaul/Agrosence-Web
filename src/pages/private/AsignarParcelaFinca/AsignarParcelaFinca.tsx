@@ -1,3 +1,7 @@
+/**
+ * Página para asignar fincas y parcelas a usuarios.
+ * Permite ver, filtrar, editar y cambiar el estado de las asignaciones de fincas y parcelas.
+ */
 import { useEffect, useState } from "react";
 import Sidebar from "../../../components/sidebar/Sidebar"
 import '../../../css/AdministacionAdministradores.css'
@@ -12,21 +16,17 @@ import AsignarFincaParcela from "../../../components/asignarfincaparcela/Asignar
 import AsignarFincaParcelaUsuario from "../../../components/asignarfincaparcela/AsignarFincaParcelaUsuario.tsx";
 import Topbar from "../../../components/topbar/Topbar.tsx";
 
-
-
-
+// Componente funcional que representa la página para asignar fincas y parcelas a usuarios.
 function AsignarParcelaFinca() {
+    // Estado para el filtro por identificación de usuario
     const [filtroIdentificacion, setFiltroIdentificacion] = useState('')
+    // Estado para almacenar el usuario logueado
     const userLoginState = useSelector((store: AppStore) => store.user);
+    // Estado para controlar la apertura y cierre del modal de edición
     const [modalEditar, setModalEditar] = useState(false);
+    // Estado para controlar la apertura y cierre del modal de asignación
     const [modalAsignar, setModalAsignar] = useState(false);
-
-
-    const abrirCerrarModalAsignar = () => {
-        setModalAsignar(!modalAsignar);
-    }
-
-
+    // Estado para almacenar la información del usuario seleccionado para editar
     const [selectedUsuario, setSelectedUsuario] = useState({
         identificacion: '',
         correo: '',
@@ -35,25 +35,31 @@ function AsignarParcelaFinca() {
         idFinca: '',
         idUsuarioFincaParcela: ''
     });
+    // Estado para almacenar todas las asignaciones de fincas y parcelas
+    const [usuariosAsignados, setUsuariosAsignados] = useState<any[]>([]);
+    // Estado para almacenar las asignaciones de fincas y parcelas filtradas
+    const [usuariosFiltrados, setUsuariosFiltrados] = useState<any[]>([]);
+
+    // Funciones para manejar el estado de los modales
+    const abrirCerrarModalAsignar = () => {
+        setModalAsignar(!modalAsignar);
+    }
 
     const abrirCerrarModalEditar = () => {
         setModalEditar(!modalEditar);
     }
-
 
     const openModal = (usuario: any) => {
         setSelectedUsuario(usuario);
         abrirCerrarModalEditar();
     };
 
-
-    const [usuariosAsignados, setUsuariosAsignados] = useState<any[]>([]);
-    const [usuariosFiltrados, setUsuariosFiltrados] = useState<any[]>([]);
-
+    // Obtener los usuarios
     useEffect(() => {
         obtenerUsuarios();
     }, []); // Ejecutar solo una vez al montar el componente
 
+    // Función para obtener todas las asignaciones de fincas y parcelas
     const obtenerUsuarios = async () => {
         try {
             const datos = {
@@ -71,6 +77,7 @@ function AsignarParcelaFinca() {
         }
     };
 
+    // Filtrar las asignaciones de fincas y parcelas cada vez que cambie el filtro de identificación de usuario
     useEffect(() => {
         filtrarUsuarios();
     }, [filtroIdentificacion, usuariosAsignados]); // Ejecutar cada vez que el filtro o los datos originales cambien
@@ -79,6 +86,7 @@ function AsignarParcelaFinca() {
         setFiltroIdentificacion(e.target.value);
     };
 
+    // Función para filtrar las asignaciones de fincas y parcelas por identificación de usuario
     const filtrarUsuarios = () => {
         const usuariosFiltrados = filtroIdentificacion
             ? usuariosAsignados.filter((usuario: any) =>
@@ -88,8 +96,7 @@ function AsignarParcelaFinca() {
         setUsuariosFiltrados(usuariosFiltrados);
     };
 
-
-
+    // Función para cambiar el estado de una asignación de finca y parcela
     const toggleStatus = (user: any) => {
         Swal.fire({
             title: "Cambiar Estado",
@@ -100,22 +107,16 @@ function AsignarParcelaFinca() {
             cancelButtonText: "No" // Texto del botón de cancelar
         }).then(async (result) => {
             if (result.isConfirmed) {
-
-
                 try {
-                    
                     const datos = {
                         identificacion: user.identificacion,
                         idUsuario: user.idUsuarioFincaParcela,
                         idFinca: user.idFinca,
                         idParcela: user.idParcela
                     };
-
-
                     const resultado = await CambiarEstadoUsuarioFincaParcela(datos);
-
                     if (parseInt(resultado.indicador) === 1) {
-                       
+
 
                         await obtenerUsuarios();
 
@@ -139,9 +140,7 @@ function AsignarParcelaFinca() {
         });
     };
 
-
     const handleEditarUsuario = async () => {
-        // Lógica para editar el usuario
         // Después de editar exitosamente, actualiza la lista de usuarios administradores
         await obtenerUsuarios();
         abrirCerrarModalEditar();
@@ -152,6 +151,7 @@ function AsignarParcelaFinca() {
         abrirCerrarModalAsignar();
     };
 
+    // Columnas de la tabla
     const columns = [
         { key: 'identificacion', header: 'Identificación' },
         { key: 'empresa', header: 'Empresa' },
@@ -161,15 +161,13 @@ function AsignarParcelaFinca() {
         { key: 'acciones', header: 'Acciones', actions: true } // Columna para acciones
     ];
 
-
-
     return (
         <Sidebar>
             <div className="main-container">
-                <Topbar/>
+                <Topbar />
                 <BordeSuperior text="Asignar Finca y Parcela" />
                 <div className="content">
-                <button onClick={() => abrirCerrarModalAsignar()} className="btn-crear">Asignar Finca y Parcela</button>
+                    <button onClick={() => abrirCerrarModalAsignar()} className="btn-crear">Asignar Finca y Parcela</button>
                     <div className="filtro-container">
                         <label htmlFor="filtroIdentificacion">Filtrar por identificación:</label>
                         <input
@@ -182,7 +180,7 @@ function AsignarParcelaFinca() {
                         />
                     </div>
                     <TableResponsive columns={columns} data={usuariosFiltrados} openModal={openModal} toggleStatus={toggleStatus} btnActionName={"Editar "} />
- 
+
                 </div>
             </div>
 
@@ -205,7 +203,6 @@ function AsignarParcelaFinca() {
                 </div>
             </Modal>
 
-
             <Modal
                 isOpen={modalAsignar}
                 toggle={abrirCerrarModalAsignar}
@@ -216,15 +213,13 @@ function AsignarParcelaFinca() {
                     <div className='form-group'>
                         <AsignarFincaParcelaUsuario
                             onAdd={handleAsignar}
-                            idEmpresa= {userLoginState.idEmpresa}
+                            idEmpresa={userLoginState.idEmpresa}
                         />
                     </div>
                 </div>
             </Modal>
 
         </Sidebar>
-
-
     )
 }
 export default AsignarParcelaFinca

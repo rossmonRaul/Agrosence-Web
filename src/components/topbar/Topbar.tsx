@@ -15,9 +15,6 @@ const Topbar: React.FC = () => {
         setShowOptions(!showOptions);
     };
 
-    
-
-    
     // Manejador de clics para abrir o cerrar el panel de notificaciones
     const toggleNotifications = () => {
         setShowNotifications(!showNotifications);
@@ -50,9 +47,6 @@ const Topbar: React.FC = () => {
                     </div>
                 )}
                 </div>
-                
-                
-
             </div>
         </div>
     );

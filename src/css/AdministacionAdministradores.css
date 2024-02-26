@@ -2,18 +2,11 @@
   display: flex;
   flex-direction: column;
   align-items: center;
-  /* Centrar contenido horizontalmente */
   justify-content: center;
-  /* Centrar contenido verticalmente */
-
 }
-
-
 
 .content {
   width: 80%;
-  /* Ancho del contenido */
-  /* Otros estilos para el contenido */
 }
 
 .btn-crear {
@@ -22,7 +15,6 @@
   margin-top: 10px;
   border-color: #548454;
 }
-
 
 /* Estilos para el contenedor del filtro */
 .filtro-container {

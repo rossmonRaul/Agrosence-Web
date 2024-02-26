@@ -6,23 +6,29 @@ import '../../css/CrearCuenta.css'
 import { ObtenerEmpresas } from '../../servicios/ServicioEmpresas.ts';
 import '../../css/FormSeleccionEmpresa.css'
 
+// Interfaz para las opciones de empresa
 interface Option {
     idEmpresa: number;
     nombre: string;
 }
 
+// Interfaz para las propiedades del componente
 interface AgregarAdministradorProps {
     onAdd: () => void;
 }
 
+// Componente funcional principal
 const CrearCuentaAdministrador: React.FC<AgregarAdministradorProps> = ({ onAdd }) => {
-
+    // Estado para almacenar las empresas disponibles
     const [empresas, setEmpresas] = useState<Option[]>([]);
 
+    // Estado para almacenar la empresa seleccionada
     const [selectedEmpresa, setSelectedEmpresa] = useState<string>();
 
+    // Estado para almacenar los errores de validación del formulario
     const [errors, setErrors] = useState<Record<string, string>>({ identificacion: '', contrasena: '', contrasenaConfirmar: '', email: '', empresa: '' });
 
+    // Estado para almacenar los datos del formulario
     const [formData, setFormData] = useState<any>({
         identificacion: '',
         email: '',
@@ -31,6 +37,7 @@ const CrearCuentaAdministrador: React.FC<AgregarAdministradorProps> = ({ onAdd }
         empresa: ''
     });
 
+    // Efecto para obtener las empresas disponibles al cargar el componente
     useEffect(() => {
         const obtenerEmpresas = async () => {
             try {
@@ -48,6 +55,24 @@ const CrearCuentaAdministrador: React.FC<AgregarAdministradorProps> = ({ onAdd }
         obtenerEmpresas();
     }, []);
 
+     // Función para manejar el blur de los inputs y eliminar mensajes de error
+     const handleInputBlur = (fieldName: string) => {
+        // Eliminar el mensaje de error para el campo cuando el identificacion comienza a escribir en él
+        if (errors[fieldName]) {
+            setErrors((prevErrors: any) => ({
+                ...prevErrors,
+                [fieldName]: ''
+            }));
+        }
+    };
+
+    // Función para manejar cambios en la selección de empresa
+    const handleEmpresaChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
+        const value = e.target.value;
+        setSelectedEmpresa(value);
+    };
+
+    // Función para manejar cambios en los inputs del formulario
     const handleInputChange = (event: React.ChangeEvent<HTMLInputElement>) => {
         const { name, value } = event.target;
         setFormData((prevState: FormData) => ({
@@ -56,7 +81,7 @@ const CrearCuentaAdministrador: React.FC<AgregarAdministradorProps> = ({ onAdd }
         }));
     };
 
-
+    // Función para manejar el envío del formulario con validación
     const handleSubmitConValidacion = () => {
         // Validar campos antes de avanzar al siguiente paso
         const newErrors: Record<string, string> = {};
@@ -68,23 +93,20 @@ const CrearCuentaAdministrador: React.FC<AgregarAdministradorProps> = ({ onAdd }
             newErrors.identificacion = '';
         }
 
-        
         // Validar contraseña
         if (!formData.contrasena.trim()) {
             newErrors.contrasena = 'La contraseña es requerida';
-          } else if (formData.contrasena.length < 8) {
+        } else if (formData.contrasena.length < 8) {
             newErrors.contrasena = 'La contraseña debe tener al menos 8 caracteres';
-          } else if (!/[!@#$%^&*(),.?":{}|<>]/.test(formData.contrasena)) {
+        } else if (!/[!@#$%^&*(),.?":{}|<>]/.test(formData.contrasena)) {
             newErrors.contrasena = 'La contraseña debe contener al menos un carácter especial';
-          } else if (!/[A-Z]/.test(formData.contrasena)) {
+        } else if (!/[A-Z]/.test(formData.contrasena)) {
             newErrors.contrasena = 'La contraseña debe contener al menos una letra mayúscula';
-          } else if (!/\d/.test(formData.contrasena)) {
+        } else if (!/\d/.test(formData.contrasena)) {
             newErrors.contrasena = 'La contraseña debe contener al menos un número';
-          } else {
+        } else {
             newErrors.contrasena = '';
-          }
-          
-
+        }
 
         // Validar que las contraseñas coincidan
         if (formData.contrasena !== formData.contrasenaConfirmar) {
@@ -94,8 +116,6 @@ const CrearCuentaAdministrador: React.FC<AgregarAdministradorProps> = ({ onAdd }
         } else {
             newErrors.contrasenaConfirmar = '';
         }
-
-
 
         // Validar correo no vacío y con formato válido
         const correoPattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
@@ -107,6 +127,7 @@ const CrearCuentaAdministrador: React.FC<AgregarAdministradorProps> = ({ onAdd }
             newErrors.email = '';
         }
 
+        // Validar que la empresa este seleccionada
         if (!selectedEmpresa) {
             newErrors.empresa = 'Debe seleccionar una empresa';
         } else {
@@ -120,11 +141,9 @@ const CrearCuentaAdministrador: React.FC<AgregarAdministradorProps> = ({ onAdd }
         if (Object.values(newErrors).every(error => error === '')) {
             handleSubmit();
         }
-
-
     };
 
-
+    // Función para manejar el envío del formulario
     const handleSubmit = async () => {
         const datos = {
             identificacion: formData.identificacion,
@@ -132,9 +151,6 @@ const CrearCuentaAdministrador: React.FC<AgregarAdministradorProps> = ({ onAdd }
             contrasena: formData.contrasena,
             idEmpresa: selectedEmpresa
         };
-
-        console.log(datos)
-
         try {
             const resultado = await InsertarUsuarioAdministrador(datos);
             if (parseInt(resultado.indicador) === 0) {
@@ -155,27 +171,11 @@ const CrearCuentaAdministrador: React.FC<AgregarAdministradorProps> = ({ onAdd }
                 onAdd();
             }
         } catch (error) {
-
-        }
-
-
-    };
-
-    const handleInputBlur = (fieldName: string) => {
-        // Eliminar el mensaje de error para el campo cuando el identificacion comienza a escribir en él
-        if (errors[fieldName]) {
-            setErrors((prevErrors: any) => ({
-                ...prevErrors,
-                [fieldName]: ''
-            }));
+            console.log(error);
         }
     };
 
-    const handleEmpresaChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
-        const value = e.target.value;
-        setSelectedEmpresa(value);
-    };
-
+    // Renderizado del componente
     return (
         <div>
             <FormGroup row>

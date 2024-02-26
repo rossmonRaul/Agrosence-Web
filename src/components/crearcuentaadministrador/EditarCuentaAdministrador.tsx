@@ -6,6 +6,7 @@ import '../../css/CrearCuenta.css'
 import { ObtenerEmpresas } from '../../servicios/ServicioEmpresas.ts';
 import '../../css/FormSeleccionEmpresa.css'
 
+// Interfaz para las opciones de empresa
 interface Option {
     idEmpresa: number;
     nombre: string;
@@ -13,20 +14,26 @@ interface Option {
     contrasenaConfirmar: string
 }
 
+// Interfaz para las propiedades del componente
 interface AdministradorSeleccionadoProps {
     identificacion: string;
     empresa: string;
     onEdit: () => void;
 }
 
+// Componente funcional principal
 const EditarCuentaAdministrador: React.FC<AdministradorSeleccionadoProps> = ({ identificacion, empresa, onEdit }) => {
 
+    // Estado para almacenar las empresas disponibles
     const [empresas, setEmpresas] = useState<Option[]>([]);
 
+    // Estado para almacenar la empresa seleccionada
     const [selectedEmpresa, setSelectedEmpresa] = useState<string>(() => empresa);
 
+    // Estado para almacenar los errores de validación del formulario
     const [errors, setErrors] = useState<Record<string, string>>({ identificacion: '', email: '', empresa: '', contrasena: '', nuevaContrasena: '' });
 
+    // Estado para almacenar los datos del formulario
     const [formData, setFormData] = useState<any>({
         identificacion: '',
         contrasena: '',
@@ -34,6 +41,7 @@ const EditarCuentaAdministrador: React.FC<AdministradorSeleccionadoProps> = ({ i
         contrasenaConfirmar: ''
     });
 
+    // Función para manejar cambios en los inputs del formulario
     const handleInputChange = (event: React.ChangeEvent<HTMLInputElement>) => {
         const { name, value } = event.target;
         setFormData((prevState: FormData) => ({
@@ -42,26 +50,22 @@ const EditarCuentaAdministrador: React.FC<AdministradorSeleccionadoProps> = ({ i
         }));
     };
 
+    // Efecto para obtener las empresas disponibles al cargar el componente
     useEffect(() => {
         const obtenerEmpresas = async () => {
             try {
-
                 const empresasResponse = await ObtenerEmpresas();
                 // Obtener todas las fincas y parcelas de una vez
-
                 setEmpresas(empresasResponse);
-
             } catch (error) {
                 console.error('Error al obtener las empresas:', error);
             }
         };
-
         obtenerEmpresas();
     }, []);
 
 
     useEffect(() => {
-
         // Actualizar el formData cuando las props cambien
         setFormData({
             identificacion: identificacion,
@@ -71,10 +75,30 @@ const EditarCuentaAdministrador: React.FC<AdministradorSeleccionadoProps> = ({ i
         });
     }, [identificacion, empresa]);
 
+    // Función para manejar el blur de los inputs y eliminar mensajes de error
+    const handleInputBlur = (fieldName: string) => {
+        // Eliminar el mensaje de error para el campo cuando el identificacion comienza a escribir en él
+        if (errors[fieldName]) {
+            setErrors((prevErrors: any) => ({
+                ...prevErrors,
+                [fieldName]: ''
+            }));
+        }
+    };
 
+    // Función para manejar cambios en la selección de empresa
+    const handleEmpresaChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
+        const value = e.target.value;
+        setSelectedEmpresa(value);
 
+    };
 
+    // Obtener la empresa seleccionada
+    const empresaSeleccionada = empresas.find(empresa => {
+        return Number(empresa.idEmpresa) === Number(selectedEmpresa);
+    });
 
+    // Función para manejar el envío del formulario con validación
     const handleSubmitConValidacion = () => {
         // Validar campos antes de avanzar al siguiente paso
         const newErrors: Record<string, string> = {};
@@ -85,7 +109,6 @@ const EditarCuentaAdministrador: React.FC<AdministradorSeleccionadoProps> = ({ i
         } else {
             newErrors.identificacion = '';
         }
-
 
         if (formData.contrasena.trim()) {
             if (formData.contrasena.length < 8) {
@@ -106,8 +129,6 @@ const EditarCuentaAdministrador: React.FC<AdministradorSeleccionadoProps> = ({ i
             }
         }
 
-
-
         if (!selectedEmpresa) {
             newErrors.empresa = 'Debe seleccionar una empresa';
         } else {
@@ -121,11 +142,9 @@ const EditarCuentaAdministrador: React.FC<AdministradorSeleccionadoProps> = ({ i
         if (Object.values(newErrors).every(error => error === '')) {
             handleSubmit();
         }
-
-
     };
 
-
+    // Función para manejar el envío del formulario
     const handleSubmit = async () => {
         const datos = {
             identificacion: formData.identificacion,
@@ -133,11 +152,7 @@ const EditarCuentaAdministrador: React.FC<AdministradorSeleccionadoProps> = ({ i
             idEmpresa: selectedEmpresa
         };
         try {
-
             const resultado = await ActualizarUsuarioAdministrador(datos);
-            console.log(datos)
-            console.log(resultado)
-
             if (parseInt(resultado.indicador) === 1) {
                 Swal.fire({
                     icon: 'success',
@@ -156,34 +171,11 @@ const EditarCuentaAdministrador: React.FC<AdministradorSeleccionadoProps> = ({ i
                 onEdit();
             }
         } catch (error) {
-
-        }
-
-
-    };
-
-    const handleInputBlur = (fieldName: string) => {
-        // Eliminar el mensaje de error para el campo cuando el identificacion comienza a escribir en él
-        if (errors[fieldName]) {
-            setErrors((prevErrors: any) => ({
-                ...prevErrors,
-                [fieldName]: ''
-            }));
+            console.log(error);
         }
     };
 
-    const handleEmpresaChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
-        const value = e.target.value;
-        setSelectedEmpresa(value);
-
-    };
-
-    const empresaSeleccionada = empresas.find(empresa => {
-        console.log('Empresa ID:', empresa.idEmpresa);
-        console.log('Selected Empresa:', selectedEmpresa);
-        return Number(empresa.idEmpresa) === Number(selectedEmpresa);
-    });
-
+    // Renderizado del componente
     return (
         <div>
             <FormGroup row>

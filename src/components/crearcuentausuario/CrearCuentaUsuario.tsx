@@ -4,11 +4,13 @@ import { InsertarUsuario } from '../../servicios/ServicioUsuario.ts';
 import Swal from 'sweetalert2';
 
 
-
+// Componente funcional CrearCuentaUsuario
 const CrearCuentaUsuario: React.FC<{ toggleForm: () => void }> = (props) => {
 
+  // Estado para almacenar los errores de validación del formulario
   const [errors, setErrors] = useState<Record<string, string>>({ identificacion: '', contrasena: '', contrasenaConfirmar: '', email: '' });
 
+  // Estado para almacenar los datos del formulario
   const [formData, setFormData] = useState<any>({
     identificacion: '',
     email: '',
@@ -16,6 +18,7 @@ const CrearCuentaUsuario: React.FC<{ toggleForm: () => void }> = (props) => {
     contrasenaConfirmar: ''
   });
 
+  // Función para manejar cambios en los inputs del formulario
   const handleInputChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = event.target;
     setFormData((prevState: FormData) => ({
@@ -24,7 +27,18 @@ const CrearCuentaUsuario: React.FC<{ toggleForm: () => void }> = (props) => {
     }));
   };
 
+  // Función para manejar el blur de los inputs y eliminar mensajes de error
+  const handleInputBlur = (fieldName: string) => {
+    // Eliminar el mensaje de error para el campo cuando el identificacion comienza a escribir en él
+    if (errors[fieldName]) {
+      setErrors((prevErrors: any) => ({
+        ...prevErrors,
+        [fieldName]: ''
+      }));
+    }
+  };
 
+  // Función para manejar el envío del formulario con validación
   const handleSubmitConValidacion = () => {
     // Validar campos antes de avanzar al siguiente paso
     const newErrors: Record<string, string> = {};
@@ -50,7 +64,6 @@ const CrearCuentaUsuario: React.FC<{ toggleForm: () => void }> = (props) => {
     } else {
       newErrors.contrasena = '';
     }
-    
 
     // Validar que las contraseñas coincidan
     if (formData.contrasena !== formData.contrasenaConfirmar) {
@@ -60,8 +73,6 @@ const CrearCuentaUsuario: React.FC<{ toggleForm: () => void }> = (props) => {
     } else {
       newErrors.contrasenaConfirmar = '';
     }
-
-
 
     // Validar correo no vacío y con formato válido
     const correoPattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
@@ -80,11 +91,9 @@ const CrearCuentaUsuario: React.FC<{ toggleForm: () => void }> = (props) => {
     if (Object.values(newErrors).every(error => error === '')) {
       handleSubmit();
     }
-
-
   };
 
-
+  // Función para manejar el envío del formulario
   const handleSubmit = async () => {
     const datos = {
       identificacion: formData.identificacion,
@@ -93,8 +102,6 @@ const CrearCuentaUsuario: React.FC<{ toggleForm: () => void }> = (props) => {
     };
     try {
       const resultado = await InsertarUsuario(datos);
-
-
       if (parseInt(resultado.indicador) === 0) {
         Swal.fire({
           icon: 'success',
@@ -110,23 +117,11 @@ const CrearCuentaUsuario: React.FC<{ toggleForm: () => void }> = (props) => {
         });
       };
     } catch (error) {
-
-    }
-
-
-  };
-
-  const handleInputBlur = (fieldName: string) => {
-    // Eliminar el mensaje de error para el campo cuando el identificacion comienza a escribir en él
-    if (errors[fieldName]) {
-      setErrors((prevErrors: any) => ({
-        ...prevErrors,
-        [fieldName]: ''
-      }));
+      console.log(error);
     }
   };
 
-
+  // Renderizado del componente
   return (
     <div>
       <h2>Crear una Cuenta</h2>

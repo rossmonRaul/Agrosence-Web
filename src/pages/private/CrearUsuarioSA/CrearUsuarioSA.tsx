@@ -1,3 +1,7 @@
+/**
+ * Página para crear cuentas de administradores.
+ * Permite ver, filtrar y crear cuentas de administradores.
+ */
 import { useEffect, useState } from "react";
 import Sidebar from "../../../components/sidebar/Sidebar"
 import '../../../css/AdministacionAdministradores.css'
@@ -10,42 +14,47 @@ import EditarCuentaAdministrador from "../../../components/crearcuentaadministra
 import Swal from "sweetalert2";
 import Topbar from "../../../components/topbar/Topbar.tsx";
 
-
-
-
+/**
+* Componente funcional que representa la página para crear cuentas de administradores.
+*/
 function CrearCuentaSA() {
-
+  // Estado para controlar la apertura y cierre del modal de inserción
   const [modalInsertar, setModalInsertar] = useState(false);
+  // Estado para controlar la apertura y cierre del modal de edición
   const [modalEditar, setModalEditar] = useState(false);
-  const [filtroIdentificacion, setFiltroIdentificacion] = useState('')
-  const abrirCerrarModalInsertar = () => {
-    setModalInsertar(!modalInsertar);
-  }
-
-
+  // Estado para el filtro por identificación de usuario
+  const [filtroIdentificacion, setFiltroIdentificacion] = useState('');
+  // Estado para almacenar la información del usuario seleccionado
   const [selectedUsuario, setSelectedUsuario] = useState({
     identificacion: '',
     correo: '',
     idEmpresa: '',
   });
+  // Estado para almacenar todos los usuarios administradores
+  const [usuariosAdministradores, setUsuariosAdministradores] = useState<any[]>([]);
+  // Estado para almacenar los usuarios administradores filtrados
+  const [usuariosFiltrados, setUsuariosFiltrados] = useState<any[]>([]);
 
 
-
+  // Funciones para manejar el estado del modal
   const openModal = (administrador: any) => {
     setSelectedUsuario(administrador);
     abrirCerrarModalEditar();
   };
 
+  const abrirCerrarModalInsertar = () => {
+    setModalInsertar(!modalInsertar);
+  }
 
-
-
-  const [usuariosAdministradores, setUsuariosAdministradores] = useState<any[]>([]);
-  const [usuariosFiltrados, setUsuariosFiltrados] = useState<any[]>([]);
+  const abrirCerrarModalEditar = () => {
+    setModalEditar(!modalEditar);
+  }
 
   useEffect(() => {
     obtenerUsuarios();
   }, []); // Ejecutar solo una vez al montar el componente
 
+  // Función para obtener todos los usuarios administradores
   const obtenerUsuarios = async () => {
     try {
       const usuarios = await ObtenerUsuariosAdministradores();
@@ -68,6 +77,7 @@ function CrearCuentaSA() {
     setFiltroIdentificacion(e.target.value);
   };
 
+  // Función para filtrar los usuarios cada vez que cambie el filtro de identificación
   const filtrarUsuarios = () => {
     const usuariosFiltrados = filtroIdentificacion
       ? usuariosAdministradores.filter((usuario: any) =>
@@ -77,6 +87,7 @@ function CrearCuentaSA() {
     setUsuariosFiltrados(usuariosFiltrados);
   };
 
+  // Funcion para cambiar el estado de los administradores
   const toggleStatus = async (user: any) => {
     Swal.fire({
       title: "Actualizar",
@@ -88,17 +99,12 @@ function CrearCuentaSA() {
     }).then(async (result) => {
       if (result.isConfirmed) {
         try {
-          
           const datos = {
             identificacion: user.identificacion,
           };
-          
           const resultado = await CambiarEstadoUsuario(datos);
-
           if (parseInt(resultado.indicador) === 1) {
-            
             await obtenerUsuarios();
-
             Swal.fire({
               icon: 'success',
               title: '¡Estado Actualizado! ',
@@ -118,11 +124,7 @@ function CrearCuentaSA() {
     });
   };
 
-
-  const abrirCerrarModalEditar = () => {
-    setModalEditar(!modalEditar);
-  }
-
+  // Columnas de la tabla
   const columns = [
     { key: 'identificacion', header: 'Identificación' },
     { key: 'correo', header: 'Correo' },
@@ -148,7 +150,6 @@ function CrearCuentaSA() {
 
   return (
     <Sidebar>
-
       <div className="main-container">
         <Topbar />
         <BordeSuperior text="Administradores" />

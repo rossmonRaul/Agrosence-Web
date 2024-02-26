@@ -2,44 +2,51 @@ import React, { useState } from 'react';
 import '../../css/Table.css'
 import { Table } from 'reactstrap'
 
+// Interface que define la estructura de una columna de la tabla.
 interface Column {
   key: string;
   header: string;
   actions?: boolean;
 }
 
+// Interface que define la estructura de una fila de la tabla.
 interface TableRow {
   [key: string]: any;
 }
 
+// Propiedades esperadas por el componente TableResponsive.
 interface TableProps {
-  columns: Column[];
-  data: TableRow[];
-  itemsPerPage?: number;
-  btnActionName: string;
-  openModal: (user: any) => void;
-  toggleStatus?: (user: any) => void;
-  btnToggleOptionalStatus?: string;
-  toggleOptionalStatus?: (user: any) => void;
+  columns: Column[]; // Columnas de la tabla
+  data: TableRow[]; // Datos a mostrar en la tabla
+  itemsPerPage?: number; // Número de elementos por página (opcional, por defecto es 5)
+  btnActionName: string; // Nombre del botón de acción en cada fila
+  openModal: (user: any) => void; // Función para abrir un modal con los detalles de un elemento
+  toggleStatus?: (user: any) => void; // Función para cambiar el estado de un elemento (opcional)
+  btnToggleOptionalStatus?: string; // Nombre del botón de acción opcional en cada fila (opcional)
+  toggleOptionalStatus?: (user: any) => void; // Función para realizar una acción opcional en cada fila (opcional)
 }
 
 const TableResponsive: React.FC<TableProps> = ({ columns, data, openModal, toggleStatus, itemsPerPage: defaultItemsPerPage = 5, btnActionName, toggleOptionalStatus, btnToggleOptionalStatus }) => {
   const [currentPage, setCurrentPage] = useState<number>(1);
   const [itemsPerPage, setItemsPerPage] = useState<number>(defaultItemsPerPage);
 
+  // Calcular el número total de elementos y de páginas
   const totalItems: number = data.length;
   const totalPages: number = Math.ceil(totalItems / itemsPerPage);
 
+  // Calcular el índice del primer y último elemento de la página actual
   const indexOfLastItem: number = currentPage * itemsPerPage;
   const indexOfFirstItem: number = indexOfLastItem - itemsPerPage;
   const currentItems: TableRow[] = data.slice(indexOfFirstItem, indexOfLastItem);
 
+  // Función para cambiar a una página específica
   const paginate = (pageNumber: number) => {
     if (pageNumber >= 1 && pageNumber <= totalPages) {
       setCurrentPage(pageNumber);
     }
   };
 
+   // Manejar el cambio en el número de elementos por página
   const handleItemsPerPageChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
     const newItemsPerPage = parseInt(e.target.value);
     setItemsPerPage(newItemsPerPage);

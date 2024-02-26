@@ -5,23 +5,26 @@ import Swal from 'sweetalert2';
 import '../../css/CrearCuenta.css'
 import { EditarEmpresas } from '../../servicios/ServicioEmpresas';
 
-
+// Interfaz para las propiedades del componente EditarEmpresa
 interface Props {
     idEmpresa: string;
     nombrebase: string;
     onEdit: () => void;
 }
 
-const EditarEmpresa: React.FC<Props> = ({ idEmpresa, nombrebase, onEdit}) => {
+// Componente funcional EditarEmpresa
+const EditarEmpresa: React.FC<Props> = ({ idEmpresa, nombrebase, onEdit }) => {
+
+    // Estado para almacenar los errores de validación del formulario
     const [errors, setErrors] = useState<Record<string, string>>({ nombrebase });
 
+    // Estado para almacenar los datos del formulario
     const [formData, setFormData] = useState<any>({
         idEmpresa: 0,
         nombre: ''
     });
 
-
-
+    // Efecto para actualizar el formData cuando las props cambien
     useEffect(() => {
         // Actualizar el formData cuando las props cambien
         setFormData({
@@ -31,19 +34,35 @@ const EditarEmpresa: React.FC<Props> = ({ idEmpresa, nombrebase, onEdit}) => {
     }, [idEmpresa, nombrebase]);
 
 
+    // Función para manejar cambios en los inputs del formulario
+    const handleInputChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+        const { name, value } = event.target;
+        setFormData((prevState: FormData) => ({
+            ...prevState,
+            [name]: value
+        }));
+    };
+
+    // Función para manejar el blur de los inputs y eliminar mensajes de error
+    const handleInputBlur = (fieldName: string) => {
+        // Eliminar el mensaje de error para el campo cuando el identificacion comienza a escribir en él
+        if (errors[fieldName]) {
+            setErrors((prevErrors: any) => ({
+                ...prevErrors,
+                [fieldName]: ''
+            }));
+        }
+    };
+
+    // Función para manejar el envío del formulario con validación
     const handleSubmitConValidacion = () => {
         // Validar campos antes de enviar los datos al servidor
         const newErrors: Record<string, string> = {};
-
-
         if (!formData.nombre.trim()) {
             newErrors.nombre = 'El nombre es requerido';
         } else {
             newErrors.nombre = '';
         }
-
-
-
         // Actualizar los errores
         setErrors(newErrors);
 
@@ -55,18 +74,14 @@ const EditarEmpresa: React.FC<Props> = ({ idEmpresa, nombrebase, onEdit}) => {
         }
     };
 
-
+    // Función para manejar el envío del formulario
     const handleSubmit = async () => {
         const datos = {
             idEmpresa: idEmpresa,
             nombre: formData.nombre
         };
-
-
         try {
-
             const resultado = await EditarEmpresas(datos);
-
             if (parseInt(resultado.indicador) === 1) {
                 Swal.fire({
                     icon: 'success',
@@ -85,27 +100,7 @@ const EditarEmpresa: React.FC<Props> = ({ idEmpresa, nombrebase, onEdit}) => {
                 onEdit();
             }
         } catch (error) {
-
-        }
-
-
-    };
-
-    const handleInputChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-        const { name, value } = event.target;
-        setFormData((prevState: FormData) => ({
-            ...prevState,
-            [name]: value
-        }));
-    };
-
-    const handleInputBlur = (fieldName: string) => {
-        // Eliminar el mensaje de error para el campo cuando el identificacion comienza a escribir en él
-        if (errors[fieldName]) {
-            setErrors((prevErrors: any) => ({
-                ...prevErrors,
-                [fieldName]: ''
-            }));
+            console.log(error);
         }
     };
 

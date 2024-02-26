@@ -1,3 +1,7 @@
+/**
+ * Página para el mantenimiento de usuarios asignados.
+ * Permite ver, filtrar y editar usuarios asignados.
+ */
 import { useEffect, useState } from "react";
 import Sidebar from "../../../components/sidebar/Sidebar"
 import '../../../css/AdministacionAdministradores.css'
@@ -11,39 +15,42 @@ import CambiarContrasenaAsignados from "../../../components/cambiarcontrasenaasi
 import { useSelector } from "react-redux";
 import { AppStore } from "../../../redux/Store.ts";
 
-
-
-
+/**
+ * Componente funcional que representa la página de mantenimiento de usuarios asignados.
+ */
 function MantenimientoUsuariosAsignados() {
-
+  // Estado para controlar la apertura y cierre del modal de edición
   const [modalEditar, setModalEditar] = useState(false);
-  const [filtroIdentificacion, setFiltroIdentificacion] = useState('')
-  const userLoginState = useSelector((store: AppStore) => store.user);
-
-
+  // Estado para el filtro por identificación de usuario
+  const [filtroIdentificacion, setFiltroIdentificacion] = useState('');
+  // Estado para almacenar la información del usuario seleccionado
   const [selectedUsuario, setSelectedUsuario] = useState({
     identificacion: '',
     correo: '',
     idEmpresa: '',
   });
+  // Estado para almacenar todos los usuarios asignados
+  const [usuariosAsignados, setUsuariosAsignados] = useState<any[]>([]);
+  // Estado para almacenar los usuarios asignados filtrados
+  const [usuariosFiltrados, setUsuariosFiltrados] = useState<any[]>([]);
+  // Estado para obtener el estado del usuario que inició sesión
+  const userLoginState = useSelector((store: AppStore) => store.user);
 
-
-
+  // Funciones para manejar el estado de los modales
   const openModal = (usuario: any) => {
     setSelectedUsuario(usuario);
     abrirCerrarModalEditar();
   };
 
-
-
-
-  const [usuariosAsignados, setUsuariosAsignados] = useState<any[]>([]);
-  const [usuariosFiltrados, setUsuariosFiltrados] = useState<any[]>([]);
+  const abrirCerrarModalEditar = () => {
+    setModalEditar(!modalEditar);
+  }
 
   useEffect(() => {
     obtenerUsuarios();
   }, []); // Ejecutar solo una vez al montar el componente
 
+  // Función para obtener todos los usuarios asignados
   const obtenerUsuarios = async () => {
     try {
       const datos={
@@ -69,6 +76,7 @@ function MantenimientoUsuariosAsignados() {
     setFiltroIdentificacion(e.target.value);
   };
 
+  // Función para filtrar los usuarios cada vez que cambie el filtro de identificación
   const filtrarUsuarios = () => {
     const usuariosFiltrados = filtroIdentificacion
       ? usuariosAsignados.filter((usuario: any) =>
@@ -78,6 +86,7 @@ function MantenimientoUsuariosAsignados() {
     setUsuariosFiltrados(usuariosFiltrados);
   };
 
+  // Función para cambiar el estado de un usuario
   const toggleStatus = async (user: any) => {
     Swal.fire({
       title: "Actualizar",
@@ -89,17 +98,12 @@ function MantenimientoUsuariosAsignados() {
     }).then(async (result) => {
       if (result.isConfirmed) {
         try {
-          
           const datos = {
             identificacion: user.identificacion,
           };
-          
           const resultado = await CambiarEstadoUsuario(datos);
-
           if (parseInt(resultado.indicador) === 1) {
-            
             await obtenerUsuarios();
-
             Swal.fire({
               icon: 'success',
               title: '¡Estado Actualizado! ',
@@ -119,11 +123,7 @@ function MantenimientoUsuariosAsignados() {
     });
   };
 
-
-  const abrirCerrarModalEditar = () => {
-    setModalEditar(!modalEditar);
-  }
-
+  // Columnas de la tabla
   const columns = [
     { key: 'identificacion', header: 'Identificación' },
     { key: 'correo', header: 'Correo' },
@@ -131,19 +131,14 @@ function MantenimientoUsuariosAsignados() {
     { key: 'acciones', header: 'Acciones', actions: true } // Columna para acciones
   ];
 
-
   const handleEditarUsuario = async () => {
-    // Lógica para editar el usuario
     // Después de editar exitosamente, actualiza la lista de usuarios Asignados
     await obtenerUsuarios();
     abrirCerrarModalEditar();
   };
 
-
-
   return (
     <Sidebar>
-
       <div className="main-container">
         <Topbar />
         <BordeSuperior text="Mantenimiento Usuarios Asignados" />
@@ -160,7 +155,6 @@ function MantenimientoUsuariosAsignados() {
             />
           </div>
           <TableResponsive columns={columns} data={usuariosFiltrados} openModal={openModal} toggleStatus={toggleStatus} btnActionName={"Editar"} />
-
         </div>
       </div>
 
@@ -179,8 +173,6 @@ function MantenimientoUsuariosAsignados() {
           </div>
         </div>
       </Modal>
-
-
     </Sidebar>
   )
 }

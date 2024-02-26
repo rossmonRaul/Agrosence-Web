@@ -7,6 +7,9 @@ import { AppStore } from '../../redux/Store';
 import { IoBusiness } from 'react-icons/io5';
 import { GiBarn } from 'react-icons/gi';
 
+/**
+ * Definición de la interfaz para los elementos del menú.
+ */
 interface MenuItem {
     path: string;
     name: string;
@@ -15,14 +18,15 @@ interface MenuItem {
     children?: MenuItem[]; // Para elementos colapsables
 }
 
+// Componente Sidebar que muestra un menú lateral.
 const Sidebar = ({ children }: { children: React.ReactNode }) => {
     const location = useLocation();
-
     const [isOpen, setIsOpen] = useState(false);
     const toggle = () => setIsOpen(!isOpen);
     // Estado para controlar la apertura y cierre de los elementos secundarios del menú
     const [submenuOpen, setSubmenuOpen] = useState<{ [path: string]: boolean }>({});
 
+    // Funcion para manejar la expancion del sidebar
     const toggleSubmenu = (path: string) => {
         setSubmenuOpen(prevState => ({
             ...prevState,
@@ -30,6 +34,7 @@ const Sidebar = ({ children }: { children: React.ReactNode }) => {
         }));
     };
 
+    // Items que se desean que tenga el menu
     const menuItem: MenuItem[] = [
         {
             path: "/",
@@ -68,7 +73,7 @@ const Sidebar = ({ children }: { children: React.ReactNode }) => {
             roles: [2]
         },
         {
-            path: "#", // Utiliza "#" como un enlace que no lleva a ninguna parte
+            path: "#", // Utilizar "#" como un enlace que no lleva a ninguna parte para los multi-seleccion
             name: "Pages",
             icon: <i className="fas fa-fw fa-folder"></i>,
             roles: [0],
@@ -97,10 +102,10 @@ const Sidebar = ({ children }: { children: React.ReactNode }) => {
         }
     ];
 
+    // Obtener el estado del usuario del almacenamiento Redux
     const userState = useSelector((store: AppStore) => store.user);
 
     return (
-       
         <div style={{ marginLeft: isOpen ? "200px" : "50px" }} className="container">
             
             <div style={{ width: isOpen ? "200px" : "50px" }} className="sidebar">
