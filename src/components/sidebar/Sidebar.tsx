@@ -50,13 +50,13 @@ const Sidebar = ({ children }: { children: React.ReactNode }) => {
         },
         {
             path: "/usuariosadmin",
-            name: "Administrar Administradores",
+            name: "Administradores",
             icon: <FaUserAlt />,
             roles: [1]
         },
         {
             path: "/asignarempresa",
-            name: "Asignar Usuario Nuevo",
+            name: "Habilitar Usuarios",
             icon: <FaUserAlt />,
             roles: [2]
         },
