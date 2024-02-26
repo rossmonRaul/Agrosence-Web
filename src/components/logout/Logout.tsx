@@ -33,7 +33,7 @@ function Logout() {
         });
     };
 
-    return <button className="btn-cerrar-sesion" onClick={logOut}>Log Out</button>;
+    return <button className="btn-cerrar-sesion" onClick={logOut}>Cerrar Sesión</button>;
 }
 
 export default Logout;

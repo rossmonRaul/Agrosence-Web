@@ -175,13 +175,13 @@ const CrearCuentaUsuario: React.FC<{ toggleForm: () => void }> = (props) => {
         </Col>
       </FormGroup>
       <FormGroup row>
-        <Label for="contrasenaConfirmar" sm={2} className="input-label">Repetir contraseña</Label>
+        <Label for="contrasenaConfirmar" sm={2} className="input-label">Confirme la contraseña</Label>
         <Col sm={12}>
           <Input
             type="password"
             id="contrasenaConfirmar"
             name="contrasenaConfirmar"
-            placeholder="Repita su contraseña"
+            placeholder="Confirme la contraseña"
             value={formData.contrasenaConfirmar}
             onChange={handleInputChange}
             onBlur={() => handleInputBlur('contrasenaConfirmar')} // Manejar blur para quitar el mensaje de error
