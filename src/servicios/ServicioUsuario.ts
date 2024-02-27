@@ -25,6 +25,12 @@ export const ObtenerUsuariosPorEmpresa = async (data: any) => {
     return await ProcesarDatosApi('POST', url, data);
 }
 
+export const ObtenerUsuariosAsignadosPorIdentificacion = async (data: any) => {
+    //const url = `${controlador}/ObtenerUsuarios`;
+    const url = `http://localhost:5271/api/v1.0/${controlador}/ObtenerUsuariosAsignadosPorIdentificacion`;
+    return await ProcesarDatosApi('POST', url, data);
+}
+
 export const ObtenerUsuariosPorFinca = async (data: any) => {
     //const url = `${controlador}/ObtenerUsuarios`;
     const url = `http://localhost:5271/api/v1.0/${controlador}/ObtenerUsuariosPorRol3`;

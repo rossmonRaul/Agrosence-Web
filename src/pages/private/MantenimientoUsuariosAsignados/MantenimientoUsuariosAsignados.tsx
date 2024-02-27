@@ -14,6 +14,7 @@ import Topbar from "../../../components/topbar/Topbar.tsx";
 import CambiarContrasenaAsignados from "../../../components/cambiarcontrasenaasignados/CambiarContrasenaAsignados.tsx";
 import { useSelector } from "react-redux";
 import { AppStore } from "../../../redux/Store.ts";
+import AsignacionesUsuarios from "../../../components/asignacionesusuario/AsignacionesUsuarios.tsx";
 
 /**
  * Componente funcional que representa la página de mantenimiento de usuarios asignados.
@@ -21,6 +22,8 @@ import { AppStore } from "../../../redux/Store.ts";
 function MantenimientoUsuariosAsignados() {
   // Estado para controlar la apertura y cierre del modal de edición
   const [modalEditar, setModalEditar] = useState(false);
+  // Estado para controlar la apertura y cierre del modal de asignaciones
+  const [modalAsignar, setModalAsignar] = useState(false);
   // Estado para el filtro por identificación de usuario
   const [filtroIdentificacion, setFiltroIdentificacion] = useState('');
   // Estado para almacenar la información del usuario seleccionado
@@ -44,6 +47,15 @@ function MantenimientoUsuariosAsignados() {
 
   const abrirCerrarModalEditar = () => {
     setModalEditar(!modalEditar);
+  }
+
+  const openModalAsignar = (usuario: any) => {
+    setSelectedUsuario(usuario);
+    abrirCerrarModalAsignar();
+  };
+
+  const abrirCerrarModalAsignar= () => {
+    setModalAsignar(!modalAsignar);
   }
 
   useEffect(() => {
@@ -123,6 +135,8 @@ function MantenimientoUsuariosAsignados() {
     });
   };
 
+  
+
   // Columnas de la tabla
   const columns = [
     { key: 'identificacion', header: 'Identificación' },
@@ -154,7 +168,8 @@ function MantenimientoUsuariosAsignados() {
               className="form-control"
             />
           </div>
-          <TableResponsive columns={columns} data={usuariosFiltrados} openModal={openModal} toggleStatus={toggleStatus} btnActionName={"Editar"} />
+          <TableResponsive columns={columns} data={usuariosFiltrados} openModal={openModal} toggleStatus={toggleStatus} btnActionName={"Editar"} 
+          toggleOptionalStatus={openModalAsignar} btnToggleOptionalStatus={'Asignaciones'} propClassNameOpcional={'Asignar'}/>
         </div>
       </div>
 
@@ -169,6 +184,22 @@ function MantenimientoUsuariosAsignados() {
             <CambiarContrasenaAsignados
               identificacion={selectedUsuario.identificacion}
               onEdit={handleEditarUsuario}
+            />
+          </div>
+        </div>
+      </Modal>
+
+      <Modal
+        isOpen={modalAsignar}
+        toggle={abrirCerrarModalAsignar}
+        title="Editar Asignaciones"
+        onCancel={abrirCerrarModalAsignar}
+      >
+        <div className='form-container'>
+          <div className='form-group'>
+            <AsignacionesUsuarios
+              identificacion={selectedUsuario.identificacion}
+              idEmpresa={userLoginState.idEmpresa}
             />
           </div>
         </div>

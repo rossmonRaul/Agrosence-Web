@@ -5,7 +5,6 @@ import '../../css/Sidebar.css';
 import { useSelector } from 'react-redux';
 import { AppStore } from '../../redux/Store';
 import { IoBusiness } from 'react-icons/io5';
-import { GiBarn } from 'react-icons/gi';
 
 /**
  * Definición de la interfaz para los elementos del menú.
@@ -61,14 +60,8 @@ const Sidebar = ({ children }: { children: React.ReactNode }) => {
             roles: [2]
         },
         {
-            path: "/asignarfincaparcela",
-            name: "Asignar Finca y Parcela",
-            icon: <GiBarn />,
-            roles: [2]
-        },
-        {
             path: "/administrarusuariosasignados",
-            name: "Matenimiento Usuarios Asignados",
+            name: "Usuarios Asignados",
             icon: <FaUserCog />,
             roles: [2]
         },

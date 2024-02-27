@@ -24,9 +24,10 @@ interface TableProps {
   toggleStatus?: (user: any) => void; // Función para cambiar el estado de un elemento (opcional)
   btnToggleOptionalStatus?: string; // Nombre del botón de acción opcional en cada fila (opcional)
   toggleOptionalStatus?: (user: any) => void; // Función para realizar una acción opcional en cada fila (opcional)
+  propClassNameOpcional?: string; // Prop opcional para cambiar el estilo del boton
 }
 
-const TableResponsive: React.FC<TableProps> = ({ columns, data, openModal, toggleStatus, itemsPerPage: defaultItemsPerPage = 5, btnActionName, toggleOptionalStatus, btnToggleOptionalStatus }) => {
+const TableResponsive: React.FC<TableProps> = ({ propClassNameOpcional ,columns, data, openModal, toggleStatus, itemsPerPage: defaultItemsPerPage = 5, btnActionName, toggleOptionalStatus, btnToggleOptionalStatus }) => {
   const [currentPage, setCurrentPage] = useState<number>(1);
   const [itemsPerPage, setItemsPerPage] = useState<number>(defaultItemsPerPage);
 
@@ -92,7 +93,7 @@ const TableResponsive: React.FC<TableProps> = ({ columns, data, openModal, toggl
                             </button>
                           )}
                           {btnToggleOptionalStatus && toggleOptionalStatus && (
-                            <button className='btn-desvincular' onClick={() => toggleOptionalStatus(item)}>{btnToggleOptionalStatus}</button>
+                            <button className={propClassNameOpcional === 'btn-desvincular' ? propClassNameOpcional : 'btn-asignaciones'} onClick={() => toggleOptionalStatus(item)}>{btnToggleOptionalStatus}</button>
                           )}
                         </div>
                       ) : (

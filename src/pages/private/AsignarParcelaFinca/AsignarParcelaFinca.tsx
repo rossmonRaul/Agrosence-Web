@@ -180,7 +180,6 @@ function AsignarParcelaFinca() {
                         />
                     </div>
                     <TableResponsive columns={columns} data={usuariosFiltrados} openModal={openModal} toggleStatus={toggleStatus} btnActionName={"Editar "} />
-
                 </div>
             </div>
 

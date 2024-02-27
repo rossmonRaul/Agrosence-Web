@@ -15,7 +15,6 @@ const Login = lazy(() => import('./pages/LoginPage'));
 const Private = lazy(() => import('./pages/private/Private'));
 const AdministacionAdministradores = lazy(() => import('./pages/private/CrearUsuarioSA/CrearUsuarioSA'))
 const AsignarEmpresa = lazy(() => import('./pages/private/AsignarUsuarios/AsignarUsuarios'))
-const AsignarFincaParcela = lazy(() => import('./pages/private/AsignarParcelaFinca/AsignarParcelaFinca'))
 const AdministrarEmpresas = lazy(() => import('./pages/private/AdministrarEmpresas/AdministrarEmpresas'))
 const MantenimientoUsuariosAsignados = lazy(() => import('./pages/private/MantenimientoUsuariosAsignados/MantenimientoUsuariosAsignados'))
 
@@ -51,7 +50,6 @@ function App() {
             <Route element={<RolGuard rol={Roles.Admin} />}>
               <Route path={PrivateRoutes.DASHBOARD} element={<Dashboard />} />
               <Route path={PrivateRoutes.ASIGNAREMPRESA} element={<AsignarEmpresa />} />
-              <Route path={PrivateRoutes.ASIGNARFINCAPARCELA} element={<AsignarFincaParcela />} />
               <Route path={PrivateRoutes.MATENIMIENTOUSUARIOSASIGNADOS} element={<MantenimientoUsuariosAsignados />} />
             </Route>
           </RoutesWithNotFound>
