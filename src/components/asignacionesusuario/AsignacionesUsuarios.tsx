@@ -247,7 +247,6 @@ const AsignacionesUsuarios: React.FC<Props> = ({ identificacion, idEmpresa }) =>
 
     // Columnas de la tabla
     const columns = [
-        { key: 'identificacion', header: 'Identificación' },
         { key: 'sEstado', header: 'Estado' },
         { key: 'nombreFinca', header: 'Finca' },
         { key: 'nombreParcela', header: 'Parcela' },
