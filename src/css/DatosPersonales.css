@@ -1,47 +1,45 @@
 .input-styled {
-    /* Estilos base para los inputs */
-    border-radius: 5px;
+  /* Estilos base para los inputs */
+  border-radius: 5px;
   border: 1px solid #548454;
   min-height: 25px;
-  width: calc(100% - 0px); 
+  width: calc(100% - 0px);
   box-sizing: border-box;
   padding: 8px;
-  color: #000; 
-  margin-bottom: 20px; 
-   
-    line-height: 1.5;
-    
-    background-color: #fff;
-    background-clip: padding-box;
-    transition: border-color 0.15s ease-in-out, box-shadow 0.15s ease-in-out;
-  }
-  
-  .input-error {
-    /* Estilos para resaltar los inputs con errores */
-    border-color: #dc3545 !important;
-  }
-  
-  .form-control::placeholder {
-    /* Estilos para el placeholder */
-    color: #6c757d;
-  }
-  
-  .form-control:focus::placeholder {
-    /* Estilos para el placeholder cuando el input está enfocado */
-    color: #495057;
-  }
-  
-  .form-control:disabled::placeholder {
-    /* Estilos para el placeholder cuando el input está deshabilitado */
-    color: #6c757d;
-  }
-  
-  .invalid-feedback {
-    /* Estilos para el mensaje de error */
-    display: block;
-    width: 100%;
-    font-size: 80%;
-    color: #dc3545;
-    margin-top: -15px;
-    margin-bottom: 2px;
-  }
+  color: #000;
+  margin-bottom: 20px;
+  line-height: 1.5;
+  background-color: #fff;
+  background-clip: padding-box;
+  transition: border-color 0.15s ease-in-out, box-shadow 0.15s ease-in-out;
+}
+
+.input-error {
+  /* Estilos para resaltar los inputs con errores */
+  border-color: #dc3545 !important;
+}
+
+.form-control::placeholder {
+  /* Estilos para el placeholder */
+  color: #6c757d;
+}
+
+.form-control:focus::placeholder {
+  /* Estilos para el placeholder cuando el input está enfocado */
+  color: #495057;
+}
+
+.form-control:disabled::placeholder {
+  /* Estilos para el placeholder cuando el input está deshabilitado */
+  color: #6c757d;
+}
+
+.invalid-feedback {
+  /* Estilos para el mensaje de error */
+  display: block;
+  width: 100%;
+  font-size: 80%;
+  color: #dc3545;
+  margin-top: -15px;
+  margin-bottom: 2px;
+}

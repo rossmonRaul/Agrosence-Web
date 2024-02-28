@@ -6,7 +6,10 @@
   color-scheme: light dark;
   color: rgba(255, 255, 255, 0.87);
   background-color: #242424;
-
+  --color-background-light: #ffffff;
+  --color-text-light: #333333;
+  --color-background-dark: #333333;
+  --color-text-dark: #0a0a0a;
   font-synthesis: none;
   text-rendering: optimizeLegibility;
   -webkit-font-smoothing: antialiased;
@@ -24,10 +27,12 @@ a:hover {
 
 body {
   margin: 0;
-  display: flex;
+  
   place-items: center;
   min-width: 320px;
   min-height: 100vh;
+  background-color: var(--color-background-light);
+  color: var(--color-text-light);
 }
 
 h1 {
@@ -53,6 +58,12 @@ button:focus,
 button:focus-visible {
   outline: 4px auto -webkit-focus-ring-color;
 }
+
+.dark-theme body {
+  background-color: var(--color-background-dark);
+  color: var(--color-text-dark);
+}
+
 
 @media (prefers-color-scheme: light) {
   :root {

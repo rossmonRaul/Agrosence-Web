@@ -8,17 +8,17 @@ interface Props {
 }
 
 const DatosPersonales: React.FC<Props> = ({ formData, handleInputChange, nextStep }) => {
-  const [errors, setErrors] = useState<Record<string, string>>({ usuario: '', contrasena: '', contrasenaConfirmar: '', email: '' });
+  const [errors, setErrors] = useState<Record<string, string>>({ identificacion: '', contrasena: '', contrasenaConfirmar: '', email: '' });
 
   const handleSubmit = () => {
     // Validar campos antes de avanzar al siguiente paso
     const newErrors: Record<string, string> = {};
 
-    // Validar usuario no vacío
-    if (!formData.usuario.trim()) {
-      newErrors.usuario = 'El usuario es requerido';
+    // Validar identificacion no vacío
+    if (!formData.identificacion.trim()) {
+      newErrors.identificacion = 'La identificación es requerida';
     } else {
-      newErrors.usuario = '';
+      newErrors.identificacion = '';
     }
 
     // Validar contraseña no vacía
@@ -59,7 +59,7 @@ const DatosPersonales: React.FC<Props> = ({ formData, handleInputChange, nextSte
   };
 
   const handleInputBlur = (fieldName: string) => {
-    // Eliminar el mensaje de error para el campo cuando el usuario comienza a escribir en él
+    // Eliminar el mensaje de error para el campo cuando el identificacion comienza a escribir en él
     if (errors[fieldName]) {
       setErrors((prevErrors: any) => ({
         ...prevErrors,
@@ -72,20 +72,20 @@ const DatosPersonales: React.FC<Props> = ({ formData, handleInputChange, nextSte
     <div>
       <h2>Crear una Cuenta</h2>
       <FormGroup row>
-        <Label for="usuario" sm={2} className="input-label">Usuario</Label>
+        <Label for="identificacion" sm={2} className="input-label">Identificación</Label>
         <Col sm={12}>
           <Input
             type="text"
-            id="usuario"
-            name="usuario"
-            placeholder="Alguien"
-            value={formData.usuario}
+            id="identificacion"
+            name="identificacion"
+            placeholder="Identificación"
+            value={formData.identificacion}
             onChange={handleInputChange}
-            onBlur={() => handleInputBlur('usuario')} // Manejar blur para quitar el mensaje de error
-            className={errors.usuario ? 'input-styled input-error' : 'input-styled'} // Aplicar clase 'is-invalid' si hay un error
+            onBlur={() => handleInputBlur('identificacion')} // Manejar blur para quitar el mensaje de error
+            className={errors.identificacion ? 'input-styled input-error' : 'input-styled'} // Aplicar clase 'is-invalid' si hay un error
             
           />
-          <FormFeedback>{errors.usuario}</FormFeedback>
+          <FormFeedback>{errors.identificacion}</FormFeedback>
         </Col>
       </FormGroup>
       <FormGroup row>

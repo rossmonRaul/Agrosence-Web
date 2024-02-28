@@ -7,8 +7,6 @@ export const ProcesarDatosApi = async (method: string, url: string, data: any) =
         },
         mode: 'cors',
         cache: 'default',
-        //credentials: 'include',
-
     };
 
     if (method !== 'GET' && data !== undefined) {
@@ -18,9 +16,6 @@ export const ProcesarDatosApi = async (method: string, url: string, data: any) =
     const myRequest = new Request(url, myInit);
     try {
         const response = await fetch(myRequest);
-        console.log("AAAAAA");
-        console.log(response);
-        console.log("AAAAAA");
         if (response.ok) {
             return await response.json();
         } else {
