@@ -31,11 +31,13 @@ const EditarCuentaAdministrador: React.FC<AdministradorSeleccionadoProps> = ({ i
     const [selectedEmpresa, setSelectedEmpresa] = useState<string>(() => empresa);
 
     // Estado para almacenar los errores de validación del formulario
-    const [errors, setErrors] = useState<Record<string, string>>({ identificacion: '', email: '', empresa: '', contrasena: '', nuevaContrasena: '' });
+    const [errors, setErrors] = useState<Record<string, string>>({ identificacion: '',nombre: '', email: '', empresa: '', contrasena: '', nuevaContrasena: '' });
 
     // Estado para almacenar los datos del formulario
     const [formData, setFormData] = useState<any>({
         identificacion: '',
+        nombre: '',
+        email: '',
         contrasena: '',
         empresa: '',
         contrasenaConfirmar: ''
@@ -148,6 +150,8 @@ const EditarCuentaAdministrador: React.FC<AdministradorSeleccionadoProps> = ({ i
     const handleSubmit = async () => {
         const datos = {
             identificacion: formData.identificacion,
+            nombre: formData.nombre,
+            correo: formData.email,
             contrasena: formData.contrasena,
             idEmpresa: selectedEmpresa
         };
@@ -197,6 +201,38 @@ const EditarCuentaAdministrador: React.FC<AdministradorSeleccionadoProps> = ({ i
                 </Col>
             </FormGroup>
             <FormGroup row>
+                <Label for="nombre" sm={2} className="input-label">Nombre</Label>
+                <Col sm={12}>
+                    <Input
+                        type="text"
+                        id="nombre"
+                        name="nombre"
+                        placeholder="Ingrese su nombre completo"
+                        value={formData.nombre}
+                        onChange={handleInputChange}
+                        onBlur={() => handleInputBlur('nombre')} // Manejar blur para quitar el mensaje de error
+                        className={errors.nombre ? 'input-styled input-error' : 'input-styled'} // Aplicar clase 'is-invalid' si hay un error
+                    />
+                    <FormFeedback>{errors.nombre}</FormFeedback>
+                </Col>
+            </FormGroup>
+            <FormGroup row>
+                <Label for="email" sm={2} className="input-label">Correo</Label>
+                <Col sm={12}>
+                    <Input
+                        type="text"
+                        id="email"
+                        name="email"
+                        placeholder="Ingrese el email"
+                        value={formData.email}
+                        onChange={handleInputChange}
+                        onBlur={() => handleInputBlur('email')} // Manejar blur para quitar el mensaje de error
+                        className={errors.email ? 'input-styled input-error' : 'input-styled'} // Aplicar clase 'is-invalid' si hay un error
+                    />
+                    <FormFeedback>{errors.email}</FormFeedback>
+                </Col>
+            </FormGroup>
+            <FormGroup row>
                 <Label for="contrasena" sm={2} className="input-label">Contraseña</Label>
                 <Col sm={12}>
                     <Input
@@ -242,7 +278,7 @@ const EditarCuentaAdministrador: React.FC<AdministradorSeleccionadoProps> = ({ i
                     ))}
                 </select>
 
-
+ 
                 {errors.empresa && <FormFeedback>{errors.empresa}</FormFeedback>}
             </FormGroup>
             <FormGroup row>

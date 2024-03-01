@@ -11,7 +11,8 @@ import Modal from "../../../components/modal/Modal.tsx"
 import {  CambiarEstadoUsuario, ObtenerUsuariosPorEmpresa } from "../../../servicios/ServicioUsuario.ts";
 import Swal from "sweetalert2";
 import Topbar from "../../../components/topbar/Topbar.tsx";
-import CambiarContrasenaAsignados from "../../../components/cambiarcontrasenaasignados/CambiarContrasenaAsignados.tsx";
+ 
+import EditarCuentaAdministrador from "../../../components/crearcuentaadministrador/EditarCuentaAdministrador.tsx";
 import { useSelector } from "react-redux";
 import { AppStore } from "../../../redux/Store.ts";
 import AsignacionesUsuarios from "../../../components/asignacionesusuario/AsignacionesUsuarios.tsx";
@@ -140,6 +141,7 @@ function MantenimientoUsuariosAsignados() {
   // Columnas de la tabla
   const columns = [
     { key: 'identificacion', header: 'Identificación' },
+    { key: 'nombre', header: 'Nombre' },
     { key: 'correo', header: 'Correo' },
     { key: 'sEstado', header: 'Estado' },
     { key: 'acciones', header: 'Acciones', actions: true } // Columna para acciones
@@ -157,6 +159,7 @@ function MantenimientoUsuariosAsignados() {
         <Topbar />
         <BordeSuperior text="Mantenimiento Usuarios Asignados" />
         <div className="content">
+        {/* <button onClick={() => abrirCerrarModalInsertarUsuario()} className="btn-crear">Crear Usuario</button> */}
           <div className="filtro-container">
             <label htmlFor="filtroIdentificacion">Filtrar por identificación:</label>
             <input
@@ -181,8 +184,11 @@ function MantenimientoUsuariosAsignados() {
       >
         <div className='form-container'>
           <div className='form-group'>
-            <CambiarContrasenaAsignados
+            {/* hay que modificar el nombre porque modifica mas datos */}
+            {/* <CambiarContrasenaAsignados */}
+            <EditarCuentaAdministrador
               identificacion={selectedUsuario.identificacion}
+              empresa={selectedUsuario.idEmpresa}
               onEdit={handleEditarUsuario}
             />
           </div>

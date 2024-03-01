@@ -38,7 +38,7 @@ const Topbar: React.FC = () => {
                     )}
                 </div>
 
-                <div className="user-name">{userState.identificacion}</div>
+                <div className="user-name">{userState.nombre}</div>
 
                 <div className="user-avatar" onClick={handleAvatarClick}>
                 {showOptions && (

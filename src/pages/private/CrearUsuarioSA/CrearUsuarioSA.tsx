@@ -13,7 +13,7 @@ import CrearCuentaAdministrador from "../../../components/crearcuentaadministrad
 import EditarCuentaAdministrador from "../../../components/crearcuentaadministrador/EditarCuentaAdministrador.tsx";
 import Swal from "sweetalert2";
 import Topbar from "../../../components/topbar/Topbar.tsx";
-
+   
 /**
 * Componente funcional que representa la página para crear cuentas de administradores.
 */
@@ -127,6 +127,7 @@ function CrearCuentaSA() {
   // Columnas de la tabla
   const columns = [
     { key: 'identificacion', header: 'Identificación' },
+    { key: 'nombre', header: 'Nombre' },
     { key: 'correo', header: 'Correo' },
     { key: 'empresa', header: 'Empresa' },
     { key: 'sEstado', header: 'Estado' },
@@ -154,6 +155,7 @@ function CrearCuentaSA() {
         <Topbar />
         <BordeSuperior text="Administradores" />
         <div className="content">
+          {/* aca esta el boton para crear usuarios */}
           <button onClick={() => abrirCerrarModalInsertar()} className="btn-crear">Crear Administrador</button>
           <div className="filtro-container">
             <label htmlFor="filtroIdentificacion">Filtrar por identificación:</label>

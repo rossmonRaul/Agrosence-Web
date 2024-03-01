@@ -5,6 +5,7 @@ import { clearSessionStorage, persisSessionStorage } from "../../utilities";
 // Estado inicial del usuario cuando no hay sesión activa.
 export const EmptyUserState: UserInfo= {
     identificacion: '',
+    nombre: '',
     email: '',
     idFinca: 0,
     idParcela: 0,
@@ -18,7 +19,7 @@ export const UserKey = 'user';
 
 export const userSlice = createSlice({
     name: 'user',
-    initialState: localStorage.getItem('user') ? JSON.parse(localStorage.getItem('user') as string) : EmptyUserState,  // Estado inicial del slice, se recupera del almacenamiento de sesión si está disponible
+    initialState: sessionStorage.getItem('user') ? JSON.parse(sessionStorage.getItem('user') as string) : EmptyUserState,  // Estado inicial del slice, se recupera del almacenamiento de sesión si está disponible
     reducers:{
         // Acción para crear un nuevo usuario en el estado y persistirlo en el almacenamiento de sesión.
         createUser: (state, action) => {

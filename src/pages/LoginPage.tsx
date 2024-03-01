@@ -83,9 +83,10 @@ const FormularioInicioSesion: React.FC<{
           </Col>
         </FormGroup>
       </form>
-      <div className='container-btn-crear-iniciar'>
+      {/* boton para crear cuenta */}
+      {/* <div className='container-btn-crear-iniciar'>
         <p>¿No tienes una cuenta? <Button color="link" className='btn-crear-iniciar' onClick={toggleForm}>Crear una Cuenta</Button></p>
-      </div>
+      </div>  */}
     </>
   );
 };

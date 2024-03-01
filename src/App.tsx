@@ -42,7 +42,8 @@ function App() {
             {/* Rutas accesibles solo para el rol de SuperAdmin */}
             <Route element={<RolGuard rol={Roles.SuperAdmin} />}>
               <Route path={PrivateRoutes.DASHBOARD} element={<Dashboard />} />
-              <Route path={PrivateRoutes.CREARUSUARIOSA} element={<AdministacionAdministradores />} />
+              {/* donde se crean los administradores */}
+              <Route path={PrivateRoutes.CREARUSUARIOSA} element={<AdministacionAdministradores />} /> 
               <Route path={PrivateRoutes.ADMINISTRAREMPRESAS} element={<AdministrarEmpresas />} />
             </Route>
 

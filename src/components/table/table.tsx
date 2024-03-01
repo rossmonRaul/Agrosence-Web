@@ -26,7 +26,7 @@ interface TableProps {
   toggleOptionalStatus?: (user: any) => void; // Función para realizar una acción opcional en cada fila (opcional)
   propClassNameOpcional?: string; // Prop opcional para cambiar el estilo del boton
 }
-
+ 
 const TableResponsive: React.FC<TableProps> = ({ propClassNameOpcional ,columns, data, openModal, toggleStatus, itemsPerPage: defaultItemsPerPage = 5, btnActionName, toggleOptionalStatus, btnToggleOptionalStatus }) => {
   const [currentPage, setCurrentPage] = useState<number>(1);
   const [itemsPerPage, setItemsPerPage] = useState<number>(defaultItemsPerPage);
