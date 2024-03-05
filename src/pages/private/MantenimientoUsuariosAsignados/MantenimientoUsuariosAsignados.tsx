@@ -58,6 +58,8 @@ function MantenimientoUsuariosAsignados() {
   // Modal para crear usuario
   const abrirCerrarModalCrearUsuario = () => {
     setModalCrearUsuario(!modalCrearUsuario);
+    localStorage.removeItem('selectedFinca');
+    localStorage.removeItem('selectedParcela');
   }
  
   const openModalAsignar = (usuario: any) => {
