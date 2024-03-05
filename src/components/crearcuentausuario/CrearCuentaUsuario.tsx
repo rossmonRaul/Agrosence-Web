@@ -56,7 +56,7 @@ const CrearCuentaUsuario: React.FC<Props> = ({ toggleForm }) => {
     };
     try {
       const resultado = await InsertarUsuario(datos);
-      if (parseInt(resultado.indicador) === 1) {
+      if (parseInt(resultado.indicador) === 0) {
         Swal.fire({
           icon: 'success',
           title: '¡Gracias por su registro! ',
