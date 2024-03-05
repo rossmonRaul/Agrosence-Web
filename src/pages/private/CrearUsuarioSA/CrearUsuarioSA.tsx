@@ -13,7 +13,6 @@ import CrearCuentaAdministrador from "../../../components/crearcuentaadministrad
 import EditarCuentaAdministrador from "../../../components/crearcuentaadministrador/EditarCuentaAdministrador.tsx";
 import Swal from "sweetalert2";
 import Topbar from "../../../components/topbar/Topbar.tsx";
-   
 /**
 * Componente funcional que representa la página para crear cuentas de administradores.
 */
@@ -27,6 +26,7 @@ function CrearCuentaSA() {
   // Estado para almacenar la información del usuario seleccionado
   const [selectedUsuario, setSelectedUsuario] = useState({
     identificacion: '',
+    nombre: '',
     correo: '',
     idEmpresa: '',
   });
@@ -113,7 +113,7 @@ function CrearCuentaSA() {
           } else {
             Swal.fire({
               icon: 'error',
-              title: 'Error al actualziar el estado.',
+              title: 'Error al actualizar el estado.',
               text: resultado.mensaje,
             });
           };
@@ -184,7 +184,7 @@ function CrearCuentaSA() {
           <div className='form-group'>
             <CrearCuentaAdministrador
               onAdd={handleAgregarUsuario}
-            />
+            />  
           </div>
         </div>
       </Modal>
@@ -200,6 +200,8 @@ function CrearCuentaSA() {
           <div className='form-group'>
             <EditarCuentaAdministrador
               identificacion={selectedUsuario.identificacion}
+              nombre={selectedUsuario.nombre}
+              email={selectedUsuario.correo}
               empresa={selectedUsuario.idEmpresa}
               onEdit={handleEditarUsuario}
             />

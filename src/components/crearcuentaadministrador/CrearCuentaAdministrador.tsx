@@ -15,7 +15,7 @@ interface Option {
 // Interfaz para las propiedades del componente
 interface AgregarAdministradorProps {
     onAdd: () => void;
-}
+} 
 
 // Componente funcional principal
 const CrearCuentaAdministrador: React.FC<AgregarAdministradorProps> = ({ onAdd }) => {
@@ -279,6 +279,5 @@ const CrearCuentaAdministrador: React.FC<AgregarAdministradorProps> = ({ onAdd }
             </FormGroup>
         </div>
     );
-}
-
+}  
 export default CrearCuentaAdministrador;

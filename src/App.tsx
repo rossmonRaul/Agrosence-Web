@@ -17,7 +17,7 @@ const AdministacionAdministradores = lazy(() => import('./pages/private/CrearUsu
 const AsignarEmpresa = lazy(() => import('./pages/private/AsignarUsuarios/AsignarUsuarios'))
 const AdministrarEmpresas = lazy(() => import('./pages/private/AdministrarEmpresas/AdministrarEmpresas'))
 const MantenimientoUsuariosAsignados = lazy(() => import('./pages/private/MantenimientoUsuariosAsignados/MantenimientoUsuariosAsignados'))
-
+ 
 function App() {
   return (
     // Suspense para manejar la carga de componentes lazy

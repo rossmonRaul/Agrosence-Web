@@ -18,7 +18,7 @@ interface Props {
 
 // Interfaz para el formato de los datos recibidos de la API
 interface Option {
-    idEmpresa: number;
+    idEmpresa: number; 
     nombre: string;
     idParcela: number;
     idFinca: number;

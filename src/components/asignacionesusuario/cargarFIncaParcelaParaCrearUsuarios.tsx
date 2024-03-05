@@ -5,7 +5,7 @@ import '../../css/FormSeleccionEmpresa.css'
 import { ObtenerParcelas } from '../../servicios/ServicioParcelas';
 import { ObtenerFincas } from '../../servicios/ServicioFincas';
 import Swal from 'sweetalert2';
-import { AsignarNuevaFincaParsela, CambiarEstadoUsuarioFincaParcela, ObtenerUsuariosAsignadosPorIdentificacion } from '../../servicios/ServicioUsuario';
+import { AsignarNuevaFincaParsela, CambiarEstadoUsuarioFincaParcela } from '../../servicios/ServicioUsuario';
 import '../../css/CrearCuenta.css'
 import TableResponsive from '../table/table';
 import Modal from '../modal/Modal';
@@ -13,13 +13,12 @@ import AsignarFincaParcela from '../asignarfincaparcela/AsignarFincaParcela';
     
 // Definición de las propiedades que espera recibir el componente
 interface Props {
-    identificacion: string; 
     idEmpresa: number;
 };
 
 // Interfaz para el formato de los datos recibidos de la API
 interface Option {
-    identificacion: string; 
+    identificacion: string;
     idEmpresa: number;
     nombre: string;
     idParcela: number;
@@ -27,7 +26,7 @@ interface Option {
 }
 
 // Componente funcional principal
-const AsignacionesUsuarios: React.FC<Props> = ({ identificacion, idEmpresa }) => {
+const CargarFincasParcelasUsuarios: React.FC<Props> = ({idEmpresa }) => {
     // Estado para controlar la apertura y cierre del modal de edición
     const [modalEditar, setModalEditar] = useState(false);
     // Estado para almacenar todas las asignaciones de fincas y parcelas
@@ -64,28 +63,6 @@ const AsignacionesUsuarios: React.FC<Props> = ({ identificacion, idEmpresa }) =>
     const openModal = (usuario: any) => {
         setSelectedUsuario(usuario);
         abrirCerrarModalEditar();
-    };
-
-    // Obtener los usuarios
-    useEffect(() => {
-        obtenerUsuarios();
-    }, []); // Ejecutar solo una vez al montar el componente
-
-    // Función para obtener todas las asignaciones de fincas y parcelas
-    const obtenerUsuarios = async () => {
-        try {
-            const datos = {
-                identificacion: identificacion,
-            }
-            const usuarios = await ObtenerUsuariosAsignadosPorIdentificacion(datos);
-            const usuariosConSEstado = usuarios.map((usuario: any) => ({
-                ...usuario,
-                sEstado: usuario.estado === 1 ? 'Activo' : 'Inactivo',
-            }));
-            setUsuariosAsignados(usuariosConSEstado);
-        } catch (error) {
-            console.error('Error al obtener usuarios:', error);
-        }
     };
 
     // Efecto para obtener las fincas, identificaciones y parcelas al cargar el componente
@@ -168,7 +145,8 @@ const AsignacionesUsuarios: React.FC<Props> = ({ identificacion, idEmpresa }) =>
             // Actualizar el estado formData con las selecciones
             formData.finca = selectedFinca,
                 formData.parcela = selectedParcela,
-                formData.identificacion = identificacion,
+                // aun no
+                // formData.identificacion = identificacion,
                 // Llamar a la función handleSubmit para enviar los datos al servidor
                 handleSubmit();
         }
@@ -190,7 +168,6 @@ const AsignacionesUsuarios: React.FC<Props> = ({ identificacion, idEmpresa }) =>
                     title: '¡Usuario Asignado! ',
                     text: 'Usuario asignado con éxito.',
                 });
-                await obtenerUsuarios();
             } else {
                 Swal.fire({
                     icon: 'error',
@@ -224,7 +201,6 @@ const AsignacionesUsuarios: React.FC<Props> = ({ identificacion, idEmpresa }) =>
                     };
                     const resultado = await CambiarEstadoUsuarioFincaParcela(datos);
                     if (parseInt(resultado.indicador) === 1) {
-                        await obtenerUsuarios();
 
                         Swal.fire({
                             icon: 'success',
@@ -256,7 +232,6 @@ const AsignacionesUsuarios: React.FC<Props> = ({ identificacion, idEmpresa }) =>
 
     const handleEditarUsuario = async () => {
         // Después de editar exitosamente, actualiza la lista de usuarios administradores
-        await obtenerUsuarios();
         abrirCerrarModalEditar();
     };
 
@@ -293,26 +268,9 @@ const AsignacionesUsuarios: React.FC<Props> = ({ identificacion, idEmpresa }) =>
 
             <TableResponsive columns={columns} data={usuariosAsignados} openModal={openModal} toggleStatus={toggleStatus} btnActionName={"Editar"} />
    
-            <Modal
-                isOpen={modalEditar}
-                toggle={abrirCerrarModalEditar}
-                title="Editar Finca y Parcela"
-                onCancel={abrirCerrarModalEditar}
-            >
-                <div className='form-container'>
-                    <div className='form-group'>
-                        <AsignarFincaParcela
-                            idFinca={parseInt(selectedUsuario.idFinca)}
-                            idEmpresa= { idEmpresa }
-                            identificacion={selectedUsuario.identificacion}
-                            onEdit={handleEditarUsuario}
-                            idUsuarioFincasParcelas={parseInt(selectedUsuario.idUsuarioFincaParcela)}
-                        />
-                    </div>
-                </div>
-            </Modal>
+
         </div>
     );
 }
 
-export default AsignacionesUsuarios;
+export default CargarFincasParcelasUsuarios;
