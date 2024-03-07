@@ -134,8 +134,6 @@ const DatosEmpresa: React.FC<Props> = ({ formData, prevStep, handleSubmit }) => 
     }
   };
 
-
-
   return (
     <div>
       <div className="form-container-fse">

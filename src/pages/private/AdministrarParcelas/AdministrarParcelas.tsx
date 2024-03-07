@@ -45,59 +45,71 @@ function AdministrarParcelas() {
         obtenerFincas();
     }, []);
 
+    
+    const handleChangeFiltro = (e: React.ChangeEvent<HTMLInputElement>) => {
+        const { value } = e.target;
+        setFiltroNombre(value);
+    };
+
     useEffect(() => {
         obtenerParcelas();
     }, [selectedFinca]);
 
     useEffect(() => {
         filtrarParcelas();
-    }, [selectedFinca, parcelas]);
+    }, [selectedFinca, parcelas, filtroNombre]);
 
     const filtrarParcelas = () => {
-        const parcelasFiltradas = selectedFinca
+        let parcelasFiltradasPorFinca = selectedFinca
             ? parcelas.filter(parcela => parcela.idFinca === selectedFinca)
             : parcelas;
-        setParcelasFiltradas(parcelasFiltradas);
+    
+        // Si hay alguna parcela seleccionada, aplicar el filtro por nombre a las parcelas seleccionadas
+        if (selectedParcela.idParcela) {
+            parcelasFiltradasPorFinca = parcelasFiltradasPorFinca.filter(parcela =>
+                parcela.idParcela === selectedParcela.idParcela
+            );
+        } else {
+            // Si no hay ninguna parcela seleccionada, aplicar el filtro por nombre a todas las parcelas
+            parcelasFiltradasPorFinca = parcelasFiltradasPorFinca.filter(parcela =>
+                parcela.nombre.toLowerCase().includes(filtroNombre.toLowerCase())
+            );
+        }
+    
+        setParcelasFiltradas(parcelasFiltradasPorFinca);
     };
+    
 
     const obtenerParcelas = async () => {
         try {
             console.log("Obteniendo parcelas...");
             const idEmpresaUsuario = localStorage.getItem('empresaUsuario');
             if (idEmpresaUsuario) {
-    
+
                 const fincas = await ObtenerFincas();
-    
+
                 const fincasEmpresaUsuario = fincas.filter((finca: any) => finca.idEmpresa === parseInt(idEmpresaUsuario));
-    
+
                 const parcelasResponse = await ObtenerParcelas();
-    
+
                 const parcelasFincasEmpresaUsuario: any[] = [];
 
 
                 fincasEmpresaUsuario.forEach((finca: any) => {
-                const parcelasFinca = parcelasResponse.filter((parcela: any) => parcela.idFinca === finca.idFinca);
-                parcelasFincasEmpresaUsuario.push(...parcelasFinca);});
-    
-                // for (const finca of fincasEmpresaUsuario) {
-                //     const parcelasFinca = parcelasResponse.filter((parcela: any) => parcela.idFinca === finca.idFinca);
-                //     parcelasFincasEmpresaUsuario.push(...parcelasFinca);
-                // }
+                    const parcelasFinca = parcelasResponse.filter((parcela: any) => parcela.idFinca === finca.idFinca);
+                    parcelasFincasEmpresaUsuario.push(...parcelasFinca);
+                });
 
                 const parcelasConEstado = parcelasFincasEmpresaUsuario.map((parcela: any) => ({
                     ...parcela,
                     sEstado: parcela.estado === 1 ? 'Activo' : 'Inactivo'
                 }));
-    
+
                 setParcelas(parcelasConEstado);
             }
         } catch (error) {
             console.error('Error al obtener las parcelas:', error);
         }
-    };
-
-    const handleChangeFiltro = (e: React.ChangeEvent<HTMLInputElement>) => {
-        setFiltroNombre(e.target.value);
     };
 
     const abrirCerrarModalInsertar = () => {
@@ -172,16 +184,15 @@ function AdministrarParcelas() {
                 <Topbar />
                 <BordeSuperior text="Administrar Parcelas" />
                 <div className="content" col-md-12>
-                    <br />
-                    <select value={selectedFinca || ''} onChange={handleFincaChange} className="custom-select">
-                        <option value="">Todas las fincas</option>
-                        {fincas.map(finca => (
-                            <option key={finca.idFinca} value={finca.idFinca}>{finca.nombre}</option>
-                        ))}
-                    </select>
-                    <br />
-
                     <button onClick={() => abrirCerrarModalInsertar()} className="btn-crear">Crear Parcela</button>
+                    <div className="filtro-container" style={{ width: '91%' }}>
+                        <select value={selectedFinca || ''} onChange={handleFincaChange} className="custom-select">
+                            <option value="">Todas las fincas</option>
+                            {fincas.map(finca => (
+                                <option key={finca.idFinca} value={finca.idFinca}>{finca.nombre}</option>
+                            ))}
+                        </select>
+                    </div>
                     <div className="filtro-container">
                         <label htmlFor="filtroNombre">Filtrar por nombre:</label>
                         <input
