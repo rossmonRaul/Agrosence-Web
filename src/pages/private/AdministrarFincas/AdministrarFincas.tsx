@@ -10,91 +10,105 @@ import TableResponsive from "../../../components/table/table.tsx";
 import BordeSuperior from "../../../components/bordesuperior/BordeSuperior.tsx";
 import Modal from "../../../components/modal/Modal.tsx";
 import Topbar from "../../../components/topbar/Topbar.tsx";
-import { CambiarEstadoEmpresas, ObtenerEmpresas } from "../../../servicios/ServicioEmpresas.ts";
-import EditarEmpresa from "../../../components/empresa/EditarEmpresa.tsx";
-import CrearEmpresa from "../../../components/empresa/CrearEmpresa.tsx";
+import { CambiarEstadoFincas, ObtenerFincas } from "../../../servicios/ServicioFincas.ts";
+import EditarFinca from "../../../components/finca/EditarFinca.tsx";
+import CrearFinca from "../../../components/finca/CrearFinca.tsx";
 import Swal from "sweetalert2";
 
 // Componente funcional que representa la página de administración de empresas.
-function AdministrarEmpresas() {
+function AdministrarFincas() {
     // Estado para el filtro por nombre de empresa
     const [filtroNombre, setFiltroNombre] = useState('')
-     // Estado para controlar la apertura y cierre del modal de edición
+    // Estado para controlar la apertura y cierre del modal de edición
     const [modalEditar, setModalEditar] = useState(false);
     // Estado para controlar la apertura y cierre del modal de inserción
     const [modalInsertar, setModalInsertar] = useState(false);
     // Estado para controlar la apertura y cierre del modal de inserción
-    const [selectedEmpresa, setSelectedEmpresa] = useState({
-        idEmpresa: '',
+    const [selectedFinca, setSelectedFinca] = useState({
+        idFinca: '',
         nombre: ''
     });
-     // Estado para almacenar todas las empresas
-    const [empresas, setEmpresa] = useState<any[]>([]);
+    // Estado para almacenar todas las empresas
+    const [fincas, setFinca] = useState<any[]>([]);
     // Estado para almacenar las empresas filtradas
-    const [empresasFiltrados, setEmpresasFiltrados] = useState<any[]>([]);
+    const [fincasFiltrados, setFincasFiltrados] = useState<any[]>([]);
+
 
     // Obtener las empresas al cargar la página
     useEffect(() => {
-        obtenerEmpresas();
+        obtenerFincas();
     }, []); // Ejecutar solo una vez al montar el componente
 
     // Función para obtener todas las empresas
-    const obtenerEmpresas = async () => {  
+    const obtenerFincas = async () => {
         try {
-            const empresas = await ObtenerEmpresas();
+            // Recuperar el valor guardado en localStorage
+            const idEmpresaUsuario = localStorage.getItem('empresaUsuario');
 
-            const empresasConSEstado = empresas.map((empresa: any) => ({
-                ...empresa,
-                sEstado: empresa.estado === 1 ? 'Activo' : 'Inactivo',
-            }));
-            setEmpresa(empresasConSEstado);
-            setEmpresasFiltrados(empresasConSEstado); // Inicialmente, los datos filtrados son los mismos que los datos originales
+            if (idEmpresaUsuario) {
+                // Si se encuentra el valor en localStorage, lo utilizamos para filtrar las fincas
+                const fincas = await ObtenerFincas();
+
+                const fincasEmpresaUsuario = fincas.filter((finca: any) => finca.idEmpresa === parseInt(idEmpresaUsuario));
+                console.log('este es el idempresa')
+                console.log(idEmpresaUsuario)
+                console.log('este es el idempresa')
+
+                const fincasConSEstado = fincasEmpresaUsuario.map((finca: any) => ({
+                    ...finca,
+                    sEstado: finca.estado === 1 ? 'Activo' : 'Inactivo',
+                }));
+                console.log(fincasConSEstado)
+                console.log('fincas')
+                setFinca(fincasConSEstado);
+                setFincasFiltrados(fincasConSEstado); // Inicialmente, los datos filtrados son los mismos que los datos originales
+            }
         } catch (error) {
-            console.error('Error al obtener empresas:', error);
+            console.error('Error al obtener fincas:', error);
         }
     };
 
     // Filtrar las empresas cada vez que cambie el filtro de nombre
     useEffect(() => {
-        filtrarEmpresas();
-    }, [filtroNombre, empresas]); // Ejecutar cada vez que el filtro o los datos originales cambien
+        filtrarFincas();
+    }, [filtroNombre, fincas]); // Ejecutar cada vez que el filtro o los datos originales cambien
 
     // Función para manejar el cambio en el filtro de nombre
     const handleChangeFiltro = (e: React.ChangeEvent<HTMLInputElement>) => {
         setFiltroNombre(e.target.value);
     };
 
-    // Función para filtrar las empresas por nombre
-    const filtrarEmpresas = () => {
-        const empresaFiltrados = filtroNombre
-            ? empresas.filter((empresa: any) =>
-                empresa.nombre.includes(filtroNombre)
+    // Función para filtrar las empresas por nombre sin key sensitive
+    const filtrarFincas = () => {
+        const fincaFiltrados = filtroNombre
+            ? fincas.filter((finca: any) =>
+                finca.nombre.toLowerCase().includes(filtroNombre.toLowerCase())
             )
-            : empresas;
-        setEmpresasFiltrados(empresaFiltrados);
+            : fincas;
+        setFincasFiltrados(fincaFiltrados);
     };
 
     // Funciones para manejar la apertura y cierre de los modales
     const abrirCerrarModalInsertar = () => {
         setModalInsertar(!modalInsertar);
+
     }
 
-    
     const abrirCerrarModalEditar = () => {
         setModalEditar(!modalEditar);
     }
 
 
-    const openModal = (empresa: any) => {
-        setSelectedEmpresa(empresa);
+    const openModal = (finca: any) => {
+        setSelectedFinca(finca);
         abrirCerrarModalEditar();
     };
 
-     // Función para cambiar el estado de una empresa
-    const toggleStatus = (empresa: any) => {
+    // Función para cambiar el estado de una empresa
+    const toggleStatus = (finca: any) => {
         Swal.fire({
             title: "Cambiar Estado",
-            text: "¿Estás seguro de que deseas actualizar el estado de la empresa: " + empresa.nombre + "?",
+            text: "¿Estás seguro de que deseas actualizar el estado de la finca: " + finca.nombre + "?",
             icon: "warning",
             showCancelButton: true, // Mostrar el botón de cancelar
             confirmButtonText: "Sí", // Texto del botón de confirmación
@@ -103,17 +117,17 @@ function AdministrarEmpresas() {
             if (result.isConfirmed) {
                 try {
                     const datos = {
-                        idEmpresa: empresa.idEmpresa,
-                        nombre: empresa.nombre
+                        idFinca: finca.idFinca,
+                        nombre: finca.nombre
                     };
-                    const resultado = await CambiarEstadoEmpresas(datos);
+                    const resultado = await CambiarEstadoFincas(datos);
                     if (parseInt(resultado.indicador) === 1) {
                         Swal.fire({
                             icon: 'success',
                             title: '¡Estado Actualizado! ',
                             text: 'Actualización exitosa.',
                         });
-                        await obtenerEmpresas();
+                        await obtenerFincas();
                     } else {
                         Swal.fire({
                             icon: 'error',
@@ -122,26 +136,26 @@ function AdministrarEmpresas() {
                         });
                     };
                 } catch (error) {
-                    Swal.fire("Error al asignar al usuario", "", "error");
+                    Swal.fire("Error al actualizar el estado de la finca", "", "error");
                 }
             }
         });
     };
 
     // Funciónes para manejar la edición y la adicion de una empresa (actualizar tabla)
-    const handleEditarEmpresa = async () => {
-        await obtenerEmpresas();
+    const handleEditarFinca = async () => {
+        await obtenerFincas();
         abrirCerrarModalEditar();
     };
 
-    const handleAgregarEmpresa = async () => {
-        await obtenerEmpresas();
+    const handleAgregarFinca = async () => {
+        await obtenerFincas();
         abrirCerrarModalInsertar();
     };
 
     // Definición de las columnas de la tabl
     const columns = [
-        { key: 'nombre', header: 'Nombre Empresa' },
+        { key: 'nombre', header: 'Nombre Finca' },
         { key: 'sEstado', header: 'Estado' },
         { key: 'acciones', header: 'Acciones', actions: true } // Columna para acciones
     ];
@@ -150,9 +164,9 @@ function AdministrarEmpresas() {
         <Sidebar>
             <div className="main-container">
                 <Topbar />
-                <BordeSuperior text="Administrar Empresas" />
+                <BordeSuperior text="Administrar Fincas" />
                 <div className="content">
-                    <button onClick={() => abrirCerrarModalInsertar()} className="btn-crear">Crear Empresa</button>
+                    <button onClick={() => abrirCerrarModalInsertar()} className="btn-crear">Crear Finca</button>
                     <div className="filtro-container">
                         <label htmlFor="filtroNombre">Filtrar por nombre:</label>
                         <input
@@ -164,21 +178,21 @@ function AdministrarEmpresas() {
                             className="form-control"
                         />
                     </div>
-                    <TableResponsive columns={columns} data={empresasFiltrados} openModal={openModal}  btnActionName={"Editar"} toggleStatus={toggleStatus} />
-   
+                    <TableResponsive columns={columns} data={fincasFiltrados} openModal={openModal} btnActionName={"Editar"} toggleStatus={toggleStatus} />
+
                 </div>
             </div>
 
             <Modal
                 isOpen={modalInsertar}
                 toggle={abrirCerrarModalInsertar}
-                title="Insertar Empresa"
+                title="Insertar Finca"
                 onCancel={abrirCerrarModalInsertar}
             >
                 <div className='form-container'>
                     <div className='form-group'>
-                        <CrearEmpresa
-                            onAdd={handleAgregarEmpresa}
+                        <CrearFinca
+                            onAdd={handleAgregarFinca}
                         />
                     </div>
                 </div>
@@ -187,15 +201,15 @@ function AdministrarEmpresas() {
             <Modal
                 isOpen={modalEditar}
                 toggle={abrirCerrarModalEditar}
-                title="Editar Empresa"
+                title="Editar Finca"
                 onCancel={abrirCerrarModalEditar}
             >
                 <div className='form-container'>
                     <div className='form-group'>
-                        <EditarEmpresa
-                            nombrebase={selectedEmpresa.nombre}
-                            idEmpresa={selectedEmpresa.idEmpresa}
-                            onEdit={handleEditarEmpresa}
+                        <EditarFinca
+                            nombreEditar={selectedFinca.nombre}
+                            idFinca={selectedFinca.idFinca}
+                            onEdit={handleEditarFinca}
                         />
                     </div>
                 </div>
@@ -206,4 +220,4 @@ function AdministrarEmpresas() {
 
     )
 }
-export default AdministrarEmpresas
+export default AdministrarFincas

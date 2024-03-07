@@ -39,6 +39,8 @@ const FormularioInicioSesion: React.FC<{
     onSubmit(formData);
   };
 
+  const [empresaUsuario, setEmpresaUsuario] =  useState<string>(() => localStorage.getItem('empresaUsuario') || '');
+
   return (
     <>
       <div className="form-header">
@@ -219,6 +221,7 @@ const Login: React.FC = () => {
         });
       } else if (usuarioEncontrado.mensaje === "Usuario encontrado.") {
         dispatch(createUser(usuarioEncontrado))
+        localStorage.setItem('empresaUsuario', usuarioEncontrado.idEmpresa);
         navigate(`/${PrivateRoutes.PRIVATE}`, { replace: true });
         setIsLoggedIn(true);
       } else if (usuarioEncontrado.mensaje === "Credenciales incorrectas.") {

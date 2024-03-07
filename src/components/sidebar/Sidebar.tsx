@@ -65,6 +65,21 @@ const Sidebar = ({ children }: { children: React.ReactNode }) => {
             icon: <FaUserCog />,
             roles: [2]
         },
+
+        {
+            path: "/administrarfincas",
+            name: "Fincas",
+            icon: <IoBusiness />,
+            roles: [2]
+        },
+
+        {
+            path: "/administrarparcelas",
+            name: "Parcelas",
+            icon: <IoBusiness />,
+            roles: [2]
+        },
+
         {
             path: "#", // Utilizar "#" como un enlace que no lleva a ninguna parte para los multi-seleccion
             name: "Pages",

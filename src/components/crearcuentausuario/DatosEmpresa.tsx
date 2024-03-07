@@ -16,7 +16,7 @@ interface Props {
 }
 
 // Interfaz para el formato de los datos recibidos de la API
-interface Option {
+interface Option { 
   idEmpresa: number;
   nombre: string;
   idParcela: number;
@@ -25,9 +25,6 @@ interface Option {
 
 const DatosEmpresa: React.FC<Props> = ({ formData, prevStep, handleSubmit }) => {
   const [errors, setErrors] = useState<Record<string, string>>({ empresa: '', finca: '', parcela: '' });
-
-  console.log(formData);
-  console.log('options');
 
   const [fincas, setFincas] = useState<Option[]>([]);
   const [parcelas, setParcelas] = useState<Option[]>([]);

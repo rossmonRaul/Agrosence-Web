@@ -10,13 +10,12 @@ export const EditarEmpresas = async (data: any) => {
     const url = `http://localhost:5271/api/v1.0/${controlador}/ActualizarEmpresa`;
     return await ProcesarDatosApi('PUT', url, data);
 }
-
+  
 export const GuardarEmpresas = async (data: any) => {
     const url = `http://localhost:5271/api/v1.0/${controlador}/CrearEmpresa`;
     return await ProcesarDatosApi('POST', url, data);
 }
-
-
+ 
 export const CambiarEstadoEmpresas = async (data: any) => {
     const url = `http://localhost:5271/api/v1.0/${controlador}/CambiarEstadoEmpresa`;
     return await ProcesarDatosApi('PUT', url, data);

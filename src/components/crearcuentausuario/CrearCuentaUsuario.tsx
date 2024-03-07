@@ -62,7 +62,7 @@ const CrearCuentaUsuario: React.FC<Props> = ({ toggleForm }) => {
           title: '¡Gracias por su registro! ',
           text: 'Cuenta creada con éxito.',
         });
-        toggleForm()
+        toggleForm() 
         localStorage.removeItem('selectedFinca');
         localStorage.removeItem('selectedParcela');
       } else {

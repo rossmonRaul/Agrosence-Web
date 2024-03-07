@@ -25,7 +25,7 @@ interface Option {
     idParcela: number;
     idFinca: number;
 }
-
+ 
 // Componente funcional principal
 const AsignacionesUsuarios: React.FC<Props> = ({ identificacion, idEmpresa }) => {
     // Estado para controlar la apertura y cierre del modal de edición

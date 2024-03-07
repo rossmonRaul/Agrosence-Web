@@ -12,6 +12,8 @@ export const PrivateRoutes = {
     ASIGNARFINCAPARCELA: 'asignarfincaparcela',
     // pagina de sa para administrar las empresas ↓
     ADMINISTRAREMPRESAS: 'administrarempresas',
-    MATENIMIENTOUSUARIOSASIGNADOS: 'administrarusuariosasignados'
+    MATENIMIENTOUSUARIOSASIGNADOS: 'administrarusuariosasignados',
+    ADMINISTRARFINCAS: 'administrarfincas',
+    ADMINISTRARPARCELAS: 'administrarparcelas'
 };
  

@@ -87,7 +87,7 @@ function MantenimientoUsuariosAsignados() {
     try {
       const datos = {
         idEmpresa: userLoginState.idEmpresa,
-      }
+      } 
       const usuarios = await ObtenerUsuariosPorEmpresa(datos);
       const usuariosConSEstado = usuarios.map((usuario: any) => ({
         ...usuario,
@@ -229,7 +229,7 @@ function MantenimientoUsuariosAsignados() {
             toggleForm={handleAgregarUsuario}
             />
           </div>
-        </div>
+        </div>  
       </Modal>
 
       <Modal
