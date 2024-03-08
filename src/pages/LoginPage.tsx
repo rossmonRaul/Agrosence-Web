@@ -39,6 +39,8 @@ const FormularioInicioSesion: React.FC<{
     onSubmit(formData);
   };
 
+  const [empresaUsuario, setEmpresaUsuario] =  useState<string>(() => localStorage.getItem('empresaUsuario') || '');
+
   return (
     <>
       <div className="form-header">
@@ -83,9 +85,10 @@ const FormularioInicioSesion: React.FC<{
           </Col>
         </FormGroup>
       </form>
-      <div className='container-btn-crear-iniciar'>
+      {/* boton para crear cuenta */}
+      {/* <div className='container-btn-crear-iniciar'>
         <p>¿No tienes una cuenta? <Button color="link" className='btn-crear-iniciar' onClick={toggleForm}>Crear una Cuenta</Button></p>
-      </div>
+      </div>  */}
     </>
   );
 };
@@ -218,6 +221,7 @@ const Login: React.FC = () => {
         });
       } else if (usuarioEncontrado.mensaje === "Usuario encontrado.") {
         dispatch(createUser(usuarioEncontrado))
+        localStorage.setItem('empresaUsuario', usuarioEncontrado.idEmpresa);
         navigate(`/${PrivateRoutes.PRIVATE}`, { replace: true });
         setIsLoggedIn(true);
       } else if (usuarioEncontrado.mensaje === "Credenciales incorrectas.") {

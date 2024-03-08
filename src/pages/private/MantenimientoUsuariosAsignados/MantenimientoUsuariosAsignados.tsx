@@ -1,3 +1,5 @@
+/*  esta pantalla se est'a usando para la creacion de usuarios por parte del administrador*/
+
 /**
  * Página para el mantenimiento de usuarios asignados.
  * Permite ver, filtrar y editar usuarios asignados.
@@ -8,10 +10,11 @@ import '../../../css/AdministacionAdministradores.css'
 import TableResponsive from "../../../components/table/table.tsx";
 import BordeSuperior from "../../../components/bordesuperior/BordeSuperior.tsx";
 import Modal from "../../../components/modal/Modal.tsx"
-import {  CambiarEstadoUsuario, ObtenerUsuariosPorEmpresa } from "../../../servicios/ServicioUsuario.ts";
+import { CambiarEstadoUsuario, ObtenerUsuariosPorEmpresa } from "../../../servicios/ServicioUsuario.ts";
 import Swal from "sweetalert2";
 import Topbar from "../../../components/topbar/Topbar.tsx";
-import CambiarContrasenaAsignados from "../../../components/cambiarcontrasenaasignados/CambiarContrasenaAsignados.tsx";
+import CrearCuentaUsuario from "../../../components/crearcuentausuario/CrearCuentaUsuario.tsx";
+import EditarCuentaUsuario from "../../../components/crearcuentausuario/EditarCuentaUsuario.tsx";
 import { useSelector } from "react-redux";
 import { AppStore } from "../../../redux/Store.ts";
 import AsignacionesUsuarios from "../../../components/asignacionesusuario/AsignacionesUsuarios.tsx";
@@ -24,11 +27,14 @@ function MantenimientoUsuariosAsignados() {
   const [modalEditar, setModalEditar] = useState(false);
   // Estado para controlar la apertura y cierre del modal de asignaciones
   const [modalAsignar, setModalAsignar] = useState(false);
+  // Estado para controlar la apertura y cierre del modal de creacion de usuarios
+  const [modalCrearUsuario, setModalCrearUsuario] = useState(false);
   // Estado para el filtro por identificación de usuario
   const [filtroIdentificacion, setFiltroIdentificacion] = useState('');
   // Estado para almacenar la información del usuario seleccionado
   const [selectedUsuario, setSelectedUsuario] = useState({
     identificacion: '',
+    nombre: '',
     correo: '',
     idEmpresa: '',
   });
@@ -49,14 +55,28 @@ function MantenimientoUsuariosAsignados() {
     setModalEditar(!modalEditar);
   }
 
+  // Modal para crear usuario
+  const abrirCerrarModalCrearUsuario = () => {
+    setModalCrearUsuario(!modalCrearUsuario);
+    localStorage.removeItem('selectedFinca');
+    localStorage.removeItem('selectedParcela');
+  }
+ 
   const openModalAsignar = (usuario: any) => {
     setSelectedUsuario(usuario);
     abrirCerrarModalAsignar();
   };
 
-  const abrirCerrarModalAsignar= () => {
+  const abrirCerrarModalAsignar = () => {
     setModalAsignar(!modalAsignar);
   }
+
+  const handleAgregarUsuario = async () => {
+    // Lógica para editar el usuario
+    // Después de editar exitosamente, actualiza la lista de usuarios administradores
+    await obtenerUsuarios();
+    abrirCerrarModalCrearUsuario();
+  };
 
   useEffect(() => {
     obtenerUsuarios();
@@ -65,9 +85,9 @@ function MantenimientoUsuariosAsignados() {
   // Función para obtener todos los usuarios asignados
   const obtenerUsuarios = async () => {
     try {
-      const datos={
+      const datos = {
         idEmpresa: userLoginState.idEmpresa,
-      }
+      } 
       const usuarios = await ObtenerUsuariosPorEmpresa(datos);
       const usuariosConSEstado = usuarios.map((usuario: any) => ({
         ...usuario,
@@ -124,7 +144,7 @@ function MantenimientoUsuariosAsignados() {
           } else {
             Swal.fire({
               icon: 'error',
-              title: 'Error al actualziar el estado.',
+              title: 'Error al actualizar el estado.',
               text: resultado.mensaje,
             });
           };
@@ -135,11 +155,12 @@ function MantenimientoUsuariosAsignados() {
     });
   };
 
-  
+
 
   // Columnas de la tabla
   const columns = [
     { key: 'identificacion', header: 'Identificación' },
+    { key: 'nombre', header: 'Nombre' },
     { key: 'correo', header: 'Correo' },
     { key: 'sEstado', header: 'Estado' },
     { key: 'acciones', header: 'Acciones', actions: true } // Columna para acciones
@@ -157,6 +178,7 @@ function MantenimientoUsuariosAsignados() {
         <Topbar />
         <BordeSuperior text="Mantenimiento Usuarios Asignados" />
         <div className="content">
+          <button onClick={() => abrirCerrarModalCrearUsuario()} className="btn-crear">Crear Usuario</button>
           <div className="filtro-container">
             <label htmlFor="filtroIdentificacion">Filtrar por identificación:</label>
             <input
@@ -168,8 +190,8 @@ function MantenimientoUsuariosAsignados() {
               className="form-control"
             />
           </div>
-          <TableResponsive columns={columns} data={usuariosFiltrados} openModal={openModal} toggleStatus={toggleStatus} btnActionName={"Editar"} 
-          toggleOptionalStatus={openModalAsignar} btnToggleOptionalStatus={'Asignaciones'} propClassNameOpcional={'Asignar'}/>
+          <TableResponsive columns={columns} data={usuariosFiltrados} openModal={openModal} toggleStatus={toggleStatus} btnActionName={"Editar"}
+            toggleOptionalStatus={openModalAsignar} btnToggleOptionalStatus={'Asignaciones'} propClassNameOpcional={'Asignar'} />
         </div>
       </div>
 
@@ -181,12 +203,33 @@ function MantenimientoUsuariosAsignados() {
       >
         <div className='form-container'>
           <div className='form-group'>
-            <CambiarContrasenaAsignados
+            {/* hay que modificar el nombre porque modifica mas datos */}
+            {/* <CambiarContrasenaAsignados */}
+            <EditarCuentaUsuario
               identificacion={selectedUsuario.identificacion}
+              nombre={selectedUsuario.nombre}
+              email={selectedUsuario.correo}
               onEdit={handleEditarUsuario}
             />
           </div>
         </div>
+      </Modal>
+      
+      {/* modal para crear usuario */}
+      <Modal
+        isOpen={modalCrearUsuario}
+        toggle={abrirCerrarModalCrearUsuario}
+        title="Crear Usuario"
+        onCancel={abrirCerrarModalCrearUsuario}
+      >
+        <div className='form-container'>
+          <div className='form-group'>
+            <CrearCuentaUsuario
+            idEmpresa={userLoginState.idEmpresa}
+            toggleForm={handleAgregarUsuario}
+            />
+          </div>
+        </div>  
       </Modal>
 
       <Modal
@@ -204,6 +247,7 @@ function MantenimientoUsuariosAsignados() {
           </div>
         </div>
       </Modal>
+
     </Sidebar>
   )
 }

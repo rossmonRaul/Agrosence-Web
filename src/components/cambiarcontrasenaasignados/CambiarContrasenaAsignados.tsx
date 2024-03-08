@@ -11,14 +11,17 @@ interface Props {
     onEdit: () => void;
 }
 
+//hay que modificarlo
 // Componente funcional principal
 const CambiarContrasenaAsignados: React.FC<Props> = ({ onEdit, identificacion }) => {
     // Estado para almacenar los errores de validación del formulario
-    const [errors, setErrors] = useState<Record<string, string>>({ contrasena: '', nuevaContrasena: '' });
+    const [errors, setErrors] = useState<Record<string, string>>({ nombre: '', correo: '', contrasena: '', nuevaContrasena: '' });
 
     // Estado para almacenar los datos del formulario
     const [formData, setFormData] = useState<any>({
         identificacion: '',
+        nombre: '',
+        correo: '',
         contrasena: ''
     });
 
@@ -111,6 +114,38 @@ const CambiarContrasenaAsignados: React.FC<Props> = ({ onEdit, identificacion })
     return (
         <div>
             <div className="form-container-fse">
+                <FormGroup row>
+                    <Label for="nombre" sm={2} className="input-label">Nombre</Label>
+                    <Col sm={12}>
+                        <Input
+                            type="text"
+                            id="nombre"
+                            name="nombre"
+                            placeholder="Ingrese el nombre completo"
+                            value={formData.nombre}
+                            onChange={handleInputChange}
+                            onBlur={() => handleInputBlur('nombre')} // Manejar blur para quitar el mensaje de error
+                            className={errors.nombre ? 'input-styled input-error' : 'input-styled'} // Aplicar clase 'is-invalid' si hay un error
+                        />
+                        <FormFeedback>{errors.nombre}</FormFeedback>
+                    </Col>
+                </FormGroup>
+                <FormGroup row>
+                    <Label for="correo" sm={2} className="input-label">Correo</Label>
+                    <Col sm={12}>
+                        <Input
+                            type="text"
+                            id="correo"
+                            name="correo"
+                            placeholder="Ingrese el correo"
+                            value={formData.correo}
+                            onChange={handleInputChange}
+                            onBlur={() => handleInputBlur('correo')} // Manejar blur para quitar el mensaje de error
+                            className={errors.correo ? 'input-styled input-error' : 'input-styled'} // Aplicar clase 'is-invalid' si hay un error
+                        />
+                        <FormFeedback>{errors.correo}</FormFeedback>
+                    </Col>
+                </FormGroup>
                 <FormGroup row>
                     <Label for="contrasena" sm={2} className="input-label">Contraseña</Label>
                     <Col sm={12}>

@@ -1,40 +1,24 @@
-/* de parte del super usuario edita a los administradores */
+/* de parte del administrador edita a los usuarios */
 import React, { useEffect, useState } from 'react';
 import { FormGroup, Label, Input, Col, FormFeedback, Button } from 'reactstrap';
-import { ActualizarUsuarioAdministrador } from '../../servicios/ServicioUsuario.ts';
+import { ActualizarAsignarUsuario } from '../../servicios/ServicioUsuario.ts';
 import Swal from 'sweetalert2';
 import '../../css/CrearCuenta.css'
-import { ObtenerEmpresas } from '../../servicios/ServicioEmpresas.ts';
 import '../../css/FormSeleccionEmpresa.css'
 
-// Interfaz para las opciones de empresa
-interface Option {
-    idEmpresa: number;
-    nombre: string;
-    contrasena: string,
-    contrasenaConfirmar: string
-}
-
 // Interfaz para las propiedades del componente
-interface AdministradorSeleccionadoProps {
-    identificacion: string;  
+interface UsuarioSeleccionadoProps {
+    identificacion: string;
     nombre: string;
     email: string;
-    empresa: string;
     onEdit: () => void;
 }
-
+  
 // Componente funcional principal
-const EditarCuentaAdministrador: React.FC<AdministradorSeleccionadoProps> = ({ identificacion, nombre, email, empresa, onEdit }) => {
-
-    // Estado para almacenar las empresas disponibles
-    const [empresas, setEmpresas] = useState<Option[]>([]);
-
-    // Estado para almacenar la empresa seleccionada
-    const [selectedEmpresa, setSelectedEmpresa] = useState<string>(() => empresa);
+const EditarCuentaUsuario: React.FC<UsuarioSeleccionadoProps> = ({ identificacion, nombre, email, onEdit }) => {
 
     // Estado para almacenar los errores de validación del formulario
-    const [errors, setErrors] = useState<Record<string, string>>({ identificacion: '',nombre: '', email: '', empresa: '', contrasena: '', nuevaContrasena: '' });
+    const [errors, setErrors] = useState<Record<string, string>>({ identificacion: '',nombre: '', email: '', contrasena: '', nuevaContrasena: '' });
 
     // Estado para almacenar los datos del formulario
     const [formData, setFormData] = useState<any>({
@@ -42,7 +26,6 @@ const EditarCuentaAdministrador: React.FC<AdministradorSeleccionadoProps> = ({ i
         nombre: '',
         email: '',
         contrasena: '',
-        empresa: '',
         contrasenaConfirmar: ''
     });
 
@@ -55,32 +38,17 @@ const EditarCuentaAdministrador: React.FC<AdministradorSeleccionadoProps> = ({ i
         }));
     };
 
-    // Efecto para obtener las empresas disponibles al cargar el componente
-    useEffect(() => {
-        const obtenerEmpresas = async () => {
-            try {
-                const empresasResponse = await ObtenerEmpresas();
-                // Obtener todas las fincas y parcelas de una vez
-                setEmpresas(empresasResponse);
-            } catch (error) {
-                console.error('Error al obtener las empresas:', error);
-            }
-        };
-        obtenerEmpresas();
-    }, []);
-
 
     useEffect(() => {
         // Actualizar el formData cuando las props cambien
         setFormData({
             identificacion: identificacion,
-            empresa: empresa,
             nombre: nombre,
             email: email,
             contrasena: '',
             contrasenaConfirmar: ''
         });
-    }, [identificacion, empresa]);
+    }, [identificacion]);
 
     // Función para manejar el blur de los inputs y eliminar mensajes de error
     const handleInputBlur = (fieldName: string) => {
@@ -92,18 +60,6 @@ const EditarCuentaAdministrador: React.FC<AdministradorSeleccionadoProps> = ({ i
             }));
         }
     };
-
-    // Función para manejar cambios en la selección de empresa
-    const handleEmpresaChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
-        const value = e.target.value;
-        setSelectedEmpresa(value);
-
-    };
-
-    // Obtener la empresa seleccionada
-    const empresaSeleccionada = empresas.find(empresa => {
-        return Number(empresa.idEmpresa) === Number(selectedEmpresa);
-    });
 
     // Función para manejar el envío del formulario con validación
     const handleSubmitConValidacion = () => {
@@ -136,12 +92,6 @@ const EditarCuentaAdministrador: React.FC<AdministradorSeleccionadoProps> = ({ i
             }
         }
 
-        if (!selectedEmpresa) {
-            newErrors.empresa = 'Debe seleccionar una empresa';
-        } else {
-            newErrors.empresa = '';
-        }
-
         // Actualizar los errores
         setErrors(newErrors);
 
@@ -157,11 +107,10 @@ const EditarCuentaAdministrador: React.FC<AdministradorSeleccionadoProps> = ({ i
             identificacion: formData.identificacion,
             nombre: formData.nombre,
             correo: formData.email,
-            contrasena: formData.contrasena,
-            idEmpresa: selectedEmpresa
+            contrasena: formData.contrasena
         };
         try {
-            const resultado = await ActualizarUsuarioAdministrador(datos);
+            const resultado = await ActualizarAsignarUsuario(datos);
             if (parseInt(resultado.indicador) === 1) {
                 Swal.fire({
                     icon: 'success',
@@ -269,23 +218,6 @@ const EditarCuentaAdministrador: React.FC<AdministradorSeleccionadoProps> = ({ i
                     <FormFeedback>{errors.contrasenaConfirmar}</FormFeedback>
                 </Col>
             </FormGroup>
-            <FormGroup>
-                <Label htmlFor="empresas" className="input-label">Empresa</Label>
-                <select className="custom-select" id="empresas" value={empresaSeleccionada?.idEmpresa || ''} onChange={handleEmpresaChange}>
-                    <option key="default-empresa" value="">Seleccione...</option>
-                    {empresas.map((empresa) => (
-                        <option
-                            key={`${empresa.idEmpresa}-${empresa.nombre}`}
-                            value={empresa.idEmpresa}
-                        >
-                            {empresa.nombre}
-                        </option>
-                    ))}
-                </select>
-
- 
-                {errors.empresa && <FormFeedback>{errors.empresa}</FormFeedback>}
-            </FormGroup>
             <FormGroup row>
                 <Col sm={{ size: 9, offset: 2 }}>
                     <Button onClick={handleSubmitConValidacion} className="btn-styled" >Editar Datos</Button>
@@ -295,4 +227,4 @@ const EditarCuentaAdministrador: React.FC<AdministradorSeleccionadoProps> = ({ i
     );
 }
 
-export default EditarCuentaAdministrador;
+export default EditarCuentaUsuario;

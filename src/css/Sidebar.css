@@ -84,6 +84,10 @@ main {
 
 }
 
+.sub-menu .link {
+    margin-left: 20px; /* Ajusta el margen izquierdo para mover los nuevos iconos un poco más a la derecha */
+}
+
 /* Estilos para pantallas más pequeñas */
 @media screen and (max-width: 768px) {
 

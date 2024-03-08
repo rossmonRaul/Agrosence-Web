@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { NavLink, useLocation } from 'react-router-dom';
-import { FaBars, FaUserAlt, FaTh, FaUserCog } from "react-icons/fa";
+import { FaBars, FaUserAlt, FaTh, FaUserCog, FaAngleRight, FaAngleDown } from "react-icons/fa";
 import '../../css/Sidebar.css';
 import { useSelector } from 'react-redux';
 import { AppStore } from '../../redux/Store';
@@ -65,6 +65,39 @@ const Sidebar = ({ children }: { children: React.ReactNode }) => {
             icon: <FaUserCog />,
             roles: [2]
         },
+
+        {
+            path: "/administrarfincas",
+            name: "Fincas",
+            icon: <IoBusiness />,
+            roles: [2]
+        },
+
+        {
+            path: "/administrarparcelas",
+            name: "Parcelas",
+            icon: <IoBusiness />,
+            roles: [2]
+        },
+
+        {
+            path: "/opciones-nuevas",
+            name: "Opciones Nuevas",
+            icon: <IoBusiness />, // Puedes usar cualquier icono que desees aquí
+            roles: [1, 2], // Especifica los roles que pueden ver esta opción
+            children: [
+                {
+                    path: "/opcion-1",
+                    name: "Opción 1",
+                    icon: <IoBusiness />,
+                },
+                {
+                    path: "/opcion-2",
+                    name: "Opción 2",
+                    icon: <IoBusiness />,
+                }
+            ]
+        },
         {
             path: "#", // Utilizar "#" como un enlace que no lleva a ninguna parte para los multi-seleccion
             name: "Pages",
@@ -99,9 +132,9 @@ const Sidebar = ({ children }: { children: React.ReactNode }) => {
     const userState = useSelector((store: AppStore) => store.user);
 
     return (
-        <div style={{ marginLeft: isOpen ? "200px" : "50px" }} className="container">
-            
-            <div style={{ width: isOpen ? "200px" : "50px" }} className="sidebar">
+        <div style={{ marginLeft: isOpen ? "200px" : "70px" }} className="container">
+
+            <div style={{ width: isOpen ? "200px" : "70px" }} className="sidebar">
                 <div className="top-section">
                     <h1 style={{ display: isOpen ? "block" : "none" }} className="logo">Logo</h1>
                     <div style={{ marginLeft: isOpen ? "50px" : "0px" }} className="bars">
@@ -116,13 +149,13 @@ const Sidebar = ({ children }: { children: React.ReactNode }) => {
                                 {item.children ? (
                                     <div onClick={() => toggleSubmenu(item.path)} className={`link ${location.pathname === item.path ? 'active' : ''}`}>
                                         <div className="icon">{item.icon}</div>
-                                        <div style={{display: isOpen ? "block" : "none"}} className="link_text">{item.name}</div>
-                                        <div className="arrow">{submenuOpen[item.path] ? '-' : '+'}</div>
+                                        <div style={{ display: isOpen ? "block" : "none" }} className="link_text">{item.name}</div>
+                                        <div className="arrow">{submenuOpen[item.path] ? <FaAngleDown /> : <FaAngleRight />}</div>
                                     </div>
                                 ) : (
                                     <NavLink to={item.path} className={`link ${location.pathname === item.path ? 'active' : ''}`}>
                                         <div className="icon">{item.icon}</div>
-                                        <div style={{display: isOpen ? "block" : "none"}} className="link_text">{item.name}</div>
+                                        <div style={{ display: isOpen ? "block" : "none" }} className="link_text">{item.name}</div>
                                     </NavLink>
                                 )}
                                 {item.children && (
@@ -130,7 +163,7 @@ const Sidebar = ({ children }: { children: React.ReactNode }) => {
                                         {item.children.map((child, childIndex) => (
                                             <NavLink key={childIndex} to={child.path} className={`link ${location.pathname === child.path ? 'active' : ''}`}>
                                                 <div className="icon">{child.icon}</div>
-                                                <div style={{display: isOpen ? "block" : "none"}} className="link_text">{child.name}</div>
+                                                <div style={{ display: isOpen ? "block" : "none" }} className="link_text">{child.name}</div>
                                             </NavLink>
                                         ))}
                                     </div>

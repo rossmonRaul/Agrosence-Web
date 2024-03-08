@@ -4,7 +4,6 @@ import Paso2 from '../crearCuenta/DatosEmpresa.tsx';
 import { InsertarUsuario } from '../../servicios/ServicioUsuario.ts';
 import Swal from 'sweetalert2';
 
-
 const CrearCuentaMultipaso: React.FC = () => {
   const [step, setStep] = useState<number>(1);
   const [formData, setFormData] = useState<any>({
@@ -71,6 +70,6 @@ const CrearCuentaMultipaso: React.FC = () => {
     default:
       return null;
   }
-}
+} 
 
 export default CrearCuentaMultipaso;

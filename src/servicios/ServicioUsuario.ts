@@ -58,13 +58,13 @@ export const ActualizarUsuarioAdministrador = async (data: any) => {
 }
 
 export const ActualizarAsignarUsuario = async (data: any) => {
-    const url = `http://localhost:5271/api/v1.0/${controlador}/ActualizarUsuario`;
+    const url = `http://localhost:5271/api/v1.0/${controlador}/ActualizarDatosUsuario`;
     return await ProcesarDatosApi('PUT', url, data);
 }
 
 
 export const AsignarFincaParcelaUsuario = async (data: any) => {
-    const url = `http://localhost:5271/api/v1.0/${controlador}/ActualizarUsuario`;
+    const url = `http://localhost:5271/api/v1.0/${controlador}/ActualizarDatosUsuario`;
     return await ProcesarDatosApi('PUT', url, data);
 }
 

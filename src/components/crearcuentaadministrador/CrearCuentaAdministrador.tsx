@@ -15,7 +15,7 @@ interface Option {
 // Interfaz para las propiedades del componente
 interface AgregarAdministradorProps {
     onAdd: () => void;
-}
+} 
 
 // Componente funcional principal
 const CrearCuentaAdministrador: React.FC<AgregarAdministradorProps> = ({ onAdd }) => {
@@ -26,10 +26,11 @@ const CrearCuentaAdministrador: React.FC<AgregarAdministradorProps> = ({ onAdd }
     const [selectedEmpresa, setSelectedEmpresa] = useState<string>();
 
     // Estado para almacenar los errores de validación del formulario
-    const [errors, setErrors] = useState<Record<string, string>>({ identificacion: '', contrasena: '', contrasenaConfirmar: '', email: '', empresa: '' });
+    const [errors, setErrors] = useState<Record<string, string>>({ nombre: '', identificacion: '', contrasena: '', contrasenaConfirmar: '', email: '', empresa: '' });
 
     // Estado para almacenar los datos del formulario
     const [formData, setFormData] = useState<any>({
+        nombre: '',
         identificacion: '',
         email: '',
         contrasena: '',
@@ -55,8 +56,8 @@ const CrearCuentaAdministrador: React.FC<AgregarAdministradorProps> = ({ onAdd }
         obtenerEmpresas();
     }, []);
 
-     // Función para manejar el blur de los inputs y eliminar mensajes de error
-     const handleInputBlur = (fieldName: string) => {
+    // Función para manejar el blur de los inputs y eliminar mensajes de error
+    const handleInputBlur = (fieldName: string) => {
         // Eliminar el mensaje de error para el campo cuando el identificacion comienza a escribir en él
         if (errors[fieldName]) {
             setErrors((prevErrors: any) => ({
@@ -146,6 +147,7 @@ const CrearCuentaAdministrador: React.FC<AgregarAdministradorProps> = ({ onAdd }
     // Función para manejar el envío del formulario
     const handleSubmit = async () => {
         const datos = {
+            nombre: formData.nombre,
             identificacion: formData.identificacion,
             correo: formData.email,
             contrasena: formData.contrasena,
@@ -178,6 +180,23 @@ const CrearCuentaAdministrador: React.FC<AgregarAdministradorProps> = ({ onAdd }
     // Renderizado del componente
     return (
         <div>
+            <FormGroup row>
+                <Label for="nombre" sm={2} className="input-label">Nombre</Label>
+                <Col sm={12}>
+                    <Input
+                        type="text"
+                        id="nombre"
+                        name="nombre"
+                        placeholder="Nombre Completo"
+                        value={formData.nombre}
+                        onChange={handleInputChange}
+                        onBlur={() => handleInputBlur('nombre')} // Manejar blur para quitar el mensaje de error
+                        className={errors.nombre ? 'input-styled input-error' : 'input-styled'} // Aplicar clase 'is-invalid' si hay un error
+
+                    />
+                    <FormFeedback>{errors.nombre}</FormFeedback>
+                </Col>
+            </FormGroup>
             <FormGroup row>
                 <Label for="identificacion" sm={2} className="input-label">Identificación</Label>
                 <Col sm={12}>
@@ -260,6 +279,5 @@ const CrearCuentaAdministrador: React.FC<AgregarAdministradorProps> = ({ onAdd }
             </FormGroup>
         </div>
     );
-}
-
+}  
 export default CrearCuentaAdministrador;
