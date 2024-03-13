@@ -19,6 +19,7 @@ const AdministrarEmpresas = lazy(() => import('./pages/private/AdministrarEmpres
 const AdministrarFincas = lazy(() => import('./pages/private/AdministrarFincas/AdministrarFincas'))
 const AdministrarParcelas = lazy(() => import('./pages/private/AdministrarParcelas/AdministrarParcelas'))
 const MantenimientoUsuariosAsignados = lazy(() => import('./pages/private/MantenimientoUsuariosAsignados/MantenimientoUsuariosAsignados'))
+const ManejodeFertilizantes = lazy(() => import('./pages/private/ManejodeFertilizantes/ManejodeFertilizantes'))
  
 function App() {
   return (
@@ -56,6 +57,11 @@ function App() {
               <Route path={PrivateRoutes.MATENIMIENTOUSUARIOSASIGNADOS} element={<MantenimientoUsuariosAsignados />} />
               <Route path={PrivateRoutes.ADMINISTRARFINCAS} element={<AdministrarFincas />} />
               <Route path={PrivateRoutes.ADMINISTRARPARCELAS} element={<AdministrarParcelas />} />
+            </Route>
+            {/* Rutas accesibles solo para el rol de usuario asignado */}
+            <Route element={<RolGuard rol={Roles.UsuarioAsignado} />}>
+              <Route path={PrivateRoutes.DASHBOARD} element={<Dashboard />} />
+              <Route path={PrivateRoutes.MANEJODEFERTILIZANTES} element={<ManejodeFertilizantes />} />
             </Route>
           </RoutesWithNotFound>
         </BrowserRouter>

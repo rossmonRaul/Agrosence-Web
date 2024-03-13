@@ -19,7 +19,7 @@ import { useSelector } from "react-redux";
 import { AppStore } from "../../../redux/Store.ts";
 import AsignacionesUsuarios from "../../../components/asignacionesusuario/AsignacionesUsuarios.tsx";
 
-/**
+/** 
  * Componente funcional que representa la página de mantenimiento de usuarios asignados.
  */
 function MantenimientoUsuariosAsignados() {
@@ -93,6 +93,9 @@ function MantenimientoUsuariosAsignados() {
         ...usuario,
         sEstado: usuario.estado === 1 ? 'Activo' : 'Inactivo',
       }));
+      console.log("estados")
+      console.log(usuariosConSEstado)
+      console.log("estados")
       setUsuariosAsignados(usuariosConSEstado);
       setUsuariosFiltrados(usuariosConSEstado); // Inicialmente, los datos filtrados son los mismos que los datos originales
     } catch (error) {
@@ -210,7 +213,7 @@ function MantenimientoUsuariosAsignados() {
               nombre={selectedUsuario.nombre}
               email={selectedUsuario.correo}
               onEdit={handleEditarUsuario}
-            />
+            /> 
           </div>
         </div>
       </Modal>

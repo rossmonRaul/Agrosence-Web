@@ -81,14 +81,14 @@ const Sidebar = ({ children }: { children: React.ReactNode }) => {
         },
 
         {
-            path: "/opciones-nuevas",
-            name: "Opciones Nuevas",
+            path: "/suelos",
+            name: "Suelos",
             icon: <IoBusiness />, // Puedes usar cualquier icono que desees aquí
-            roles: [1, 2], // Especifica los roles que pueden ver esta opción
+            roles: [3], // Especifica los roles que pueden ver esta opción
             children: [
                 {
-                    path: "/opcion-1",
-                    name: "Opción 1",
+                    path: "/manejodefertilizantes",
+                    name: "Manejo de fertilizantes",
                     icon: <IoBusiness />,
                 },
                 {

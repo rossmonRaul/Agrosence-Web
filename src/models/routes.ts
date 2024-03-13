@@ -15,6 +15,7 @@ export const PrivateRoutes = {
     MATENIMIENTOUSUARIOSASIGNADOS: 'administrarusuariosasignados',
     ADMINISTRARFINCAS: 'administrarfincas',
     ADMINISTRARPARCELAS: 'administrarparcelas',
-    MANEJODESUELOS:'manejosdesuelos',
+    MANEJODESUELOS:'manejodesuelos',
+    MANEJODEFERTILIZANTES: 'manejodefertilizantes'
 };
  
