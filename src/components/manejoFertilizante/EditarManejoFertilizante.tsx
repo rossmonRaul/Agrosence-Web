@@ -106,11 +106,16 @@ const ModificacionManejoFertilizante: React.FC<FertilizanteSeleccionado> = ({
 
     useEffect(() => {
         // Actualizar el formData cuando las props cambien
+        const parts = fechaCreacion.split('/');
+        const day = parts[0];
+        const month = parts[1];
+        const year = parts[2];
+        const fecha= year + '-' + month + '-' + day;
         setFormData({
             idFinca: idFinca,
             idParcela: idParcela,
             idManejoFertilizantes: idManejoFertilizantes,
-            fechaCreacion: fechaCreacion,
+            fechaCreacion: fecha,
             fertilizante: fertilizante,
             aplicacion: aplicacion,
             dosis: dosis,
@@ -291,7 +296,7 @@ const ModificacionManejoFertilizante: React.FC<FertilizanteSeleccionado> = ({
             idFinca: selectedFinca,
             idParcela: selectedParcela,
             idManejoFertilizantes: formData.idManejoFertilizantes,
-            fechaCreacion: fechaCreacion,
+            fechaCreacion: formData.fechaCreacion,
             fertilizante: formData.fertilizante,
             aplicacion: formData.aplicacion,
             dosis: formData.dosis,
@@ -300,6 +305,7 @@ const ModificacionManejoFertilizante: React.FC<FertilizanteSeleccionado> = ({
             accionesAdicionales: formData.accionesAdicionales,
             observaciones: formData.observaciones
         };
+
         try {
             const resultado = await EditarManejoFertilizantes(datos);
             if (resultado.indicador === 1) {
