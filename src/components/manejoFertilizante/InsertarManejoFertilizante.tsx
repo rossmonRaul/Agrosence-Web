@@ -196,7 +196,7 @@ const InsertarManejoFertilizante: React.FC<InsertarManejoFertilizanteProps> = ({
         } else {
             newErrors.observaciones = '';
         }
- 
+  
         setErrors(newErrors);
 
         if (Object.values(newErrors).every(error => error === '')) {

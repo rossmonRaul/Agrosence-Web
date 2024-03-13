@@ -98,8 +98,8 @@ const ModificacionManejoFertilizante: React.FC<FertilizanteSeleccionado> = ({
     // Función para manejar cambios en los inputs del formulario
     const handleInputChange = (event: React.ChangeEvent<HTMLInputElement>) => {
         const { name, value } = event.target;
-        setFormData((prevState: FormData) => ({
-            ...prevState,
+        setFormData((prevState: any) => ({
+            ...prevState, 
             [name]: value
         }));
     };
@@ -238,14 +238,6 @@ const ModificacionManejoFertilizante: React.FC<FertilizanteSeleccionado> = ({
             newErrors.aplicacion = '';
         }
 
-        if (!formData.dosis.trim()) {
-            newErrors.dosis = 'La dosis es requerida';
-        } else if (!/^\d+$/.test(formData.dosis)) {
-            newErrors.dosis = 'La dosis debe ser un número';
-        } else {
-            newErrors.dosis = '';
-        }
-
         if (!formData.cultivoTratado.trim()) {
             newErrors.cultivoTratado = 'El nombre del cultivo es requerido';
         } else if (formData.cultivoTratado.length > 50) {
@@ -299,7 +291,7 @@ const ModificacionManejoFertilizante: React.FC<FertilizanteSeleccionado> = ({
             idFinca: selectedFinca,
             idParcela: selectedParcela,
             idManejoFertilizantes: formData.idManejoFertilizantes,
-            fechaCreacion: formData.fechaCreacion,
+            fechaCreacion: fechaCreacion,
             fertilizante: formData.fertilizante,
             aplicacion: formData.aplicacion,
             dosis: formData.dosis,
@@ -363,7 +355,7 @@ const ModificacionManejoFertilizante: React.FC<FertilizanteSeleccionado> = ({
                                 type="date"
                                 id="fechaCreacion"
                                 name="fechaCreacion"
-                                value={formattedDate}
+                                value={formData.fechaCreacion}
                                 onChange={handleInputChange}
                                 className={errors.fechaCreacion ? 'input-styled input-error' : 'input-styled'}
                                 placeholder="Selecciona una fecha"

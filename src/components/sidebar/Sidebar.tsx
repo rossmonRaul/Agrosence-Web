@@ -88,12 +88,12 @@ const Sidebar = ({ children }: { children: React.ReactNode }) => {
             children: [
                 {
                     path: "/manejodefertilizantes",
-                    name: "Manejo de fertilizantes",
+                    name: "Manejo de Fertilizantes",
                     icon: <IoBusiness />,
                 },
                 {
-                    path: "/opcion-2",
-                    name: "Opción 2",
+                    path: "/medicionesdesuelos",
+                    name: "Mediciones de Suelos",
                     icon: <IoBusiness />,
                 }
             ]
