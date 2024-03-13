@@ -43,6 +43,7 @@ const ModificacionManejoFertilizante: React.FC<FertilizanteSeleccionado> = ({
     condicionesAmbientales,
     accionesAdicionales,
     observaciones,
+    onEdit
 }) => {
 
 
@@ -62,9 +63,10 @@ const ModificacionManejoFertilizante: React.FC<FertilizanteSeleccionado> = ({
 
     const [fincas, setFincas] = useState<Option[]>([]);
     const [parcelas, setParcelas] = useState<Option[]>([]);
-    const [selectedFinca, setSelectedFinca] = useState<string>('');
-    const [selectedParcela, setSelectedParcela] = useState<string>('');
 
+    //esto rellena los select de finca y parcela cuando se carga el modal
+    const [selectedFinca, setSelectedFinca] = useState<string>(() => idFinca ? idFinca.toString() : '');
+    const [selectedParcela, setSelectedParcela] = useState<string>(() => idParcela ? idParcela.toString() : '');
 
     // Estado para almacenar los errores de validación del formulario
     const [errors, setErrors] = useState<Record<string, string>>({
@@ -88,7 +90,7 @@ const ModificacionManejoFertilizante: React.FC<FertilizanteSeleccionado> = ({
         fechaCreacion: '',
         fertilizante: '',
         aplicacion: '',
-        dosis: '',
+        dosis: 0,
         cultivoTratado: '',
         condicionesAmbientales: '',
         accionesAdicionales: '',
@@ -243,6 +245,14 @@ const ModificacionManejoFertilizante: React.FC<FertilizanteSeleccionado> = ({
             newErrors.aplicacion = '';
         }
 
+        if (!formData.dosis) {
+            newErrors.dosis = 'La dosis es requerida';
+        } else if (!/^\d+$/.test(formData.dosis)) {
+            newErrors.dosis = 'La dosis debe ser un número';
+        } else {
+            newErrors.dosis = '';
+        }
+
         if (!formData.cultivoTratado.trim()) {
             newErrors.cultivoTratado = 'El nombre del cultivo es requerido';
         } else if (formData.cultivoTratado.length > 50) {
@@ -251,19 +261,25 @@ const ModificacionManejoFertilizante: React.FC<FertilizanteSeleccionado> = ({
             newErrors.cultivoTratado = '';
         }
 
-        if (formData.accionesAdicionales.length > 200) {
+        if (!formData.accionesAdicionales.trim()) {
+            newErrors.accionesAdicionales = 'Las acciones adicionales son requeridas';
+        } else if (formData.accionesAdicionales.length > 200) {
             newErrors.accionesAdicionales = 'Las acciones adicionales no pueden tener más de 200 caracteres';
         } else {
             newErrors.accionesAdicionales = '';
         }
 
-        if (formData.condicionesAmbientales.length > 200) {
+        if (!formData.condicionesAmbientales.trim()) {
+            newErrors.condicionesAmbientales = 'Las condiciones ambientales son requeridas';
+        } else if (formData.condicionesAmbientales.length > 200) {
             newErrors.condicionesAmbientales = 'Las condiciones ambientales no pueden tener más de 200 caracteres';
         } else {
             newErrors.condicionesAmbientales = '';
         }
 
-        if (formData.observaciones.length > 200) {
+        if (!formData.observaciones.trim()) {
+            newErrors.observaciones = 'Las observaciones son requeridas';
+        } else if (formData.observaciones.length > 200) {
             newErrors.observaciones = 'Las observaciones no pueden tener más de 200 caracteres';
         } else {
             newErrors.observaciones = '';
@@ -321,6 +337,13 @@ const ModificacionManejoFertilizante: React.FC<FertilizanteSeleccionado> = ({
                     text: resultado.mensaje,
                 });
             };
+
+            // vuelve a cargar la tabla
+            
+            if (onEdit) {
+                onEdit();
+            }
+
         } catch (error) {
             console.log(error);
         }

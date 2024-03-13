@@ -15,8 +15,9 @@ import ModificacionManejoFertilizante from "../../../components/manejoFertilizan
 import { ObtenerUsuariosAsignadosPorIdentificacion } from '../../../servicios/ServicioUsuario.ts';
 import '../../../css/FormSeleccionEmpresa.css'
 
-function AdministrarParcelas() {
-    const [filtroNombre, setFiltroNombre] = useState('');
+function AdministrarManejoFertilizantes() {
+    const [filtroNombreFertilizante, setFiltroNombreFertilizante] = useState('');
+    const [datosFertilizantesOriginales, setDatosFertilizantesOriginales] = useState<any[]>([]);
     const [modalEditar, setModalEditar] = useState(false);
     const [modalInsertar, setModalInsertar] = useState(false);
     const [selectedParcela, setSelectedParcela] = useState<number | null>(null);
@@ -31,17 +32,20 @@ function AdministrarParcelas() {
         cultivoTratado: '',
         condicionesAmbientales: '',
         accionesAdicionales: '',
-        observaciones: '' 
-      });
+        observaciones: ''
+    });
     const [parcelas, setParcelas] = useState<any[]>([]);
     const [parcelasFiltradas, setParcelasFiltradas] = useState<any[]>([]);
     const [datosFertilizantes, setDatosFertilizantes] = useState<any[]>([]);
+    const [datosFertilizantesFiltrados, setdatosFertilizantesFiltrados] = useState<any[]>([]);
     const [selectedFinca, setSelectedFinca] = useState<number | null>(null);
     const [fincas, setFincas] = useState<any[]>([]);
 
     const handleFincaChange = async (e: React.ChangeEvent<HTMLSelectElement>) => {
         const value = parseInt(e.target.value);
+        setDatosFertilizantes([])
         setSelectedFinca(value);
+        setSelectedParcela(null);
     };
 
     const handleParcelaChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
@@ -57,7 +61,7 @@ function AdministrarParcelas() {
                 const idEmpresaString = localStorage.getItem('empresaUsuario');
                 const identificacionString = localStorage.getItem('identificacionUsuario');
                 if (identificacionString && idEmpresaString) {
-                   
+
                     const identificacion = identificacionString;
                     const usuariosAsignados = await ObtenerUsuariosAsignadosPorIdentificacion({ identificacion: identificacion });
                     const idFincasUsuario = usuariosAsignados.map((usuario: any) => usuario.idFinca);
@@ -101,39 +105,31 @@ function AdministrarParcelas() {
 
 
     const handleChangeFiltro = (e: React.ChangeEvent<HTMLInputElement>) => {
-        const { value } = e.target;
-        setFiltroNombre(value);
+        setFiltroNombreFertilizante(e.target.value); // Convertir a minúsculas
     };
 
-
+    
     //este componente refrezca la tabla al momento
     useEffect(() => {
-        filtrarParcelas();
-        obtenerInfo();
-    }, [selectedFinca, parcelas, selectedParcela, filtroNombre]);
+        filtrarFertilizantes();
+    }, [selectedFinca, parcelas, selectedParcela, filtroNombreFertilizante]);
 
-    useEffect(() => {
-        obtenerInfo();
-    }, []);
+    //  useEffect(() => {
+    //     obtenerInfo();
+    // }, []);
 
-    const filtrarParcelas = () => {
-        let parcelasFiltradasPorFinca = selectedFinca
-            ? parcelas.filter(parcela => parcela.idFinca === selectedFinca)
-            : parcelas;
+   
+    const filtrarFertilizantes = () => {
+        const fertilizantesFiltrados = filtroNombreFertilizante
+            ? datosFertilizantes.filter((fertilizante: any) =>
+                fertilizante.fertilizante.toLowerCase().includes(filtroNombreFertilizante.toLowerCase())
+            )
+            : datosFertilizantes;
+            setdatosFertilizantesFiltrados(fertilizantesFiltrados);
 
-        // Aplica el filtro por nombre en función de filtroNombre
-        parcelasFiltradasPorFinca = parcelasFiltradasPorFinca.filter(parcela =>
-            parcela.nombre.toLowerCase().includes(filtroNombre.toLowerCase())
-        );
-
-        // Si hay alguna parcela seleccionada, aplica el filtro a esa parcela específica
-        if (selectedParcela) {
-            parcelasFiltradasPorFinca = parcelasFiltradasPorFinca.filter(parcela =>
-                parcela.idParcela === selectedParcela
-            );
-        }
-
-        setParcelasFiltradas(parcelasFiltradasPorFinca);
+        console.log("fertilizantesFiltrados")
+        console.log(fertilizantesFiltrados)
+        console.log("fertilizantesFiltrados")
     };
 
     // hay que hacer el filtro de obtener usuarios asignados por identificacion
@@ -184,14 +180,9 @@ function AdministrarParcelas() {
                 //aca se hace el filtro y hasta que elija la parcela funciona
                 return dato.idFinca === selectedFinca && dato.idParcela === selectedParcela;
             });
-
-            console.log("datosFiltrados")
-            console.log(datosFiltrados)
-            console.log("datosFiltrados")
-
-
             // Actualizar el estado con los datos filtrados
             setDatosFertilizantes(datosFiltrados);
+            setdatosFertilizantesFiltrados(datosFiltrados);
         } catch (error) {
             console.error('Error al obtener los datos de los fertilizantes:', error);
         }
@@ -300,17 +291,17 @@ function AdministrarParcelas() {
                         </select>
                     </div>
                     <div className="filtro-container">
-                        <label htmlFor="filtroNombre">Filtrar por nombre:</label>
+                        <label htmlFor="filtroNombreFertilizante">Filtrar por nombre de fertilizante:</label>
                         <input
                             type="text"
-                            id="filtroNombre"
-                            value={filtroNombre}
+                            id="filtroNombreFertilizante"
+                            value={filtroNombreFertilizante}
                             onChange={handleChangeFiltro}
-                            placeholder="Ingrese el nombre"
+                            placeholder="Ingrese el nombre del fertilizante"
                             className="form-control"
                         />
                     </div>
-                    <TableResponsive columns={columns2} data={datosFertilizantes} openModal={openModal} btnActionName={"Editar"} toggleStatus={toggleStatus} />
+                    <TableResponsive columns={columns2} data={datosFertilizantesFiltrados} openModal={openModal} btnActionName={"Editar"} toggleStatus={toggleStatus} />
                 </div>
             </div>
 
@@ -359,4 +350,4 @@ function AdministrarParcelas() {
     );
 }
 
-export default AdministrarParcelas;
+export default AdministrarManejoFertilizantes;

@@ -8,7 +8,7 @@ import { AsignarEmpresaFincaParcelaUsuario } from '../../servicios/ServicioUsuar
 import '../../css/CrearCuenta.css'
 
 // Definición de las propiedades que espera recibir el componente
-interface Props {
+interface Props { 
     idEmpresa: number;
     identificacion: string;
     idFinca?: number;

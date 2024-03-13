@@ -179,19 +179,25 @@ const InsertarManejoFertilizante: React.FC<InsertarManejoFertilizanteProps> = ({
             newErrors.cultivoTratado = '';
         }
 
-        if (formData.accionesAdicionales.length > 200) {
+        if (!formData.accionesAdicionales.trim()) {
+            newErrors.accionesAdicionales = 'Las acciones adicionales son requeridas';
+        } else if (formData.accionesAdicionales.length > 200) {
             newErrors.accionesAdicionales = 'Las acciones adicionales no pueden tener más de 200 caracteres';
         } else {
             newErrors.accionesAdicionales = '';
         }
 
-        if (formData.condicionesAmbientales.length > 200) {
+        if (!formData.condicionesAmbientales.trim()) {
+            newErrors.condicionesAmbientales = 'Las condiciones ambientales son requeridas';
+        } else if (formData.condicionesAmbientales.length > 200) {
             newErrors.condicionesAmbientales = 'Las condiciones ambientales no pueden tener más de 200 caracteres';
         } else {
             newErrors.condicionesAmbientales = '';
         }
 
-        if (formData.observaciones.length > 200) {
+        if (!formData.observaciones.trim()) {
+            newErrors.observaciones = 'Las observaciones son requeridas';
+        } else if (formData.observaciones.length > 200) {
             newErrors.observaciones = 'Las observaciones no pueden tener más de 200 caracteres';
         } else {
             newErrors.observaciones = '';

@@ -76,7 +76,7 @@ function AdministrarFincas() {
     // Función para manejar el cambio en el filtro de nombre
     const handleChangeFiltro = (e: React.ChangeEvent<HTMLInputElement>) => {
         setFiltroNombre(e.target.value);
-    };
+    };    
 
     // Función para filtrar las empresas por nombre sin key sensitive
     const filtrarFincas = () => {
