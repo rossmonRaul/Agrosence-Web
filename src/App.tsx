@@ -20,7 +20,7 @@ const AdministrarFincas = lazy(() => import('./pages/private/AdministrarFincas/A
 const AdministrarParcelas = lazy(() => import('./pages/private/AdministrarParcelas/AdministrarParcelas'))
 const MantenimientoUsuariosAsignados = lazy(() => import('./pages/private/MantenimientoUsuariosAsignados/MantenimientoUsuariosAsignados'))
 const ManejodeFertilizantes = lazy(() => import('./pages/private/ManejodeFertilizantes/ManejodeFertilizantes'))
-const MedicionesdeSuelos = lazy(() => import('./pages/private/MedicionesdeSuelos/MedicionesdeSuelos'))
+const MedicionesdeSuelos = lazy(() => import('./pages/private/CalidadSuelo/CalidadSuelo'))
  
 function App() {
   return (
