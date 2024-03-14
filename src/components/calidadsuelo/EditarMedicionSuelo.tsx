@@ -568,7 +568,7 @@ const EditarMedicionSuelo: React.FC<FertilizanteSeleccionado> = ({
                         </div>
 
 
-                        <div className="row" style={{ display: "flex" }}>
+                        <div className="row" style={{ display: 'flex', justifyContent: 'space-between' }}>
                             <div className="col-sm-6" style={{ marginRight: "10px" }}>
                                 <FormGroup row>
                                     <Label for="lombrices" sm={4} className="input-label">Ensayo de lombrices (número de lombrices/m<sup>2</sup>)</Label>
