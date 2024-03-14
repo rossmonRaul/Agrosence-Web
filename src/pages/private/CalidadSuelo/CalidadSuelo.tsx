@@ -107,28 +107,38 @@ function CalidadSuelo() {
 
     // Función para obtener todos las mediciones 
 
+    // const idUsuario = localStorage.getItem('identificacionUsuario');
+
     const obtenerDatosMediciones = async () => {
         try {
-
-            //hacen falta cambios a obtener usuarios asignados con el filtro
-            const idEmpresa = localStorage.getItem('empresaUsuario')
-            const datos = await ObtenerUsuariosAsignados({ idEmpresa: idEmpresa });
-            //aca le pones el nombre del servicio que vas a usar para traer los datos
-            const datosManejoSuelos = await ObtenerMedicionesSuelo();
-
-            const datosManejoSuelosFiltrados = datosManejoSuelos.filter((datosEntrantes: any) => datos.includes(datosEntrantes.identificacionUsuario));
-            
-            const datosConEstado = datosManejoSuelosFiltrados.map((mediciones: any) => ({
-                ...mediciones,
-                sEstado: mediciones.estado === 1 ? 'Activo' : 'Inactivo',
+            const idEmpresa = localStorage.getItem('empresaUsuario');
+            const idUsuario = localStorage.getItem('identificacionUsuario');
+            const datosUsuarios = await ObtenerUsuariosAsignados({ idEmpresa: idEmpresa });
+            const datosMedicionesSuelo = await ObtenerMedicionesSuelo();
+    
+            const usuarioActual = datosUsuarios.find((usuario: any) => usuario.identificacion === idUsuario);
+    
+            if (!usuarioActual) {
+                console.error('No se encontró el usuario actual');
+                return;
+            }
+    
+            const parcelasUsuarioActual = datosUsuarios.filter((usuario: any) => usuario.identificacion === idUsuario).map((usuario: any) => usuario.idParcela);
+    
+            // Filtrar las mediciones de suelo de las parcelas del usuario actual
+            const medicionesFiltradas = datosMedicionesSuelo.filter((medicion: any) => {
+                return parcelasUsuarioActual.includes(medicion.idParcela);
+            }).map((medicion: any) => ({
+                ...medicion,
+                sEstado: medicion.estado === 1 ? 'Activo' : 'Inactivo',
             }));
-
-            setMediciones(datosConEstado);
-            // setMediciones(datosConEstado.filter());
+    
+            setMediciones(medicionesFiltradas);
         } catch (error) {
             console.error('Error al obtener las mediciones:', error);
         }
     };
+    
 
     // Función para cambiar el estado de un usuario
     const toggleStatus = async (medicionSuelo: any) => {

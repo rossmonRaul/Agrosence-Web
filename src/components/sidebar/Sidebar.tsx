@@ -69,32 +69,32 @@ const Sidebar = ({ children }: { children: React.ReactNode }) => {
         {
             path: "/administrarfincas",
             name: "Fincas",
-            icon: <IoBusiness />,
+            icon: <img src='/field.png'style={{width: '22px'}}/>,
             roles: [2]
         },
 
         {
             path: "/administrarparcelas",
             name: "Parcelas",
-            icon: <IoBusiness />,
+            icon: <img src='/tractor.png'style={{width: '30px'}}/>,
             roles: [2]
         },
 
         {
             path: "/suelos",
             name: "Suelos",
-            icon: <IoBusiness />, // Puedes usar cualquier icono que desees aquí
+            icon: <img src='/field.png'style={{width: '22px'}}/>, // Puedes usar cualquier icono que desees aquí
             roles: [3], // Especifica los roles que pueden ver esta opción
             children: [
                 {
                     path: "/manejodefertilizantes",
                     name: "Manejo de Fertilizantes",
-                    icon: <IoBusiness />,
+                    icon: <img src='/fertilizer.png'style={{width: '30px'}}/>,
                 },
                 {
                     path: "/medicionesdesuelos",
                     name: "Mediciones de Suelos",
-                    icon: <IoBusiness />,
+                    icon: <img src='/tractor.png'style={{width: '30px'}}/>,
                 }
             ]
         },

@@ -82,7 +82,7 @@ const CrearMedicionSuelo: React.FC<InsertarManejoFertilizanteProps> = ({ onAdd }
                     const identificacion = identificacionString;
                     const usuariosAsignados = await ObtenerUsuariosAsignadosPorIdentificacion({ identificacion: identificacion });
                     const idFincasUsuario = usuariosAsignados.map((usuario: any) => usuario.idFinca);
-                    
+
                     const fincasResponse = await ObtenerFincas();
                     const fincasUsuario = fincasResponse.filter((finca: any) => idFincasUsuario.includes(finca.idFinca));
                     setFincas(fincasUsuario);
@@ -152,55 +152,93 @@ const CrearMedicionSuelo: React.FC<InsertarManejoFertilizanteProps> = ({ onAdd }
             newErrors.parcela = '';
         }
 
-        // if (!formData.fertilizante.trim()) {
-        //     newErrors.fertilizante = 'El tipo de fertilizante es requerido';
-        // } else if (formData.fertilizante.length > 50) {
-        //     newErrors.fertilizante = 'El tipo de fertilizante no puede tener más de 50 caracteres';
-        // } else {
-        //     newErrors.fertilizante = '';
-        // }
+        // Validar campo medicionesCalidadSuelo
+        if (!formData.medicionesCalidadSuelo.trim()) {
+            newErrors.medicionesCalidadSuelo = 'Las mediciones de calidad de suelo son requeridas';
+        } else if (formData.medicionesCalidadSuelo.length > 50) {
+            newErrors.medicionesCalidadSuelo = 'Las mediciones de calidad de suelo no pueden tener más de 50 caracteres';
+        } else {
+            newErrors.medicionesCalidadSuelo = '';
+        }
 
-        // if (!formData.aplicacion.trim()) {
-        //     newErrors.aplicacion = 'El método de aplicación es requerido';
-        // } else if (formData.aplicacion.length > 50) {
-        //     newErrors.aplicacion = 'El método de aplicación no puede tener más de 50 caracteres';
-        // } else {
-        //     newErrors.aplicacion = '';
-        // }
+        // Validar campo respiracionSuelo
+        if (!formData.respiracionSuelo.trim()) {
+            newErrors.respiracionSuelo = 'El ensayo de respiración de suelo es requerido';
+        } else {
+            newErrors.respiracionSuelo = '';
+        }
 
-        // if (!formData.dosis.trim()) {
-        //     newErrors.dosis = 'La dosis es requerida';
-        // } else if (!/^\d+$/.test(formData.dosis)) {
-        //     newErrors.dosis = 'La dosis debe ser un número';
-        // } else {
-        //     newErrors.dosis = '';
-        // }
+        // Validar campo infiltracion
+        if (!formData.infiltracion.trim()) {
+            newErrors.infiltracion = 'El ensayo de infiltración es requerido';
+        } else {
+            newErrors.infiltracion = '';
+        }
 
-        // if (!formData.cultivoTratado.trim()) {
-        //     newErrors.cultivoTratado = 'El nombre del cultivo es requerido';
-        // } else if (formData.cultivoTratado.length > 50) {
-        //     newErrors.cultivoTratado = 'El nombre del cultivo no puede tener más de 50 caracteres';
-        // } else {
-        //     newErrors.cultivoTratado = '';
-        // }
+        // Validar campo densidadAparente
+        if (!formData.densidadAparente.trim()) {
+            newErrors.densidadAparente = 'El ensayo de densidad aparente es requerido';
+        } else {
+            newErrors.densidadAparente = '';
+        }
 
-        // if (formData.accionesAdicionales.length > 200) {
-        //     newErrors.accionesAdicionales = 'Las acciones adicionales no pueden tener más de 200 caracteres';
-        // } else {
-        //     newErrors.accionesAdicionales = '';
-        // }
+        // Validar campo conductividadElectrica
+        if (!formData.conductividadElectrica.trim()) {
+            newErrors.conductividadElectrica = 'El ensayo de conductividad eléctrica es requerido';
+        } else {
+            newErrors.conductividadElectrica = '';
+        }
 
-        // if (formData.condicionesAmbientales.length > 200) {
-        //     newErrors.condicionesAmbientales = 'Las condiciones ambientales no pueden tener más de 200 caracteres';
-        // } else {
-        //     newErrors.condicionesAmbientales = '';
-        // }
+        // Validar campo pH
+        if (!formData.pH.trim()) {
+            newErrors.pH = 'El ensayo de pH es requerido';
+        } else {
+            newErrors.pH = '';
+        }
 
-        // if (formData.observaciones.length > 200) {
-        //     newErrors.observaciones = 'Las observaciones no pueden tener más de 200 caracteres';
-        // } else {
-        //     newErrors.observaciones = '';
-        // }
+        // Validar campo nitratosSuelo
+        if (!formData.nitratosSuelo.trim()) {
+            newErrors.nitratosSuelo = 'El ensayo de nitratos del suelo es requerido';
+        } else {
+            newErrors.nitratosSuelo = '';
+        }
+
+        // Validar campo estabilidadAgregados
+        if (!formData.estabilidadAgregados.trim()) {
+            newErrors.estabilidadAgregados = 'El ensayo de estabilidad de agregados es requerido';
+        } else {
+            newErrors.estabilidadAgregados = '';
+        }
+
+        // Validar campo desleimiento
+        if (!formData.desleimiento.trim()) {
+            newErrors.desleimiento = 'El ensayo de desleimiento es requerido';
+        } else {
+            newErrors.desleimiento = '';
+        }
+
+        // Validar campo lombrices
+        if (!formData.lombrices.trim()) {
+            newErrors.lombrices = 'El ensayo de lombrices es requerido';
+        } else {
+            newErrors.lombrices = '';
+        }
+
+        // Validar campo calidadAgua
+        if (!formData.calidadAgua.trim()) {
+            newErrors.calidadAgua = 'El ensayo de la calidad del agua es requerido';
+        } else {
+            newErrors.calidadAgua = '';
+        }
+
+        // Validar campo observaciones
+        if (!formData.observaciones.trim()) {
+            newErrors.observaciones = 'Las observaciones son requeridas';
+        } else if (formData.observaciones.length > 200) {
+            newErrors.observaciones = 'Las observaciones no pueden tener más de 200 caracteres';
+        } else {
+            newErrors.observaciones = '';
+        }
 
         setErrors(newErrors);
 
@@ -336,7 +374,7 @@ const CrearMedicionSuelo: React.FC<InsertarManejoFertilizanteProps> = ({ onAdd }
                                         name="densidadAparente"
                                         value={formData.densidadAparente}
                                         onChange={handleInputChange}
-                                        className={errors.densidadAparente ? 'input-styled input-error' : 'input-styled flex-grow-1' }
+                                        className={errors.densidadAparente ? 'input-styled input-error' : 'input-styled flex-grow-1'}
                                         placeholder="0.0"
                                         maxLength={50}
                                     />

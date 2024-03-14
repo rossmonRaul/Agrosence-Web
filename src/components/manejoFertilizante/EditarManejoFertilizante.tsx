@@ -177,7 +177,7 @@ const ModificacionManejoFertilizante: React.FC<FertilizanteSeleccionado> = ({
     const handleParcelaChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
         const value = e.target.value;
         setSelectedParcela(value);
-    };
+    }; 
 
     // Función para manejar el envío del formulario con validación
     const handleSubmitConValidacion = () => {
