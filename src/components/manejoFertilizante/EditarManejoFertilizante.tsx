@@ -309,13 +309,13 @@ const ModificacionManejoFertilizante: React.FC<FertilizanteSeleccionado> = ({
             if (resultado.indicador === 1) {
                 Swal.fire({
                     icon: 'success',
-                    title: '¡Usuario Actualizado! ',
-                    text: 'Usuario actualizado con éxito.',
+                    title: '¡Fertilizante Actualizado! ',
+                    text: 'Fertilizante actualizado con éxito.',
                 });
             } else {
                 Swal.fire({
                     icon: 'error',
-                    title: 'Error al actualizar el usuario.',
+                    title: 'Error al actualizar el fertilizante.',
                     text: resultado.mensaje,
                 });
             };

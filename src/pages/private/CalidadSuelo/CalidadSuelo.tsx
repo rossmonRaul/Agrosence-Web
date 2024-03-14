@@ -211,7 +211,7 @@ function CalidadSuelo() {
                 <Topbar />
                 <BordeSuperior text="Estudio de Calidad de Suelo" />
                 <div className="content">
-                    <button onClick={() => abrirCerrarModalCrearMedicion()} className="btn-crear">Crear Medicion</button>
+                    <button onClick={() => abrirCerrarModalCrearMedicion()} className="btn-crear">Crear MediciÓn</button>
                     <div className="filtro-container">
                         <label htmlFor="filtroIdentificacion">Filtrar:</label>
                         <input

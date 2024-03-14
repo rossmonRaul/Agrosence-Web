@@ -369,7 +369,7 @@ const EditarMedicionSuelo: React.FC<FertilizanteSeleccionado> = ({
             {step === 1 && (
                 <div>
                     <div className="form-container-fse" style={{ display: 'flex', flexDirection: 'column', width: '50%' }}>
-                        <h2>Medicion de la calidad del suelo</h2>
+                        <h2>Medición de la calidad del suelo</h2>
                         <FormGroup>
                             <label htmlFor="fincas">Finca:</label>
                             <select className="custom-select" id="fincas" value={selectedFinca} onChange={handleFincaChange}>
@@ -452,7 +452,7 @@ const EditarMedicionSuelo: React.FC<FertilizanteSeleccionado> = ({
                     <div className="row" style={{ display: "flex" }}>
                         <div className="col-sm-4" style={{ marginRight: "10px" }}>
                             <FormGroup row className="d-flex align-items-center">
-                                <Label for="densidadAparente" sm={4} className="input-label flex-grow-1">Ensayo de densisdad aparente (g/cm<sup>3</sup>)</Label>
+                                <Label for="densidadAparente" sm={4} className="input-label flex-grow-1">Ensayo de densidad aparente (g/cm<sup>3</sup>)</Label>
                                 <Col sm={8}>
                                     <Input
                                         type="text"
@@ -510,7 +510,7 @@ const EditarMedicionSuelo: React.FC<FertilizanteSeleccionado> = ({
             {step === 2 && (
                 <div>
                     <div className="form-container-fse" style={{ display: 'flex', flexDirection: 'column', width: '100%' }}>
-                        <h2>Manejo de fertilizantes</h2>
+                        <h2>Medición de la calidad del suelo</h2>
 
                         <div className="row" style={{ display: "flex" }}>
                             <div className="col-sm-4" style={{ marginRight: "10px" }}>
