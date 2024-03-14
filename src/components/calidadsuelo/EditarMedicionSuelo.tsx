@@ -365,11 +365,11 @@ const EditarMedicionSuelo: React.FC<FertilizanteSeleccionado> = ({
     };
 
     return (
-        <div id='general' style={{ display: 'flex', flexDirection: 'column', paddingBottom: '0rem', width: '100%', margin: '0 auto' }}>
+        <div id='general' style={{ display: 'flex', flexDirection: 'column', paddingBottom: '0rem', width: '90%', margin: '0 auto' }}>
             {step === 1 && (
                 <div>
                     <div className="form-container-fse" style={{ display: 'flex', flexDirection: 'column', width: '50%' }}>
-                        <h2>Manejo de fertilizantes</h2>
+                        <h2>Medicion de la calidad del suelo</h2>
                         <FormGroup>
                             <label htmlFor="fincas">Finca:</label>
                             <select className="custom-select" id="fincas" value={selectedFinca} onChange={handleFincaChange}>
@@ -392,8 +392,9 @@ const EditarMedicionSuelo: React.FC<FertilizanteSeleccionado> = ({
                             {errors.parcela && <FormFeedback>{errors.parcela}</FormFeedback>}
                         </FormGroup>
                     </div>
-                    <div style={{ display: 'flex', flexDirection: 'row', marginBottom: '0rem' }}>
-                        <div style={{ flex: 1, marginRight: '0.5rem', marginLeft: '0.5rem' }}>
+
+                    <div className="row" style={{ display: "flex" }}>
+                        <div className="col-sm-4" style={{ marginRight: "10px" }}>
                             <FormGroup row>
                                 <Label for="medicionesCalidadSuelo" sm={4} className="input-label">Mediciones de Calidad de suelo</Label>
                                 <Col sm={8}>
@@ -411,9 +412,9 @@ const EditarMedicionSuelo: React.FC<FertilizanteSeleccionado> = ({
                                 </Col>
                             </FormGroup>
                         </div>
-                        <div style={{ flex: 1, marginRight: '0.5rem', marginLeft: '0.5rem' }}>
+                        <div className="col-sm-4" style={{ marginRight: "10px" }}>
                             <FormGroup row>
-                                <Label for="respiracionSuelo" sm={4} className="input-label">Ensayo de respiracion de suelo(mg CO2-C/g)</Label>
+                                <Label for="respiracionSuelo" sm={4} className="input-label">Ensayo de respiración de suelo (mg CO2-C/g)</Label>
                                 <Col sm={8}>
                                     <Input
                                         type="text"
@@ -428,9 +429,9 @@ const EditarMedicionSuelo: React.FC<FertilizanteSeleccionado> = ({
                                 </Col>
                             </FormGroup>
                         </div>
-                        <div style={{ flex: 1, marginRight: '0.5rem', marginLeft: '0.5rem' }}>
+                        <div className="col-sm-4" >
                             <FormGroup row>
-                                <Label for="infiltracion" sm={4} className="input-label">Ensayo de infiltración(mm/hora)</Label>
+                                <Label for="infiltracion" sm={4} className="input-label">Ensayo de infiltración (mm/hora)</Label>
                                 <Col sm={8}>
                                     <Input
                                         type="text"
@@ -446,10 +447,12 @@ const EditarMedicionSuelo: React.FC<FertilizanteSeleccionado> = ({
                             </FormGroup>
                         </div>
                     </div>
-                    <div style={{ display: 'flex', flexDirection: 'row', marginBottom: '0rem' }}>
-                        <div style={{ flex: 1, marginRight: '0.5rem', marginLeft: '0.5rem' }}>
-                            <FormGroup row>
-                                <Label for="densidadAparente" sm={4} className="input-label">Ensayo de densisdad aparente(g/cm<sup>3</sup>)</Label>
+
+
+                    <div className="row" style={{ display: "flex" }}>
+                        <div className="col-sm-4" style={{ marginRight: "10px" }}>
+                            <FormGroup row className="d-flex align-items-center">
+                                <Label for="densidadAparente" sm={4} className="input-label flex-grow-1">Ensayo de densisdad aparente (g/cm<sup>3</sup>)</Label>
                                 <Col sm={8}>
                                     <Input
                                         type="text"
@@ -457,7 +460,7 @@ const EditarMedicionSuelo: React.FC<FertilizanteSeleccionado> = ({
                                         name="densidadAparente"
                                         value={formData.densidadAparente}
                                         onChange={handleInputChange}
-                                        className={errors.densidadAparente ? 'input-styled input-error' : 'input-styled'}
+                                        className={errors.densidadAparente ? 'input-styled input-error' : 'input-styled flex-grow-1'}
                                         placeholder="0.0"
                                         maxLength={50}
                                     />
@@ -465,9 +468,9 @@ const EditarMedicionSuelo: React.FC<FertilizanteSeleccionado> = ({
                                 </Col>
                             </FormGroup>
                         </div>
-                        <div style={{ flex: 1, marginRight: '0.5rem', marginLeft: '0.5rem' }}>
-                            <FormGroup row>
-                                <Label for="conductividadElectrica" sm={4} className="input-label">Ensayo de conductividad electrica(dS/m)</Label>
+                        <div className="col-sm-4" style={{ marginRight: "10px" }}>
+                            <FormGroup row className="d-flex align-items-center">
+                                <Label for="conductividadElectrica" sm={4} className="input-label flex-grow-1">Ensayo de conductividad electrica (dS/m)</Label>
                                 <Col sm={8}>
                                     <Input
                                         type="text"
@@ -475,16 +478,16 @@ const EditarMedicionSuelo: React.FC<FertilizanteSeleccionado> = ({
                                         name="conductividadElectrica"
                                         value={formData.conductividadElectrica}
                                         onChange={handleInputChange}
-                                        className="input-styled"
+                                        className="input-styled flex-grow-1"
                                         placeholder="0.0"
                                         maxLength={50}
                                     />
                                 </Col>
                             </FormGroup>
                         </div>
-                        <div style={{ flex: 1, marginRight: '0.5rem', marginLeft: '0.5rem' }}>
-                            <FormGroup row>
-                                <Label for="pH" sm={4} className="input-label">Ensayo de pH(unidad de pH)</Label>
+                        <div className="col-sm-4" >
+                            <FormGroup row className="d-flex align-items-center">
+                                <Label for="pH" sm={4} className="input-label flex-grow-1">Ensayo de pH (unidad de pH)</Label>
                                 <Col sm={8}>
                                     <Input
                                         type="text"
@@ -492,7 +495,7 @@ const EditarMedicionSuelo: React.FC<FertilizanteSeleccionado> = ({
                                         name="pH"
                                         value={formData.pH}
                                         onChange={handleInputChange}
-                                        className={errors.pH ? 'input-styled input-error' : 'input-styled'}
+                                        className={errors.pH ? 'input-styled input-error' : 'input-styled flex-grow-1'}
                                         placeholder="0.0"
                                     />
                                     <FormFeedback>{errors.pH}</FormFeedback>
@@ -500,6 +503,7 @@ const EditarMedicionSuelo: React.FC<FertilizanteSeleccionado> = ({
                             </FormGroup>
                         </div>
                     </div>
+
                     <button onClick={handleNextStep} className="btn-styled">Siguiente</button>
                 </div>
             )}
@@ -508,10 +512,10 @@ const EditarMedicionSuelo: React.FC<FertilizanteSeleccionado> = ({
                     <div className="form-container-fse" style={{ display: 'flex', flexDirection: 'column', width: '100%' }}>
                         <h2>Manejo de fertilizantes</h2>
 
-                        <div style={{ display: 'flex', flexDirection: 'row', marginBottom: '0rem' }}>
-                            <div style={{ flex: 1, marginRight: '0.5rem', marginLeft: '0.5rem' }}>
+                        <div className="row" style={{ display: "flex" }}>
+                            <div className="col-sm-4" style={{ marginRight: "10px" }}>
                                 <FormGroup row>
-                                    <Label for="nitratosSuelo" sm={4} className="input-label">Ensayo de nitratos del suelo(mg/kg)</Label>
+                                    <Label for="nitratosSuelo" sm={4} className="input-label">Ensayo de nitratos del suelo (mg/kg)</Label>
                                     <Col sm={8}>
                                         <Input
                                             type="text"
@@ -527,9 +531,9 @@ const EditarMedicionSuelo: React.FC<FertilizanteSeleccionado> = ({
                                     </Col>
                                 </FormGroup>
                             </div>
-                            <div style={{ flex: 1, marginRight: '0.5rem', marginLeft: '0.5rem' }}>
+                            <div className="col-sm-4" style={{ marginRight: "10px" }}>
                                 <FormGroup row>
-                                    <Label for="estabilidadAgregados" sm={4} className="input-label">Ensayo de estabilidad de Agregados(%)</Label>
+                                    <Label for="estabilidadAgregados" sm={4} className="input-label">Ensayo de estabilidad de Agregados (%)</Label>
                                     <Col sm={8}>
                                         <Input
                                             type="text"
@@ -544,9 +548,9 @@ const EditarMedicionSuelo: React.FC<FertilizanteSeleccionado> = ({
                                     </Col>
                                 </FormGroup>
                             </div>
-                            <div style={{ flex: 1, marginRight: '0.5rem', marginLeft: '0.5rem' }}>
+                            <div className="col-sm-4">
                                 <FormGroup row>
-                                    <Label for="desleimiento" sm={4} className="input-label">Ensayo de desleimiento(%)</Label>
+                                    <Label for="desleimiento" sm={4} className="input-label">Ensayo de desleimiento (%)</Label>
                                     <Col sm={8}>
                                         <Input
                                             type="text"
@@ -562,10 +566,12 @@ const EditarMedicionSuelo: React.FC<FertilizanteSeleccionado> = ({
                                 </FormGroup>
                             </div>
                         </div>
-                        <div style={{ display: 'flex', flexDirection: 'row', marginBottom: '0rem' }}>
-                            <div style={{ flex: 1, marginRight: '0.5rem', marginLeft: '0.5rem' }}>
+
+
+                        <div className="row" style={{ display: "flex" }}>
+                            <div className="col-sm-6" style={{ marginRight: "10px" }}>
                                 <FormGroup row>
-                                    <Label for="lombrices" sm={4} className="input-label">Ensayo de lombrices(número de lombrices/m<sup>2</sup>)</Label>
+                                    <Label for="lombrices" sm={4} className="input-label">Ensayo de lombrices (número de lombrices/m<sup>2</sup>)</Label>
                                     <Col sm={8}>
                                         <Input
                                             type="text"
@@ -581,9 +587,9 @@ const EditarMedicionSuelo: React.FC<FertilizanteSeleccionado> = ({
                                     </Col>
                                 </FormGroup>
                             </div>
-                            <div style={{ flex: 1, marginRight: '0.5rem', marginLeft: '0.5rem' }}>
+                            <div className="col-sm-6">
                                 <FormGroup row>
-                                    <Label for="calidadAgua" sm={4} className="input-label">Ensayo de la calidad del agua(mg/L)</Label>
+                                    <Label for="calidadAgua" sm={4} className="input-label">Ensayo de la calidad del agua (mg/L)</Label>
                                     <Col sm={8}>
                                         <Input
                                             type="text"
@@ -600,6 +606,7 @@ const EditarMedicionSuelo: React.FC<FertilizanteSeleccionado> = ({
                                 </FormGroup>
                             </div>
                         </div>
+
                         <FormGroup row>
                             <Label for="observaciones" sm={4} className="input-label">Estimaciones y observaciones de fisica del suelo</Label>
                             <Col sm={8}>
@@ -620,7 +627,7 @@ const EditarMedicionSuelo: React.FC<FertilizanteSeleccionado> = ({
                             <Col sm={{ size: 10, offset: 2 }}>
                                 {/* Agregar aquí el botón de cancelar proporcionado por el modal */}
                                 <button onClick={handlePreviousStep} className='btn-styled-danger'>Anterior</button>
-                                <Button onClick={handleSubmitConValidacion} className="btn-styled">Guardar</Button>
+                                <Button onClick={handleSubmit} className="btn-styled">Guardar</Button>
                             </Col>
                         </FormGroup>
                     </div>

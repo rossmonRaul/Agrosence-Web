@@ -31,8 +31,18 @@ function CalidadSuelo() {
     // Estado para almacenar la información del usuario seleccionado
     // Estado para almacenar todos los usuarios asignados
     const [mediciones, setMediciones] = useState<any[]>([]);
+
+    // Estado para almacenar los datos filtrados
+    const [MedicionesFiltradas, setMedicionesFiltradas] = useState<any[]>([]);
+
+    // Estado para el filtro por identificación de usuario
+    const [filtroInput, setfiltroInput] = useState('');
+
     // Estado para obtener el estado del usuario que inició sesión
     const userLoginState = useSelector((store: AppStore) => store.user);
+
+    // Estado para almacenar los usuarios asignados filtrados
+    const [datosFiltrados, setdatosFiltrados] = useState<any[]>([]);
 
     //puede que falten cambios a los datos seleccionados
     const [selectedDatos, setSelectedDatos] = useState({
@@ -71,43 +81,42 @@ function CalidadSuelo() {
         abrirCerrarModalCrearMedicion();
     };
 
+    const handleChangeFiltro = (e: React.ChangeEvent<HTMLInputElement>) => {
+        setfiltroInput(e.target.value);
+    };
+
+    useEffect(() => {
+        filtrarDatos();
+    }, [filtroInput, mediciones]); // Ejecutar cada vez que el filtro o los datos originales cambien
+
+    // Función para filtrar los usuarios cada vez que cambie el filtro de identificación
+    const filtrarDatos = () => {
+        const datosFiltrados = filtroInput
+            ? mediciones.filter((datosTabla: any) =>
+                datosTabla.usuario.toLowerCase().includes(filtroInput.toLowerCase()) ||
+                datosTabla.finca.toLowerCase().includes(filtroInput.toLowerCase()) ||
+                datosTabla.parcela.toLowerCase().includes(filtroInput.toLowerCase())
+            )
+            : mediciones;
+        setMedicionesFiltradas(datosFiltrados);
+    };
+
 
     const abrirCerrarModalEditar = () => {
         console.log();
         setModalEditar(!modalEditar);
     }
 
-     const handleEditarMedicionUsuario = async () => {
-         // Después de editar exitosamente, actualiza la lista de usuarios Asignados
-         await obtenerDatosMediciones();
-         abrirCerrarModalEditar();
-     };
+    const handleEditarMedicionUsuario = async () => {
+        // Después de editar exitosamente, actualiza la lista de usuarios Asignados
+        await obtenerDatosMediciones();
+        abrirCerrarModalEditar();
+    };
 
 
     useEffect(() => {
         obtenerDatosMediciones();
     }, []); // Ejecutar solo una vez al montar el componente
-
-
-    // // Función para obtener todos las mediciones 
-    //  const obtenerUsuariosAsignadosPorIdentificacion = async () => {
-    //     try {
-
-    //          const usuarios= await ObtenerUsuariosAsignadosPorIdentificacion(localStorage.getItem('identificacionUsuario')); //aca le pones el nombre del servicio que vas a usar para traer los datos
-    //          const datosConEstado = datos.map((mediciones: any) => ({
-    //              ...mediciones,
-    //              sEstado: mediciones.estado === 1 ? 'Activo' : 'Inactivo',
-    //          }));
-    //          setMediciones(datosConEstado);
-    //        // setMediciones(datosConEstado.filter());
-    //      } catch (error) {
-    //          console.error('Error al obtener las mediciones:', error);
-    //     }
-    // };
-
-    // Función para obtener todos las mediciones 
-
-    // const idUsuario = localStorage.getItem('identificacionUsuario');
 
     const obtenerDatosMediciones = async () => {
         try {
@@ -115,16 +124,16 @@ function CalidadSuelo() {
             const idUsuario = localStorage.getItem('identificacionUsuario');
             const datosUsuarios = await ObtenerUsuariosAsignados({ idEmpresa: idEmpresa });
             const datosMedicionesSuelo = await ObtenerMedicionesSuelo();
-    
+
             const usuarioActual = datosUsuarios.find((usuario: any) => usuario.identificacion === idUsuario);
-    
+
             if (!usuarioActual) {
                 console.error('No se encontró el usuario actual');
                 return;
             }
-    
+
             const parcelasUsuarioActual = datosUsuarios.filter((usuario: any) => usuario.identificacion === idUsuario).map((usuario: any) => usuario.idParcela);
-    
+
             // Filtrar las mediciones de suelo de las parcelas del usuario actual
             const medicionesFiltradas = datosMedicionesSuelo.filter((medicion: any) => {
                 return parcelasUsuarioActual.includes(medicion.idParcela);
@@ -132,13 +141,16 @@ function CalidadSuelo() {
                 ...medicion,
                 sEstado: medicion.estado === 1 ? 'Activo' : 'Inactivo',
             }));
-    
+
+            //debo de poner 2 arreglos aca para poder cargar la tabla siempre que se cambia
+            // la palabra del input de filtro
             setMediciones(medicionesFiltradas);
+            setMedicionesFiltradas(medicionesFiltradas);
         } catch (error) {
             console.error('Error al obtener las mediciones:', error);
         }
     };
-    
+
 
     // Función para cambiar el estado de un usuario
     const toggleStatus = async (medicionSuelo: any) => {
@@ -200,7 +212,18 @@ function CalidadSuelo() {
                 <BordeSuperior text="Estudio de Calidad de Suelo" />
                 <div className="content">
                     <button onClick={() => abrirCerrarModalCrearMedicion()} className="btn-crear">Crear Medicion</button>
-                    <TableResponsive columns={columns} data={mediciones} openModal={openModal} toggleStatus={toggleStatus} btnActionName={"Editar"} />
+                    <div className="filtro-container">
+                        <label htmlFor="filtroIdentificacion">Filtrar:</label>
+                        <input
+                            type="text"
+                            id="filtroIdentificacion"
+                            value={filtroInput}
+                            onChange={handleChangeFiltro}
+                            placeholder="Ingrese la identificación"
+                            className="form-control"
+                        />
+                    </div>
+                    <TableResponsive columns={columns} data={MedicionesFiltradas} openModal={openModal} toggleStatus={toggleStatus} btnActionName={"Editar"} />
                 </div>
             </div>
 
