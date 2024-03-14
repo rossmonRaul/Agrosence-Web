@@ -82,7 +82,6 @@ function AdministrarParcelas() {
 
     const obtenerParcelas = async () => {
         try {
-            console.log("Obteniendo parcelas...");
             const idEmpresaUsuario = localStorage.getItem('empresaUsuario');
             if (idEmpresaUsuario) {
 

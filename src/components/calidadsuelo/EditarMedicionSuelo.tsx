@@ -4,21 +4,25 @@ import Swal from 'sweetalert2';
 import { ObtenerFincas } from '../../servicios/ServicioFincas.ts';
 import { ObtenerParcelas } from '../../servicios/ServicioParcelas.ts';
 import { ObtenerUsuariosAsignadosPorIdentificacion } from '../../servicios/ServicioUsuario.ts';
-import { EditarManejoFertilizantes } from "../../servicios/ServicioFertilizantes.ts";
+import { ModificarMedicionesSuelo } from "../../servicios/ServicioSuelos.ts";
 import '../../css/CrearCuenta.css';
 
 // Interfaz para las propiedades del componente
 interface FertilizanteSeleccionado {
     idFinca: number;
     idParcela: number;
-    idManejoFertilizantes: number;
-    fechaCreacion: string;
-    fertilizante: string;
-    aplicacion: string;
-    dosis: number;
-    cultivoTratado: string;
-    condicionesAmbientales: string;
-    accionesAdicionales: string;
+    idMedicionesSuelo: number;
+    calidadAgua: number;
+    conductividadElectrica: number;
+    densidadAparente: number;
+    desleimiento: number;
+    estabilidadAgregados: number;
+    infiltracion: number;
+    lombrices: number;
+    medicionesCalidadSuelo: string;
+    nitratosSuelo: number;
+    pH: number;
+    respiracionSuelo: number;
     observaciones: string;
     onEdit?: () => void; // Hacer onEdit opcional agregando "?"
 }
@@ -34,97 +38,107 @@ interface Option {
 const EditarMedicionSuelo: React.FC<FertilizanteSeleccionado> = ({
     idFinca,
     idParcela,
-    idManejoFertilizantes,
-    fechaCreacion,
-    fertilizante,
-    aplicacion,
-    dosis,
-    cultivoTratado,
-    condicionesAmbientales,
-    accionesAdicionales,
+    idMedicionesSuelo,
+    calidadAgua,
+    conductividadElectrica,
+    densidadAparente,
+    desleimiento,
+    estabilidadAgregados,
+    infiltracion,
+    lombrices,
+    medicionesCalidadSuelo,
+    nitratosSuelo,
+    pH,
+    respiracionSuelo,
     observaciones,
+    onEdit
 }) => {
-
-
-    // Imprimir los datos en la consola
-    console.log("Datos del Fertilizante Seleccionado:");
-    console.log("ID Finca:", idFinca);
-    console.log("ID Parcela:", idParcela);
-    console.log("ID Manejo Fertilizante:", idManejoFertilizantes);
-    console.log("Fecha:", fechaCreacion);
-    console.log("Fertilizante:", fertilizante);
-    console.log("Aplicación:", aplicacion);
-    console.log("Dosis:", dosis);
-    console.log("Cultivo Tratado:", cultivoTratado);
-    console.log("Condiciones Ambientales:", condicionesAmbientales);
-    console.log("Acciones Adicionales:", accionesAdicionales);
-    console.log("Observaciones:", observaciones);
 
     const [fincas, setFincas] = useState<Option[]>([]);
     const [parcelas, setParcelas] = useState<Option[]>([]);
-    const [selectedFinca, setSelectedFinca] = useState<string>('');
-    const [selectedParcela, setSelectedParcela] = useState<string>('');
+
+    //esto rellena los select de finca y parcela cuando se carga el modal
+    const [selectedFinca, setSelectedFinca] = useState<string>(() => idFinca ? idFinca.toString() : '');
+    const [selectedParcela, setSelectedParcela] = useState<string>(() => idParcela ? idParcela.toString() : '');
 
 
     // Estado para almacenar los errores de validación del formulario
     const [errors, setErrors] = useState<Record<string, string>>({
         idFinca: '',
         idParcela: '',
-        idManejoFertilizantes: '',
+        calidadAgua: '',
+        conductividadElectrica: '',
+        densidadAparente: '',
+        desleimiento: '',
+        estabilidadAgregados: '',
         fechaCreacion: '',
-        fertilizante: '',
-        aplicacion: '',
-        dosis: '',
-        cultivoTratado: '',
-        condicionesAmbientales: '',
-        accionesAdicionales: '',
-        observaciones: ''
+        idMedicionesSuelo: '',
+        identificacionUsuario: '',
+        infiltracion: '',
+        lombrices: '',
+        medicionesCalidadSuelo: '',
+        nitratosSuelo: '',
+        observaciones: '',
+        pH: '',
+        respiracionSuelo: ''
     });
 
     const [formData, setFormData] = useState<any>({
-        idFinca: '',
-        idParcela: '',
-        idManejoFertilizantes: '',
-        fechaCreacion: '',
-        fertilizante: '',
-        aplicacion: '',
-        dosis: '',
-        cultivoTratado: '',
-        condicionesAmbientales: '',
-        accionesAdicionales: '',
-        observaciones: ''
+        idFinca: 0,
+        idParcela: 0,
+        calidadAgua: 0,
+        conductividadElectrica: 0,
+        densidadAparente: 0,
+        desleimiento: 0,
+        estabilidadAgregados: 0,
+        infiltracion: 0,
+        lombrices: 0,
+        medicionesCalidadSuelo: '',
+        nitratosSuelo: 0,
+        observaciones: '',
+        pH: 0,
+        respiracionSuelo: 0
     });
+
+    const [step, setStep] = useState(1);
+
+    const handleNextStep = () => {
+        setStep(prevStep => prevStep + 1);
+    };
+
+    const handlePreviousStep = () => {
+        setStep(prevStep => prevStep - 1);
+    };
 
     // Función para manejar cambios en los inputs del formulario
     const handleInputChange = (event: React.ChangeEvent<HTMLInputElement>) => {
         const { name, value } = event.target;
         setFormData((prevState: any) => ({
-            ...prevState, 
+            ...prevState,
             [name]: value
         }));
     };
 
     useEffect(() => {
         // Actualizar el formData cuando las props cambien
-        const parts = fechaCreacion.split('/');
-        const day = parts[0];
-        const month = parts[1];
-        const year = parts[2];
-        const fecha= year + '-' + month + '-' + day;
         setFormData({
             idFinca: idFinca,
             idParcela: idParcela,
-            idManejoFertilizantes: idManejoFertilizantes,
-            fechaCreacion: fecha,
-            fertilizante: fertilizante,
-            aplicacion: aplicacion,
-            dosis: dosis,
-            cultivoTratado: cultivoTratado,
-            condicionesAmbientales: condicionesAmbientales,
-            accionesAdicionales: accionesAdicionales,
+            calidadAgua: calidadAgua,
+            conductividadElectrica: conductividadElectrica,
+            densidadAparente: densidadAparente,
+            desleimiento: desleimiento,
+            estabilidadAgregados: estabilidadAgregados,
+            idMedicionesSuelo: idMedicionesSuelo,
+            infiltracion: infiltracion,
+            lombrices: lombrices,
+            medicionesCalidadSuelo: medicionesCalidadSuelo,
+            nitratosSuelo: nitratosSuelo,
+            pH: pH,
+            respiracionSuelo: respiracionSuelo,
             observaciones: observaciones
         });
-    }, [idManejoFertilizantes]);
+    }, [idMedicionesSuelo]);
 
 
     // Obtener las fincas al cargar la página
@@ -140,10 +154,6 @@ const EditarMedicionSuelo: React.FC<FertilizanteSeleccionado> = ({
                     const idFincasUsuario = usuariosAsignados.map((usuario: any) => usuario.idFinca);
                     const fincasResponse = await ObtenerFincas();
                     const fincasUsuario = fincasResponse.filter((finca: any) => idFincasUsuario.includes(finca.idFinca));
-
-                    console.log("fincasUsuario");
-                    console.log(fincasUsuario);
-                    console.log("fincasUsuario");
                     setFincas(fincasUsuario);
                 } else {
                     console.error('La identificación y/o el ID de la empresa no están disponibles en el localStorage.');
@@ -214,60 +224,47 @@ const EditarMedicionSuelo: React.FC<FertilizanteSeleccionado> = ({
             newErrors.parcela = '';
         }
 
-        if (!formData.fechaCreacion.trim()) {
-            newErrors.fechaCreacion = 'La fecha es requerida';
-        } else {
-            // Validar que la fecha esté en el rango desde el 2015 hasta la fecha actual
-            const minDate = new Date('2015-01-01');
-            const selectedDate = new Date(formData.fechaCreacion);
-            if (selectedDate < minDate || selectedDate > new Date()) {
-                newErrors.fechaCreacion = 'La fecha debe estar entre 2015 y la fecha actual';
-            } else {
-                newErrors.fechaCreacion = '';
-            }
-        }
+        // if (!formData.fertilizante.trim()) {
+        //     newErrors.fertilizante = 'El tipo de fertilizante es requerido';
+        // } else if (formData.fertilizante.length > 50) {
+        //     newErrors.fertilizante = 'El tipo de fertilizante no puede tener más de 50 caracteres';
+        // } else {
+        //     newErrors.fertilizante = '';
+        // }
 
-        if (!formData.fertilizante.trim()) {
-            newErrors.fertilizante = 'El tipo de fertilizante es requerido';
-        } else if (formData.fertilizante.length > 50) {
-            newErrors.fertilizante = 'El tipo de fertilizante no puede tener más de 50 caracteres';
-        } else {
-            newErrors.fertilizante = '';
-        }
+        // if (!formData.aplicacion.trim()) {
+        //     newErrors.aplicacion = 'El método de aplicación es requerido';
+        // } else if (formData.aplicacion.length > 50) {
+        //     newErrors.aplicacion = 'El método de aplicación no puede tener más de 50 caracteres';
+        // } else {
+        //     newErrors.aplicacion = '';
+        // }
 
-        if (!formData.aplicacion.trim()) {
-            newErrors.aplicacion = 'El método de aplicación es requerido';
-        } else if (formData.aplicacion.length > 50) {
-            newErrors.aplicacion = 'El método de aplicación no puede tener más de 50 caracteres';
-        } else {
-            newErrors.aplicacion = '';
-        }
+        // if (!formData.cultivoTratado.trim()) {
+        //     newErrors.cultivoTratado = 'El nombre del cultivo es requerido';
+        // } else if (formData.cultivoTratado.length > 50) {
+        //     newErrors.cultivoTratado = 'El nombre del cultivo no puede tener más de 50 caracteres';
+        // } else {
+        //     newErrors.cultivoTratado = '';
+        // }
 
-        if (!formData.cultivoTratado.trim()) {
-            newErrors.cultivoTratado = 'El nombre del cultivo es requerido';
-        } else if (formData.cultivoTratado.length > 50) {
-            newErrors.cultivoTratado = 'El nombre del cultivo no puede tener más de 50 caracteres';
-        } else {
-            newErrors.cultivoTratado = '';
-        }
+        // if (formData.accionesAdicionales.length > 200) {
+        //     newErrors.accionesAdicionales = 'Las acciones adicionales no pueden tener más de 200 caracteres';
+        // } else {
+        //     newErrors.accionesAdicionales = '';
+        // }
 
-        if (formData.accionesAdicionales.length > 200) {
-            newErrors.accionesAdicionales = 'Las acciones adicionales no pueden tener más de 200 caracteres';
-        } else {
-            newErrors.accionesAdicionales = '';
-        }
+        // if (formData.condicionesAmbientales.length > 200) {
+        //     newErrors.condicionesAmbientales = 'Las condiciones ambientales no pueden tener más de 200 caracteres';
+        // } else {
+        //     newErrors.condicionesAmbientales = '';
+        // }
 
-        if (formData.condicionesAmbientales.length > 200) {
-            newErrors.condicionesAmbientales = 'Las condiciones ambientales no pueden tener más de 200 caracteres';
-        } else {
-            newErrors.condicionesAmbientales = '';
-        }
-
-        if (formData.observaciones.length > 200) {
-            newErrors.observaciones = 'Las observaciones no pueden tener más de 200 caracteres';
-        } else {
-            newErrors.observaciones = '';
-        }
+        // if (formData.observaciones.length > 200) {
+        //     newErrors.observaciones = 'Las observaciones no pueden tener más de 200 caracteres';
+        // } else {
+        //     newErrors.observaciones = '';
+        // }
 
         // Actualizar los errores
         setErrors(newErrors);
@@ -278,49 +275,44 @@ const EditarMedicionSuelo: React.FC<FertilizanteSeleccionado> = ({
         }
     };
 
-    // Función para formatear la fecha en el formato yyyy-MM-dd
-    function formatDate(inputDate: any) {
-        const parts = inputDate.split('/');
-        const day = parts[0];
-        const month = parts[1];
-        const year = parts[2];
-        return year + '-' + month + '-' + day;
-    }
-
-    // Suponiendo que formData.fechaCreacion contiene la fecha recibida (08/03/2024)
-    const formattedDate = formatDate(formData.fechaCreacion);
-
     // Función para manejar el envío del formulario
     const handleSubmit = async () => {
         const datos = {
             idFinca: selectedFinca,
             idParcela: selectedParcela,
-            idManejoFertilizantes: formData.idManejoFertilizantes,
-            fechaCreacion: formData.fechaCreacion,
-            fertilizante: formData.fertilizante,
-            aplicacion: formData.aplicacion,
-            dosis: formData.dosis,
-            cultivoTratado: formData.cultivoTratado,
-            condicionesAmbientales: formData.condicionesAmbientales,
-            accionesAdicionales: formData.accionesAdicionales,
+            calidadAgua: formData.calidadAgua,
+            conductividadElectrica: formData.conductividadElectrica,
+            densidadAparente: formData.densidadAparente,
+            desleimiento: formData.desleimiento,
+            estabilidadAgregados: formData.estabilidadAgregados,
+            idMedicionesSuelo: formData.idMedicionesSuelo,
+            infiltracion: formData.infiltracion,
+            lombrices: formData.lombrices,
+            medicionesCalidadSuelo: formData.medicionesCalidadSuelo,
+            nitratosSuelo: formData.nitratosSuelo,
+            pH: formData.pH,
+            respiracionSuelo: formData.respiracionSuelo,
             observaciones: formData.observaciones
         };
 
         try {
-            const resultado = await EditarManejoFertilizantes(datos);
+            const resultado = await ModificarMedicionesSuelo(datos);
             if (resultado.indicador === 1) {
                 Swal.fire({
                     icon: 'success',
-                    title: '¡Usuario Actualizado! ',
-                    text: 'Usuario actualizado con éxito.',
+                    title: '¡Manejo de suelo Actualizado! ',
+                    text: 'Manejo de suelo actualizado con éxito.',
                 });
             } else {
                 Swal.fire({
                     icon: 'error',
-                    title: 'Error al actualizar el usuario.',
+                    title: 'Error al actualizar el manejo de suelo.',
                     text: resultado.mensaje,
                 });
             };
+            if (onEdit) {
+                onEdit();
+            }
         } catch (error) {
             console.log(error);
         }
@@ -328,180 +320,266 @@ const EditarMedicionSuelo: React.FC<FertilizanteSeleccionado> = ({
 
     return (
         <div id='general' style={{ display: 'flex', flexDirection: 'column', paddingBottom: '0rem', width: '100%', margin: '0 auto' }}>
-            <div className="form-container-fse" style={{ display: 'flex', flexDirection: 'column', width: '50%' }}>
-                <h2>Manejo de fertilizantes</h2>
-                <FormGroup>
-                    <label htmlFor="fincas">Finca:</label>
-                    <select className="custom-select" id="fincas" value={selectedFinca} onChange={handleFincaChange}>
-                        <option key="default-finca" value="">Seleccione...</option>
-                        {filteredFincas.map((finca) => (
-                            <option key={`${finca.idFinca}-${finca.nombre || 'undefined'}`} value={finca.idFinca}>{finca.nombre || 'Undefined'}</option>
-                        ))}
-                    </select>
-                    {errors.finca && <FormFeedback>{errors.finca}</FormFeedback>}
-                </FormGroup>
+            {step === 1 && (
+                <div>
+                    <div className="form-container-fse" style={{ display: 'flex', flexDirection: 'column', width: '50%' }}>
+                        <h2>Manejo de fertilizantes</h2>
+                        <FormGroup>
+                            <label htmlFor="fincas">Finca:</label>
+                            <select className="custom-select" id="fincas" value={selectedFinca} onChange={handleFincaChange}>
+                                <option key="default-finca" value="">Seleccione...</option>
+                                {filteredFincas.map((finca) => (
+                                    <option key={`${finca.idFinca}-${finca.nombre || 'undefined'}`} value={finca.idFinca}>{finca.nombre || 'Undefined'}</option>
+                                ))}
+                            </select>
+                            {errors.finca && <FormFeedback>{errors.finca}</FormFeedback>}
+                        </FormGroup>
 
-                <FormGroup>
-                    <label htmlFor="parcelas">Parcela:</label>
-                    <select className="custom-select" id="parcelas" value={selectedParcela} onChange={handleParcelaChange}>
-                        <option key="default-parcela" value="">Seleccione...</option>
-                        {filteredParcelas.map((parcela) => (
-                            <option key={`${parcela.idParcela}-${parcela.nombre || 'undefined'}`} value={parcela.idParcela}>{parcela.nombre || 'Undefined'}</option>
-                        ))}
-                    </select>
-                    {errors.parcela && <FormFeedback>{errors.parcela}</FormFeedback>}
-                </FormGroup>
-            </div>
-            <div style={{ display: 'flex', flexDirection: 'row', marginBottom: '0rem' }}>
-                <div style={{ flex: 1, marginRight: '0.5rem', marginLeft: '0.5rem' }}>
-                    <FormGroup row>
-                        <Label for="fechaCreacion" sm={4} className="input-label">Fecha</Label>
-                        <Col sm={8}>
-                            <Input
-                                type="date"
-                                id="fechaCreacion"
-                                name="fechaCreacion"
-                                value={formData.fechaCreacion}
-                                onChange={handleInputChange}
-                                className={errors.fechaCreacion ? 'input-styled input-error' : 'input-styled'}
-                                placeholder="Selecciona una fecha"
-                            />
-                            <FormFeedback>{errors.fechaCreacion}</FormFeedback>
-                        </Col>
-                    </FormGroup>
+                        <FormGroup>
+                            <label htmlFor="parcelas">Parcela:</label>
+                            <select className="custom-select" id="parcelas" value={selectedParcela} onChange={handleParcelaChange}>
+                                <option key="default-parcela" value="">Seleccione...</option>
+                                {filteredParcelas.map((parcela) => (
+                                    <option key={`${parcela.idParcela}-${parcela.nombre || 'undefined'}`} value={parcela.idParcela}>{parcela.nombre || 'Undefined'}</option>
+                                ))}
+                            </select>
+                            {errors.parcela && <FormFeedback>{errors.parcela}</FormFeedback>}
+                        </FormGroup>
+                    </div>
+                    <div style={{ display: 'flex', flexDirection: 'row', marginBottom: '0rem' }}>
+                        <div style={{ flex: 1, marginRight: '0.5rem', marginLeft: '0.5rem' }}>
+                            <FormGroup row>
+                                <Label for="medicionesCalidadSuelo" sm={4} className="input-label">Mediciones de Calidad de suelo</Label>
+                                <Col sm={8}>
+                                    <Input
+                                        type="text"
+                                        id="medicionesCalidadSuelo"
+                                        name="medicionesCalidadSuelo"
+                                        value={formData.medicionesCalidadSuelo}
+                                        onChange={handleInputChange}
+                                        className={errors.fertilizante ? 'input-styled input-error' : 'input-styled'}
+                                        placeholder="Mediciones de Calidad de suelo"
+                                        maxLength={50}
+                                    />
+                                    <FormFeedback>{errors.fertilizante}</FormFeedback>
+                                </Col>
+                            </FormGroup>
+                        </div>
+                        <div style={{ flex: 1, marginRight: '0.5rem', marginLeft: '0.5rem' }}>
+                            <FormGroup row>
+                                <Label for="respiracionSuelo" sm={4} className="input-label">Ensayo de respiracion de suelo(mg CO2-C/g)</Label>
+                                <Col sm={8}>
+                                    <Input
+                                        type="text"
+                                        id="respiracionSuelo"
+                                        name="respiracionSuelo"
+                                        value={formData.respiracionSuelo}
+                                        onChange={handleInputChange}
+                                        className="input-styled"
+                                        placeholder="0.0"
+                                        maxLength={50}
+                                    />
+                                </Col>
+                            </FormGroup>
+                        </div>
+                        <div style={{ flex: 1, marginRight: '0.5rem', marginLeft: '0.5rem' }}>
+                            <FormGroup row>
+                                <Label for="infiltracion" sm={4} className="input-label">Ensayo de infiltración(mm/hora)</Label>
+                                <Col sm={8}>
+                                    <Input
+                                        type="text"
+                                        id="infiltracion"
+                                        name="infiltracion"
+                                        value={formData.infiltracion}
+                                        onChange={handleInputChange}
+                                        className={errors.infiltracion ? 'input-styled input-error' : 'input-styled'}
+                                        placeholder="0.0"
+                                    />
+                                    <FormFeedback>{errors.infiltracion}</FormFeedback>
+                                </Col>
+                            </FormGroup>
+                        </div>
+                    </div>
+                    <div style={{ display: 'flex', flexDirection: 'row', marginBottom: '0rem' }}>
+                        <div style={{ flex: 1, marginRight: '0.5rem', marginLeft: '0.5rem' }}>
+                            <FormGroup row>
+                                <Label for="densidadAparente" sm={4} className="input-label">Ensayo de densisdad aparente(g/cm<sup>3</sup>)</Label>
+                                <Col sm={8}>
+                                    <Input
+                                        type="text"
+                                        id="densidadAparente"
+                                        name="densidadAparente"
+                                        value={formData.densidadAparente}
+                                        onChange={handleInputChange}
+                                        className={errors.densidadAparente ? 'input-styled input-error' : 'input-styled'}
+                                        placeholder="0.0"
+                                        maxLength={50}
+                                    />
+                                    <FormFeedback>{errors.densidadAparente}</FormFeedback>
+                                </Col>
+                            </FormGroup>
+                        </div>
+                        <div style={{ flex: 1, marginRight: '0.5rem', marginLeft: '0.5rem' }}>
+                            <FormGroup row>
+                                <Label for="conductividadElectrica" sm={4} className="input-label">Ensayo de conductividad electrica(dS/m)</Label>
+                                <Col sm={8}>
+                                    <Input
+                                        type="text"
+                                        id="conductividadElectrica"
+                                        name="conductividadElectrica"
+                                        value={formData.conductividadElectrica}
+                                        onChange={handleInputChange}
+                                        className="input-styled"
+                                        placeholder="0.0"
+                                        maxLength={50}
+                                    />
+                                </Col>
+                            </FormGroup>
+                        </div>
+                        <div style={{ flex: 1, marginRight: '0.5rem', marginLeft: '0.5rem' }}>
+                            <FormGroup row>
+                                <Label for="pH" sm={4} className="input-label">Ensayo de pH(unidad de pH)</Label>
+                                <Col sm={8}>
+                                    <Input
+                                        type="text"
+                                        id="pH"
+                                        name="pH"
+                                        value={formData.pH}
+                                        onChange={handleInputChange}
+                                        className={errors.pH ? 'input-styled input-error' : 'input-styled'}
+                                        placeholder="0.0"
+                                    />
+                                    <FormFeedback>{errors.pH}</FormFeedback>
+                                </Col>
+                            </FormGroup>
+                        </div>
+                    </div>
+                    <button onClick={handleNextStep} className="btn-styled">Siguiente</button>
                 </div>
-                <div style={{ flex: 1, marginRight: '0.5rem', marginLeft: '0.5rem' }}>
-                    <FormGroup row>
-                        <Label for="fertilizante" sm={4} className="input-label">Fertilizante</Label>
-                        <Col sm={8}>
-                            <Input
-                                type="text"
-                                id="fertilizante"
-                                name="fertilizante"
-                                value={formData.fertilizante}
-                                onChange={handleInputChange}
-                                className={errors.fertilizante ? 'input-styled input-error' : 'input-styled'}
-                                placeholder="Tipo de fertilizante"
-                                maxLength={50}
-                            />
-                            <FormFeedback>{errors.fertilizante}</FormFeedback>
-                        </Col>
-                    </FormGroup>
-                </div>
-                <div style={{ flex: 1, marginRight: '0.5rem', marginLeft: '0.5rem' }}>
-                    <FormGroup row>
-                        <Label for="aplicacion" sm={4} className="input-label">Aplicación</Label>
-                        <Col sm={8}>
-                            <Input
-                                type="text"
-                                id="aplicacion"
-                                name="aplicacion"
-                                value={formData.aplicacion}
-                                onChange={handleInputChange}
-                                className="input-styled"
-                                placeholder="Método de aplicación"
-                                maxLength={50}
-                            />
-                        </Col>
-                    </FormGroup>
-                </div>
-            </div>
-            <div style={{ display: 'flex', flexDirection: 'row', marginBottom: '0rem' }}>
-                <div style={{ flex: 1, marginRight: '0.5rem', marginLeft: '0.5rem' }}>
-                    <FormGroup row>
-                        <Label for="dosis" sm={4} className="input-label">Dosis</Label>
-                        <Col sm={8}>
-                            <Input
-                                type="text"
-                                id="dosis"
-                                name="dosis"
-                                value={formData.dosis}
-                                onChange={handleInputChange}
-                                className={errors.dosis ? 'input-styled input-error' : 'input-styled'}
-                                placeholder="Cantidad de dosis"
-                            />
-                            <FormFeedback>{errors.dosis}</FormFeedback>
-                        </Col>
-                    </FormGroup>
-                </div>
-                <div style={{ flex: 1, marginRight: '0.5rem', marginLeft: '0.5rem' }}>
-                    <FormGroup row>
-                        <Label for="cultivoTratado" sm={4} className="input-label">Cultivo Tratado</Label>
-                        <Col sm={8}>
-                            <Input
-                                type="text"
-                                id="cultivoTratado"
-                                name="cultivoTratado"
-                                value={formData.cultivoTratado}
-                                onChange={handleInputChange}
-                                className={errors.cultivoTratado ? 'input-styled input-error' : 'input-styled'}
-                                placeholder="Nombre del cultivo"
-                                maxLength={50}
-                            />
-                            <FormFeedback>{errors.cultivoTratado}</FormFeedback>
-                        </Col>
-                    </FormGroup>
-                </div>
-                <div style={{ flex: 1, marginRight: '0.5rem', marginLeft: '0.5rem' }}>
-                    <FormGroup row>
-                        <Label for="accionesAdicionales" sm={4} className="input-label">Acciones Adicionales</Label>
-                        <Col sm={8}>
-                            <Input
-                                type="text"
-                                id="accionesAdicionales"
-                                name="accionesAdicionales"
-                                value={formData.accionesAdicionales}
-                                onChange={handleInputChange}
-                                className="input-styled"
-                                placeholder="Acciones adicionales"
-                                maxLength={200}
-                            />
-                            <FormFeedback>{errors.accionesAdicionales}</FormFeedback>
-                        </Col>
-                    </FormGroup>
-                </div>
-            </div>
-            <FormGroup row>
-                <Label for="condicionesAmbientales" sm={2} className="input-label">Condiciones Ambientales</Label>
-                <Col sm={10}>
-                    <Input
-                        type="textarea"
-                        id="condicionesAmbientales"
-                        name="condicionesAmbientales"
-                        value={formData.condicionesAmbientales}
-                        onChange={handleInputChange}
-                        className="input-styled"
-                        style={{ height: '75px', resize: "none" }}
-                        placeholder="Descripción de las condiciones ambientales"
-                        maxLength={200}
-                    />
-                    <FormFeedback>{errors.condicionesAmbientales}</FormFeedback>
-                </Col>
-            </FormGroup>
-            <FormGroup row>
-                <Label for="observaciones" sm={2} className="input-label">Observaciones</Label>
-                <Col sm={10}>
-                    <Input
-                        type="textarea"
-                        id="observaciones"
-                        name="observaciones"
-                        value={formData.observaciones}
-                        onChange={handleInputChange}
-                        className="input-styled"
-                        style={{ height: '75px', resize: "none" }}
-                        placeholder="Observaciones"
-                        maxLength={200}
+            )}
+            {step === 2 && (
+                <div>
+                    <div className="form-container-fse" style={{ display: 'flex', flexDirection: 'column', width: '100%' }}>
+                        <h2>Manejo de fertilizantes</h2>
 
-                    />
-                    <FormFeedback>{errors.observaciones}</FormFeedback>
-                </Col>
-            </FormGroup>
-            <FormGroup row>
-                <Col sm={{ size: 10, offset: 2 }}>
-                    {/* Agregar aquí el botón de cancelar proporcionado por el modal */}
-                    <Button onClick={handleSubmitConValidacion} className="btn-styled">Guardar</Button>
-                </Col>
-            </FormGroup>
+                        <div style={{ display: 'flex', flexDirection: 'row', marginBottom: '0rem' }}>
+                            <div style={{ flex: 1, marginRight: '0.5rem', marginLeft: '0.5rem' }}>
+                                <FormGroup row>
+                                    <Label for="nitratosSuelo" sm={4} className="input-label">Ensayo de nitratos del suelo(mg/kg)</Label>
+                                    <Col sm={8}>
+                                        <Input
+                                            type="text"
+                                            id="nitratosSuelo"
+                                            name="nitratosSuelo"
+                                            value={formData.nitratosSuelo}
+                                            onChange={handleInputChange}
+                                            className={errors.nitratosSuelo ? 'input-styled input-error' : 'input-styled'}
+                                            placeholder="0.0"
+                                            maxLength={50}
+                                        />
+                                        <FormFeedback>{errors.nitratosSuelo}</FormFeedback>
+                                    </Col>
+                                </FormGroup>
+                            </div>
+                            <div style={{ flex: 1, marginRight: '0.5rem', marginLeft: '0.5rem' }}>
+                                <FormGroup row>
+                                    <Label for="estabilidadAgregados" sm={4} className="input-label">Ensayo de estabilidad de Agregados(%)</Label>
+                                    <Col sm={8}>
+                                        <Input
+                                            type="text"
+                                            id="estabilidadAgregados"
+                                            name="estabilidadAgregados"
+                                            value={formData.estabilidadAgregados}
+                                            onChange={handleInputChange}
+                                            className="input-styled"
+                                            placeholder="0.0"
+                                            maxLength={50}
+                                        />
+                                    </Col>
+                                </FormGroup>
+                            </div>
+                            <div style={{ flex: 1, marginRight: '0.5rem', marginLeft: '0.5rem' }}>
+                                <FormGroup row>
+                                    <Label for="desleimiento" sm={4} className="input-label">Ensayo de desleimiento(%)</Label>
+                                    <Col sm={8}>
+                                        <Input
+                                            type="text"
+                                            id="desleimiento"
+                                            name="desleimiento"
+                                            value={formData.desleimiento}
+                                            onChange={handleInputChange}
+                                            className={errors.desleimiento ? 'input-styled input-error' : 'input-styled'}
+                                            placeholder="0.0"
+                                        />
+                                        <FormFeedback>{errors.desleimiento}</FormFeedback>
+                                    </Col>
+                                </FormGroup>
+                            </div>
+                        </div>
+                        <div style={{ display: 'flex', flexDirection: 'row', marginBottom: '0rem' }}>
+                            <div style={{ flex: 1, marginRight: '0.5rem', marginLeft: '0.5rem' }}>
+                                <FormGroup row>
+                                    <Label for="lombrices" sm={4} className="input-label">Ensayo de lombrices(número de lombrices/m<sup>2</sup>)</Label>
+                                    <Col sm={8}>
+                                        <Input
+                                            type="text"
+                                            id="lombrices"
+                                            name="lombrices"
+                                            value={formData.lombrices}
+                                            onChange={handleInputChange}
+                                            className={errors.lombrices ? 'input-styled input-error' : 'input-styled'}
+                                            placeholder="0"
+                                            maxLength={50}
+                                        />
+                                        <FormFeedback>{errors.lombrices}</FormFeedback>
+                                    </Col>
+                                </FormGroup>
+                            </div>
+                            <div style={{ flex: 1, marginRight: '0.5rem', marginLeft: '0.5rem' }}>
+                                <FormGroup row>
+                                    <Label for="calidadAgua" sm={4} className="input-label">Ensayo de la calidad del agua(mg/L)</Label>
+                                    <Col sm={8}>
+                                        <Input
+                                            type="text"
+                                            id="calidadAgua"
+                                            name="calidadAgua"
+                                            value={formData.calidadAgua}
+                                            onChange={handleInputChange}
+                                            className="input-styled"
+                                            placeholder="0.0"
+                                            maxLength={200}
+                                        />
+                                        <FormFeedback>{errors.calidadAgua}</FormFeedback>
+                                    </Col>
+                                </FormGroup>
+                            </div>
+                        </div>
+                        <FormGroup row>
+                            <Label for="observaciones" sm={4} className="input-label">Estimaciones y observaciones de fisica del suelo</Label>
+                            <Col sm={8}>
+                                <Input
+                                    type="text"
+                                    id="observaciones"
+                                    name="observaciones"
+                                    value={formData.observaciones}
+                                    onChange={handleInputChange}
+                                    className="input-styled"
+                                    placeholder="Estimaciones y observaciones de fisica del suelo"
+                                    maxLength={200}
+                                />
+                                <FormFeedback>{errors.observaciones}</FormFeedback>
+                            </Col>
+                        </FormGroup>
+                        <FormGroup row>
+                            <Col sm={{ size: 10, offset: 2 }}>
+                                {/* Agregar aquí el botón de cancelar proporcionado por el modal */}
+                                <button onClick={handlePreviousStep} className='btn-styled-danger'>Anterior</button>
+                                <Button onClick={handleSubmit} className="btn-styled">Guardar</Button>
+                            </Col>
+                        </FormGroup>
+                    </div>
+                </div>
+            )}
         </div>
     );
 

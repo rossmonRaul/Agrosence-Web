@@ -46,21 +46,6 @@ const ModificacionManejoFertilizante: React.FC<FertilizanteSeleccionado> = ({
     onEdit
 }) => {
 
-
-    // Imprimir los datos en la consola
-    console.log("Datos del Fertilizante Seleccionado:");
-    console.log("ID Finca:", idFinca);
-    console.log("ID Parcela:", idParcela);
-    console.log("ID Manejo Fertilizante:", idManejoFertilizantes);
-    console.log("Fecha:", fechaCreacion);
-    console.log("Fertilizante:", fertilizante);
-    console.log("Aplicación:", aplicacion);
-    console.log("Dosis:", dosis);
-    console.log("Cultivo Tratado:", cultivoTratado);
-    console.log("Condiciones Ambientales:", condicionesAmbientales);
-    console.log("Acciones Adicionales:", accionesAdicionales);
-    console.log("Observaciones:", observaciones);
-
     const [fincas, setFincas] = useState<Option[]>([]);
     const [parcelas, setParcelas] = useState<Option[]>([]);
 
@@ -143,9 +128,6 @@ const ModificacionManejoFertilizante: React.FC<FertilizanteSeleccionado> = ({
                     const fincasResponse = await ObtenerFincas();
                     const fincasUsuario = fincasResponse.filter((finca: any) => idFincasUsuario.includes(finca.idFinca));
 
-                    console.log("fincasUsuario");
-                    console.log(fincasUsuario);
-                    console.log("fincasUsuario");
                     setFincas(fincasUsuario);
                 } else {
                     console.error('La identificación y/o el ID de la empresa no están disponibles en el localStorage.');

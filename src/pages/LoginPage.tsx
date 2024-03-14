@@ -222,7 +222,7 @@ const Login: React.FC = () => {
       } else if (usuarioEncontrado.mensaje === "Usuario encontrado.") {
         dispatch(createUser(usuarioEncontrado))
         //localstorage datos guardados
-        localStorage.setItem('empresaUsuario', usuarioEncontrado.idEmpresa);
+        localStorage.setItem('empresaUsuario', usuarioEncontrado.idEmpresa); 
         localStorage.setItem('identificacionUsuario', usuarioEncontrado.identificacion);
 
         navigate(`/${PrivateRoutes.PRIVATE}`, { replace: true });

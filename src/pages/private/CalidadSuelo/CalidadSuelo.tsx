@@ -16,6 +16,8 @@ import { useSelector } from "react-redux";
 import { AppStore } from "../../../redux/Store.ts";
 import EditarMedicionSuelo from "../../../components/calidadsuelo/EditarMedicionSuelo.tsx";
 import CrearMedicionSuelo from "../../../components/calidadsuelo/CrearMedicionSuelo.tsx";
+import { ObtenerMedicionesSuelo, CambiarEstadoMedicionesSuelo } from "../../../servicios/ServicioSuelos.ts"
+import { ObtenerUsuariosAsignados } from "../../../servicios/ServicioUsuario.ts"
 
 
 /**
@@ -27,18 +29,33 @@ function CalidadSuelo() {
     // Estado para controlar la apertura y cierre del modal de creacion de usuarios
     const [modalCrearMedicionSuelo, setModalCrearMedicionSuelo] = useState(false);
     // Estado para almacenar la información del usuario seleccionado
-    const [selectedFincaParcela, setSelectedFincaParcela] = useState({
-        idFinca: 0,
-        idParcela: 0,
-    });
     // Estado para almacenar todos los usuarios asignados
     const [mediciones, setMediciones] = useState<any[]>([]);
     // Estado para obtener el estado del usuario que inició sesión
     const userLoginState = useSelector((store: AppStore) => store.user);
 
+    //puede que falten cambios a los datos seleccionados
+    const [selectedDatos, setSelectedDatos] = useState({
+        idFinca: 0,
+        idParcela: 0,
+        idMedicionesSuelo: 0,
+        calidadAgua: 0,
+        conductividadElectrica: 0,
+        densidadAparente: 0,
+        desleimiento: 0,
+        estabilidadAgregados: 0,
+        infiltracion: 0,
+        lombrices: 0,
+        medicionesCalidadSuelo: '',
+        nitratosSuelo: 0,
+        observaciones: '',
+        pH: 0,
+        respiracionSuelo: 0
+    });
+
     // Funciones para manejar el estado de los modales
     const openModal = (fincaParcela: any) => {
-        setSelectedFincaParcela(fincaParcela);
+        setSelectedDatos(fincaParcela);
         abrirCerrarModalEditar();
     };
 
@@ -54,40 +71,67 @@ function CalidadSuelo() {
         abrirCerrarModalCrearMedicion();
     };
 
-    
+
     const abrirCerrarModalEditar = () => {
+        console.log();
         setModalEditar(!modalEditar);
     }
 
-    const handleEditarMedicionUsuario = async () => {
-        // Después de editar exitosamente, actualiza la lista de usuarios Asignados
-        await ObtenerDatosMediciones();
-        abrirCerrarModalEditar();
-    };
+     const handleEditarMedicionUsuario = async () => {
+         // Después de editar exitosamente, actualiza la lista de usuarios Asignados
+         await obtenerDatosMediciones();
+         abrirCerrarModalEditar();
+     };
 
 
     useEffect(() => {
         obtenerDatosMediciones();
     }, []); // Ejecutar solo una vez al montar el componente
 
+
+    // // Función para obtener todos las mediciones 
+    //  const obtenerUsuariosAsignadosPorIdentificacion = async () => {
+    //     try {
+
+    //          const usuarios= await ObtenerUsuariosAsignadosPorIdentificacion(localStorage.getItem('identificacionUsuario')); //aca le pones el nombre del servicio que vas a usar para traer los datos
+    //          const datosConEstado = datos.map((mediciones: any) => ({
+    //              ...mediciones,
+    //              sEstado: mediciones.estado === 1 ? 'Activo' : 'Inactivo',
+    //          }));
+    //          setMediciones(datosConEstado);
+    //        // setMediciones(datosConEstado.filter());
+    //      } catch (error) {
+    //          console.error('Error al obtener las mediciones:', error);
+    //     }
+    // };
+
     // Función para obtener todos las mediciones 
+
     const obtenerDatosMediciones = async () => {
         try {
 
-            const datos= await ObtenerDatosMediciones(); //aca le pones el nombre del servicio que vas a usar para traer los datos
-            const datosConEstado = datos.map((mediciones: any) => ({
+            //hacen falta cambios a obtener usuarios asignados con el filtro
+            const idEmpresa = localStorage.getItem('empresaUsuario')
+            const datos = await ObtenerUsuariosAsignados({ idEmpresa: idEmpresa });
+            //aca le pones el nombre del servicio que vas a usar para traer los datos
+            const datosManejoSuelos = await ObtenerMedicionesSuelo();
+
+            const datosManejoSuelosFiltrados = datosManejoSuelos.filter((datosEntrantes: any) => datos.includes(datosEntrantes.identificacionUsuario));
+            
+            const datosConEstado = datosManejoSuelosFiltrados.map((mediciones: any) => ({
                 ...mediciones,
                 sEstado: mediciones.estado === 1 ? 'Activo' : 'Inactivo',
             }));
-            setMediciones(datosConEstado.filter(/** aca agregas los filtros por finca y parcela de acuerdo a la finca y parcela del usuario*/));
+
+            setMediciones(datosConEstado);
+            // setMediciones(datosConEstado.filter());
         } catch (error) {
             console.error('Error al obtener las mediciones:', error);
         }
     };
 
-    
     // Función para cambiar el estado de un usuario
-    const toggleStatus = async (medicionSuelo : any) => {
+    const toggleStatus = async (medicionSuelo: any) => {
         Swal.fire({
             title: "Actualizar",
             text: "¿Estás seguro de que deseas actualizar el estado de la medicion:  ?",
@@ -99,11 +143,13 @@ function CalidadSuelo() {
             if (result.isConfirmed) {
                 try {
                     const datos = {
-                        idMedicionesSuelo: medicionSuelo.idMecionesSuelo, //aca revisar que si sea idMedicionesSuelo
+                        idMedicionesSuelo: medicionSuelo.idMedicionesSuelo, //aca revisar que si sea idMedicionesSuelo
                     };
-                    const resultado = await CambiarEstadoMedicionSuelo(datos); //aca pones el servicio que se utliza para las mediciones del suelo
+
+                    const resultado = await CambiarEstadoMedicionesSuelo(datos); //aca pones el servicio que se utliza para las mediciones del suelo
+
                     if (parseInt(resultado.indicador) === 1) {
-                        await ObtenerDatosMediciones();
+                        await obtenerDatosMediciones();
                         Swal.fire({
                             icon: 'success',
                             title: '¡Estado Actualizado! ',
@@ -127,14 +173,15 @@ function CalidadSuelo() {
 
     // Columnas de la tabla
     const columns = [
-        { key: '', header: 'Usuario' },
-        { key: '', header: 'Finca' },
-        { key: '', header: 'Parcela' },
-        { key: '', header: 'Fecha' },
+        { key: 'usuario', header: 'Usuario' },
+        { key: 'finca', header: 'Finca' },
+        { key: 'parcela', header: 'Parcela' },
+        { key: 'fechaCreacion', header: 'Fecha' },
+        { key: 'sEstado', header: 'Estado' },
         { key: 'acciones', header: 'Acciones', actions: true } // Columna para acciones
     ];
 
-  
+
 
     return (
         <Sidebar>
@@ -143,7 +190,7 @@ function CalidadSuelo() {
                 <BordeSuperior text="Estudio de Calidad de Suelo" />
                 <div className="content">
                     <button onClick={() => abrirCerrarModalCrearMedicion()} className="btn-crear">Crear Medicion</button>
-                    <TableResponsive columns={columns} data={mediciones} openModal={openModal} toggleStatus={toggleStatus} btnActionName={"Editar"}/>
+                    <TableResponsive columns={columns} data={mediciones} openModal={openModal} toggleStatus={toggleStatus} btnActionName={"Editar"} />
                 </div>
             </div>
 
@@ -158,6 +205,22 @@ function CalidadSuelo() {
                         {/* hay que modificar el nombre porque modifica mas datos */}
                         {/* <CambiarContrasenaAsignados */}
                         <EditarMedicionSuelo
+                            idFinca={selectedDatos.idFinca}
+                            idParcela={selectedDatos.idParcela}
+                            idMedicionesSuelo={selectedDatos.idMedicionesSuelo}
+                            calidadAgua={selectedDatos.calidadAgua}
+                            conductividadElectrica={selectedDatos.conductividadElectrica}
+                            densidadAparente={selectedDatos.densidadAparente}
+                            desleimiento={selectedDatos.desleimiento}
+                            estabilidadAgregados={selectedDatos.estabilidadAgregados}
+                            infiltracion={selectedDatos.infiltracion}
+                            lombrices={selectedDatos.lombrices}
+                            medicionesCalidadSuelo={selectedDatos.medicionesCalidadSuelo}
+                            nitratosSuelo={selectedDatos.nitratosSuelo}
+                            observaciones={selectedDatos.observaciones}
+                            pH={selectedDatos.pH}
+                            respiracionSuelo={selectedDatos.respiracionSuelo}
+
                             //aqui agregas las props que ocupa que reciba el componente, (todos los datos para editar)
                             onEdit={handleEditarMedicionUsuario}
                         />
@@ -175,7 +238,6 @@ function CalidadSuelo() {
                 <div className='form-container'>
                     <div className='form-group'>
                         <CrearMedicionSuelo
-                            //aca van las props del componente que va a crear
                             onAdd={handleAgregarMedicion}
                         />
                     </div>

@@ -50,17 +50,12 @@ function AdministrarFincas() {
                 const fincas = await ObtenerFincas();
 
                 const fincasEmpresaUsuario = fincas.filter((finca: any) => finca.idEmpresa === parseInt(idEmpresaUsuario));
-                console.log('este es el idempresa')
-                console.log(idEmpresaUsuario)
-                console.log('este es el idempresa')
 
                 const fincasConSEstado = fincasEmpresaUsuario.map((finca: any) => ({
                     ...finca,
                     sEstado: finca.estado === 1 ? 'Activo' : 'Inactivo',
                 }));
-                console.log(fincasConSEstado)
-                console.log('fincas')
-                setFinca(fincasConSEstado);
+
                 setFincasFiltrados(fincasConSEstado); // Inicialmente, los datos filtrados son los mismos que los datos originales
             }
         } catch (error) {

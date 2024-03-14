@@ -93,9 +93,6 @@ function MantenimientoUsuariosAsignados() {
         ...usuario,
         sEstado: usuario.estado === 1 ? 'Activo' : 'Inactivo',
       }));
-      console.log("estados")
-      console.log(usuariosConSEstado)
-      console.log("estados")
       setUsuariosAsignados(usuariosConSEstado);
       setUsuariosFiltrados(usuariosConSEstado); // Inicialmente, los datos filtrados son los mismos que los datos originales
     } catch (error) {

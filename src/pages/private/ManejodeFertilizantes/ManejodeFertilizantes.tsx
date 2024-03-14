@@ -50,12 +50,11 @@ function AdministrarManejoFertilizantes() {
 
     const handleParcelaChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
         const value = e.target.value;
-        obtenerInfo();
         setSelectedParcela(parseInt(value));
     };
 
     // Obtener las fincas al cargar la página
-    useEffect(() => {
+    useEffect(() => { 
         const obtenerFincas = async () => {
             try {
                 const idEmpresaString = localStorage.getItem('empresaUsuario');
@@ -91,11 +90,6 @@ function AdministrarManejoFertilizantes() {
                     setParcelas(parcelasFinca);
                 }
 
-                console.log("selectedFinca")
-                console.log(selectedFinca)
-                console.log("selectedFinca")
-
-
             } catch (error) {
                 console.error('Error al obtener las parcelas de la finca:', error);
             }
@@ -127,9 +121,6 @@ function AdministrarManejoFertilizantes() {
             : datosFertilizantes;
             setdatosFertilizantesFiltrados(fertilizantesFiltrados);
 
-        console.log("fertilizantesFiltrados")
-        console.log(fertilizantesFiltrados)
-        console.log("fertilizantesFiltrados")
     };
 
     // hay que hacer el filtro de obtener usuarios asignados por identificacion
@@ -188,6 +179,13 @@ function AdministrarManejoFertilizantes() {
         }
     };
 
+    //esto carga la tabla al momento de hacer cambios en el filtro
+    //carga los datos de la tabla al momento de cambiar los datos de selected parcela
+    //cada vez que selected parcela cambie de datos este use effect obtiene datos
+    useEffect(()=> {
+        obtenerInfo();
+    },[selectedParcela]);
+
     const abrirCerrarModalInsertar = () => {
         setModalInsertar(!modalInsertar);
     };
@@ -196,17 +194,10 @@ function AdministrarManejoFertilizantes() {
         setModalEditar(!modalEditar);
     };
 
-
-
-
-
     const openModal = (datos: any) => {
         setSelectedDatos(datos);
         abrirCerrarModalEditar();
     };
-
-
-
 
     const toggleStatus = async (parcela: any) => {
         Swal.fire({

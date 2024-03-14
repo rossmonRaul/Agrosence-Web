@@ -60,9 +60,6 @@ const InsertarManejoFertilizante: React.FC<InsertarManejoFertilizanteProps> = ({
                 if (identificacionString && idEmpresaString) {
                     const idEmpresa = parseInt(idEmpresaString);
                     const identificacion = identificacionString;
-                    console.log("identificacion");
-                    console.log(identificacion);
-                    console.log("identificacion");
                     const usuariosAsignados = await ObtenerUsuariosAsignadosPorIdentificacion({ identificacion: identificacion });
                     const idFincasUsuario = usuariosAsignados.map((usuario: any) => usuario.idFinca);
                     const fincasResponse = await ObtenerFincas();
