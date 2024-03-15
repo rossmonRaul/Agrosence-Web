@@ -230,7 +230,7 @@ function CalidadSuelo() {
             <Modal
                 isOpen={modalEditar}
                 toggle={abrirCerrarModalEditar}
-                title="Editar Medicion Suelo"
+                title="Editar Medición Suelo"
                 onCancel={abrirCerrarModalEditar}
             >
                 <div className='form-container'>
@@ -265,7 +265,7 @@ function CalidadSuelo() {
             <Modal
                 isOpen={modalCrearMedicionSuelo}
                 toggle={abrirCerrarModalCrearMedicion}
-                title="Crear Medicion"
+                title="Crear Medición"
                 onCancel={abrirCerrarModalCrearMedicion}
             >
                 <div className='form-container'>

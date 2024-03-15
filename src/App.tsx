@@ -21,7 +21,6 @@ const AdministrarParcelas = lazy(() => import('./pages/private/AdministrarParcel
 const MantenimientoUsuariosAsignados = lazy(() => import('./pages/private/MantenimientoUsuariosAsignados/MantenimientoUsuariosAsignados'))
 const ManejodeFertilizantes = lazy(() => import('./pages/private/ManejodeFertilizantes/ManejodeFertilizantes'))
 const MedicionesdeSuelos = lazy(() => import('./pages/private/CalidadSuelo/CalidadSuelo'))
- 
 function App() {
   return (
     // Suspense para manejar la carga de componentes lazy

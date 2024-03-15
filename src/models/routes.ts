@@ -18,4 +18,4 @@ export const PrivateRoutes = {
     MEDICIONESDESUELOS:'medicionesdesuelos',
     MANEJODEFERTILIZANTES: 'manejodefertilizantes'
 };
- 
+  

@@ -79,11 +79,10 @@ const Sidebar = ({ children }: { children: React.ReactNode }) => {
             icon: <img src='/tractor.png'style={{width: '30px'}}/>,
             roles: [2]
         },
-
         {
             path: "/suelos",
             name: "Suelos",
-            icon: <img src='/field.png'style={{width: '22px'}}/>, // Puedes usar cualquier icono que desees aquí
+            icon: <img src='/calidadsuelo.png'style={{width: '22px'}}/>, // Puedes usar cualquier icono que desees aquí
             roles: [3], // Especifica los roles que pueden ver esta opción
             children: [
                 {
@@ -94,7 +93,35 @@ const Sidebar = ({ children }: { children: React.ReactNode }) => {
                 {
                     path: "/medicionesdesuelos",
                     name: "Mediciones de Suelos",
-                    icon: <img src='/tractor.png'style={{width: '30px'}}/>,
+                    icon: <img src='/calidadsuelo.png'style={{width: '30px'}}/>,
+                }
+            ]
+        },
+                {
+            path: "/manejodecultivos",
+            name: "Menú desplegable 2",
+            icon: <IoBusiness/>, // Puedes usar cualquier icono que desees aquí
+            roles: [3], // Especifica los roles que pueden ver esta opción
+            children: [
+                {
+                    path: "/manejodefertilizantes",
+                    name: "Opción desplegable 1",
+                    icon: <IoBusiness/>,
+                },
+                {
+                    path: "/manejodefertilizantes",
+                    name: "Opción desplegable 2",
+                    icon: <IoBusiness/>,
+                },
+                {
+                    path: "/manejodefertilizantes",
+                    name: "Opción desplegable 3",
+                    icon: <IoBusiness/>,
+                },
+                {
+                    path: "/medicionesdesuelos",
+                    name: "Opción desplegable 4",
+                    icon: <IoBusiness/>,
                 }
             ]
         },

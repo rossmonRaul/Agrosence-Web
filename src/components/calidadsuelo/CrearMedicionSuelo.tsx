@@ -285,43 +285,47 @@ const CrearMedicionSuelo: React.FC<InsertarManejoFertilizanteProps> = ({ onAdd }
         <div id='general' style={{ display: 'flex', flexDirection: 'column', paddingBottom: '0rem', width: '90%', margin: '0 auto' }}>
             {step === 1 && (
                 <div>
-                    <div className="form-container-fse" style={{ display: 'flex', flexDirection: 'column', width: '50%' }}>
-                        <h2>Medición de la calidad del suelo</h2>
-                        <FormGroup>
-                            <label htmlFor="fincas">Finca:</label>
-                            <select className="custom-select" id="fincas" value={selectedFinca} onChange={handleFincaChange}>
-                                <option key="default-finca" value="">Seleccione...</option>
-                                {filteredFincas.map((finca) => (
-                                    <option key={`${finca.idFinca}-${finca.nombre || 'undefined'}`} value={finca.idFinca}>{finca.nombre || 'Undefined'}</option>
-                                ))}
-                            </select>
-                            {errors.finca && <FormFeedback>{errors.finca}</FormFeedback>}
-                        </FormGroup>
-
-                        <FormGroup>
-                            <label htmlFor="parcelas">Parcela:</label>
-                            <select className="custom-select" id="parcelas" value={selectedParcela} onChange={handleParcelaChange}>
-                                <option key="default-parcela" value="">Seleccione...</option>
-                                {filteredParcelas.map((parcela) => (
-                                    <option key={`${parcela.idParcela}-${parcela.nombre || 'undefined'}`} value={parcela.idParcela}>{parcela.nombre || 'Undefined'}</option>
-                                ))}
-                            </select>
-                            {errors.parcela && <FormFeedback>{errors.parcela}</FormFeedback>}
-                        </FormGroup>
+                    <h2>Medición de la calidad del suelo</h2>
+                    <div className="form-container-fse" style={{ display: 'flex', flexDirection: 'row', width: '100%' }}>
+                        <div style={{ marginRight: '10px', width: '50%' }}>
+                            <FormGroup>
+                                <label htmlFor="fincas">Finca:</label>
+                                <select className="custom-select" id="fincas" value={selectedFinca} onChange={handleFincaChange}>
+                                    <option key="default-finca" value="">Seleccione...</option>
+                                    {filteredFincas.map((finca) => (
+                                        <option key={`${finca.idFinca}-${finca.nombre || 'undefined'}`} value={finca.idFinca}>{finca.nombre || 'Undefined'}</option>
+                                    ))}
+                                </select>
+                                {errors.finca && <FormFeedback>{errors.finca}</FormFeedback>}
+                            </FormGroup>
+                        </div>
+                        <div style={{ marginRight: '0px', width: '50%' }}>
+                            <FormGroup>
+                                <label htmlFor="parcelas">Parcela:</label>
+                                <select className="custom-select" id="parcelas" value={selectedParcela} onChange={handleParcelaChange}>
+                                    <option key="default-parcela" value="">Seleccione...</option>
+                                    {filteredParcelas.map((parcela) => (
+                                        <option key={`${parcela.idParcela}-${parcela.nombre || 'undefined'}`} value={parcela.idParcela}>{parcela.nombre || 'Undefined'}</option>
+                                    ))}
+                                </select>
+                                {errors.parcela && <FormFeedback>{errors.parcela}</FormFeedback>}
+                            </FormGroup>
+                        </div>
                     </div>
 
-                    <div className="row" style={{ display: "flex" }}>
-                        <div className="col-sm-4" style={{ marginRight: "10px" }}>
+                    <div className="row">
+                        <div style={{ marginRight: "10px" }}>
                             <FormGroup row>
                                 <Label for="medicionesCalidadSuelo" sm={4} className="input-label">Mediciones de Calidad de suelo</Label>
                                 <Col sm={8}>
                                     <Input
-                                        type="text"
+                                        type="textarea"
                                         id="medicionesCalidadSuelo"
                                         name="medicionesCalidadSuelo"
                                         value={formData.medicionesCalidadSuelo}
                                         onChange={handleInputChange}
                                         className={errors.fertilizante ? 'input-styled input-error' : 'input-styled'}
+                                        style={{ width: '100%', height: '75px', resize: 'none', overflowY: 'auto' }} // Ajustamos el ancho y la altura
                                         placeholder="Mediciones de Calidad de suelo"
                                         maxLength={50}
                                     />
@@ -329,6 +333,9 @@ const CrearMedicionSuelo: React.FC<InsertarManejoFertilizanteProps> = ({ onAdd }
                                 </Col>
                             </FormGroup>
                         </div>
+                    </div>
+
+                    <div className="row" style={{ display: "flex" }}>
                         <div className="col-sm-4" style={{ marginRight: "10px" }}>
                             <FormGroup row>
                                 <Label for="respiracionSuelo" sm={4} className="input-label">Ensayo de respiración de suelo (mg CO2-C/g)</Label>
@@ -484,7 +491,7 @@ const CrearMedicionSuelo: React.FC<InsertarManejoFertilizanteProps> = ({ onAdd }
                             </div>
                         </div>
 
-                                            
+
 
                         <div className="row" style={{ display: 'flex', justifyContent: 'space-between' }}>
                             <div className="col-sm-6" style={{ marginRight: "10px" }}>
