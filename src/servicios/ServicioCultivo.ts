@@ -20,3 +20,4 @@ export const CambiarEstadoCalidadCultivo = async (data: any) => {
     const url = `http://localhost:5271/api/v1.0/${controlador}/CambiarEstadoCalidadCultivo`;
     return await ProcesarDatosApi('PUT', url, data);
 }
+

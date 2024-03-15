@@ -82,7 +82,7 @@ const Sidebar = ({ children }: { children: React.ReactNode }) => {
         {
             path: "/suelos",
             name: "Suelos",
-            icon: <img src='/calidadsuelo.png'style={{width: '22px'}}/>, // Puedes usar cualquier icono que desees aquí
+            icon: <img src='/suelos.png'style={{width: '22px'}}/>, // Puedes usar cualquier icono que desees aquí
             roles: [3], // Especifica los roles que pueden ver esta opción
             children: [
                 {
