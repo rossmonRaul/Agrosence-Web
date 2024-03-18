@@ -69,32 +69,64 @@ const Sidebar = ({ children }: { children: React.ReactNode }) => {
         {
             path: "/administrarfincas",
             name: "Fincas",
-            icon: <IoBusiness />,
+            icon: <img src='/field.png'style={{width: '22px'}}/>,
             roles: [2]
         },
 
         {
             path: "/administrarparcelas",
             name: "Parcelas",
-            icon: <IoBusiness />,
+            icon: <img src='/tractor.png'style={{width: '30px'}}/>,
             roles: [2]
         },
-
         {
-            path: "/opciones-nuevas",
-            name: "Opciones Nuevas",
-            icon: <IoBusiness />, // Puedes usar cualquier icono que desees aquí
-            roles: [1, 2], // Especifica los roles que pueden ver esta opción
+            path: "/suelos",
+            name: "Suelos",
+            icon: <img src='/suelos.png'style={{width: '22px'}}/>, // Puedes usar cualquier icono que desees aquí
+            roles: [3], // Especifica los roles que pueden ver esta opción
             children: [
                 {
-                    path: "/opcion-1",
-                    name: "Opción 1",
-                    icon: <IoBusiness />,
+                    path: "/manejodefertilizantes",
+                    name: "Manejo de Fertilizantes",
+                    icon: <img src='/fertilizer.png'style={{width: '30px'}}/>,
                 },
                 {
-                    path: "/opcion-2",
-                    name: "Opción 2",
-                    icon: <IoBusiness />,
+                    path: "/medicionesdesuelos",
+                    name: "Mediciones de Suelos",
+                    icon: <img src='/calidadsuelo.png'style={{width: '30px'}}/>,
+                }
+            ]
+        },
+                {
+            path: "/manejodecultivos",
+            name: "Menú desplegable 2",
+            icon: <IoBusiness/>, // Puedes usar cualquier icono que desees aquí
+            roles: [3], // Especifica los roles que pueden ver esta opción
+            children: [
+                {
+                    path: "/manejodefertilizantes",
+                    name: "Opción desplegable 1",
+                    icon: <IoBusiness/>,
+                },
+                {
+                    path: "/manejodefertilizantes",
+                    name: "Opción desplegable 2",
+                    icon: <IoBusiness/>,
+                },
+                {
+                    path: "/manejodefertilizantes",
+                    name: "Opción desplegable 3",
+                    icon: <IoBusiness/>,
+                },
+                {
+                    path: "/medicionesdesuelos",
+                    name: "Opción desplegable 4",
+                    icon: <IoBusiness/>,
+                },
+                {
+                    path: "/preparaciondeterrenos",
+                    name: "Opción desplegable 5",
+                    icon: <IoBusiness/>,
                 }
             ]
         },

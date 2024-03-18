@@ -19,7 +19,9 @@ const AdministrarEmpresas = lazy(() => import('./pages/private/AdministrarEmpres
 const AdministrarFincas = lazy(() => import('./pages/private/AdministrarFincas/AdministrarFincas'))
 const AdministrarParcelas = lazy(() => import('./pages/private/AdministrarParcelas/AdministrarParcelas'))
 const MantenimientoUsuariosAsignados = lazy(() => import('./pages/private/MantenimientoUsuariosAsignados/MantenimientoUsuariosAsignados'))
- 
+const ManejodeFertilizantes = lazy(() => import('./pages/private/ManejodeFertilizantes/ManejodeFertilizantes'))
+const MedicionesdeSuelos = lazy(() => import('./pages/private/CalidadSuelo/CalidadSuelo'))
+const PreparacionTerreno = lazy(() => import('./pages/private/PreparacionTerreno/PreparacionTerreno'))
 function App() {
   return (
     // Suspense para manejar la carga de componentes lazy
@@ -56,6 +58,16 @@ function App() {
               <Route path={PrivateRoutes.MATENIMIENTOUSUARIOSASIGNADOS} element={<MantenimientoUsuariosAsignados />} />
               <Route path={PrivateRoutes.ADMINISTRARFINCAS} element={<AdministrarFincas />} />
               <Route path={PrivateRoutes.ADMINISTRARPARCELAS} element={<AdministrarParcelas />} />
+            </Route>
+            {/* Rutas accesibles solo para el rol de usuario asignado */}
+            <Route element={<RolGuard rol={Roles.UsuarioAsignado} />}>
+              <Route path={PrivateRoutes.DASHBOARD} element={<Dashboard />} />
+              <Route path={PrivateRoutes.MANEJODEFERTILIZANTES} element={<ManejodeFertilizantes />} />
+              <Route path={PrivateRoutes.MEDICIONESDESUELOS} element={<MedicionesdeSuelos />} />
+              <Route path={PrivateRoutes.PREPARACIONTERRENOS} element={<PreparacionTerreno />} />
+
+
+              
             </Route>
           </RoutesWithNotFound>
         </BrowserRouter>

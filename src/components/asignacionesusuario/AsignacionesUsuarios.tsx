@@ -315,4 +315,4 @@ const AsignacionesUsuarios: React.FC<Props> = ({ identificacion, idEmpresa }) =>
     );
 }
 
-export default AsignacionesUsuarios;
+export default AsignacionesUsuarios; 

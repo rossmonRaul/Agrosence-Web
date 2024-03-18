@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import '../../css/Table.css'
 import { Table } from 'reactstrap'
 
@@ -26,8 +26,8 @@ interface TableProps {
   toggleOptionalStatus?: (user: any) => void; // Función para realizar una acción opcional en cada fila (opcional)
   propClassNameOpcional?: string; // Prop opcional para cambiar el estilo del boton
 }
- 
-const TableResponsive: React.FC<TableProps> = ({ propClassNameOpcional ,columns, data, openModal, toggleStatus, itemsPerPage: defaultItemsPerPage = 5, btnActionName, toggleOptionalStatus, btnToggleOptionalStatus }) => {
+
+const TableResponsive: React.FC<TableProps> = ({ propClassNameOpcional, columns, data, openModal, toggleStatus, itemsPerPage: defaultItemsPerPage = 5, btnActionName, toggleOptionalStatus, btnToggleOptionalStatus }) => {
   const [currentPage, setCurrentPage] = useState<number>(1);
   const [itemsPerPage, setItemsPerPage] = useState<number>(defaultItemsPerPage);
 
@@ -38,7 +38,14 @@ const TableResponsive: React.FC<TableProps> = ({ propClassNameOpcional ,columns,
   // Calcular el índice del primer y último elemento de la página actual
   const indexOfLastItem: number = currentPage * itemsPerPage;
   const indexOfFirstItem: number = indexOfLastItem - itemsPerPage;
-  const currentItems: TableRow[] = data.slice(indexOfFirstItem, indexOfLastItem);
+  const [currentData, setCurrentData] = useState<TableRow[]>(data);
+  const currentItems: TableRow[] = currentData.slice(indexOfFirstItem, indexOfLastItem);
+ 
+  //para devolver la tabla a la primera pagina
+  useEffect(() => {
+    setCurrentData(data);
+    setCurrentPage(1);
+  }, [data]);
 
   // Función para cambiar a una página específica
   const paginate = (pageNumber: number) => {
@@ -47,7 +54,7 @@ const TableResponsive: React.FC<TableProps> = ({ propClassNameOpcional ,columns,
     }
   };
 
-   // Manejar el cambio en el número de elementos por página
+  // Manejar el cambio en el número de elementos por página
   const handleItemsPerPageChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
     const newItemsPerPage = parseInt(e.target.value);
     setItemsPerPage(newItemsPerPage);
@@ -119,6 +126,7 @@ const TableResponsive: React.FC<TableProps> = ({ propClassNameOpcional ,columns,
         </div>
       )}
     </div>
+
   );
 };
 

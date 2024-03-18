@@ -19,7 +19,7 @@ import { useSelector } from "react-redux";
 import { AppStore } from "../../../redux/Store.ts";
 import AsignacionesUsuarios from "../../../components/asignacionesusuario/AsignacionesUsuarios.tsx";
 
-/**
+/** 
  * Componente funcional que representa la página de mantenimiento de usuarios asignados.
  */
 function MantenimientoUsuariosAsignados() {
@@ -210,7 +210,7 @@ function MantenimientoUsuariosAsignados() {
               nombre={selectedUsuario.nombre}
               email={selectedUsuario.correo}
               onEdit={handleEditarUsuario}
-            />
+            /> 
           </div>
         </div>
       </Modal>

@@ -1,0 +1,20 @@
+#general {
+    display: flex;
+    flex-direction: column;
+}
+
+#fecha-div, #fertilizante-div, #aplicacion-div, #dosis-div, #cultivoTratado-div, #accionesAdicionales-div {
+    display: flex;
+    flex-direction: row;
+    margin-bottom: 1rem;
+}
+
+#fecha-div > div, #fertilizante-div > div, #aplicacion-div > div, #dosis-div > div, #cultivoTratado-div > div, #accionesAdicionales-div > div {
+    flex: 1;
+    margin-right: 0.5rem;
+}
+
+#fecha-div, #fertilizante-div, #aplicacion-div, #dosis-div, #cultivoTratado-div, #accionesAdicionales-div {
+    flex: 1;
+    margin-left: 0.5rem;
+}

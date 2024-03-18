@@ -221,7 +221,10 @@ const Login: React.FC = () => {
         });
       } else if (usuarioEncontrado.mensaje === "Usuario encontrado.") {
         dispatch(createUser(usuarioEncontrado))
-        localStorage.setItem('empresaUsuario', usuarioEncontrado.idEmpresa);
+        //localstorage datos guardados
+        localStorage.setItem('empresaUsuario', usuarioEncontrado.idEmpresa); 
+        localStorage.setItem('identificacionUsuario', usuarioEncontrado.identificacion);
+
         navigate(`/${PrivateRoutes.PRIVATE}`, { replace: true });
         setIsLoggedIn(true);
       } else if (usuarioEncontrado.mensaje === "Credenciales incorrectas.") {

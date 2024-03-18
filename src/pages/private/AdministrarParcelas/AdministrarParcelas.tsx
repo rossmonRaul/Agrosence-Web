@@ -82,7 +82,6 @@ function AdministrarParcelas() {
 
     const obtenerParcelas = async () => {
         try {
-            console.log("Obteniendo parcelas...");
             const idEmpresaUsuario = localStorage.getItem('empresaUsuario');
             if (idEmpresaUsuario) {
 
@@ -100,6 +99,7 @@ function AdministrarParcelas() {
                     parcelasFincasEmpresaUsuario.push(...parcelasFinca);
                 });
 
+                //ajustar para fertilizantes
                 const parcelasConEstado = parcelasFincasEmpresaUsuario.map((parcela: any) => ({
                     ...parcela,
                     sEstado: parcela.estado === 1 ? 'Activo' : 'Inactivo'
@@ -185,7 +185,7 @@ function AdministrarParcelas() {
                 <BordeSuperior text="Administrar Parcelas" />
                 <div className="content" col-md-12>
                     <button onClick={() => abrirCerrarModalInsertar()} className="btn-crear">Crear Parcela</button>
-                    <div className="filtro-container" style={{ width: '91%' }}>
+                    <div className="filtro-container" style={{ width: '300px' }}>
                         <select value={selectedFinca || ''} onChange={handleFincaChange} className="custom-select">
                             <option value="">Todas las fincas</option>
                             {fincas.map(finca => (
