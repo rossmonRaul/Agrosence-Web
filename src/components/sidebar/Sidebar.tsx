@@ -122,6 +122,11 @@ const Sidebar = ({ children }: { children: React.ReactNode }) => {
                     path: "/medicionesdesuelos",
                     name: "Opción desplegable 4",
                     icon: <IoBusiness/>,
+                },
+                {
+                    path: "/preparaciondeterrenos",
+                    name: "Opción desplegable 5",
+                    icon: <IoBusiness/>,
                 }
             ]
         },

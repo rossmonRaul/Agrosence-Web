@@ -21,6 +21,7 @@ const AdministrarParcelas = lazy(() => import('./pages/private/AdministrarParcel
 const MantenimientoUsuariosAsignados = lazy(() => import('./pages/private/MantenimientoUsuariosAsignados/MantenimientoUsuariosAsignados'))
 const ManejodeFertilizantes = lazy(() => import('./pages/private/ManejodeFertilizantes/ManejodeFertilizantes'))
 const MedicionesdeSuelos = lazy(() => import('./pages/private/CalidadSuelo/CalidadSuelo'))
+const PreparacionTerreno = lazy(() => import('./pages/private/PreparacionTerreno/PreparacionTerreno'))
 function App() {
   return (
     // Suspense para manejar la carga de componentes lazy
@@ -63,6 +64,10 @@ function App() {
               <Route path={PrivateRoutes.DASHBOARD} element={<Dashboard />} />
               <Route path={PrivateRoutes.MANEJODEFERTILIZANTES} element={<ManejodeFertilizantes />} />
               <Route path={PrivateRoutes.MEDICIONESDESUELOS} element={<MedicionesdeSuelos />} />
+              <Route path={PrivateRoutes.PREPARACIONTERRENOS} element={<PreparacionTerreno />} />
+
+
+              
             </Route>
           </RoutesWithNotFound>
         </BrowserRouter>
