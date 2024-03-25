@@ -394,7 +394,7 @@ const ModificarCalidadCultivo: React.FC<Props> = ({
                                 onChange={handleInputChange}
                                 onBlur={() => handleInputBlur('productividad')}
                                 className={errors.productividad ? 'input-styled input-error' : 'input-styled'}
-                                placeholder="Peso Total"
+                                placeholder="Productividad"
                             />
                             <FormFeedback>{errors.productividad}</FormFeedback>
                         </Col>

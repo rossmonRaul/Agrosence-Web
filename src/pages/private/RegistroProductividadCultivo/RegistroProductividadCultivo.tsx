@@ -47,7 +47,7 @@ function RegistroProductividadCultivo() {
     const [selectedFinca, setSelectedFinca] = useState<number | null>(null);
     const [fincas, setFincas] = useState<any[]>([]);
     const userState = useSelector((store: AppStore) => store.user);
-
+    const [parcelasFiltradas, setParcelasFiltradas] = useState<Option[]>([]);
     //Eventos que se activan al percibir cambios en la finca y parcela seleccionadas
     const handleFincaChange = async (e: React.ChangeEvent<HTMLSelectElement>) => {
         const value = parseInt(e.target.value);
@@ -100,14 +100,9 @@ function RegistroProductividadCultivo() {
 
     useEffect(() => {
         const obtenerParcelasDeFinca = async () => {
-            try {
-                const parcelasResponse = await ObtenerParcelas();
-                let parcelasFinca = parcelasResponse;
-                if (selectedFinca !== null) {
-                    parcelasFinca = parcelasFinca.filter((parcela: any) => parcela.idFinca === selectedFinca);
-                    setParcelas(parcelasFinca);
-                }
-
+            try{
+                    const parcelasFinca = parcelas.filter((parcela: any) => parcela.idFinca === selectedFinca);
+                    setParcelasFiltradas(parcelasFinca);
             } catch (error) {
                 console.error('Error al obtener las parcelas de la finca:', error);
             }
@@ -260,7 +255,7 @@ function RegistroProductividadCultivo() {
                     <div className="filtro-container" style={{ width: '265px' }}>
                         <select value={selectedParcela ? selectedParcela : ''} onChange={handleParcelaChange} className="custom-select">
                             <option value="">Seleccione la parcela...</option>
-                            {parcelas.map(parcela => (
+                            {parcelasFiltradas.map(parcela => (
                                 <option key={parcela.idParcela} value={parcela.idParcela}>{parcela.nombre}</option>
                             ))}
                         </select>
