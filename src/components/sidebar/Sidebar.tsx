@@ -104,7 +104,7 @@ const Sidebar = ({ children }: { children: React.ReactNode }) => {
             roles: [3], // Especifica los roles que pueden ver esta opción
             children: [
                 {
-                    path: "/rotacioncultivos",
+                    path: "/rotacionescultivosestacion",
                     name: "Rotacion",
                     icon: <img src='/rotacionCultivos.png' style={{ width: '22px' }} />,
                 },
