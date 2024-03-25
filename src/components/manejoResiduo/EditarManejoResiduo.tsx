@@ -116,11 +116,14 @@ const EditarManejoResiduo: React.FC<ResiduoSeleccionado> = ({
                     const usuariosAsignados = await ObtenerUsuariosAsignadosPorIdentificacion({ identificacion: identificacion });
                     const idFincasUsuario = usuariosAsignados.map((usuario: any) => usuario.idFinca);
                     const idParcelasUsuario = usuariosAsignados.map((usuario: any) => usuario.idParcela);
-
+                    //Se obtienen las fincas 
                     const fincasResponse = await ObtenerFincas();
+                    //Se filtran las fincas del usuario
                     const fincasUsuario = fincasResponse.filter((finca: any) => idFincasUsuario.includes(finca.idFinca));
                     setFincas(fincasUsuario);
+                    //se obtien las parcelas
                     const parcelasResponse = await ObtenerParcelas();
+                    //se filtran las parcelas
                     const parcelasUsuario = parcelasResponse.filter((parcela: any) => idParcelasUsuario.includes(parcela.idParcela));
                     setParcelas(parcelasUsuario)
                     
@@ -134,7 +137,7 @@ const EditarManejoResiduo: React.FC<ResiduoSeleccionado> = ({
         obtenerFincas();
     }, [setParcelas]);
 
-
+    //se filtran las parcelas de acuerdo a la finca seleccionada
     const filteredParcelas = parcelas.filter(parcela => parcela.idFinca === parseInt(selectedFinca));
 
     const handleFincaChange = (e: React.ChangeEvent<HTMLSelectElement>) => {

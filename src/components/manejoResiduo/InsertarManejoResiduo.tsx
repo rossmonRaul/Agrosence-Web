@@ -75,11 +75,14 @@ const CrearManejoResiduos: React.FC<CrearManejoResiduosProps> = ({ onAdd }) => {
                     const usuariosAsignados = await ObtenerUsuariosAsignadosPorIdentificacion({ identificacion: identificacion });
                     const idFincasUsuario = usuariosAsignados.map((usuario: any) => usuario.idFinca);
                     const idParcelasUsuario = usuariosAsignados.map((usuario: any) => usuario.idParcela);
-                    
+                    //se obtiene las fincas 
                     const fincasResponse = await ObtenerFincas();
+                    //se filtran las fincas con las fincas del usuario
                     const fincasUsuario = fincasResponse.filter((finca: any) => idFincasUsuario.includes(finca.idFinca));
                     setFincas(fincasUsuario);
+                    //se obtienen las parcelas
                     const parcelasResponse = await ObtenerParcelas();
+                    //se filtran las parcelas con los idparcelasusuario
                     const parcelasUsuario = parcelasResponse.filter((parcela: any) => idParcelasUsuario.includes(parcela.idParcela));
                     setParcelas(parcelasUsuario)
                     
@@ -92,11 +95,12 @@ const CrearManejoResiduos: React.FC<CrearManejoResiduosProps> = ({ onAdd }) => {
         };
         obtenerDatosUsuario();
     }, []);
+    //funcion para poder filtrar las parcelas de acuerdo al idFinca que se selecciona
     const obtenerParcelasDeFinca = async (idFinca: string) => {
         try {
             
             const parcelasFinca = parcelas.filter(parcela => parcela.idFinca === parseInt(idFinca));
-            
+            //se asigna las parcelas de la IdFinca que se selecciona y se pone en parcelasfiltradas
             setParcelasFiltradas(parcelasFinca);
         } catch (error) {
             console.error('Error al obtener las parcelas de la finca:', error);
