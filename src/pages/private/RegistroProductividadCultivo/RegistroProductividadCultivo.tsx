@@ -53,7 +53,6 @@ function RegistroProductividadCultivo() {
         const value = parseInt(e.target.value);
         setSelectedFinca(value);
         setSelectedParcela(null);
-        obtenerParcelasDeFinca(e.target.value);
     };
 
 
@@ -99,17 +98,22 @@ function RegistroProductividadCultivo() {
         obtenerDatosUsuario();
     }, []);
 
+    useEffect(() => {
+        const obtenerParcelasDeFinca = async () => {
+            try {
+                const parcelasResponse = await ObtenerParcelas();
+                let parcelasFinca = parcelasResponse;
+                if (selectedFinca !== null) {
+                    parcelasFinca = parcelasFinca.filter((parcela: any) => parcela.idFinca === selectedFinca);
+                    setParcelas(parcelasFinca);
+                }
 
-    const obtenerParcelasDeFinca = async (idFinca: string) => {
-        try {
-            
-            const parcelasFinca = parcelas.filter(parcela => parcela.idFinca === parseInt(idFinca));
-            
-            setParcelas(parcelasFinca);
-        } catch (error) {
-            console.error('Error al obtener las parcelas de la finca:', error);
-        }
-    };
+            } catch (error) {
+                console.error('Error al obtener las parcelas de la finca:', error);
+            }
+        };
+        obtenerParcelasDeFinca();
+    }, [selectedFinca]);
 
     let filteredFincas: Option[] = [];
 

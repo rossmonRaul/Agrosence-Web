@@ -63,6 +63,7 @@ const InsertarCalidadCultivo: React.FC<InsertarManejoFertilizanteProps> = ({ onA
     const [selectedParcela, setSelectedParcela] = useState<string>('');
     const userState = useSelector((store: AppStore) => store.user);
     const [selectedTemporada, setSelectedTemporada] = useState<string>('');
+    const [parcelasFiltradas, setParcelasFiltradas] = useState<Option[]>([]);
     const handleInputChange = (event: React.ChangeEvent<HTMLInputElement>) => {
         const { name, value } = event.target;
         setFormData((prevState: any) => ({
@@ -106,7 +107,7 @@ const InsertarCalidadCultivo: React.FC<InsertarManejoFertilizanteProps> = ({ onA
             
             const parcelasFinca = parcelas.filter(parcela => parcela.idFinca === parseInt(idFinca));
             
-            setParcelas(parcelasFinca);
+            setParcelasFiltradas(parcelasFinca);
         } catch (error) {
             console.error('Error al obtener las parcelas de la finca:', error);
         }
@@ -115,10 +116,6 @@ const InsertarCalidadCultivo: React.FC<InsertarManejoFertilizanteProps> = ({ onA
     let filteredFincas: Option[] = [];
 
     filteredFincas = fincas.filter(finca => finca.idEmpresa === userState.idEmpresa);
-
-
-    //se filtran las parcelas segun la finca que selecciona el usuario
-    const filteredParcelas = parcelas.filter(parcela => parcela.idFinca === parseInt(selectedFinca));
 
 
     //eventos que manejan los cambios de los select de finca, parcela y temporada
@@ -275,7 +272,7 @@ const InsertarCalidadCultivo: React.FC<InsertarManejoFertilizanteProps> = ({ onA
                     <label htmlFor="parcelas">Parcela:</label>
                     <select className="custom-select" id="parcelas" value={selectedParcela} onChange={handleParcelaChange}>
                         <option key="default-parcela" value="">Seleccione...</option>
-                        {filteredParcelas.map((parcela) => (
+                        {parcelasFiltradas.map((parcela) => (
                             <option key={`${parcela.idParcela}-${parcela.nombre || 'undefined'}`} value={parcela.idParcela}>{parcela.nombre || 'Undefined'}</option>
                         ))}
                     </select>
