@@ -125,10 +125,17 @@ const ModificacionManejoFertilizante: React.FC<FertilizanteSeleccionado> = ({
                     const identificacion = identificacionString;
                     const usuariosAsignados = await ObtenerUsuariosAsignadosPorIdentificacion({ identificacion: identificacion });
                     const idFincasUsuario = usuariosAsignados.map((usuario: any) => usuario.idFinca);
+                    const idParcelasUsuario = usuariosAsignados.map((usuario: any) => usuario.idParcela);
+                    //Se obtienen las fincas 
                     const fincasResponse = await ObtenerFincas();
+                    //Se filtran las fincas del usuario
                     const fincasUsuario = fincasResponse.filter((finca: any) => idFincasUsuario.includes(finca.idFinca));
-
                     setFincas(fincasUsuario);
+                    //se obtien las parcelas
+                    const parcelasResponse = await ObtenerParcelas();
+                    //se filtran las parcelas
+                    const parcelasUsuario = parcelasResponse.filter((parcela: any) => idParcelasUsuario.includes(parcela.idParcela));
+                    setParcelas(parcelasUsuario)
                 } else {
                     console.error('La identificación y/o el ID de la empresa no están disponibles en el localStorage.');
                 }
@@ -140,25 +147,12 @@ const ModificacionManejoFertilizante: React.FC<FertilizanteSeleccionado> = ({
     }, []);
 
 
-    useEffect(() => {
-        const obtenerParcelasDeFinca = async () => {
-            try {
-                const parcelasResponse = await ObtenerParcelas();
-                const parcelasFinca = parcelasResponse.filter((parcela: any) => parcela.idFinca === parseInt(selectedFinca));
-                setParcelas(parcelasFinca);
-            } catch (error) {
-                console.error('Error al obtener las parcelas de la finca:', error);
-            }
-        };
-        if (selectedFinca !== '') {
-            obtenerParcelasDeFinca();
-        }
-    }, [selectedFinca]);
-
     const filteredParcelas = parcelas.filter(parcela => parcela.idFinca === parseInt(selectedFinca));
 
     const handleFincaChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
         const value = e.target.value;
+        formData.idFinca = value
+        formData.idParcela = ""
         setSelectedFinca(value);
         setSelectedParcela('');
     };
@@ -176,8 +170,9 @@ const ModificacionManejoFertilizante: React.FC<FertilizanteSeleccionado> = ({
 
     const handleParcelaChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
         const value = e.target.value;
+        formData.idParcela = value
         setSelectedParcela(value);
-    }; 
+    };
 
     // Función para manejar el envío del formulario con validación
     const handleSubmitConValidacion = () => {
@@ -266,7 +261,7 @@ const ModificacionManejoFertilizante: React.FC<FertilizanteSeleccionado> = ({
         } else {
             newErrors.observaciones = '';
         }
-
+        
         // Actualizar los errores
         setErrors(newErrors);
 
