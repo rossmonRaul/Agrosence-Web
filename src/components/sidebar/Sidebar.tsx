@@ -97,6 +97,12 @@ const Sidebar = ({ children }: { children: React.ReactNode }) => {
                 }
             ]
         },
+        {
+            path: "/registroseguimientousoagua",
+            name: "Registros y seguimientos del uso del agua",
+            icon: <img src='/water.png'style={{width: '30px'}} />,
+            roles: [3]
+        },
                 {
             path: "/manejodecultivos",
             name: "Menú desplegable 2",

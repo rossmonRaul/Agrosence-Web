@@ -4,22 +4,20 @@ import Swal from 'sweetalert2';
 import { ObtenerFincas } from '../../servicios/ServicioFincas.ts';
 import { ObtenerParcelas } from '../../servicios/ServicioParcelas.ts';
 import { ObtenerUsuariosAsignadosPorIdentificacion } from '../../servicios/ServicioUsuario.ts';
-import { EditarManejoFertilizantes } from "../../servicios/ServicioFertilizantes.ts";
 import '../../css/CrearCuenta.css';
+import { EditarRegistroSeguimientoUsoAgua } from '../../servicios/ServicioUsoAgua.ts';
 
 // Interfaz para las propiedades del componente
-interface FertilizanteSeleccionado {
+interface RegistroSeguimientoUsoAguaSeleccionado {
     idFinca: number;
     idParcela: number;
-    idManejoFertilizantes: number;
-    fechaCreacion: string;
-    fertilizante: string;
-    aplicacion: string;
-    dosis: number;
-    cultivoTratado: string;
-    condicionesAmbientales: string;
-    accionesAdicionales: string;
+    idRegistroSeguimientoUsoAgua: number;
+    fecha: string;
+    actividad: string;
+    caudal: string;
+    consumoAgua: number;
     observaciones: string;
+    usuarioModificacion?: string;
     onEdit?: () => void; // Hacer onEdit opcional agregando "?"
 }
 
@@ -31,18 +29,16 @@ interface Option {
     idFinca: number;
 }
 
-const ModificacionManejoFertilizante: React.FC<FertilizanteSeleccionado> = ({
+const ModificacionRegistroSeguimientoUsoAgua: React.FC<RegistroSeguimientoUsoAguaSeleccionado> = ({
     idFinca,
     idParcela,
-    idManejoFertilizantes,
-    fechaCreacion,
-    fertilizante,
-    aplicacion,
-    dosis,
-    cultivoTratado,
-    condicionesAmbientales,
-    accionesAdicionales,
+    idRegistroSeguimientoUsoAgua,
+    fecha,
+    actividad,
+    caudal,
+    consumoAgua,
     observaciones,
+    usuarioModificacion,
     onEdit
 }) => {
 
@@ -57,29 +53,24 @@ const ModificacionManejoFertilizante: React.FC<FertilizanteSeleccionado> = ({
     const [errors, setErrors] = useState<Record<string, string>>({
         idFinca: '',
         idParcela: '',
-        idManejoFertilizantes: '',
-        fechaCreacion: '',
-        fertilizante: '',
-        aplicacion: '',
-        dosis: '',
-        cultivoTratado: '',
-        condicionesAmbientales: '',
-        accionesAdicionales: '',
-        observaciones: ''
+        fecha: '',
+        actividad: '',
+        caudal: '',
+        consumoAgua: '',
+        observaciones: '',
+        usuarioModificacion: ''
     });
 
     const [formData, setFormData] = useState<any>({
         idFinca: '',
         idParcela: '',
-        idManejoFertilizantes: '',
-        fechaCreacion: '',
-        fertilizante: '',
-        aplicacion: '',
-        dosis: 0,
-        cultivoTratado: '',
-        condicionesAmbientales: '',
-        accionesAdicionales: '',
-        observaciones: ''
+        idRegistroSeguimientoUsoAgua: '',
+        fecha: '',
+        actividad: '',
+        caudal: '',
+        consumoAgua: '',
+        observaciones: '',
+        usuarioModificacion: ''
     });
 
     // Función para manejar cambios en los inputs del formulario
@@ -93,25 +84,22 @@ const ModificacionManejoFertilizante: React.FC<FertilizanteSeleccionado> = ({
 
     useEffect(() => {
         // Actualizar el formData cuando las props cambien
-        const parts = fechaCreacion.split('/');
+        const parts = fecha.split('/');
         const day = parts[0];
         const month = parts[1];
         const year = parts[2];
-        const fecha = year + '-' + month + '-' + day;
+        const fechaUsoAgua = year + '-' + month + '-' + day;
         setFormData({
             idFinca: idFinca,
             idParcela: idParcela,
-            idManejoFertilizantes: idManejoFertilizantes,
-            fechaCreacion: fecha,
-            fertilizante: fertilizante,
-            aplicacion: aplicacion,
-            dosis: dosis,
-            cultivoTratado: cultivoTratado,
-            condicionesAmbientales: condicionesAmbientales,
-            accionesAdicionales: accionesAdicionales,
+            idRegistroSeguimientoUsoAgua: idRegistroSeguimientoUsoAgua,
+            fecha: fechaUsoAgua,
+            actividad: actividad,
+            caudal: caudal,
+            consumoAgua: consumoAgua,
             observaciones: observaciones
         });
-    }, [idManejoFertilizantes]);
+    }, [idRegistroSeguimientoUsoAgua]);
 
 
     // Obtener las fincas al cargar la página
@@ -198,65 +186,41 @@ const ModificacionManejoFertilizante: React.FC<FertilizanteSeleccionado> = ({
             newErrors.parcela = '';
         }
 
-        if (!formData.fechaCreacion.trim()) {
-            newErrors.fechaCreacion = 'La fecha es requerida';
+        if (!formData.fecha.trim()) {
+            newErrors.fecha = 'La fecha es requerida';
         } else {
             // Validar que la fecha esté en el rango desde el 2015 hasta la fecha actual
             const minDate = new Date('2015-01-01');
-            const selectedDate = new Date(formData.fechaCreacion);
+            const selectedDate = new Date(formData.fecha);
             if (selectedDate < minDate || selectedDate > new Date()) {
-                newErrors.fechaCreacion = 'La fecha debe estar entre 2015 y la fecha actual';
+                newErrors.fecha = 'La fecha debe estar entre 2015 y la fecha actual';
             } else {
-                newErrors.fechaCreacion = '';
+                newErrors.fecha = '';
             }
         }
 
-        if (!formData.fertilizante.trim()) {
-            newErrors.fertilizante = 'El tipo de fertilizante es requerido';
-        } else if (formData.fertilizante.length > 50) {
-            newErrors.fertilizante = 'El tipo de fertilizante no puede tener más de 50 caracteres';
+        if (!formData.actividad.trim()) {
+            newErrors.actividad = 'La actividad es requerida';
+        } else if (formData.actividad.length > 50) {
+            newErrors.actividad = 'La actividad no puede tener más de 50 caracteres';
         } else {
-            newErrors.fertilizante = '';
+            newErrors.actividad = '';
         }
 
-        if (!formData.aplicacion.trim()) {
-            newErrors.aplicacion = 'El método de aplicación es requerido';
-        } else if (formData.aplicacion.length > 50) {
-            newErrors.aplicacion = 'El método de aplicación no puede tener más de 50 caracteres';
+        if (!formData.consumoAgua) {
+            newErrors.consumoAgua = 'El consumo de agua es requerido';
+        } else if (!/^\d+$/.test(formData.consumoAgua)) {
+            newErrors.consumoAgua = 'El consumo de agua debe ser un número';
         } else {
-            newErrors.aplicacion = '';
+            newErrors.consumoAgua = '';
         }
 
-        if (!formData.dosis) {
-            newErrors.dosis = 'La dosis es requerida';
-        } else if (!/^\d+$/.test(formData.dosis)) {
-            newErrors.dosis = 'La dosis debe ser un número';
+        if (!formData.caudal) {
+            newErrors.caudal = 'El caudal es requerido';
+        } else if (!/^\d+$/.test(formData.caudal)) {
+            newErrors.caudal = 'El caudal debe ser un número';
         } else {
-            newErrors.dosis = '';
-        }
-
-        if (!formData.cultivoTratado.trim()) {
-            newErrors.cultivoTratado = 'El nombre del cultivo es requerido';
-        } else if (formData.cultivoTratado.length > 50) {
-            newErrors.cultivoTratado = 'El nombre del cultivo no puede tener más de 50 caracteres';
-        } else {
-            newErrors.cultivoTratado = '';
-        }
-
-        if (!formData.accionesAdicionales.trim()) {
-            newErrors.accionesAdicionales = 'Las acciones adicionales son requeridas';
-        } else if (formData.accionesAdicionales.length > 200) {
-            newErrors.accionesAdicionales = 'Las acciones adicionales no pueden tener más de 200 caracteres';
-        } else {
-            newErrors.accionesAdicionales = '';
-        }
-
-        if (!formData.condicionesAmbientales.trim()) {
-            newErrors.condicionesAmbientales = 'Las condiciones ambientales son requeridas';
-        } else if (formData.condicionesAmbientales.length > 200) {
-            newErrors.condicionesAmbientales = 'Las condiciones ambientales no pueden tener más de 200 caracteres';
-        } else {
-            newErrors.condicionesAmbientales = '';
+            newErrors.caudal = '';
         }
 
         if (!formData.observaciones.trim()) {
@@ -276,46 +240,36 @@ const ModificacionManejoFertilizante: React.FC<FertilizanteSeleccionado> = ({
         }
     };
 
-    // Función para formatear la fecha en el formato yyyy-MM-dd
-    function formatDate(inputDate: any) {
-        const parts = inputDate.split('/');
-        const day = parts[0];
-        const month = parts[1];
-        const year = parts[2];
-        return year + '-' + month + '-' + day;
-    }
-
-    // Suponiendo que formData.fechaCreacion contiene la fecha recibida (08/03/2024)
-    const formattedDate = formatDate(formData.fechaCreacion);
-
     // Función para manejar el envío del formulario
     const handleSubmit = async () => {
         const datos = {
             idFinca: selectedFinca,
             idParcela: selectedParcela,
-            idManejoFertilizantes: formData.idManejoFertilizantes,
-            fechaCreacion: formData.fechaCreacion,
-            fertilizante: formData.fertilizante,
-            aplicacion: formData.aplicacion,
-            dosis: formData.dosis,
-            cultivoTratado: formData.cultivoTratado,
-            condicionesAmbientales: formData.condicionesAmbientales,
-            accionesAdicionales: formData.accionesAdicionales,
-            observaciones: formData.observaciones
+            idRegistroSeguimientoUsoAgua: formData.idRegistroSeguimientoUsoAgua,
+            fecha: formData.fecha,
+            actividad: formData.actividad,
+            caudal: formData.caudal,
+            consumoAgua: formData.consumoAgua,
+            observaciones: formData.observaciones,
+            usuarioModificacion: localStorage.getItem('identificacionUsuario'),
         };
 
+        console.log('datos');
+        console.log(datos);
+        console.log('datos');
+
         try {
-            const resultado = await EditarManejoFertilizantes(datos);
+            const resultado = await EditarRegistroSeguimientoUsoAgua(datos);
             if (resultado.indicador === 1) {
                 Swal.fire({
                     icon: 'success',
-                    title: '¡Fertilizante Actualizado! ',
-                    text: 'Fertilizante actualizado con éxito.',
+                    title: '¡Registro de seguimiento del uso de agua Actualizado! ',
+                    text: 'registro de seguimiento del uso de agua con éxito.',
                 });
             } else {
                 Swal.fire({
                     icon: 'error',
-                    title: 'Error al actualizar el fertilizante.',
+                    title: 'Error al actualizar el registro de seguimiento del uso de agua.',
                     text: resultado.mensaje,
                 });
             };
@@ -332,8 +286,8 @@ const ModificacionManejoFertilizante: React.FC<FertilizanteSeleccionado> = ({
     };
 
     return (
-        <div id='general' style={{ display: 'flex', flexDirection: 'column', paddingBottom: '0rem', width: '100%', margin: '0 auto' }}>
-            <h2>Manejo de fertilizantes</h2>
+        <div id='general' style={{ display: 'flex', flexDirection: 'column', paddingBottom: '0rem', width: '90%', margin: '0 auto' }}>
+            <h2>Registro de seguimiento del uso del agua</h2>
             <div className="form-container-fse" style={{ display: 'flex', flexDirection: 'row', width: '100%' }}>
                 <div style={{ marginRight: '10px', width: '50%' }}>
                     <FormGroup>
@@ -363,53 +317,36 @@ const ModificacionManejoFertilizante: React.FC<FertilizanteSeleccionado> = ({
             <div style={{ display: 'flex', flexDirection: 'row', marginBottom: '0rem' }}>
                 <div style={{ flex: 1, marginRight: '0.5rem', marginLeft: '0.5rem' }}>
                     <FormGroup row>
-                        <Label for="fechaCreacion" sm={4} className="input-label">Fecha</Label>
+                        <Label for="fecha" sm={4} className="input-label">Fecha</Label>
                         <Col sm={8}>
                             <Input
                                 type="date"
-                                id="fechaCreacion"
-                                name="fechaCreacion"
-                                value={formData.fechaCreacion}
+                                id="fecha"
+                                name="fecha"
+                                value={formData.fecha}
                                 onChange={handleInputChange}
-                                className={errors.fechaCreacion ? 'input-styled input-error' : 'input-styled'}
+                                className={errors.fecha ? 'input-styled input-error' : 'input-styled'}
                                 placeholder="Selecciona una fecha"
                             />
-                            <FormFeedback>{errors.fechaCreacion}</FormFeedback>
+                            <FormFeedback>{errors.fecha}</FormFeedback>
                         </Col>
                     </FormGroup>
                 </div>
                 <div style={{ flex: 1, marginRight: '0.5rem', marginLeft: '0.5rem' }}>
                     <FormGroup row>
-                        <Label for="fertilizante" sm={4} className="input-label">Fertilizante</Label>
+                        <Label for="actividad" sm={4} className="input-label">Actividad</Label>
                         <Col sm={8}>
                             <Input
                                 type="text"
-                                id="fertilizante"
-                                name="fertilizante"
-                                value={formData.fertilizante}
+                                id="actividad"
+                                name="actividad"
+                                value={formData.actividad}
                                 onChange={handleInputChange}
-                                className={errors.fertilizante ? 'input-styled input-error' : 'input-styled'}
-                                placeholder="Tipo de fertilizante"
+                                className={errors.actividad ? 'input-styled input-error' : 'input-styled'}
+                                placeholder="Actividad"
                                 maxLength={50}
                             />
-                            <FormFeedback>{errors.fertilizante}</FormFeedback>
-                        </Col>
-                    </FormGroup>
-                </div>
-                <div style={{ flex: 1, marginRight: '0.5rem', marginLeft: '0.5rem' }}>
-                    <FormGroup row>
-                        <Label for="aplicacion" sm={4} className="input-label">Aplicación</Label>
-                        <Col sm={8}>
-                            <Input
-                                type="text"
-                                id="aplicacion"
-                                name="aplicacion"
-                                value={formData.aplicacion}
-                                onChange={handleInputChange}
-                                className="input-styled"
-                                placeholder="Método de aplicación"
-                                maxLength={50}
-                            />
+                            <FormFeedback>{errors.actividad}</FormFeedback>
                         </Col>
                     </FormGroup>
                 </div>
@@ -417,75 +354,40 @@ const ModificacionManejoFertilizante: React.FC<FertilizanteSeleccionado> = ({
             <div style={{ display: 'flex', flexDirection: 'row', marginBottom: '0rem' }}>
                 <div style={{ flex: 1, marginRight: '0.5rem', marginLeft: '0.5rem' }}>
                     <FormGroup row>
-                        <Label for="dosis" sm={4} className="input-label">Dosis</Label>
+                        <Label for="caudal" sm={4} className="input-label">Caudal(L/s)</Label>
                         <Col sm={8}>
                             <Input
                                 type="text"
-                                id="dosis"
-                                name="dosis"
-                                value={formData.dosis}
-                                onChange={handleInputChange}
-                                className={errors.dosis ? 'input-styled input-error' : 'input-styled'}
-                                placeholder="Cantidad de dosis"
-                            />
-                            <FormFeedback>{errors.dosis}</FormFeedback>
-                        </Col>
-                    </FormGroup>
-                </div>
-                <div style={{ flex: 1, marginRight: '0.5rem', marginLeft: '0.5rem' }}>
-                    <FormGroup row>
-                        <Label for="cultivoTratado" sm={4} className="input-label">Cultivo Tratado</Label>
-                        <Col sm={8}>
-                            <Input
-                                type="text"
-                                id="cultivoTratado"
-                                name="cultivoTratado"
-                                value={formData.cultivoTratado}
-                                onChange={handleInputChange}
-                                className={errors.cultivoTratado ? 'input-styled input-error' : 'input-styled'}
-                                placeholder="Nombre del cultivo"
-                                maxLength={50}
-                            />
-                            <FormFeedback>{errors.cultivoTratado}</FormFeedback>
-                        </Col>
-                    </FormGroup>
-                </div>
-                <div style={{ flex: 1, marginRight: '0.5rem', marginLeft: '0.5rem' }}>
-                    <FormGroup row>
-                        <Label for="accionesAdicionales" sm={4} className="input-label">Acciones Adicionales</Label>
-                        <Col sm={8}>
-                            <Input
-                                type="text"
-                                id="accionesAdicionales"
-                                name="accionesAdicionales"
-                                value={formData.accionesAdicionales}
+                                id="caudal"
+                                name="caudal"
+                                value={formData.caudal}
                                 onChange={handleInputChange}
                                 className="input-styled"
-                                placeholder="Acciones adicionales"
-                                maxLength={200}
+                                placeholder="Caudal"
+                                maxLength={50}
                             />
-                            <FormFeedback>{errors.accionesAdicionales}</FormFeedback>
+                            <FormFeedback>{errors.caudal}</FormFeedback>
+                        </Col>
+                    </FormGroup>
+                </div>
+                <div style={{ flex: 1, marginRight: '0.5rem', marginLeft: '0.5rem' }}>
+                    <FormGroup row>
+                        <Label for="consumoAgua" sm={4} className="input-label">Consumo de agua(m3)</Label>
+                        <Col sm={8}>
+                            <Input
+                                type="text"
+                                id="consumoAgua"
+                                name="consumoAgua"
+                                value={formData.consumoAgua}
+                                onChange={handleInputChange}
+                                className={errors.consumoAgua ? 'input-styled input-error' : 'input-styled'}
+                                placeholder="Consumo de agua"
+                            />
+                            <FormFeedback>{errors.consumoAgua}</FormFeedback>
                         </Col>
                     </FormGroup>
                 </div>
             </div>
-            <FormGroup row>
-                <Label for="condicionesAmbientales" sm={2} className="input-label">Condiciones Ambientales</Label>
-                <Col sm={10}>
-                    <Input
-                        type="textarea"
-                        id="condicionesAmbientales"
-                        name="condicionesAmbientales"
-                        value={formData.condicionesAmbientales}
-                        onChange={handleInputChange}
-                        className="input-styled"
-                        style={{ height: '75px', resize: "none" }}
-                        placeholder="Descripción de las condiciones ambientales"
-                        maxLength={200}
-                    />
-                    <FormFeedback>{errors.condicionesAmbientales}</FormFeedback>
-                </Col>
-            </FormGroup>
             <FormGroup row>
                 <Label for="observaciones" sm={2} className="input-label">Observaciones</Label>
                 <Col sm={10}>
@@ -512,7 +414,6 @@ const ModificacionManejoFertilizante: React.FC<FertilizanteSeleccionado> = ({
             </FormGroup>
         </div >
     );
-
 };
 
-export default ModificacionManejoFertilizante;
+export default ModificacionRegistroSeguimientoUsoAgua;
