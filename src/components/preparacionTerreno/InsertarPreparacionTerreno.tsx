@@ -41,6 +41,8 @@ const InsertarPreparacionTerreno: React.FC<InsertarPreparacionTerrenoProps> = ({
     const [parcelas, setParcelas] = useState<Option[]>([]);
     const [selectedFinca, setSelectedFinca] = useState<string>('');
     const [selectedParcela, setSelectedParcela] = useState<string>('');
+    const [parcelasFiltradas, setParcelasFiltradas] = useState<Option[]>([]);
+
 
     const handleInputChange = (event: React.ChangeEvent<HTMLInputElement>) => {
         const { name, value } = event.target;
@@ -56,14 +58,18 @@ const InsertarPreparacionTerreno: React.FC<InsertarPreparacionTerrenoProps> = ({
                 const idEmpresaString = localStorage.getItem('empresaUsuario');
                 const identificacionString = localStorage.getItem('identificacionUsuario');
                 if (identificacionString && idEmpresaString) {
-                    const idEmpresa = parseInt(idEmpresaString);
                     const identificacion = identificacionString;
-                    formData.usuarioCreacionModificacion=identificacionString;
+                    
                     const usuariosAsignados = await ObtenerUsuariosAsignadosPorIdentificacion({ identificacion: identificacion });
                     const idFincasUsuario = usuariosAsignados.map((usuario: any) => usuario.idFinca);
+                    const idParcelasUsuario = usuariosAsignados.map((usuario: any) => usuario.idParcela);
+                    
                     const fincasResponse = await ObtenerFincas();
                     const fincasUsuario = fincasResponse.filter((finca: any) => idFincasUsuario.includes(finca.idFinca));
                     setFincas(fincasUsuario);
+                    const parcelasResponse = await ObtenerParcelas();
+                    const parcelasUsuario = parcelasResponse.filter((parcela: any) => idParcelasUsuario.includes(parcela.idParcela));
+                    setParcelas(parcelasUsuario)
                 } else {
                     console.error('La identificación y/o el ID de la empresa no están disponibles en el localStorage.');
                 }
@@ -74,20 +80,16 @@ const InsertarPreparacionTerreno: React.FC<InsertarPreparacionTerrenoProps> = ({
         obtenerDatosUsuario();
     }, []);
 
-    useEffect(() => {
-        const obtenerParcelasDeFinca = async () => {
-            try {
-                const parcelasResponse = await ObtenerParcelas();
-                const parcelasFinca = parcelasResponse.filter((parcela: any) => parcela.idFinca === parseInt(selectedFinca));
-                setParcelas(parcelasFinca);
-            } catch (error) {
-                console.error('Error al obtener las parcelas de la finca:', error);
-            }
-        };
-        if (selectedFinca !== '') {
-            obtenerParcelasDeFinca();
+    const obtenerParcelasDeFinca = async (idFinca: string) => {
+        try {
+            
+            const parcelasFinca = parcelas.filter(parcela => parcela.idFinca === parseInt(idFinca));
+            
+            setParcelasFiltradas(parcelasFinca);
+        } catch (error) {
+            console.error('Error al obtener las parcelas de la finca:', error);
         }
-    }, [selectedFinca]);
+    };
 
     const empresaUsuarioString = localStorage.getItem('empresaUsuario');
     let filteredFincas: Option[] = [];
@@ -105,6 +107,7 @@ const InsertarPreparacionTerreno: React.FC<InsertarPreparacionTerrenoProps> = ({
         const value = e.target.value;
         setSelectedFinca(value);
         setSelectedParcela('');
+        obtenerParcelasDeFinca(value)
     };
 
     const handleParcelaChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
@@ -222,7 +225,7 @@ const InsertarPreparacionTerreno: React.FC<InsertarPreparacionTerrenoProps> = ({
                     <label htmlFor="parcelas">Parcela:</label>
                     <select className="custom-select" id="parcelas" value={selectedParcela} onChange={handleParcelaChange}>
                         <option key="default-parcela" value="">Seleccione...</option>
-                        {filteredParcelas.map((parcela) => (
+                        {parcelasFiltradas.map((parcela) => (
                             <option key={`${parcela.idParcela}-${parcela.nombre || 'undefined'}`} value={parcela.idParcela}>{parcela.nombre || 'Undefined'}</option>
                         ))}
                     </select>

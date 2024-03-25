@@ -14,7 +14,17 @@ import InsertarPreparacionTerreno from "../../../components/preparacionTerreno/I
 import ModificacionPreparacionTerreno from "../../../components/preparacionTerreno/EditarPreparacionTerreno.tsx";
 import { ObtenerUsuariosAsignadosPorIdentificacion } from '../../../servicios/ServicioUsuario.ts';
 import '../../../css/FormSeleccionEmpresa.css'
+import { useSelector } from "react-redux";
+import { AppStore } from "../../../redux/Store.ts";
 
+
+interface Option {
+    identificacion: string;
+    idEmpresa: number;
+    nombre: string;
+    idParcela: number;
+    idFinca: number;
+}
 function AdministrarPreparacionTerreno() {
     const [filtroNombreActividad, setFiltroNombreActividad] = useState('');
     const [datosPreparacionTerrenoOriginales, setDatosPreparacionTerrenoOriginales] = useState<any[]>([]);
@@ -36,6 +46,7 @@ function AdministrarPreparacionTerreno() {
     const [datosPreparacionTerrenoFiltrados, setdatosPreparacionTerrenoFiltrados] = useState<any[]>([]);
     const [selectedFinca, setSelectedFinca] = useState<number | null>(null);
     const [fincas, setFincas] = useState<any[]>([]);
+    const userState = useSelector((store: AppStore) => store.user);
 
     const handleFincaChange = async (e: React.ChangeEvent<HTMLSelectElement>) => {
         const value = parseInt(e.target.value);
@@ -56,15 +67,18 @@ function AdministrarPreparacionTerreno() {
                 const idEmpresaString = localStorage.getItem('empresaUsuario');
                 const identificacionString = localStorage.getItem('identificacionUsuario');
                 if (identificacionString && idEmpresaString) {
-
                     const identificacion = identificacionString;
+                    
                     const usuariosAsignados = await ObtenerUsuariosAsignadosPorIdentificacion({ identificacion: identificacion });
                     const idFincasUsuario = usuariosAsignados.map((usuario: any) => usuario.idFinca);
+                    const idParcelasUsuario = usuariosAsignados.map((usuario: any) => usuario.idParcela);
+                    
                     const fincasResponse = await ObtenerFincas();
                     const fincasUsuario = fincasResponse.filter((finca: any) => idFincasUsuario.includes(finca.idFinca));
-
-
                     setFincas(fincasUsuario);
+                    const parcelasResponse = await ObtenerParcelas();
+                    const parcelasUsuario = parcelasResponse.filter((parcela: any) => idParcelasUsuario.includes(parcela.idParcela));
+                    setParcelas(parcelasUsuario)
                 } else {
                     console.error('La identificación y/o el ID de la empresa no están disponibles en el localStorage.');
                 }
@@ -93,6 +107,9 @@ function AdministrarPreparacionTerreno() {
         obtenerParcelasDeFinca();
     }, [selectedFinca]);
 
+    let filteredFincas: Option[] = [];
+
+    filteredFincas = fincas.filter(finca => finca.idEmpresa === userState.idEmpresa);
 
     const handleChangeFiltro = (e: React.ChangeEvent<HTMLInputElement>) => {
         setFiltroNombreActividad(e.target.value); // Convertir a minúsculas
@@ -260,7 +277,7 @@ function AdministrarPreparacionTerreno() {
                     <div className="filtro-container" style={{ width: '300px' }}>
                         <select value={selectedFinca || ''} onChange={handleFincaChange} className="custom-select">
                             <option value="">Seleccione la finca...</option>
-                            {fincas.map(finca => (
+                            {filteredFincas.map(finca => (
                                 <option key={finca.idFinca} value={finca.idFinca}>{finca.nombre}</option>
                             ))}
                         </select>

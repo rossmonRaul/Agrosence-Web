@@ -110,12 +110,12 @@ const Sidebar = ({ children }: { children: React.ReactNode }) => {
                 },
                 {
                     path: "/manejoreciduos",
-                    name: "Manejo de reciduos",
+                    name: "Manejo de residuos",
                     icon: <img src='/historial.png' style={{ width: '22px' }} />,
                 },
                 {
-                    path: "/terrenoyconservacion",
-                    name: "Terreno y conservacion",
+                    path: "/preparaciondeterrenos",
+                    name: "Preparación de terreno",
                     icon: <img src='/montana.png' style={{ width: '22px' }} />,
                 },
                 {

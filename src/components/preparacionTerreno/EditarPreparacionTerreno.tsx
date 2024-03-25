@@ -106,12 +106,17 @@ const ModificacionPreparacionTerreno: React.FC<PreparacionTerrenoSeleccionado> =
                 const identificacionString = localStorage.getItem('identificacionUsuario');
                 console.log("AAA "+ identificacionString);
                 if (identificacionString && idEmpresaString) {
-                    formData.usuarioCreacionModificacion=identificacionString;
                     const identificacion = identificacionString;
                     const usuariosAsignados = await ObtenerUsuariosAsignadosPorIdentificacion({ identificacion: identificacion });
                     const idFincasUsuario = usuariosAsignados.map((usuario: any) => usuario.idFinca);
+                    const idParcelasUsuario = usuariosAsignados.map((usuario: any) => usuario.idParcela);
+
                     const fincasResponse = await ObtenerFincas();
                     const fincasUsuario = fincasResponse.filter((finca: any) => idFincasUsuario.includes(finca.idFinca));
+                    setFincas(fincasUsuario);
+                    const parcelasResponse = await ObtenerParcelas();
+                    const parcelasUsuario = parcelasResponse.filter((parcela: any) => idParcelasUsuario.includes(parcela.idParcela));
+                    setParcelas(parcelasUsuario)
 
                     setFincas(fincasUsuario);
                 } else {
@@ -124,26 +129,12 @@ const ModificacionPreparacionTerreno: React.FC<PreparacionTerrenoSeleccionado> =
         obtenerFincas();
     }, []);
 
-
-    useEffect(() => {
-        const obtenerParcelasDeFinca = async () => {
-            try {
-                const parcelasResponse = await ObtenerParcelas();
-                const parcelasFinca = parcelasResponse.filter((parcela: any) => parcela.idFinca === parseInt(selectedFinca));
-                setParcelas(parcelasFinca);
-            } catch (error) {
-                console.error('Error al obtener las parcelas de la finca:', error);
-            }
-        };
-        if (selectedFinca !== '') {
-            obtenerParcelasDeFinca();
-        }
-    }, [selectedFinca]);
-
     const filteredParcelas = parcelas.filter(parcela => parcela.idFinca === parseInt(selectedFinca));
 
     const handleFincaChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
         const value = e.target.value;
+        formData.idFinca = value;
+        formData.idParcela = "";
         setSelectedFinca(value);
         setSelectedParcela('');
     };
@@ -161,6 +152,7 @@ const ModificacionPreparacionTerreno: React.FC<PreparacionTerrenoSeleccionado> =
 
     const handleParcelaChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
         const value = e.target.value;
+        formData.idParcela = value
         setSelectedParcela(value);
     }; 
 
