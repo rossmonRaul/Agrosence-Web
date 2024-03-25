@@ -41,6 +41,8 @@ const InsertarManejoFertilizante: React.FC<InsertarManejoFertilizanteProps> = ({
     // Estados para almacenar los datos obtenidos de la API
     const [fincas, setFincas] = useState<Option[]>([]);
     const [parcelas, setParcelas] = useState<Option[]>([]);
+
+    const [parcelasFiltradas, setParcelasFiltradas] = useState<Option[]>([]);
     const [selectedFinca, setSelectedFinca] = useState<string>('');
     const [selectedParcela, setSelectedParcela] = useState<string>('');
 
@@ -58,13 +60,22 @@ const InsertarManejoFertilizante: React.FC<InsertarManejoFertilizanteProps> = ({
                 const idEmpresaString = localStorage.getItem('empresaUsuario');
                 const identificacionString = localStorage.getItem('identificacionUsuario');
                 if (identificacionString && idEmpresaString) {
-                    const idEmpresa = parseInt(idEmpresaString);
                     const identificacion = identificacionString;
+
                     const usuariosAsignados = await ObtenerUsuariosAsignadosPorIdentificacion({ identificacion: identificacion });
                     const idFincasUsuario = usuariosAsignados.map((usuario: any) => usuario.idFinca);
+                    const idParcelasUsuario = usuariosAsignados.map((usuario: any) => usuario.idParcela);
+                    //se obtiene las fincas 
                     const fincasResponse = await ObtenerFincas();
+                    //se filtran las fincas con las fincas del usuario
                     const fincasUsuario = fincasResponse.filter((finca: any) => idFincasUsuario.includes(finca.idFinca));
                     setFincas(fincasUsuario);
+                    //se obtienen las parcelas
+                    const parcelasResponse = await ObtenerParcelas();
+                    //se filtran las parcelas con los idparcelasusuario
+                    const parcelasUsuario = parcelasResponse.filter((parcela: any) => idParcelasUsuario.includes(parcela.idParcela));
+                    setParcelas(parcelasUsuario)
+
                 } else {
                     console.error('La identificación y/o el ID de la empresa no están disponibles en el localStorage.');
                 }
@@ -75,21 +86,17 @@ const InsertarManejoFertilizante: React.FC<InsertarManejoFertilizanteProps> = ({
         obtenerDatosUsuario();
     }, []);
 
-    useEffect(() => {
-        const obtenerParcelasDeFinca = async () => {
-            try {
-                const parcelasResponse = await ObtenerParcelas();
-                const parcelasFinca = parcelasResponse.filter((parcela: any) => parcela.idFinca === parseInt(selectedFinca));
-                setParcelas(parcelasFinca);
-            } catch (error) {
-                console.error('Error al obtener las parcelas de la finca:', error);
-            }
-        };
-        if (selectedFinca !== '') {
-            obtenerParcelasDeFinca();
-        }
-    }, [selectedFinca]);
+    //funcion para poder filtrar las parcelas de acuerdo al idFinca que se selecciona
+    const obtenerParcelasDeFinca = async (idFinca: string) => {
+        try {
 
+            const parcelasFinca = parcelas.filter(parcela => parcela.idFinca === parseInt(idFinca));
+            //se asigna las parcelas de la IdFinca que se selecciona y se pone en parcelasfiltradas
+            setParcelasFiltradas(parcelasFinca);
+        } catch (error) {
+            console.error('Error al obtener las parcelas de la finca:', error);
+        }
+    };
     const empresaUsuarioString = localStorage.getItem('empresaUsuario');
     let filteredFincas: Option[] = [];
 
@@ -100,16 +107,18 @@ const InsertarManejoFertilizante: React.FC<InsertarManejoFertilizanteProps> = ({
         console.error('El valor de empresaUsuario en localStorage es nulo.');
     }
 
-    const filteredParcelas = parcelas.filter(parcela => parcela.idFinca === parseInt(selectedFinca));
-
     const handleFincaChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
         const value = e.target.value;
+        formData.idFinca = value
+        formData.idParcela = ''
         setSelectedFinca(value);
         setSelectedParcela('');
+        obtenerParcelasDeFinca(value)
     };
 
     const handleParcelaChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
         const value = e.target.value;
+        formData.idParcela = value
         setSelectedParcela(value);
     };
 
@@ -199,7 +208,7 @@ const InsertarManejoFertilizante: React.FC<InsertarManejoFertilizanteProps> = ({
         } else {
             newErrors.observaciones = '';
         }
-  
+        
         setErrors(newErrors);
 
         if (Object.values(newErrors).every(error => error === '')) {
@@ -237,12 +246,11 @@ const InsertarManejoFertilizante: React.FC<InsertarManejoFertilizanteProps> = ({
 
     return (
         <div id='general' style={{ display: 'flex', flexDirection: 'column', paddingBottom: '0rem', width: '100%', margin: '0 auto' }}>
-            <h2>Manejo de fertilizantes</h2>
             <div className="form-container-fse" style={{ display: 'flex', flexDirection: 'row', width: '100%' }}>
                 <div style={{ marginRight: '10px', width: '50%' }}>
                     <FormGroup>
                         <label htmlFor="fincas">Finca:</label>
-                        <select className="custom-select" id="fincas" value={selectedFinca} onChange={handleFincaChange}>
+                        <select className="custom-select input-styled" id="fincas" value={selectedFinca} onChange={handleFincaChange}>
                             <option key="default-finca" value="">Seleccione...</option>
                             {filteredFincas.map((finca) => (
                                 <option key={`${finca.idFinca}-${finca.nombre || 'undefined'}`} value={finca.idFinca}>{finca.nombre || 'Undefined'}</option>
@@ -254,9 +262,10 @@ const InsertarManejoFertilizante: React.FC<InsertarManejoFertilizanteProps> = ({
                 <div style={{ marginRight: '0px', width: '50%' }}>
                     <FormGroup>
                         <label htmlFor="parcelas">Parcela:</label>
-                        <select className="custom-select" id="parcelas" value={selectedParcela} onChange={handleParcelaChange}>
+                        <select className="custom-select input-styled" id="parcelas" value={selectedParcela} onChange={handleParcelaChange}>
                             <option key="default-parcela" value="">Seleccione...</option>
-                            {filteredParcelas.map((parcela) => (
+                            {parcelasFiltradas.map((parcela) => (
+
                                 <option key={`${parcela.idParcela}-${parcela.nombre || 'undefined'}`} value={parcela.idParcela}>{parcela.nombre || 'Undefined'}</option>
                             ))}
                         </select>
@@ -417,7 +426,7 @@ const InsertarManejoFertilizante: React.FC<InsertarManejoFertilizanteProps> = ({
         </div >
     );
 
-    
+
 };
 
 export default InsertarManejoFertilizante;
