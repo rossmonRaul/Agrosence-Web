@@ -24,6 +24,8 @@ const MedicionesdeSuelos = lazy(() => import('./pages/private/CalidadSuelo/Calid
 const PreparacionTerreno = lazy(() => import('./pages/private/PreparacionTerreno/PreparacionTerreno'))
 const AdministrarRotacionCultivosEstacion = lazy(() => import('./pages/private/RotacionCultivosEstacion/RotacionCultivosEstacion'))
 const ProduccionCultivos = lazy(() => import('./pages/private/RegistroProductividadCultivo/RegistroProductividadCultivo'))
+const RegistroSeguimientoUsoAgua = lazy(() => import('./pages/private/RegistroSeguimientoUsoAgua/RegistroSeguimientoUsoAgua'))
+
 const ManejoResiduos = lazy(() => import('./pages/private/ManejoResiduos/ManejoResiduos'))
 function App() {
   return (
@@ -73,6 +75,7 @@ function App() {
 
 
               <Route path={PrivateRoutes.PRODUCCIONCULTIVOS} element={<ProduccionCultivos />} />
+              <Route path={PrivateRoutes.REGISTROSEGUIMIENTOUSOAGUA} element={<RegistroSeguimientoUsoAgua />} />
             </Route>
           </RoutesWithNotFound>
         </BrowserRouter>

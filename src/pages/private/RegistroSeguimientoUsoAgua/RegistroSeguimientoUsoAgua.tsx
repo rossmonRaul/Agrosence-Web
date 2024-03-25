@@ -4,19 +4,18 @@ import TableResponsive from "../../../components/table/table.tsx";
 import BordeSuperior from "../../../components/bordesuperior/BordeSuperior.tsx";
 import Modal from "../../../components/modal/Modal.tsx";
 import Topbar from "../../../components/topbar/Topbar.tsx";
-import { CambiarEstadoParcelas, ObtenerParcelas } from "../../../servicios/ServicioParcelas.ts";
-import EditarParcela from "../../../components/parcela/EditarParcela.tsx";
-import CrearParcela from "../../../components/parcela/CrearParcela.tsx";
+import { ObtenerParcelas } from "../../../servicios/ServicioParcelas.ts";
 import Swal from "sweetalert2";
 import { ObtenerFincas } from "../../../servicios/ServicioFincas.ts";
-import { ObtenerManejoFertilizantes, CambiarEstadoManejoFertilizantes } from "../../../servicios/ServicioFertilizantes.ts";
-import InsertarManejoFertilizante from "../../../components/manejoFertilizante/InsertarManejoFertilizante.tsx";
-import ModificacionManejoFertilizante from "../../../components/manejoFertilizante/EditarManejoFertilizante.tsx";
+import { CambiarEstadoRegistroSeguimientoUsoAgua, ObtenerUsoAgua } from "../../../servicios/ServicioUsoAgua.ts";
+
+import InsertarUsoAgua from "../../../components/usoAgua/InsertarUsoAgua.tsx";
+import ModificacionUsoAgua from "../../../components/usoAgua/EditarUsoAgua.tsx";
 import { ObtenerUsuariosAsignadosPorIdentificacion } from '../../../servicios/ServicioUsuario.ts';
 import '../../../css/FormSeleccionEmpresa.css'
 
-function AdministrarManejoFertilizantes() {
-    const [filtroNombreFertilizante, setFiltroNombreFertilizante] = useState('');
+function AdministrarRegistroSeguimientoUsoAgua() {
+    const [filtroActividad, setFiltroActividad] = useState('');
     const [datosFertilizantesOriginales, setDatosFertilizantesOriginales] = useState<any[]>([]);
     const [modalEditar, setModalEditar] = useState(false);
     const [modalInsertar, setModalInsertar] = useState(false);
@@ -24,30 +23,28 @@ function AdministrarManejoFertilizantes() {
     const [selectedDatos, setSelectedDatos] = useState({
         idFinca: '',
         idParcela: '',
-        idManejoFertilizantes: '',
+        idRegistroSeguimientoUsoAgua: '',
         fecha: '',
-        fertilizante: '',
-        aplicacion: '',
-        dosis: '',
-        cultivoTratado: '',
-        condicionesAmbientales: '',
-        accionesAdicionales: '',
-        observaciones: ''
+        actividad: '', 
+        caudal: '',
+        consumoAgua: '',
+        observaciones: '',
+        estado:''
     });
     const [parcelas, setParcelas] = useState<any[]>([]);
     const [parcelasFiltradas, setParcelasFiltradas] = useState<any[]>([]);
-    const [datosFertilizantes, setDatosFertilizantes] = useState<any[]>([]);
-    const [datosFertilizantesFiltrados, setdatosFertilizantesFiltrados] = useState<any[]>([]);
+    const [datosUsoAgua, setDatosUsoAgua] = useState<any[]>([]);
+    const [datosUsoAguaFiltrados, setDatosUsoAguaFiltrados] = useState<any[]>([]);
     const [selectedFinca, setSelectedFinca] = useState<number | null>(null);
     const [fincas, setFincas] = useState<any[]>([]);
 
     const handleFincaChange = async (e: React.ChangeEvent<HTMLSelectElement>) => {
         const value = parseInt(e.target.value);
-        setDatosFertilizantes([])
+        setDatosUsoAgua([])
         setSelectedFinca(value);
         setSelectedParcela(null);
     };
- 
+
     const handleParcelaChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
         const value = e.target.value;
         setSelectedParcela(parseInt(value));
@@ -86,7 +83,6 @@ function AdministrarManejoFertilizantes() {
         obtenerFincas();
     }, []);
 
-
     useEffect(() => {
         const obtenerParcelasDeFinca = async () => {
             try {
@@ -103,83 +99,52 @@ function AdministrarManejoFertilizantes() {
 
 
     const handleChangeFiltro = (e: React.ChangeEvent<HTMLInputElement>) => {
-        setFiltroNombreFertilizante(e.target.value); // Convertir a minúsculas
+        setFiltroActividad(e.target.value); // Convertir a minúsculas
+
     };
 
     
     //este componente refrezca la tabla al momento
     useEffect(() => {
-        filtrarFertilizantes();
-    }, [selectedFinca, parcelas, selectedParcela, filtroNombreFertilizante]);
+        filtrarUsoAgua();
+    }, [selectedFinca, parcelas, selectedParcela, filtroActividad]);
 
     //  useEffect(() => {
     //     obtenerInfo();
     // }, []);
 
    
-    const filtrarFertilizantes = () => {
-        const fertilizantesFiltrados = filtroNombreFertilizante
-            ? datosFertilizantes.filter((fertilizante: any) =>
-                fertilizante.fertilizante.toLowerCase().includes(filtroNombreFertilizante.toLowerCase())
+    const filtrarUsoAgua = () => {
+        const UsoAguaFiltrados = filtroActividad
+            ? datosUsoAgua.filter((usoAgua: any) =>
+            usoAgua.actividad.toLowerCase().includes(filtroActividad.toLowerCase())
             )
-            : datosFertilizantes;
-            setdatosFertilizantesFiltrados(fertilizantesFiltrados);
+            : datosUsoAgua;
+            setDatosUsoAguaFiltrados(UsoAguaFiltrados);
 
-    };
-
-    // hay que hacer el filtro de obtener usuarios asignados por identificacion
-
-    const obtenerParcelas = async () => {
-        try {
-            const idEmpresaUsuario = localStorage.getItem('empresaUsuario');
-            if (idEmpresaUsuario) {
-
-                const fincas = await ObtenerFincas();
-
-                const fincasEmpresaUsuario = fincas.filter((finca: any) => finca.idEmpresa === parseInt(idEmpresaUsuario));
-
-                const parcelasResponse = await ObtenerParcelas();
-
-                const parcelasFincasEmpresaUsuario: any[] = [];
-
-                fincasEmpresaUsuario.forEach((finca: any) => {
-                    const parcelasFinca = parcelasResponse.filter((parcela: any) => parcela.idFinca === finca.idFinca);
-                    parcelasFincasEmpresaUsuario.push(...parcelasFinca);
-                });
-
-                const parcelasConEstado = parcelasFincasEmpresaUsuario.map((parcela: any) => ({
-                    ...parcela,
-                    sEstado: parcela.estado === 1 ? 'Activo' : 'Inactivo'
-
-                }));
-
-                setParcelas(parcelasConEstado);
-            }
-        } catch (error) {
-            console.error('Error al obtener las parcelas:', error);
-        }
     };
 
     const obtenerInfo = async () => {
         try {
-            const datosFertilizante = await ObtenerManejoFertilizantes();
+            const datosUsoAgua = await ObtenerUsoAgua();
 
             // Convertir el estado de 0 o 1 a palabras "Activo" o "Inactivo"
-            const datosFertilizanteConSEstado = datosFertilizante.map((dato: any) => ({
+            const datosUsoAguaConSEstado = datosUsoAgua.map((dato: any) => ({
                 ...dato,
                 sEstado: dato.estado === 1 ? 'Activo' : 'Inactivo'
             }));
-
+   
             // Filtrar los datos para mostrar solo los correspondientes a la finca y parcela seleccionadas
-            const datosFiltrados = datosFertilizanteConSEstado.filter((dato: any) => {
+            const datosFiltrados = datosUsoAguaConSEstado.filter((dato: any) => {
                 //aca se hace el filtro y hasta que elija la parcela funciona
                 return dato.idFinca === selectedFinca && dato.idParcela === selectedParcela;
             });
             // Actualizar el estado con los datos filtrados
-            setDatosFertilizantes(datosFiltrados);
-            setdatosFertilizantesFiltrados(datosFiltrados);
+            setDatosUsoAgua(datosFiltrados);
+            setDatosUsoAguaFiltrados(datosFiltrados);
+
         } catch (error) {
-            console.error('Error al obtener los datos de los fertilizantes:', error);
+            console.error('Error al obtener los datos de registro y seguimiento del agua:', error);
         }
     };
 
@@ -203,7 +168,7 @@ function AdministrarManejoFertilizantes() {
         abrirCerrarModalEditar();
     };
 
-    const toggleStatus = async (parcela: any) => {
+    const toggleStatus = async (usoAgua: any) => {
         Swal.fire({
             title: "Cambiar Estado",
             text: "¿Estás seguro de que deseas actualizar el estado?",
@@ -215,9 +180,9 @@ function AdministrarManejoFertilizantes() {
             if (result.isConfirmed) {
                 try {
                     const datos = {
-                        idManejoFertilizantes: parcela.idManejoFertilizantes
+                        idRegistroSeguimientoUsoAgua: usoAgua.idRegistroSeguimientoUsoAgua
                     };
-                    const resultado = await CambiarEstadoManejoFertilizantes(datos);
+                    const resultado = await CambiarEstadoRegistroSeguimientoUsoAgua(datos);
                     if (parseInt(resultado.indicador) === 1) {
                         Swal.fire({
                             icon: 'success',
@@ -239,24 +204,21 @@ function AdministrarManejoFertilizantes() {
         });
     };
 
-    const handleEditarManejoFertilizante = async () => {
+    const handleEditarUsoAgua = async () => {
         await obtenerInfo();
         abrirCerrarModalEditar();
     };
 
-    const handleAgregarManejoFertilizante = async () => {
+    const handleAgregarUsoAgua = async () => {
         await obtenerInfo();
         abrirCerrarModalInsertar();
     };
 
-    const columns2 = [
+    const columns = [
         { key: 'fecha', header: 'Fecha' },
-        { key: 'fertilizante', header: 'Fertilizante' },
-        { key: 'aplicacion', header: 'Aplicación' },
-        { key: 'dosis', header: 'Dosis' },
-        { key: 'cultivoTratado', header: 'Cultivo Tratado' },
-        { key: 'condicionesAmbientales', header: 'Condiciones Ambientales' },
-        { key: 'accionesAdicionales', header: 'Acciones Adicionales' },
+        { key: 'actividad', header: 'Actividad' },
+        { key: 'caudal', header: 'Caudal(L/s)' },
+        { key: 'consumoAgua', header: 'Consumo de agua(m3)' },
         { key: 'observaciones', header: 'Observaciones' },
         { key: 'sEstado', header: 'Estado' },
         { key: 'acciones', header: 'Acciones', actions: true }
@@ -266,9 +228,9 @@ function AdministrarManejoFertilizantes() {
         <Sidebar>
             <div className="main-container">
                 <Topbar />
-                <BordeSuperior text="Manejo de Fertilizantes" />
+                <BordeSuperior text="Registros y seguimientos del uso del agua" />
                 <div className="content" col-md-12>
-                    <button onClick={() => abrirCerrarModalInsertar()} className="btn-crear">Ingresar registro de fertilizante</button>
+                    <button onClick={() => abrirCerrarModalInsertar()} className="btn-crear">Ingresar registro de seguimiento del uso del agua</button>
                     <div className="filtro-container" style={{ width: '300px' }}>
                         <select value={selectedFinca || ''} onChange={handleFincaChange} className="custom-select">
                             <option value="">Seleccione la finca...</option>
@@ -286,31 +248,31 @@ function AdministrarManejoFertilizantes() {
                         </select>
                     </div>
                     <div className="filtro-container">
-                        <label htmlFor="filtroNombreFertilizante">Filtrar por nombre de fertilizante:</label>
+                        <label htmlFor="filtroActividad">Filtrar por actividad:</label>
                         <input
                             type="text"
-                            id="filtroNombreFertilizante"
-                            value={filtroNombreFertilizante}
+                            id="filtroActividad"
+                            value={filtroActividad}
                             onChange={handleChangeFiltro}
-                            placeholder="Ingrese el nombre del fertilizante"
+                            placeholder="Ingrese la actividad"
                             className="form-control"
                         />
                     </div>
-                    <TableResponsive columns={columns2} data={datosFertilizantesFiltrados} openModal={openModal} btnActionName={"Editar"} toggleStatus={toggleStatus} />
+                    <TableResponsive columns={columns} data={datosUsoAguaFiltrados} openModal={openModal} btnActionName={"Editar"} toggleStatus={toggleStatus} />
                 </div>
             </div>
 
             <Modal
                 isOpen={modalInsertar}
                 toggle={abrirCerrarModalInsertar}
-                title="Manejo Fertilizantes"
+                title="Insertar registro de seguimiento del uso del agua"
                 onCancel={abrirCerrarModalInsertar}
             >
                 <div className='form-container'>
                     <div className='form-group'>
                         {/* este es el componente para crear el manejo fertilizante */}
-                        <InsertarManejoFertilizante
-                            onAdd={handleAgregarManejoFertilizante}
+                        <InsertarUsoAgua
+                            onAdd={handleAgregarUsoAgua}
                         />
                     </div>
                 </div>
@@ -319,24 +281,21 @@ function AdministrarManejoFertilizantes() {
             <Modal
                 isOpen={modalEditar}
                 toggle={abrirCerrarModalEditar}
-                title="Editar Manejo de Fertilizantes"
+                title="Editar registro de seguimiento del uso del agua"
                 onCancel={abrirCerrarModalEditar}
             >
                 <div className='form-container'>
                     <div className='form-group'>
-                        <ModificacionManejoFertilizante
+                        <ModificacionUsoAgua
                             idFinca={parseInt(selectedDatos.idFinca)}
                             idParcela={parseInt(selectedDatos.idParcela)}
-                            idManejoFertilizantes={parseInt(selectedDatos.idManejoFertilizantes)}
-                            fechaCreacion={selectedDatos.fecha.toString()}
-                            fertilizante={selectedDatos.fertilizante}
-                            aplicacion={selectedDatos.aplicacion}
-                            dosis={parseInt(selectedDatos.dosis)}
-                            cultivoTratado={selectedDatos.cultivoTratado}
-                            condicionesAmbientales={selectedDatos.condicionesAmbientales}
-                            accionesAdicionales={selectedDatos.accionesAdicionales}
+                            idRegistroSeguimientoUsoAgua={parseInt(selectedDatos.idRegistroSeguimientoUsoAgua)}
+                            fecha={selectedDatos.fecha.toString()}
+                            actividad={selectedDatos.actividad}
+                            caudal={selectedDatos.caudal}
+                            consumoAgua={parseInt(selectedDatos.consumoAgua)}
                             observaciones={selectedDatos.observaciones}
-                            onEdit={handleEditarManejoFertilizante}
+                            onEdit={handleEditarUsoAgua}
                         />
                     </div>
                 </div>
@@ -345,4 +304,4 @@ function AdministrarManejoFertilizantes() {
     );
 }
 
-export default AdministrarManejoFertilizantes;
+export default AdministrarRegistroSeguimientoUsoAgua;

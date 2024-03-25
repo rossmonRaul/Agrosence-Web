@@ -126,6 +126,34 @@ const Sidebar = ({ children }: { children: React.ReactNode }) => {
             ]
         },
         {
+            path: "/menuhidrico",
+            name: "Menú Hidrico",
+            icon: <img src='/water-filter.png' style={{ width: '22px' }} />, // Puedes usar cualquier icono que desees aquí
+            roles: [3], // Especifica los roles que pueden ver esta opción
+            children: [
+                {
+                    path: "/registroseguimientousoagua",
+                    name: "Rotacion",
+                    icon: <img src='/water.png' style={{ width: '22px' }} />,
+                },
+                {
+                    path: "/opcion2",
+                    name: "opcion2",
+                    icon: <img src='/historial.png' style={{ width: '22px' }} />,
+                },
+                {
+                    path: "/opcion3",
+                    name: "opcion3",
+                    icon: <img src='/montana.png' style={{ width: '22px' }} />,
+                },
+                {
+                    path: "/opcion4",
+                    name: "opcion4",
+                    icon: <img src='/productividad.png' style={{ width: '22px' }} />,
+                }
+            ]
+        },
+        {
             path: "#", // Utilizar "#" como un enlace que no lleva a ninguna parte para los multi-seleccion
             name: "Pages",
             icon: <i className="fas fa-fw fa-folder"></i>,

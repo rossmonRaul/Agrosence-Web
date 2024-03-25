@@ -213,13 +213,13 @@ function CalidadSuelo() {
                 <div className="content">
                     <button onClick={() => abrirCerrarModalCrearMedicion()} className="btn-crear">Crear Medición</button>
                     <div className="filtro-container">
-                        <label htmlFor="filtroIdentificacion">Filtrar:</label>
+                        <label htmlFor="filtroFincaParcelaUsuario">Filtrar:</label>
                         <input
                             type="text"
-                            id="filtroIdentificacion"
+                            id="filtroFincaParcelaUsuario"
                             value={filtroInput}
                             onChange={handleChangeFiltro}
-                            placeholder="Ingrese la identificación"
+                            placeholder="Ingrese la finca, parcela o el usuario"
                             className="form-control"
                         />
                     </div>
