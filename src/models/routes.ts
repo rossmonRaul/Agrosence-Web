@@ -14,7 +14,7 @@ export const PrivateRoutes = {
     ADMINISTRAREMPRESAS: 'administrarempresas',
     MATENIMIENTOUSUARIOSASIGNADOS: 'administrarusuariosasignados',
     ADMINISTRARFINCAS: 'administrarfincas',
-    ADMINISTRARPARCELAS: 'administrarparcelas',
+    ADMINISTRARPARCELAS: 'administrarparcelas', 
     MEDICIONESDESUELOS: 'medicionesdesuelos',
     MANEJODEFERTILIZANTES: 'manejodefertilizantes',
     REGISTROSEGUIMIENTOUSOAGUA: 'registroseguimientousoagua',

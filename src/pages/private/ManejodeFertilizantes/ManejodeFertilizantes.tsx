@@ -47,7 +47,7 @@ function AdministrarManejoFertilizantes() {
         setSelectedFinca(value);
         setSelectedParcela(null);
     };
-
+ 
     const handleParcelaChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
         const value = e.target.value;
         setSelectedParcela(parseInt(value));
