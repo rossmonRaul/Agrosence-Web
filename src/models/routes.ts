@@ -15,8 +15,8 @@ export const PrivateRoutes = {
     MATENIMIENTOUSUARIOSASIGNADOS: 'administrarusuariosasignados',
     ADMINISTRARFINCAS: 'administrarfincas',
     ADMINISTRARPARCELAS: 'administrarparcelas',
-    MEDICIONESDESUELOS:'medicionesdesuelos',
+    MEDICIONESDESUELOS: 'medicionesdesuelos',
     MANEJODEFERTILIZANTES: 'manejodefertilizantes',
-    PREPARACIONTERRENOS: 'preparaciondeterrenos'
+    PREPARACIONTERRENOS: 'preparaciondeterrenos',
+    ROTACIONESCULTIVOSESTACION: 'rotacionescultivosestacion',
 };
-  
