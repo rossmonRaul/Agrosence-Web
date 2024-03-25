@@ -144,7 +144,6 @@ const ModificacionRegistroSeguimientoUsoAgua: React.FC<RegistroSeguimientoUsoAgu
         setSelectedParcela('');
     };
 
-
     const empresaUsuarioString = localStorage.getItem('empresaUsuario');
     let filteredFincas: Option[] = [];
 
