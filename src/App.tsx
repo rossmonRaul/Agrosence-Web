@@ -23,6 +23,7 @@ const ManejodeFertilizantes = lazy(() => import('./pages/private/ManejodeFertili
 const MedicionesdeSuelos = lazy(() => import('./pages/private/CalidadSuelo/CalidadSuelo'))
 const PreparacionTerreno = lazy(() => import('./pages/private/PreparacionTerreno/PreparacionTerreno'))
 const AdministrarRotacionCultivosEstacion = lazy(() => import('./pages/private/RotacionCultivosEstacion/RotacionCultivosEstacion'))
+const ProduccionCultivos = lazy(() => import('./pages/private/RegistroProductividadCultivo/RegistroProductividadCultivo'))
 function App() {
   return (
     // Suspense para manejar la carga de componentes lazy
@@ -70,6 +71,7 @@ function App() {
 
 
 
+              <Route path={PrivateRoutes.PRODUCCIONCULTIVOS} element={<ProduccionCultivos />} />
             </Route>
           </RoutesWithNotFound>
         </BrowserRouter>
