@@ -1,23 +1,23 @@
 import { ProcesarDatosApi } from "./ApiFetch";
 const controlador = "Cultivos";
 
-export const ObtenerCalidadCultivos = async () => {
-    const url = `http://localhost:5271/api/v1.0/${controlador}/ObtenerCalidadCultivos`;
+export const ObtenerProductividadCultivos = async () => {
+    const url = `http://localhost:5271/api/v1.0/${controlador}/ObtenerProductividadCultivo`;
     return await ProcesarDatosApi('GET', url, '');
 }
 
-export const EditarCalidadCultivo = async (data: any) => {
-    const url = `http://localhost:5271/api/v1.0/${controlador}/EditarCalidadCultivo`;
+export const EditarProductividadCultivo = async (data: any) => {
+    const url = `http://localhost:5271/api/v1.0/${controlador}/ActualizarProductividadCultivo`;
     return await ProcesarDatosApi('PUT', url, data);
 }
   
-export const AgregarCalidadCultivo = async (data: any) => {
-    const url = `http://localhost:5271/api/v1.0/${controlador}/AgregarCalidadCultivo`;
+export const AgregarProductividadCultivo = async (data: any) => {
+    const url = `http://localhost:5271/api/v1.0/${controlador}/CrearProductividadCultivo`;
     return await ProcesarDatosApi('POST', url, data);
 }
  
-export const CambiarEstadoCalidadCultivo = async (data: any) => {
-    const url = `http://localhost:5271/api/v1.0/${controlador}/CambiarEstadoCalidadCultivo`;
+export const CambiarEstadoProductividadCultivo = async (data: any) => {
+    const url = `http://localhost:5271/api/v1.0/${controlador}/CambiarEstadoProductividadCultivo`;
     return await ProcesarDatosApi('PUT', url, data);
 }
 

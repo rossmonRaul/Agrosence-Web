@@ -69,64 +69,59 @@ const Sidebar = ({ children }: { children: React.ReactNode }) => {
         {
             path: "/administrarfincas",
             name: "Fincas",
-            icon: <img src='/field.png'style={{width: '22px'}}/>,
+            icon: <img src='/field.png' style={{ width: '22px' }} />,
             roles: [2]
         },
 
         {
             path: "/administrarparcelas",
             name: "Parcelas",
-            icon: <img src='/tractor.png'style={{width: '30px'}}/>,
+            icon: <img src='/tractor.png' style={{ width: '30px' }} />,
             roles: [2]
         },
         {
             path: "/suelos",
             name: "Suelos",
-            icon: <img src='/suelos.png'style={{width: '22px'}}/>, // Puedes usar cualquier icono que desees aquí
+            icon: <img src='/suelos.png' style={{ width: '22px' }} />, // Puedes usar cualquier icono que desees aquí
             roles: [3], // Especifica los roles que pueden ver esta opción
             children: [
                 {
                     path: "/manejodefertilizantes",
                     name: "Manejo de Fertilizantes",
-                    icon: <img src='/fertilizer.png'style={{width: '30px'}}/>,
+                    icon: <img src='/fertilizer.png' style={{ width: '30px' }} />,
                 },
                 {
                     path: "/medicionesdesuelos",
                     name: "Mediciones de Suelos",
-                    icon: <img src='/calidadsuelo.png'style={{width: '30px'}}/>,
+                    icon: <img src='/calidadsuelo.png' style={{ width: '30px' }} />,
                 }
             ]
         },
-                {
-            path: "/manejodecultivos",
-            name: "Menú desplegable 2",
-            icon: <IoBusiness/>, // Puedes usar cualquier icono que desees aquí
+        {
+            path: "/cultivos",
+            name: "Cultivos",
+            icon: <img src='/cultivos.png' style={{ width: '22px' }} />, // Puedes usar cualquier icono que desees aquí
             roles: [3], // Especifica los roles que pueden ver esta opción
             children: [
                 {
-                    path: "/manejodefertilizantes",
-                    name: "Opción desplegable 1",
-                    icon: <IoBusiness/>,
+                    path: "/rotacioncultivos",
+                    name: "Rotacion",
+                    icon: <img src='/rotacionCultivos.png' style={{ width: '22px' }} />,
                 },
                 {
-                    path: "/manejodefertilizantes",
-                    name: "Opción desplegable 2",
-                    icon: <IoBusiness/>,
+                    path: "/manejoreciduos",
+                    name: "Manejo de reciduos",
+                    icon: <img src='/historial.png' style={{ width: '22px' }} />,
                 },
                 {
-                    path: "/manejodefertilizantes",
-                    name: "Opción desplegable 3",
-                    icon: <IoBusiness/>,
+                    path: "/terrenoyconservacion",
+                    name: "Terreno y conservacion",
+                    icon: <img src='/montana.png' style={{ width: '22px' }} />,
                 },
                 {
-                    path: "/medicionesdesuelos",
-                    name: "Opción desplegable 4",
-                    icon: <IoBusiness/>,
-                },
-                {
-                    path: "/preparaciondeterrenos",
-                    name: "Opción desplegable 5",
-                    icon: <IoBusiness/>,
+                    path: "/productividadcultivos",
+                    name: "Productividad",
+                    icon: <img src='/productividad.png' style={{ width: '22px' }} />,
                 }
             ]
         },

@@ -6,7 +6,8 @@ import { ObtenerParcelas } from '../../servicios/ServicioParcelas.ts';
 import { ObtenerUsuariosAsignadosPorIdentificacion } from '../../servicios/ServicioUsuario.ts';
 import { useSelector } from 'react-redux';
 import { AppStore } from '../../redux/Store.ts';
-import { AgregarCalidadCultivo } from '../../servicios/ServicioCultivo.ts';
+import { AgregarProductividadCultivo } from '../../servicios/ServicioCultivo.ts';
+
 
 interface InsertarManejoFertilizanteProps {
     onAdd: () => void;
@@ -20,43 +21,48 @@ interface Option {
     idFinca: number;
 }
 
+interface Temporada {
+    nombre: string;
+}
+
 const InsertarCalidadCultivo: React.FC<InsertarManejoFertilizanteProps> = ({ onAdd }) => {
     const [formData, setFormData] = useState<any>({
         idFinca: '',
         idParcela: '',
-        idManejoCalidadCultivo: '',
-        fechaCreacion: '',
         cultivo: '',
-        hora: '',
-        lote: '',
-        pesoTotal: '',
-        pesoPromedio: '',
-        calidad: '',
-        observaciones: ''
+        temporada: '',
+        area: '',
+        produccion: '',
+        productividad: ''
     });
 
     // Estado para almacenar los errores de validación del formulario
     const [errors, setErrors] = useState<Record<string, string>>({
         idFinca: '',
         idParcela: '',
-        idManejoCalidadCultivo: '',
-        fechaCreacion: '',
         cultivo: '',
-        hora: '',
-        lote: '',
-        pesoTotal: '',
-        pesoPromedio: '',
-        calidad: '',
-        observaciones: ''
+        temporada: '',
+        area: '',
+        produccion: '',
+        productividad: ''
     });
 
 
     // Estados para almacenar los datos obtenidos de la API
     const [fincas, setFincas] = useState<Option[]>([]);
     const [parcelas, setParcelas] = useState<Option[]>([]);
+    const [temporadas, setTemporadas] = useState<Temporada[]>([]);
+    // Se agregan las temporadas deseadas al cargar el componente
+    useEffect(() => {
+        setTemporadas([
+            { nombre: 'Lluviosa' },
+            { nombre: 'Seca' }
+        ]);
+    }, []);
     const [selectedFinca, setSelectedFinca] = useState<string>('');
     const [selectedParcela, setSelectedParcela] = useState<string>('');
     const userState = useSelector((store: AppStore) => store.user);
+    const [selectedTemporada, setSelectedTemporada] = useState<string>('');
     const handleInputChange = (event: React.ChangeEvent<HTMLInputElement>) => {
         const { name, value } = event.target;
         setFormData((prevState: any) => ({
@@ -65,18 +71,26 @@ const InsertarCalidadCultivo: React.FC<InsertarManejoFertilizanteProps> = ({ onA
         }));
     };
 
+    //Se obtienen las fincas y parcelas del usuario al cargar el componente
     useEffect(() => {
         const obtenerDatosUsuario = async () => {
             try {
-                const idEmpresaString = userState.idEmpresa.toString();
-                const identificacionString = userState.identificacion;
+                const idEmpresaString = localStorage.getItem('empresaUsuario');
+                const identificacionString = localStorage.getItem('identificacionUsuario');
                 if (identificacionString && idEmpresaString) {
                     const identificacion = identificacionString;
+                    
                     const usuariosAsignados = await ObtenerUsuariosAsignadosPorIdentificacion({ identificacion: identificacion });
                     const idFincasUsuario = usuariosAsignados.map((usuario: any) => usuario.idFinca);
+                    const idParcelasUsuario = usuariosAsignados.map((usuario: any) => usuario.idParcela);
+                    
                     const fincasResponse = await ObtenerFincas();
                     const fincasUsuario = fincasResponse.filter((finca: any) => idFincasUsuario.includes(finca.idFinca));
                     setFincas(fincasUsuario);
+                    const parcelasResponse = await ObtenerParcelas();
+                    const parcelasUsuario = parcelasResponse.filter((parcela: any) => idParcelasUsuario.includes(parcela.idParcela));
+                    setParcelas(parcelasUsuario)
+                    
                 } else {
                     console.error('La identificación y/o el ID de la empresa no están disponibles en el localStorage.');
                 }
@@ -87,39 +101,46 @@ const InsertarCalidadCultivo: React.FC<InsertarManejoFertilizanteProps> = ({ onA
         obtenerDatosUsuario();
     }, []);
 
-    useEffect(() => {
-        const obtenerParcelasDeFinca = async () => {
-            try {
-                const parcelasResponse = await ObtenerParcelas();
-                const parcelasFinca = parcelasResponse.filter((parcela: any) => parcela.idFinca === parseInt(selectedFinca));
-                setParcelas(parcelasFinca);
-            } catch (error) {
-                console.error('Error al obtener las parcelas de la finca:', error);
-            }
-        };
-        if (selectedFinca !== '') {
-            obtenerParcelasDeFinca();
+    const obtenerParcelasDeFinca = async (idFinca: string) => {
+        try {
+            
+            const parcelasFinca = parcelas.filter(parcela => parcela.idFinca === parseInt(idFinca));
+            
+            setParcelas(parcelasFinca);
+        } catch (error) {
+            console.error('Error al obtener las parcelas de la finca:', error);
         }
-    }, [selectedFinca]);
+    };
 
     let filteredFincas: Option[] = [];
 
     filteredFincas = fincas.filter(finca => finca.idEmpresa === userState.idEmpresa);
 
 
+    //se filtran las parcelas segun la finca que selecciona el usuario
     const filteredParcelas = parcelas.filter(parcela => parcela.idFinca === parseInt(selectedFinca));
 
+
+    //eventos que manejan los cambios de los select de finca, parcela y temporada
     const handleFincaChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
         const value = e.target.value;
+        formData.idFinca = value
+        formData.idParcela = ''
         setSelectedFinca(value);
         setSelectedParcela('');
+        obtenerParcelasDeFinca(value)
     };
 
     const handleParcelaChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
         const value = e.target.value;
+        formData.idParcela = value;
         setSelectedParcela(value);
     };
 
+    const handleTemporadaChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
+        const value = e.target.value;
+        setSelectedTemporada(value);
+    };
     // Función para manejar el envío del formulario con validación
     const handleSubmitConValidacion = () => {
         // Validar campos antes de avanzar al siguiente paso
@@ -139,19 +160,14 @@ const InsertarCalidadCultivo: React.FC<InsertarManejoFertilizanteProps> = ({ onA
             newErrors.parcela = '';
         }
 
-        if (!formData.fechaCreacion.trim()) {
-            newErrors.fechaCreacion = 'La fecha es requerida';
+        // Validar selección de temporada
+        if (!selectedTemporada) {
+            newErrors.temporada = 'Debe seleccionar una temporada';
         } else {
-            // Validar que la fecha esté en el rango desde el 2015 hasta la fecha actual
-            const minDate = new Date('2015-01-01');
-            const selectedDate = new Date(formData.fechaCreacion);
-            if (selectedDate < minDate || selectedDate > new Date()) {
-                newErrors.fechaCreacion = 'La fecha debe estar entre 2015 y la fecha actual';
-            } else {
-                newErrors.fechaCreacion = '';
-            }
+            newErrors.temporada = '';
         }
 
+        // validar que se ingrese un nombre de cultivo
         if (!formData.cultivo.trim()) {
             newErrors.cultivo = 'El cultivo es requerido';
         } else if (formData.cultivo.length > 50) {
@@ -160,57 +176,25 @@ const InsertarCalidadCultivo: React.FC<InsertarManejoFertilizanteProps> = ({ onA
             newErrors.cultivo = '';
         }
 
-        if (!formData.hora.trim()) {
-            newErrors.hora = 'La hora es requerida';
-        } else if (!/^([01]?[0-9]|2[0-3]):[0-5][0-9]$/.test(formData.hora.trim())) {
-            newErrors.hora = 'El formato de la hora debe ser ##:##';
+        // validar que se ingrese el area
+        if (!formData.area) {
+            newErrors.area = 'El área es requerida';
         } else {
-            newErrors.hora = '';
+            newErrors.area = '';
         }
 
-        if (!formData.lote) {
-            newErrors.lote = 'El número de lote es requerido';
-        } else if (!/^\d+$/.test(formData.dosis)) {
-            newErrors.lote = 'El número de lote debe de ser un número';
+        // validar que se ingrese la produccion
+        if (!formData.produccion) {
+            newErrors.produccion = 'La produccion es requerida';
         } else {
-            newErrors.lote = '';
+            newErrors.produccion = '';
         }
 
-        if (!formData.pesoTotal) {
-            newErrors.pesoTotal = 'El  peso es requerido';
-        } else if (!/^\d+$/.test(formData.dosis)) {
-            newErrors.pesoTotal = 'El peso debe de ser un número';
+        // validar que se ingrese la productividad
+        if (!formData.productividad) {
+            newErrors.productividad = 'La productividad es requerida';
         } else {
-            newErrors.pesoTotal = '';
-        }
-
-        if (!formData.pesoPromedio) {
-            newErrors.pesoPromedio = 'El  peso promedio es requerido';
-        } else if (!/^\d+$/.test(formData.dosis)) {
-            newErrors.pesoPromedio = 'El peso promedio debe de ser un número';
-        } else {
-            newErrors.pesoPromedio = '';
-        }
-
-        if (!formData.calidad) {
-            newErrors.calidad = 'La calidad es requerida';
-        } else if (!/^\d+$/.test(formData.calidad)) {
-            newErrors.calidad = 'La calidad debe ser un número';
-        } else {
-            const calidadNumber = parseInt(formData.calidad);
-            if (calidadNumber < 0 || calidadNumber > 5) {
-                newErrors.calidad = 'La calidad debe ser un número entre 0 y 5';
-            } else {
-                newErrors.calidad = '';
-            }
-        }
-
-        if (!formData.observaciones.trim()) {
-            newErrors.observaciones = 'Las observaciones son requeridas';
-        } else if (formData.observaciones.length > 200) {
-            newErrors.observaciones = 'Las observaciones no pueden tener más de 200 caracteres';
-        } else {
-            newErrors.observaciones = '';
+            newErrors.productividad = '';
         }
 
         // Actualizar los errores
@@ -225,31 +209,28 @@ const InsertarCalidadCultivo: React.FC<InsertarManejoFertilizanteProps> = ({ onA
     // Función para manejar el envío del formulario
     const handleSubmit = async () => {
         const datos = {
-            idFinca: selectedFinca,
-            idParcela: selectedParcela,
-            idManejoCalidadCultivo: formData.idManejoCalidadCultivo,
-            fechaCreacion: formData.fechaCreacion,
-            cultivo: formData.cultivo,
-            hora: formData.hora,
-            lote: formData.lote,
-            pesoTotal: formData.pesoTotal,
-            pesoPromedio: formData.pesoPromedio,
-            calidad: formData.calidad,
-            observaciones: formData.observaciones
+            IdFinca: selectedFinca,
+            IdParcela: selectedParcela,
+            Cultivo: formData.cultivo,
+            Temporada: selectedTemporada,
+            Area: formData.area,
+            Produccion: formData.produccion,
+            Productividad: formData.productividad,
+            Usuario: userState.identificacion
         };
 
         try {
-            const resultado = await AgregarCalidadCultivo(datos);
+            const resultado = await AgregarProductividadCultivo(datos);
             if (resultado.indicador === 1) {
                 Swal.fire({
                     icon: 'success',
-                    title: '¡Registro Actualizado! ',
-                    text: 'Registro actualizado con éxito.',
+                    title: '¡Registro Agregado! ',
+                    text: 'Registro agregado con éxito.',
                 });
             } else {
                 Swal.fire({
                     icon: 'error',
-                    title: 'Error al actualizar el registro.',
+                    title: 'Error al agregar el registro.',
                     text: resultado.mensaje,
                 });
             };
@@ -264,10 +245,21 @@ const InsertarCalidadCultivo: React.FC<InsertarManejoFertilizanteProps> = ({ onA
         }
     };
 
+    const handleInputBlur = (fieldName: string) => {
+        // Eliminar el mensaje de error para el campo cuando el identificacion comienza a escribir en él
+        if (errors[fieldName]) {
+            setErrors((prevErrors: any) => ({
+                ...prevErrors,
+                [fieldName]: ''
+            }));
+        }
+    };
+
     return (
         <div id='general' style={{ display: 'flex', flexDirection: 'column', paddingBottom: '0rem', width: '100%', margin: '0 auto' }}>
-            <div className="form-container-fse" style={{ display: 'flex', flexDirection: 'column', width: '50%' }}>
-                <h2>Calidad de Cultivos</h2>
+            <h2>Productividad de Cultivos</h2>
+            <div className="form-container-fse" style={{ display: 'flex', flexDirection: 'column', width: '60%', marginLeft: '0.5rem'}}>
+                
                 <FormGroup>
                     <label htmlFor="fincas">Finca:</label>
                     <select className="custom-select" id="fincas" value={selectedFinca} onChange={handleFincaChange}>
@@ -289,26 +281,20 @@ const InsertarCalidadCultivo: React.FC<InsertarManejoFertilizanteProps> = ({ onA
                     </select>
                     {errors.parcela && <FormFeedback>{errors.parcela}</FormFeedback>}
                 </FormGroup>
+
+                <FormGroup>
+                    <label htmlFor="temporadas">Temporada:</label>
+                    <select className="custom-select" id="temporadas" value={selectedTemporada} onChange={handleTemporadaChange}>
+                        <option key="default-temporada" value="">Seleccione...</option>
+                        {temporadas.map((temporada) => (
+                            <option key={`${temporada.nombre}}-${temporada.nombre || 'undefined'}`} value={temporada.nombre}>{temporada.nombre || 'Undefined'}</option>
+                        ))}
+                    </select>
+                    {errors.temporada && <FormFeedback>{errors.temporada}</FormFeedback>}
+                </FormGroup>
             </div>
 
             <div style={{ display: 'flex', flexDirection: 'row', marginBottom: '0rem' }}>
-                <div style={{ flex: 1, marginRight: '0.5rem', marginLeft: '0.5rem' }}>
-                    <FormGroup row>
-                        <Label for="fechaCreacion" sm={4} className="input-label">Fecha</Label>
-                        <Col sm={8}>
-                            <Input
-                                type="date"
-                                id="fechaCreacion"
-                                name="fechaCreacion"
-                                value={formData.fechaCreacion}
-                                onChange={handleInputChange}
-                                className={errors.fechaCreacion ? 'input-styled input-error' : 'input-styled'}
-                                placeholder="Selecciona una fecha"
-                            />
-                            <FormFeedback>{errors.fechaCreacion}</FormFeedback>
-                        </Col>
-                    </FormGroup>
-                </div>
 
                 <div style={{ flex: 1, marginRight: '0.5rem', marginLeft: '0.5rem' }}>
                     <FormGroup row>
@@ -321,6 +307,7 @@ const InsertarCalidadCultivo: React.FC<InsertarManejoFertilizanteProps> = ({ onA
                                 value={formData.cultivo}
                                 onChange={handleInputChange}
                                 className={errors.cultivo ? 'input-styled input-error' : 'input-styled'}
+                                onBlur={() => handleInputBlur('cultivo')}
                                 placeholder="Nombre del Cultivo"
                                 maxLength={50}
                             />
@@ -331,19 +318,19 @@ const InsertarCalidadCultivo: React.FC<InsertarManejoFertilizanteProps> = ({ onA
 
                 <div style={{ flex: 1, marginRight: '0.5rem', marginLeft: '0.5rem' }}>
                     <FormGroup row>
-                        <Label for="hora" sm={4} className="input-label">Hora:</Label>
+                        <Label for="area" sm={4} className="input-label">Área (ha):</Label>
                         <Col sm={8}>
                             <Input
-                                type="text"
-                                id="hora"
-                                name="hora"
-                                value={formData.hora}
+                                type="number"
+                                id="area"
+                                name="area"
+                                value={formData.area}
                                 onChange={handleInputChange}
-                                className="input-styled"
-                                placeholder="08:00"
-                                maxLength={5}
+                                onBlur={() => handleInputBlur('area')}
+                                className={errors.area ? 'input-styled input-error' : 'input-styled'}
+                                placeholder="Número de lote"
                             />
-                            <FormFeedback>{errors.hora}</FormFeedback>
+                            <FormFeedback>{errors.area}</FormFeedback>
                         </Col>
                     </FormGroup>
                 </div>
@@ -352,18 +339,19 @@ const InsertarCalidadCultivo: React.FC<InsertarManejoFertilizanteProps> = ({ onA
             <div style={{ display: 'flex', flexDirection: 'row', marginBottom: '0rem' }}>
                 <div style={{ flex: 1, marginRight: '0.5rem', marginLeft: '0.5rem' }}>
                     <FormGroup row>
-                        <Label for="lote" sm={4} className="input-label">Lote:</Label>
+                        <Label for="produccion" sm={4} className="input-label">Produccion (ton):</Label>
                         <Col sm={8}>
                             <Input
                                 type="number"
-                                id="dosis"
-                                name="dosis"
-                                value={formData.lote}
+                                id="produccion"
+                                name="produccion"
+                                value={formData.produccion}
                                 onChange={handleInputChange}
-                                className={errors.lote ? 'input-styled input-error' : 'input-styled'}
-                                placeholder="Número de lote"
+                                onBlur={() => handleInputBlur('produccion')}
+                                className={errors.produccion ? 'input-styled input-error' : 'input-styled'}
+                                placeholder="Produccion"
                             />
-                            <FormFeedback>{errors.lote}</FormFeedback>
+                            <FormFeedback>{errors.produccion}</FormFeedback>
                         </Col>
                     </FormGroup>
                 </div>
@@ -371,79 +359,25 @@ const InsertarCalidadCultivo: React.FC<InsertarManejoFertilizanteProps> = ({ onA
 
                 <div style={{ flex: 1, marginRight: '0.5rem', marginLeft: '0.5rem' }}>
                     <FormGroup row>
-                        <Label for="pesoTotal" sm={4} className="input-label">Peso Total:</Label>
+                        <Label for="productividad" sm={4} className="input-label">Productividad:</Label>
                         <Col sm={8}>
                             <Input
                                 type="number"
-                                id="pesoTotal"
-                                name="pesoTotal"
-                                value={formData.pesoTotal}
+                                id="productividad"
+                                name="productividad"
+                                value={formData.productividad}
                                 onChange={handleInputChange}
-                                className={errors.pesoTotal ? 'input-styled input-error' : 'input-styled'}
+                                onBlur={() => handleInputBlur('productividad')}
+                                className={errors.productividad ? 'input-styled input-error' : 'input-styled'}
                                 placeholder="Peso Total"
                             />
-                            <FormFeedback>{errors.pesoTotal}</FormFeedback>
-                        </Col>
-                    </FormGroup>
-                </div>
-
-
-                <div style={{ flex: 1, marginRight: '0.5rem', marginLeft: '0.5rem' }}>
-                    <FormGroup row>
-                        <Label for="pesoPromedio" sm={4} className="input-label">Peso Promedio:</Label>
-                        <Col sm={8}>
-                            <Input
-                                type="number"
-                                id="pesoPromedio"
-                                name="pesoPromedio"
-                                value={formData.pesoPromedio}
-                                onChange={handleInputChange}
-                                className={errors.pesoPromedio ? 'input-styled input-error' : 'input-styled'}
-                                placeholder="Peso Promedio"
-                            />
-                            <FormFeedback>{errors.pesoPromedio}</FormFeedback>
-                        </Col>
-                    </FormGroup>
-                </div>
-
-                <div style={{ flex: 1, marginRight: '0.5rem', marginLeft: '0.5rem' }}>
-                    <FormGroup row>
-                        <Label for="calidad" sm={4} className="input-label">Calidad:</Label>
-                        <Col sm={8}>
-                            <Input
-                                type="number"
-                                id="calidad"
-                                name="calidad"
-                                value={formData.calidad}
-                                onChange={handleInputChange}
-                                className={errors.calidad ? 'input-styled input-error' : 'input-styled'}
-                                placeholder="0 al 5"
-                            />
-                            <FormFeedback>{errors.calidad}</FormFeedback>
+                            <FormFeedback>{errors.productividad}</FormFeedback>
                         </Col>
                     </FormGroup>
                 </div>
 
             </div>
 
-            <FormGroup row>
-                <Label for="observaciones" sm={2} className="input-label">Observaciones</Label>
-                <Col sm={10}>
-                    <Input
-                        type="textarea"
-                        id="observaciones"
-                        name="observaciones"
-                        value={formData.observaciones}
-                        onChange={handleInputChange}
-                        className="input-styled"
-                        style={{ height: '75px', resize: "none" }}
-                        placeholder="Observaciones"
-                        maxLength={200}
-
-                    />
-                    <FormFeedback>{errors.observaciones}</FormFeedback>
-                </Col>
-            </FormGroup>
             <FormGroup row>
                 <Col sm={{ size: 10, offset: 2 }}>
                     {/* Agregar aquí el botón de cancelar proporcionado por el modal */}

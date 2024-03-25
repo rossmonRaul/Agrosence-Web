@@ -17,6 +17,7 @@ export const PrivateRoutes = {
     ADMINISTRARPARCELAS: 'administrarparcelas',
     MEDICIONESDESUELOS:'medicionesdesuelos',
     MANEJODEFERTILIZANTES: 'manejodefertilizantes',
-    PREPARACIONTERRENOS: 'preparaciondeterrenos'
+    PREPARACIONTERRENOS: 'preparaciondeterrenos',
+    PRODUCCIONCULTIVOS: 'productividadcultivos'
 };
   
