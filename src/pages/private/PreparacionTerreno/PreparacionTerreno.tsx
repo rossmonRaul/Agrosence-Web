@@ -93,12 +93,9 @@ function AdministrarPreparacionTerreno() {
     useEffect(() => {
         const obtenerParcelasDeFinca = async () => {
             try {
-                const parcelasResponse = await ObtenerParcelas();
-                let parcelasFinca = parcelasResponse;
-                if (selectedFinca !== null) {
-                    parcelasFinca = parcelasFinca.filter((parcela: any) => parcela.idFinca === selectedFinca);
-                    setParcelas(parcelasFinca);
-                }
+                
+                    const parcelasFinca = parcelas.filter((parcela: any) => parcela.idFinca === selectedFinca);
+                    setParcelasFiltradas(parcelasFinca);
 
             } catch (error) {
                 console.error('Error al obtener las parcelas de la finca:', error);
@@ -285,7 +282,7 @@ function AdministrarPreparacionTerreno() {
                     <div className="filtro-container" style={{ width: '300px' }}>
                         <select value={selectedParcela ? selectedParcela : ''} onChange={handleParcelaChange} className="custom-select">
                             <option value="">Seleccione la parcela...</option>
-                            {parcelas.map(parcela => (
+                            {parcelasFiltradas.map(parcela => (
                                 <option key={parcela.idParcela} value={parcela.idParcela}>{parcela.nombre}</option>
                             ))}
                         </select>
