@@ -24,6 +24,7 @@ const MedicionesdeSuelos = lazy(() => import('./pages/private/CalidadSuelo/Calid
 const PreparacionTerreno = lazy(() => import('./pages/private/PreparacionTerreno/PreparacionTerreno'))
 const AdministrarRotacionCultivosEstacion = lazy(() => import('./pages/private/RotacionCultivosEstacion/RotacionCultivosEstacion'))
 const ProduccionCultivos = lazy(() => import('./pages/private/RegistroProductividadCultivo/RegistroProductividadCultivo'))
+const ManejoResiduos = lazy(() => import('./pages/private/ManejoResiduos/ManejoResiduos'))
 function App() {
   return (
     // Suspense para manejar la carga de componentes lazy
@@ -68,7 +69,7 @@ function App() {
               <Route path={PrivateRoutes.MEDICIONESDESUELOS} element={<MedicionesdeSuelos />} />
               <Route path={PrivateRoutes.PREPARACIONTERRENOS} element={<PreparacionTerreno />} />
               <Route path={PrivateRoutes.ROTACIONESCULTIVOSESTACION} element={<AdministrarRotacionCultivosEstacion />} />
-
+              <Route path={PrivateRoutes.RESIDUOS} element={<ManejoResiduos />} />
 
 
               <Route path={PrivateRoutes.PRODUCCIONCULTIVOS} element={<ProduccionCultivos />} />

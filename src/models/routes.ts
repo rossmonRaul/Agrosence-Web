@@ -19,5 +19,6 @@ export const PrivateRoutes = {
     MANEJODEFERTILIZANTES: 'manejodefertilizantes',
     PREPARACIONTERRENOS: 'preparaciondeterrenos',
     ROTACIONESCULTIVOSESTACION: 'rotacionescultivosestacion',
-    PRODUCCIONCULTIVOS: 'productividadcultivos'
+    PRODUCCIONCULTIVOS: 'productividadcultivos',
+    RESIDUOS: 'manejoresiduos'
 };
