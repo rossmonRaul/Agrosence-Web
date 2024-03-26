@@ -109,7 +109,7 @@ const Sidebar = ({ children }: { children: React.ReactNode }) => {
                     icon: <img src='/rotacionCultivos.png' style={{ width: '22px' }} />,
                 },
                 {
-                    path: "/manejoreciduos",
+                    path: "/manejoresiduos",
                     name: "Manejo de residuos",
                     icon: <img src='/historial.png' style={{ width: '22px' }} />,
                 },

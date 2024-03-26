@@ -336,7 +336,7 @@ const CrearManejoResiduos: React.FC<CrearManejoResiduosProps> = ({ onAdd }) => {
                     <div className="row" style={{ display: "flex" }}>
                         <div style={{ flex: 1, marginRight:'10px' }}>
                             <FormGroup row>
-                                <Label for="fechaGeneracion" sm={4} className="input-label">Fecha Generativa</Label>
+                                <Label for="fechaGeneracion" sm={4} className="input-label">Fecha Generacion</Label>
                                 <Col sm={8}>
                                     <Input
                                         type="date"
