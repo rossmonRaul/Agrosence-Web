@@ -207,7 +207,7 @@ function ManejoResiduos() {
                             id="filtroIdentificacion"
                             value={filtroInput}
                             onChange={handleChangeFiltro}
-                            placeholder="Ingrese para buscar"
+                            placeholder="Buscar por Finca, Parcela o Usuario"
                             className="form-control"
                         />
                     </div>
