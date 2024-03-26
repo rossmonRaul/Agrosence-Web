@@ -1,4 +1,4 @@
-/**  esta pantalla se est'a usando para la creacion de usuarios por parte del administrador */
+
 
 /**
  * Página para el manejo de residuo.
