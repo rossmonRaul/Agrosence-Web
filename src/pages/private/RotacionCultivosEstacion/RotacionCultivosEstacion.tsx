@@ -13,9 +13,19 @@ import { ObtenerUsuariosAsignadosPorIdentificacion } from '../../../servicios/Se
 import '../../../css/FormSeleccionEmpresa.css'
 import { ObtenerRotacionCultivoSegunEstacionalidad } from "../../../servicios/ServicioCultivo.ts";
 import InsertarRotacionCultivos from "../../../components/rotacionCultivos/InsertarRotacionCultivos.tsx";
+import { useSelector } from "react-redux";
+import { AppStore } from "../../../redux/Store.ts";
+
+interface Option {
+    identificacion: string;
+    idEmpresa: number;
+    nombre: string;
+    idParcela: number;
+    idFinca: number;
+}
+
 function AdministrarRotacionCultivosEstacion() {
     const [filtroNombreCultivo, setFiltroNombreCultivo] = useState('');
-    const [datosFertilizantesOriginales, setDatosFertilizantesOriginales] = useState<any[]>([]);
     const [modalEditar, setModalEditar] = useState(false);
     const [modalInsertar, setModalInsertar] = useState(false);
     const [selectedParcela, setSelectedParcela] = useState<number | null>(null);
@@ -36,6 +46,7 @@ function AdministrarRotacionCultivosEstacion() {
     const [datosFertilizantesFiltrados, setdatosFertilizantesFiltrados] = useState<any[]>([]);
     const [selectedFinca, setSelectedFinca] = useState<number | null>(null);
     const [fincas, setFincas] = useState<any[]>([]);
+    const userState = useSelector((store: AppStore) => store.user);
 
     const handleFincaChange = async (e: React.ChangeEvent<HTMLSelectElement>) => {
         const value = parseInt(e.target.value);
@@ -56,15 +67,18 @@ function AdministrarRotacionCultivosEstacion() {
                 const idEmpresaString = localStorage.getItem('empresaUsuario');
                 const identificacionString = localStorage.getItem('identificacionUsuario');
                 if (identificacionString && idEmpresaString) {
-
                     const identificacion = identificacionString;
+
                     const usuariosAsignados = await ObtenerUsuariosAsignadosPorIdentificacion({ identificacion: identificacion });
                     const idFincasUsuario = usuariosAsignados.map((usuario: any) => usuario.idFinca);
+                    const idParcelasUsuario = usuariosAsignados.map((usuario: any) => usuario.idParcela);
+
                     const fincasResponse = await ObtenerFincas();
                     const fincasUsuario = fincasResponse.filter((finca: any) => idFincasUsuario.includes(finca.idFinca));
-
-
                     setFincas(fincasUsuario);
+                    const parcelasResponse = await ObtenerParcelas();
+                    const parcelasUsuario = parcelasResponse.filter((parcela: any) => idParcelasUsuario.includes(parcela.idParcela));
+                    setParcelas(parcelasUsuario)
                 } else {
                     console.error('La identificación y/o el ID de la empresa no están disponibles en el localStorage.');
                 }
@@ -75,16 +89,12 @@ function AdministrarRotacionCultivosEstacion() {
         obtenerFincas();
     }, []);
 
-
     useEffect(() => {
         const obtenerParcelasDeFinca = async () => {
             try {
-                const parcelasResponse = await ObtenerParcelas();
-                let parcelasFinca = parcelasResponse;
-                if (selectedFinca !== null) {
-                    parcelasFinca = parcelasFinca.filter((parcela: any) => parcela.idFinca === selectedFinca);
-                    setParcelas(parcelasFinca);
-                }
+
+                const parcelasFinca = parcelas.filter((parcela: any) => parcela.idFinca === selectedFinca);
+                setParcelasFiltradas(parcelasFinca);
 
             } catch (error) {
                 console.error('Error al obtener las parcelas de la finca:', error);
@@ -92,6 +102,11 @@ function AdministrarRotacionCultivosEstacion() {
         };
         obtenerParcelasDeFinca();
     }, [selectedFinca]);
+
+
+    let filteredFincas: Option[] = [];
+
+    filteredFincas = fincas.filter(finca => finca.idEmpresa === userState.idEmpresa);
 
 
     const handleChangeFiltro = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -262,7 +277,7 @@ function AdministrarRotacionCultivosEstacion() {
                     <div className="filtro-container" style={{ width: '300px' }}>
                         <select value={selectedFinca || ''} onChange={handleFincaChange} className="custom-select">
                             <option value="">Seleccione la finca...</option>
-                            {fincas.map(finca => (
+                            {filteredFincas.map(finca => (
                                 <option key={finca.idFinca} value={finca.idFinca}>{finca.nombre}</option>
                             ))}
                         </select>
@@ -270,7 +285,7 @@ function AdministrarRotacionCultivosEstacion() {
                     <div className="filtro-container" style={{ width: '300px' }}>
                         <select value={selectedParcela ? selectedParcela : ''} onChange={handleParcelaChange} className="custom-select">
                             <option value="">Seleccione la parcela...</option>
-                            {parcelas.map(parcela => (
+                            {parcelasFiltradas.map(parcela => (
                                 <option key={parcela.idParcela} value={parcela.idParcela}>{parcela.nombre}</option>
                             ))}
                         </select>
