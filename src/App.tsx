@@ -27,6 +27,7 @@ const ProduccionCultivos = lazy(() => import('./pages/private/RegistroProductivi
 const RegistroSeguimientoUsoAgua = lazy(() => import('./pages/private/RegistroSeguimientoUsoAgua/RegistroSeguimientoUsoAgua'))
 
 const ManejoResiduos = lazy(() => import('./pages/private/ManejoResiduos/ManejoResiduos'))
+const EficienciaRiego = lazy(() => import('./pages/private/EficienciaRiego/EficienciaRiego'))
 function App() {
   return (
     // Suspense para manejar la carga de componentes lazy
@@ -72,7 +73,7 @@ function App() {
               <Route path={PrivateRoutes.PREPARACIONTERRENOS} element={<PreparacionTerreno />} />
               <Route path={PrivateRoutes.ROTACIONESCULTIVOSESTACION} element={<AdministrarRotacionCultivosEstacion />} />
               <Route path={PrivateRoutes.RESIDUOS} element={<ManejoResiduos />} />
-
+              <Route path={PrivateRoutes.RIEGOS} element={<EficienciaRiego />} />
 
               <Route path={PrivateRoutes.PRODUCCIONCULTIVOS} element={<ProduccionCultivos />} />
               <Route path={PrivateRoutes.REGISTROSEGUIMIENTOUSOAGUA} element={<RegistroSeguimientoUsoAgua />} />

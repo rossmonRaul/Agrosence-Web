@@ -21,5 +21,6 @@ export const PrivateRoutes = {
     PREPARACIONTERRENOS: 'preparaciondeterrenos',
     ROTACIONESCULTIVOSESTACION: 'rotacionescultivosestacion',
     PRODUCCIONCULTIVOS: 'productividadcultivos',
-    RESIDUOS: 'manejoresiduos'
+    RESIDUOS: 'manejoresiduos',
+    RIEGOS: 'eficienciariego'
 };
