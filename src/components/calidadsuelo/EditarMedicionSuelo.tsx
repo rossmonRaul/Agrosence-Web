@@ -231,71 +231,71 @@ const EditarMedicionSuelo: React.FC<FertilizanteSeleccionado> = ({
         }
 
         // Validar campo respiracionSuelo
-        if (!formData.respiracionSuelo.trim()) {
-            newErrors.respiracionSuelo = 'El ensayo de respiración de suelo es requerido';
+        if (formData.respiracionSuelo === '' || parseFloat(formData.respiracionSuelo) <= 0) {
+            newErrors.respiracionSuelo = 'El ensayo de respiración de suelo es requerido y debe ser mayor que cero';
         } else {
             newErrors.respiracionSuelo = '';
         }
 
         // Validar campo infiltracion
-        if (!formData.infiltracion.trim()) {
-            newErrors.infiltracion = 'El ensayo de infiltración es requerido';
+        if (formData.infiltracion === '' || parseFloat(formData.infiltracion) <= 0) {
+            newErrors.infiltracion = 'El ensayo de infiltración es requerido y debe ser mayor que cero';
         } else {
             newErrors.infiltracion = '';
         }
 
         // Validar campo densidadAparente
-        if (!formData.densidadAparente.trim()) {
-            newErrors.densidadAparente = 'El ensayo de densidad aparente es requerido';
+        if (formData.densidadAparente === '' || parseFloat(formData.densidadAparente) <= 0) {
+            newErrors.densidadAparente = 'El ensayo de densidad aparente es requerido y debe ser mayor que cero';
         } else {
             newErrors.densidadAparente = '';
         }
 
         // Validar campo conductividadElectrica
-        if (!formData.conductividadElectrica.trim()) {
-            newErrors.conductividadElectrica = 'El ensayo de conductividad eléctrica es requerido';
+        if (formData.conductividadElectrica === '' || parseFloat(formData.conductividadElectrica) <= 0) {
+            newErrors.conductividadElectrica = 'El ensayo de conductividad eléctrica es requerido y debe ser mayor que cero';
         } else {
             newErrors.conductividadElectrica = '';
         }
 
         // Validar campo pH
-        if (!formData.pH.trim()) {
-            newErrors.pH = 'El ensayo de pH es requerido';
+        if (formData.pH === '' || parseFloat(formData.pH) <= 0) {
+            newErrors.pH = 'El ensayo de pH es requerido y debe ser mayor que cero';
         } else {
             newErrors.pH = '';
         }
 
         // Validar campo nitratosSuelo
-        if (!formData.nitratosSuelo.trim()) {
-            newErrors.nitratosSuelo = 'El ensayo de nitratos del suelo es requerido';
+        if (formData.nitratosSuelo === '' || parseFloat(formData.nitratosSuelo) <= 0) {
+            newErrors.nitratosSuelo = 'El ensayo de nitratos del suelo es requerido y debe ser mayor que cero';
         } else {
             newErrors.nitratosSuelo = '';
         }
 
         // Validar campo estabilidadAgregados
-        if (!formData.estabilidadAgregados.trim()) {
-            newErrors.estabilidadAgregados = 'El ensayo de estabilidad de agregados es requerido';
+        if (formData.estabilidadAgregados === '' || parseFloat(formData.estabilidadAgregados) <= 0) {
+            newErrors.estabilidadAgregados = 'El ensayo de estabilidad de agregados es requerido y debe ser mayor que cero';
         } else {
             newErrors.estabilidadAgregados = '';
         }
 
         // Validar campo desleimiento
-        if (!formData.desleimiento.trim()) {
-            newErrors.desleimiento = 'El ensayo de desleimiento es requerido';
+        if (formData.desleimiento === '' || parseFloat(formData.desleimiento) <= 0) {
+            newErrors.desleimiento = 'El ensayo de desleimiento es requerido y debe ser mayor que cero';
         } else {
             newErrors.desleimiento = '';
         }
 
         // Validar campo lombrices
-        if (!formData.lombrices.trim()) {
-            newErrors.lombrices = 'El ensayo de lombrices es requerido';
+        if (formData.lombrices === '' || parseFloat(formData.lombrices) <= 0) {
+            newErrors.lombrices = 'El ensayo de lombrices es requerido y debe ser mayor que cero';
         } else {
             newErrors.lombrices = '';
         }
 
         // Validar campo calidadAgua
-        if (!formData.calidadAgua.trim()) {
-            newErrors.calidadAgua = 'El ensayo de la calidad del agua es requerido';
+        if (formData.calidadAgua === '' || parseFloat(formData.calidadAgua) <= 0) {
+            newErrors.calidadAgua = 'El ensayo de la calidad del agua es requerido y debe ser mayor que cero';
         } else {
             newErrors.calidadAgua = '';
         }
