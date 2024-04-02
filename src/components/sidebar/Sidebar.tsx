@@ -143,7 +143,7 @@ const Sidebar = ({ children }: { children: React.ReactNode }) => {
                 },
                 {
                     path: "/conductividadelectrica",
-                    name: "Conductividad Electrica",
+                    name: "Conductividad Eléctrica",
                     icon: <img src='/destello.png' style={{ width: '22px' }} />,
                 },
                 {
