@@ -142,9 +142,9 @@ const Sidebar = ({ children }: { children: React.ReactNode }) => {
                     icon: <img src='/sistema-de-agua.png' style={{ width: '22px' }} />,
                 },
                 {
-                    path: "/opcion3",
-                    name: "opcion3",
-                    icon: <img src='/montana.png' style={{ width: '22px' }} />,
+                    path: "/conductividadelectrica",
+                    name: "Conductividad Electrica",
+                    icon: <img src='/destello.png' style={{ width: '22px' }} />,
                 },
                 {
                     path: "/opcion4",
