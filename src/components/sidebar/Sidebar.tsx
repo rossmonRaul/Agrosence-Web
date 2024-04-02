@@ -127,7 +127,7 @@ const Sidebar = ({ children }: { children: React.ReactNode }) => {
         },
         {
             path: "/menuhidrico",
-            name: "Menú Hidrico",
+            name: "Hidrico",
             icon: <img src='/water-filter.png' style={{ width: '22px' }} />, // Puedes usar cualquier icono que desees aquí
             roles: [3], // Especifica los roles que pueden ver esta opción
             children: [
