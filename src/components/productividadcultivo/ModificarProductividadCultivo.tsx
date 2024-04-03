@@ -107,6 +107,8 @@ const ModificarCalidadCultivo: React.FC<Props> = ({
         });
     }, [idManejoProductividadCultivo]);
 
+    
+
     // Obtener las fincas al cargar la página
     useEffect(() => {
         const obtenerFincas = async () => {
