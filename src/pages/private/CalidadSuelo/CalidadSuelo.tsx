@@ -127,7 +127,7 @@ function CalidadSuelo() {
 
             const usuarioActual = datosUsuarios.find((usuario: any) => usuario.identificacion === idUsuario);
 
-            if (!usuarioActual) {
+            if (!usuarioActual) { 
                 console.error('No se encontró el usuario actual');
                 return;
             }

@@ -31,11 +31,13 @@ const CrearParcela: React.FC<AgregarParcela> = ({ onAdd }) => {
     // Estado para almacenar la selección actual de cada select
     const [selectedFinca, setSelectedFinca] = useState<string>('');
 
+
     // Estado para almacenar los datos del formulario
     const [formData, setFormData] = useState<any>({
-        idFinca: 0,
-        nombre: ''
+        idFinca: '', // Inicializa idFinca como una cadena vacía
+        nombre: ''    // Inicializa nombre como una cadena vacía
     });
+
 
     // Efecto para obtener las fincas, identificaciones y parcelas al cargar el componente
     useEffect(() => {
@@ -55,8 +57,9 @@ const CrearParcela: React.FC<AgregarParcela> = ({ onAdd }) => {
         // Actualizar el formData cuando las props cambien
         setFormData({
             idFinca: selectedFinca,
+            nombre: '' // Establece el valor inicial de nombre
         });
-    }, []);
+    }, [selectedFinca]);
 
     //obtener el valor de idEmpresa del usuario logueado
     const idEmpresaString = localStorage.getItem('empresaUsuario');
@@ -80,7 +83,7 @@ const CrearParcela: React.FC<AgregarParcela> = ({ onAdd }) => {
 
     // Función para manejar el blur de los inputs y eliminar mensajes de error
     const handleInputBlur = (fieldName: string) => {
-        // Eliminar el mensaje de error para el campo cuando el identificacion comienza a escribir en él
+        // Eliminar el mensaje de error para el campo cuando el usuario comience a escribir en él
         if (errors[fieldName]) {
             setErrors((prevErrors: any) => ({
                 ...prevErrors,
@@ -89,54 +92,45 @@ const CrearParcela: React.FC<AgregarParcela> = ({ onAdd }) => {
         }
     };
 
-// Función para manejar cambios en la selección de finca
-const handleFincaChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
-    const value = e.target.value;
-    setSelectedFinca(value);
-    // Actualizar el formData con el id de la finca seleccionada
-    setFormData((prevState: any) => ({
-        ...prevState,
-        idFinca: parseInt(value)
-    }));
-
-    // Validar el nombre cuando se selecciona una finca
-    const newErrors: Record<string, string> = { ...errors };
-    if (!formData.nombre.trim()) {
-        newErrors.nombre = 'El nombre es requerido';
-    } else {
-        newErrors.nombre = '';
-    }
-    setErrors(newErrors);
-};
+    // Función para manejar cambios en la selección de finca
+    const handleFincaChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
+        const value = e.target.value;
+        setSelectedFinca(value);
+        // Actualizar el formData con el id de la finca seleccionada
+        setFormData((prevState: any) => ({
+            ...prevState,
+            idFinca: parseInt(value)
+        }));
+    };
 
     // Función para manejar el envío del formulario con validación
-const handleSubmitConValidacion = () => {
-    // Validar campos antes de enviar los datos al servidor
-    const newErrors: Record<string, string> = {};
+    const handleSubmitConValidacion = () => {
+        // Validar campos antes de enviar los datos al servidor
+        const newErrors: Record<string, string> = {};
 
-    // Validar selección de finca
-    if (!selectedFinca) {
-        newErrors.finca = 'Debe seleccionar una finca';
-    } else {
-        newErrors.finca = '';
-    }
+        // Validar selección de finca
+        if (!selectedFinca) {
+            newErrors.finca = 'Debe seleccionar una finca';
+        } else {
+            newErrors.finca = '';
+        }
 
-    // Validar que el nombre no esté vacío
-    if (!formData.nombre.trim()) {
-        newErrors.nombre = 'El nombre es requerido';
-    } else {
-        newErrors.nombre = '';
-    }
+        // Validar que el nombre no esté vacío si se ha seleccionado una finca
+        if (!formData.nombre && selectedFinca) {
+            newErrors.nombre = 'El nombre es requerido';
+        } else {
+            newErrors.nombre = '';
+        }
 
-    // Actualizar los errores
-    setErrors(newErrors);
+        // Actualizar los errores
+        setErrors(newErrors);
 
-    // Si no hay errores, enviar los datos al servidor
-    if (Object.values(newErrors).every(error => error === '')) {
-        // Llamar a la función handleSubmit para enviar los datos al servidor
-        handleSubmit();
-    }
-};
+        // Si no hay errores, enviar los datos al servidor
+        if (Object.values(newErrors).every(error => error === '')) {
+            // Llamar a la función handleSubmit para enviar los datos al servidor
+            handleSubmit();
+        }
+    };
     // Función para manejar el envío del formulario
     const handleSubmit = async () => {
         const datos = {

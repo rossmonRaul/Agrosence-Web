@@ -402,7 +402,7 @@ const CrearMedicionSuelo: React.FC<InsertarManejoFertilizanteProps> = ({ onAdd }
                         </div>
                         <div className="col-sm-4" style={{ marginRight: "10px" }}>
                             <FormGroup row className="d-flex align-items-center">
-                                <Label for="conductividadElectrica" sm={4} className="input-label flex-grow-1">Ensayo de conductividad electrica (dS/m)</Label>
+                                <Label for="conductividadElectrica" sm={4} className="input-label flex-grow-1">Ensayo de conductividad eléctrica (dS/m)</Label>
                                 <Col sm={8}>
                                     <Input
                                         type="text"
