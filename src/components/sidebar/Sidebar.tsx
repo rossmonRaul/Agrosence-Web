@@ -54,12 +54,6 @@ const Sidebar = ({ children }: { children: React.ReactNode }) => {
             roles: [1]
         },
         {
-            path: "/asignarempresa",
-            name: "Habilitar Usuarios",
-            icon: <FaUserAlt />,
-            roles: [2]
-        },
-        {
             path: "/administrarusuariosasignados",
             name: "Usuarios Asignados",
             icon: <FaUserCog />,
