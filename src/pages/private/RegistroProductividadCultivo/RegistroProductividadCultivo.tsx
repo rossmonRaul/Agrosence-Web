@@ -307,9 +307,9 @@ function RegistroProductividadCultivo() {
                             idManejoProductividadCultivo={parseInt(selectedDatos.idManejoProductividadCultivo)}
                             cultivo={selectedDatos.cultivo}
                             temporada={selectedDatos.temporada}
-                            area={parseInt(selectedDatos.area)}
-                            produccion={parseInt(selectedDatos.produccion)}
-                            productividad={parseInt(selectedDatos.productividad)}
+                            area={parseFloat(selectedDatos.area)}
+                            produccion={parseFloat(selectedDatos.produccion)}
+                            productividad={parseFloat(selectedDatos.productividad)}
                             onEdit={handleEditarProduccionCultivo}
                         />
                     </div>
