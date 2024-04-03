@@ -225,7 +225,7 @@ const CrearEficienciaRiegos: React.FC<CrearEficienciaRiegoProps> = ({ onAdd }) =
                     <div className="col-sm-4" style={{ marginRight: "10px", width: '50%' }}>
                         <FormGroup>
 
-                            <Label for="volumenAguaUtilizado" sm={8} className="input-label">Consumo Agua (L o m³)</Label>
+                            <Label for="volumenAguaUtilizado" sm={8} className="input-label">Consumo Agua (L)</Label>
 
                             <Col >
                                 <Input
