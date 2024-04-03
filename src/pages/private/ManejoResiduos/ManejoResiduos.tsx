@@ -185,9 +185,9 @@ function ManejoResiduos() {
         { key: 'usuario', header: 'Usuario' },
         { key: 'finca', header: 'Finca' },
         { key: 'parcela', header: 'Parcela' },
+        { key: 'residuo', header: 'Residuo' },
         { key: 'fechaGeneracion', header: 'Fecha Generacion' },
         { key: 'fechaManejo', header: 'Fecha Manejo' },
-        { key: 'sEstado', header: 'Estado' },
         { key: 'acciones', header: 'Acciones', actions: true } // Columna para acciones
     ];
 
