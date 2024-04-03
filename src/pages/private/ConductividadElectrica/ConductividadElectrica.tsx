@@ -150,7 +150,7 @@ function AdministrarConductividadRiego() {
         <Sidebar>
             <div className="main-container">
                 <Topbar />
-                <BordeSuperior text="Conductividad Eléctrica" />
+                <BordeSuperior text="Estrés Hídrico" />
                 <div className="content col-md-12">
                     <div className="filtro-container" style={{ width: '300px' }}>
                         <select value={selectedFinca || ''} onChange={handleFincaChange} className="custom-select">
