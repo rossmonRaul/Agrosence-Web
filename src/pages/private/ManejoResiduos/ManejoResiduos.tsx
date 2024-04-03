@@ -143,7 +143,7 @@ function ManejoResiduos() {
     const toggleStatus = async (residuo: any) => {
         Swal.fire({
             title: "Actualizar",
-            text: "¿Estás seguro de que deseas actualizar el estado de el residuo:  ?",
+            text: "¿Estás seguro de que deseas actualizar el estado del residuo: "+ residuo.residuo +"  ?",
             icon: "warning",
             showCancelButton: true,
             confirmButtonText: "Sí",
