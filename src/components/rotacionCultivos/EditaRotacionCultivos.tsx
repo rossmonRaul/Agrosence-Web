@@ -206,6 +206,26 @@ const ModificacionRotacionCultivos: React.FC<RotacionCultivosProps> = ({
         } else {
             newErrors.cultivo = '';
         }
+        // Convertir las fechas a objetos Date
+        const parseDate = (dateString: any) => {
+            const [day, month, year] = dateString.split('/');
+            return new Date(`${year}-${month}-${day}`);
+        };
+        const epocaSiembraDate = parseDate(formData.epocaSiembra);
+        const epocaSiembraCultivoSiguienteDate = parseDate(formData.epocaSiembraCultivoSiguiente);
+        const tiempoCosechaDate = parseDate(formData.tiempoCosecha);
+
+        if (tiempoCosechaDate <= epocaSiembraDate || tiempoCosechaDate >= epocaSiembraCultivoSiguienteDate) {
+            newErrors.epocaSiembra = 'El tiempo de cosecha no puede ser anterior a la época de siembra ni tampoco después de la época de siembra siguiente.';
+        } else {
+            newErrors.epocaSiembra = '';
+        }
+
+        if (epocaSiembraCultivoSiguienteDate <= epocaSiembraDate || epocaSiembraCultivoSiguienteDate <= tiempoCosechaDate) {
+            newErrors.tiempoCosecha = 'Época de siembra no puede ser anterior a la época de siembra ni tampoco al tiempo de cosecha.';
+        } else {
+            newErrors.tiempoCosecha = '';
+        }
 
         // Validar cultivo siguiente
         if (!formData.cultivoSiguiente.trim()) {
@@ -273,7 +293,6 @@ const ModificacionRotacionCultivos: React.FC<RotacionCultivosProps> = ({
             console.log(error);
         }
     };
-
     return (
         <div id='general' style={{ display: 'flex', flexDirection: 'column', paddingBottom: '0rem', width: '100%', margin: '0 auto' }}>
             <div className="form-container-fse" style={{ display: 'flex', flexDirection: 'column', width: '60%' }}>
@@ -304,7 +323,7 @@ const ModificacionRotacionCultivos: React.FC<RotacionCultivosProps> = ({
 
                 <div style={{ flex: 1, marginRight: '0.5rem', marginLeft: '0.5rem' }}>
                     <FormGroup row>
-                        <Label for="epocaSiembra" sm={4} className="input-label">Epoca de siembra</Label>
+                        <Label for="epocaSiembra" sm={4} className="input-label">Época de siembra</Label>
                         <Col sm={8}>
                             <Input
                                 type="date"
@@ -338,7 +357,7 @@ const ModificacionRotacionCultivos: React.FC<RotacionCultivosProps> = ({
                 </div>
                 <div style={{ flex: 1, marginRight: '0.5rem', marginLeft: '0.5rem' }}>
                     <FormGroup row>
-                        <Label for="epocaSiembraCultivoSiguiente" sm={4} className="input-label">Epoca de siembra siguiente</Label>
+                        <Label for="epocaSiembraCultivoSiguiente" sm={4} className="input-label">Época de siembra siguiente</Label>
                         <Col sm={8}>
                             <Input
                                 type="date"
