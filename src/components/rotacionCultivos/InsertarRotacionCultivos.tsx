@@ -135,13 +135,14 @@ const InsertarRotacionCultivos: React.FC<InsertarRotacionCultivosProps> = ({ onA
             newErrors.parcela = '';
         }
 
+
+
         // Validar fecha de creación
         if (!formData.epocaSiembra.trim()) {
             newErrors.epocaSiembra = 'La época de siembra es requerida';
         } else {
             newErrors.epocaSiembra = '';
         }
-
         // Validar tiempo de cosecha
         if (!formData.tiempoCosecha.trim()) {
             newErrors.tiempoCosecha = 'El tiempo de cosecha es requerido';
@@ -156,6 +157,26 @@ const InsertarRotacionCultivos: React.FC<InsertarRotacionCultivosProps> = ({ onA
             newErrors.cultivo = 'El cultivo no puede tener más de 50 caracteres';
         } else {
             newErrors.cultivo = '';
+        }
+        // Convertir las fechas a objetos Date
+        const parseDate = (dateString: any) => {
+            const [day, month, year] = dateString.split('/');
+            return new Date(`${year}-${month}-${day}`);
+        };
+        const epocaSiembraDate = parseDate(formData.epocaSiembra);
+        const epocaSiembraCultivoSiguienteDate = parseDate(formData.epocaSiembraCultivoSiguiente);
+        const tiempoCosechaDate = parseDate(formData.tiempoCosecha);
+
+        if (tiempoCosechaDate <= epocaSiembraDate || tiempoCosechaDate >= epocaSiembraCultivoSiguienteDate) {
+            newErrors.epocaSiembra = 'El tiempo de cosecha no puede ser anterior a la época de siembra ni tampoco después de la época de siembra siguiente.';
+        } else {
+            newErrors.epocaSiembra = '';
+        }
+
+        if (epocaSiembraCultivoSiguienteDate <= epocaSiembraDate || epocaSiembraCultivoSiguienteDate <= tiempoCosechaDate) {
+            newErrors.tiempoCosecha = 'Época de siembra no puede ser anterior a la época de siembra ni tampoco al tiempo de cosecha.';
+        } else {
+            newErrors.tiempoCosecha = '';
         }
 
         // Validar cultivo siguiente
@@ -238,7 +259,7 @@ const InsertarRotacionCultivos: React.FC<InsertarRotacionCultivosProps> = ({ onA
 
                 <div style={{ flex: 1, marginRight: '0.5rem', marginLeft: '0.5rem' }}>
                     <FormGroup row>
-                        <Label for="epocaSiembra" sm={4} className="input-label">Epoca de siembra</Label>
+                        <Label for="epocaSiembra" sm={4} className="input-label">Época de siembra</Label>
                         <Col sm={8}>
                             <Input
                                 type="date"
@@ -272,7 +293,7 @@ const InsertarRotacionCultivos: React.FC<InsertarRotacionCultivosProps> = ({ onA
                 </div>
                 <div style={{ flex: 1, marginRight: '0.5rem', marginLeft: '0.5rem' }}>
                     <FormGroup row>
-                        <Label for="epocaSiembraCultivoSiguiente" sm={4} className="input-label">Epoca de siembra siguiente</Label>
+                        <Label for="epocaSiembraCultivoSiguiente" sm={4} className="input-label">Época de siembra siguiente</Label>
                         <Col sm={8}>
                             <Input
                                 type="date"
