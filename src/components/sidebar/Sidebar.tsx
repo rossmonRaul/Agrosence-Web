@@ -147,6 +147,26 @@ const Sidebar = ({ children }: { children: React.ReactNode }) => {
                 }
             ]
         },
+
+        {
+            path: "/menucondicionesclimaticas",
+            name: "Clima",
+            icon: <img src='/water-filter.png' style={{ width: '22px' }} />, // Puedes usar cualquier icono que desees aquí
+            roles: [3], // Especifica los roles que pueden ver esta opción
+            children: [
+                {
+                    path: "/pronosticometereologico",
+                    name: "Pronostico Metereologico",
+                    icon: <img src='/water.png' style={{ width: '22px' }} />,
+                },
+                {
+                    path: "/eficienciariego",
+                    name: "Eficiencia Riego",
+                    icon: <img src='/sistema-de-agua.png' style={{ width: '22px' }} />,
+                },
+            ]
+        },
+
         {
             path: "#", // Utilizar "#" como un enlace que no lleva a ninguna parte para los multi-seleccion
             name: "Pages",
