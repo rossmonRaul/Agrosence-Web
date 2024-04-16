@@ -151,19 +151,25 @@ const Sidebar = ({ children }: { children: React.ReactNode }) => {
         {
             path: "/menucondicionesclimaticas",
             name: "Clima",
-            icon: <img src='/water-filter.png' style={{ width: '22px' }} />, // Puedes usar cualquier icono que desees aquí
+            icon: <img src='/weather-forecast.png' style={{ width: '22px' }} />, // Puedes usar cualquier icono que desees aquí
             roles: [3], // Especifica los roles que pueden ver esta opción
             children: [
                 {
                     path: "/pronosticometereologico",
-                    name: "Pronostico Metereologico",
-                    icon: <img src='/water.png' style={{ width: '22px' }} />,
+                    name: "Pronóstico Meteorológico",
+                    icon: <img src='/weather.png' style={{ width: '22px' }} />,
+                },
+                {
+                    path: "/condicionesmetereologicasclimaticas",
+                    name: "Condiciones Meteorológicas y Climáticas",
+                    icon: <img src='/condiciones-climaticas.png' style={{ width: '22px' }} />,
                 },
                 {
                     path: "/riesgonatural",
                     name: "Riesgos Naturales",
                     icon: <img src='/calentamiento-global.png' style={{ width: '22px' }} />,
                 },
+                
             ]
         },
 

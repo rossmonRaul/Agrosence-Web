@@ -14,12 +14,13 @@ interface AgregarFinca {
 const CrearFinca: React.FC<AgregarFinca> = ({ onAdd }) => {
 
     // Estado para almacenar los errores de validación del formulario
-    const [errors, setErrors] = useState<Record<string, string>>({ nombre: '' });
+    const [errors, setErrors] = useState<Record<string, string>>({ nombre: '',ubicacion: '' });
 
     // Estado para almacenar los datos del formulario
     const [formData, setFormData] = useState<any>({
         idEmpresa: localStorage.getItem('empresaUsuario'),
-        nombre: ''
+        nombre: '',
+        ubicacion: ''
     });
 
     // Función para manejar cambios en los inputs del formulario
@@ -51,6 +52,11 @@ const CrearFinca: React.FC<AgregarFinca> = ({ onAdd }) => {
         } else {
             newErrors.nombre = '';
         }
+        if (!formData.ubicacion.trim()) {
+            newErrors.ubicacion = 'La ubicación es requerido';
+        } else {
+            newErrors.ubicacion = '';
+        }
         // Actualizar los errores
         setErrors(newErrors);
         // Si no hay errores, enviar los datos al servidor
@@ -64,7 +70,8 @@ const CrearFinca: React.FC<AgregarFinca> = ({ onAdd }) => {
     const handleSubmit = async () => {
         const datos = {
             idEmpresa: formData.idEmpresa,
-            nombre: formData.nombre
+            nombre: formData.nombre,
+            ubicacion:formData.ubicacion
         };
         try {
             const resultado = await GuardarFincas(datos);
@@ -108,6 +115,23 @@ const CrearFinca: React.FC<AgregarFinca> = ({ onAdd }) => {
                         <FormFeedback>{errors.nombre}</FormFeedback>
                     </Col>
                 </FormGroup>
+                <FormGroup row>
+                    <Label for="ubicacion" sm={2} className="input-label">Ubicacion: </Label>
+                    <Col sm={12}>
+                        <Input
+                            type="text"
+                            id="ubicacion"
+                            name="ubicacion"
+                            placeholder="Ingrese la ubicación"
+                            value={formData.ubicacion}
+                            onChange={handleInputChange}
+                            onBlur={() => handleInputBlur('ubicacion')} // Manejar blur para quitar el mensaje de error
+                            className={errors.ubicacion ? 'input-styled input-error' : 'input-styled'} // Aplicar clase 'is-invalid' si hay un error
+                        />
+                        <FormFeedback>{errors.ubicacion}</FormFeedback>
+                    </Col>
+                </FormGroup>
+
             </div>
             <button onClick={handleSubmitConValidacion} className="btn-styled">Crear Finca</button>
         </div>

@@ -98,3 +98,9 @@ export const CambiarContrasenaUsuarios = async (data: any) => {
     const url = `http://localhost:5271/api/v1.0/${controlador}/ActualizarContrasenaUsuario`;
     return await ProcesarDatosApi('PUT', url, data);
 }
+
+export const ObtenerFincasUbicacionPorIdEmpresa = async (data: any) => {
+    //const url = `${controlador}/ObtenerUsuarios`;
+    const url = `http://localhost:5271/api/v1.0/${controlador}/ObtenerFincasUbicacionPorIdEmpresa`;
+    return await ProcesarDatosApi('POST', url, data);
+}
