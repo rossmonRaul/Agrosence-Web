@@ -9,19 +9,22 @@ import { EditarFincas } from '../../servicios/ServicioFincas';
 interface Props {
     idFinca: string;
     nombreEditar: string;
+    ubicacion: string;
+
     onEdit: () => void;
 }
 
 // Componente funcional EditarEmpresa
-const EditarFinca: React.FC<Props> = ({ idFinca, nombreEditar, onEdit }) => {
+const EditarFinca: React.FC<Props> = ({ idFinca, nombreEditar,ubicacion, onEdit }) => {
 
     // Estado para almacenar los errores de validación del formulario
-    const [errors, setErrors] = useState<Record<string, string>>({ nombreEditar });
+    const [errors, setErrors] = useState<Record<string, string>>({ nombreEditar : '',ubicacion: '' });
 
     // Estado para almacenar los datos del formulario
     const [formData, setFormData] = useState<any>({
         idFinca: 0,
-        nombre: ''
+        nombre: '',
+        ubicacion:''
     });
 
     // Efecto para actualizar el formData cuando las props cambien
@@ -29,9 +32,10 @@ const EditarFinca: React.FC<Props> = ({ idFinca, nombreEditar, onEdit }) => {
         // Actualizar el formData cuando las props cambien
         setFormData({
             idFinca: idFinca,
-            nombre: nombreEditar
+            nombre: nombreEditar,
+            ubicacion:ubicacion
         });
-    }, [idFinca, nombreEditar]);
+    }, [idFinca, nombreEditar,ubicacion]);
 
 
     // Función para manejar cambios en los inputs del formulario
@@ -63,6 +67,11 @@ const EditarFinca: React.FC<Props> = ({ idFinca, nombreEditar, onEdit }) => {
         } else {
             newErrors.nombre = '';
         }
+        if (!formData.ubicacion.trim()) {
+            newErrors.ubicacion = 'La ubicación es requerido';
+        } else {
+            newErrors.ubicacion = '';
+        }
         // Actualizar los errores
         setErrors(newErrors);
 
@@ -78,7 +87,8 @@ const EditarFinca: React.FC<Props> = ({ idFinca, nombreEditar, onEdit }) => {
     const handleSubmit = async () => {
         const datos = {
             idFinca: idFinca,
-            nombre: formData.nombre
+            nombre: formData.nombre,
+            ubicacion:formData.ubicacion
         };
         try {
             const resultado = await EditarFincas(datos);
@@ -121,6 +131,22 @@ const EditarFinca: React.FC<Props> = ({ idFinca, nombreEditar, onEdit }) => {
                             className={errors.nombre ? 'input-styled input-error' : 'input-styled'} // Aplicar clase 'is-invalid' si hay un error
                         />
                         <FormFeedback>{errors.nombre}</FormFeedback>
+                    </Col>
+                </FormGroup>
+                <FormGroup row>
+                    <Label for="ubicacion" sm={2} className="input-label">Ubicación: </Label>
+                    <Col sm={12}>
+                        <Input
+                            type="text"
+                            id="ubicacion"
+                            name="ubicacion"
+                            placeholder="Ingrese la ubicación"
+                            value={formData.ubicacion}
+                            onChange={handleInputChange}
+                            onBlur={() => handleInputBlur('ubicacion')} // Manejar blur para quitar el mensaje de error
+                            className={errors.ubicacion ? 'input-styled input-error' : 'input-styled'} // Aplicar clase 'is-invalid' si hay un error
+                        />
+                        <FormFeedback>{errors.ubicacion}</FormFeedback>
                     </Col>
                 </FormGroup>
             </div>

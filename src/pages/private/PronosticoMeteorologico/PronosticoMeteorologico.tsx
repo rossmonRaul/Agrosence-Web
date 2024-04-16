@@ -269,12 +269,12 @@ function PronosticoMeteorologico() {
         <Sidebar>
             <div className="main-container">
                 <Topbar />
-                <BordeSuperior text="Pronostico Meteorologico" />
+                <BordeSuperior text="Pronóstico Meteorológico" />
                 <div className="content, col-md-12" >
                 <WeatherWidget />
-                <br />
+                {/* <br />
                     <iframe src="https://openweathermap.org/weathermap?basemap=map&cities=true&layer=precipitation&lat=9.8201&lon=-83.8718&zoom=10"
-                     width="600" height="400" ></iframe>
+                     width="600" height="400" ></iframe> */}
                 </div>
             </div>
 
