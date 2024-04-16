@@ -14,7 +14,7 @@ export const PrivateRoutes = {
     ADMINISTRAREMPRESAS: 'administrarempresas',
     MATENIMIENTOUSUARIOSASIGNADOS: 'administrarusuariosasignados',
     ADMINISTRARFINCAS: 'administrarfincas',
-    ADMINISTRARPARCELAS: 'administrarparcelas', 
+    ADMINISTRARPARCELAS: 'administrarparcelas',
     MEDICIONESDESUELOS: 'medicionesdesuelos',
     MANEJODEFERTILIZANTES: 'manejodefertilizantes',
     REGISTROSEGUIMIENTOUSOAGUA: 'registroseguimientousoagua',
@@ -24,5 +24,6 @@ export const PrivateRoutes = {
     RESIDUOS: 'manejoresiduos',
     RIEGOS: 'eficienciariego',
     CONDUCTIVIDADELECTRICA: 'conductividadelectrica',
-    PRONOSTICOMETEOROLOGICO:'pronosticometereologico'
+    PRONOSTICOMETEOROLOGICO: 'pronosticometereologico',
+    CONDICIONESMETEOROLOGICASCLIMATICAS: 'condicionesmetereologicasclimaticas'
 };
