@@ -24,5 +24,6 @@ export const PrivateRoutes = {
     RESIDUOS: 'manejoresiduos',
     RIEGOS: 'eficienciariego',
     CONDUCTIVIDADELECTRICA: 'conductividadelectrica',
-    PRONOSTICOMETEOROLOGICO:'pronosticometereologico'
+    PRONOSTICOMETEOROLOGICO:'pronosticometereologico',
+    RIESGOSNATURALES:'riesgonatural'
 };

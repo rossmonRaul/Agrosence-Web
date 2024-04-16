@@ -29,6 +29,7 @@ const Conductividadelectrica = lazy(() => import('./pages/private/ConductividadE
 const ManejoResiduos = lazy(() => import('./pages/private/ManejoResiduos/ManejoResiduos'))
 const EficienciaRiego = lazy(() => import('./pages/private/EficienciaRiego/EficienciaRiego'))
 const PronosticoMeteorologico = lazy(() => import('./pages/private/PronosticoMeteorologico/PronosticoMeteorologico'))
+const RiesgosNaturales = lazy(() => import('./pages/private/RiesgoNatural/RiesgoNatural'))
 function App() {
   return (
     // Suspense para manejar la carga de componentes lazy
@@ -78,6 +79,7 @@ function App() {
               <Route path={PrivateRoutes.CONDUCTIVIDADELECTRICA} element={<Conductividadelectrica />} />
               <Route path={PrivateRoutes.PRODUCCIONCULTIVOS} element={<ProduccionCultivos />} />
               <Route path={PrivateRoutes.REGISTROSEGUIMIENTOUSOAGUA} element={<RegistroSeguimientoUsoAgua />} />
+              <Route path={PrivateRoutes.RIESGOSNATURALES} element={<RiesgosNaturales />} />
 
               <Route path={PrivateRoutes.PRONOSTICOMETEOROLOGICO} element={<PronosticoMeteorologico />} />
             </Route>
