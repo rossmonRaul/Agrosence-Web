@@ -160,9 +160,9 @@ const Sidebar = ({ children }: { children: React.ReactNode }) => {
                     icon: <img src='/water.png' style={{ width: '22px' }} />,
                 },
                 {
-                    path: "/eficienciariego",
-                    name: "Eficiencia Riego",
-                    icon: <img src='/sistema-de-agua.png' style={{ width: '22px' }} />,
+                    path: "/condicionesmetereologicasclimaticas",
+                    name: "Condiciones Meteorológicas y Climáticas",
+                    icon: <img src='/condiciones-climaticas.png' style={{ width: '22px' }} />,
                 },
             ]
         },
