@@ -172,6 +172,25 @@ const Sidebar = ({ children }: { children: React.ReactNode }) => {
                 
             ]
         },
+        {
+            path: "/menuplagas",
+            name: "Gestion Plagas",
+            icon: <img src='/weather-forecast.png' style={{ width: '22px' }} />, // Puedes usar cualquier icono que desees aquí
+            roles: [3], // Especifica los roles que pueden ver esta opción
+            children: [
+                {
+                    path: "/problemasplagas",
+                    name: "Problemas Plagas",
+                    icon: <img src='/plagas.png' style={{ width: '22px' }} />,
+                },
+                {
+                    path: "/condicionesmetereologicasclimaticas",
+                    name: "Condiciones Meteorológicas y Climáticas",
+                    icon: <img src='/condiciones-climaticas.png' style={{ width: '22px' }} />,
+                },
+                
+            ]
+        },
 
         {
             path: "#", // Utilizar "#" como un enlace que no lleva a ninguna parte para los multi-seleccion

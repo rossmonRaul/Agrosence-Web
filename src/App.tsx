@@ -31,6 +31,7 @@ const EficienciaRiego = lazy(() => import('./pages/private/EficienciaRiego/Efici
 const PronosticoMeteorologico = lazy(() => import('./pages/private/PronosticoMeteorologico/PronosticoMeteorologico'))
 import CondicionesMeteorologicasClimaticas from './pages/private/RegistroCondicionesMetereologicas/RegistroCondicionesMetereologicas';
 const RiesgosNaturales = lazy(() => import('./pages/private/RiesgoNatural/RiesgoNatural'))
+const ProblemasPlagas = lazy(() => import('./pages/private/ProblemasPlagas/ProblemasPlagas'))
 function App() {
   return (
     // Suspense para manejar la carga de componentes lazy
@@ -81,6 +82,7 @@ function App() {
               <Route path={PrivateRoutes.PRODUCCIONCULTIVOS} element={<ProduccionCultivos />} />
               <Route path={PrivateRoutes.REGISTROSEGUIMIENTOUSOAGUA} element={<RegistroSeguimientoUsoAgua />} />
               <Route path={PrivateRoutes.RIESGOSNATURALES} element={<RiesgosNaturales />} />
+              <Route path={PrivateRoutes.PROBLEMASPLAGAS} element={<ProblemasPlagas/>} />
 
               <Route path={PrivateRoutes.PRONOSTICOMETEOROLOGICO} element={<PronosticoMeteorologico />} />
               <Route path={PrivateRoutes.CONDICIONESMETEOROLOGICASCLIMATICAS} element={<CondicionesMeteorologicasClimaticas />} />
