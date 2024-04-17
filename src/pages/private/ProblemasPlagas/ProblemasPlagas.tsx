@@ -228,7 +228,7 @@ function ProblemasPlagas() {
             <Modal
                 isOpen={modalInsertar}
                 toggle={abrirCerrarModalInsertar}
-                title="Problemas plagas o Enfermedades"
+                title="Problemas plagas o enfermedades"
                 onCancel={abrirCerrarModalInsertar}
             >
                 <div className='form-container'>
@@ -244,7 +244,7 @@ function ProblemasPlagas() {
             <Modal
                 isOpen={modalEditar}
                 toggle={abrirCerrarModalEditar}
-                title="Editar Eficiencia Riegos"
+                title="Editar Problema de plagas o enfermedades"
                 onCancel={abrirCerrarModalEditar}
             >
                 <div className='form-container'>

@@ -439,7 +439,7 @@ const EditarProblemaPlagas: React.FC<ProblemaSeleccionado> = ({
             )}
             {step === 2 && (
                 <div>
-                    <h2>Riesgos Naturales</h2>
+                    <h2>Problemas Plagas</h2>
                     <div className="row" style={{ display: "flex" }}>
                         <div className="row" style={{ display: "flex", flexDirection: 'row', width: '50%' }}>
                             <div style={{ flex: 1, marginRight: '10px' }}>
