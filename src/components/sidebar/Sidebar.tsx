@@ -175,7 +175,7 @@ const Sidebar = ({ children }: { children: React.ReactNode }) => {
         {
             path: "/menuplagas",
             name: "Gestion Plagas",
-            icon: <img src='/weather-forecast.png' style={{ width: '22px' }} />, // Puedes usar cualquier icono que desees aquí
+            icon: <img src='/plagasmenu.png' style={{ width: '22px' }} />, // Puedes usar cualquier icono que desees aquí
             roles: [3], // Especifica los roles que pueden ver esta opción
             children: [
                 {
