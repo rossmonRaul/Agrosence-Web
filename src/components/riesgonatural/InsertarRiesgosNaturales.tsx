@@ -433,6 +433,7 @@ const CrearRiesgosNaturales: React.FC<CrearRiesgosNaturalesProps> = ({ onAdd }) 
                                     <option key="default-riesgos" value="">Seleccione...</option>
                                     <option key="terremoto" value="Terremoto">Terremoto</option>
                                     <option key="deslizamiento" value="Deslizamiento">Deslizamiento</option>
+                                    <option key="deslizamiento" value="Deslizamiento">Inundacion</option>
                                     <option key="incendio" value="Incendio">Incendio</option>
                                     <option key="sequia" value="Sequia">Sequía</option>
                                     <option key="huracan" value="Huracan">Huracan</option>

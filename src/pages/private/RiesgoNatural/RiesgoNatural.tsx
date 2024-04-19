@@ -11,6 +11,7 @@ import { CambiarEstadoRiesgoNatural, ObtenerRiesgosNaturales} from "../../../ser
 import { ObtenerUsuariosAsignados } from "../../../servicios/ServicioUsuario.ts"
 import CrearRiesgosNaturales from "../../../components/riesgonatural/InsertarRiesgosNaturales.tsx";
 import EditarRiesgoNatural from "../../../components/riesgonatural/EditarRiesgosNaturales.tsx";
+import TableResponsiveDelete from "../../../components/table/tableDelete.tsx";
 
 
 /**
@@ -196,7 +197,7 @@ function RiesgoNatural() {
                             className="form-control"
                         />
                     </div>
-                    <TableResponsive columns={columns} data={RiesgosFiltrados} openModal={openModal} toggleStatus={toggleStatus} btnActionName={"Editar"} />
+                    <TableResponsiveDelete columns={columns} data={RiesgosFiltrados} openModal={openModal} toggleStatus={toggleStatus} btnActionName={"Editar"} />
                 </div>
             </div>
 
