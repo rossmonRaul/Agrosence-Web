@@ -25,7 +25,6 @@ const CrearFinca: React.FC<AgregarFinca> = ({ onAdd }) => {
 
     // Función para manejar cambios en los inputs del formulario
     const handleInputChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-console.log("DSEDS", event.target.value);
         setShowAdditionalInfo(false);
         const { name, value } = event.target;
         setFormData((prevState: FormData) => ({
