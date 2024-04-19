@@ -441,8 +441,8 @@ const EditarProblemaPlagas: React.FC<ProblemaSeleccionado> = ({
                 <div>
                     <h2>Problemas Plagas</h2>
                     <div className="row" style={{ display: "flex" }}>
-                        <div className="row" style={{ display: "flex", flexDirection: 'row', width: '50%' }}>
-                            <div style={{ flex: 1, marginRight: '10px' }}>
+                        <div className="row" style={{ display: "flex", flexDirection: 'row', width: '100%' }}>
+                            <div style={{ flex: 1 }}>
                                 <FormGroup row>
                                     <Label for="metodologiaEstimacion" sm={4} className="input-label">Metodologia de Estimacion</Label>
                                     <Col sm={8}>

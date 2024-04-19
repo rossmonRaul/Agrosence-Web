@@ -192,9 +192,6 @@ function ProblemasPlagas() {
         { key: 'cultivo', header: 'Cultivo' },
         { key: 'plagaEnfermedad', header: 'Plaga o Enfermedad' },
         { key: 'incidencia', header: 'Incidencia' },
-        { key: 'metodologiaEstimacion', header: 'Metodologia' },
-        { key: 'problema', header: 'Problema' },
-        { key: 'accionTomada', header: 'Accion Tomada' },
         { key: 'acciones', header: 'Acciones', actions: true }
     ];
 
