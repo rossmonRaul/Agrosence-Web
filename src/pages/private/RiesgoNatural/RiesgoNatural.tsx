@@ -129,8 +129,8 @@ function RiesgoNatural() {
     // Función para cambiar el estado de un Riesgo
     const toggleStatus = async (riesgo: any) => {
         Swal.fire({
-            title: "Actualizar",
-            text: "¿Estás seguro de que deseas actualizar el estado del riesgo: "+ riesgo.riesgoNatural +"  ?",
+            title: "Eliminar",
+            text: "¿Estás seguro de que deseas eliminar el riesgo: "+ riesgo.riesgoNatural +"  ?",
             icon: "warning",
             showCancelButton: true,
             confirmButtonText: "Sí",
@@ -148,13 +148,13 @@ function RiesgoNatural() {
                         await obtenerDatosRiesgos();
                         Swal.fire({
                             icon: 'success',
-                            title: '¡Estado Actualizado! ',
-                            text: 'Actualización exitosa.',
+                            title: '¡Eliminacion exitosa! ',
+                            text: 'Se puedo eliminar el riesgo.',
                         });
                     } else {
                         Swal.fire({
                             icon: 'error',
-                            title: 'Error al actualizar el estado.',
+                            title: 'Error al eliminar',
                             text: resultado.mensaje,
                         });
                     };

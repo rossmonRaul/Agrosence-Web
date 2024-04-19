@@ -251,8 +251,6 @@ const CrearRiesgosNaturales: React.FC<CrearRiesgosNaturalesProps> = ({ onAdd }) 
 
         if (!formData.riesgoNatural.trim()) {
             newErrors.riesgoNatural = 'El Riesgo Natural es obligatorio';
-        } else if (formData.riesgoNatural.length > 50) {
-            newErrors.riesgoNatural = 'El Riesgo Natural no pueden tener más de 50 caracteres';
         } else {
             newErrors.riesgoNatural = '';
         }
@@ -277,9 +275,7 @@ const CrearRiesgosNaturales: React.FC<CrearRiesgosNaturalesProps> = ({ onAdd }) 
 
         if (!formData.resultadoPractica.trim()) {
             newErrors.resultadoPractica = 'El Resultado Practica es obligatorio';
-        } else if (formData.resultadoPractica.length > 100) {
-            newErrors.resultadoPractica = 'El Resultado Practica no puede ser mayor a 100 caracteres';
-        } else {
+        }else {
             newErrors.resultadoPractica = '';
         }
 
@@ -296,7 +292,7 @@ const CrearRiesgosNaturales: React.FC<CrearRiesgosNaturalesProps> = ({ onAdd }) 
         } else if (formData.observaciones.length > 250) {
             newErrors.observaciones = 'Las Observaciones no puede ser mayor a 250 caracteres';
         } else {
-            newErrors.resultadoPractica = '';
+            newErrors.observaciones = '';
         }
 
         const fechaParts = formData.fecha.split("/");
@@ -504,6 +500,7 @@ const CrearRiesgosNaturales: React.FC<CrearRiesgosNaturalesProps> = ({ onAdd }) 
                                     <option key="regular" value="Regular">Regular</option>
                                     <option key="incendio" value="Incendio">Malo</option>
                                 </select>
+                                {errors.resultadoPractica && <FormFeedback>{errors.resultadoPractica}</FormFeedback>}
                             </FormGroup>
                         </div>
                         <div className="row" style={{ display: "flex", flexDirection: 'row', width: '50%' }}>

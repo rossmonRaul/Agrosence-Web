@@ -425,7 +425,7 @@ const CrearProblemaPlagas: React.FC<CrearProblemaPlagasProps> = ({ onAdd }) => {
                                     placeholder="Problema"
                                     maxLength={100}
                                 />
-                                <FormFeedback>{errors.accionesCorrectivas}</FormFeedback>
+                                <FormFeedback>{errors.problema}</FormFeedback>
                             </Col>
                         </FormGroup>
                     </div>
@@ -444,7 +444,7 @@ const CrearProblemaPlagas: React.FC<CrearProblemaPlagasProps> = ({ onAdd }) => {
                                     placeholder="Accion Tomada"
                                     maxLength={100}
                                 />
-                                <FormFeedback>{errors.accionesCorrectivas}</FormFeedback>
+                                <FormFeedback>{errors.accionTomada}</FormFeedback>
                             </Col>
                         </FormGroup>
                     </div>
