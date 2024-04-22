@@ -105,7 +105,7 @@ const EditarParcela: React.FC<Props> = ({ idParcela, nombreEditar, onEdit }) => 
     };
 
     return (
-        <div>
+        <div> 
             <div className="form-container-fse">
                 <FormGroup row>
                     <Label for="nombre" sm={2} className="input-label">Nombre: </Label>

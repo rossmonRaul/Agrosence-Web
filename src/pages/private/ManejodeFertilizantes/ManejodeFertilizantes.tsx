@@ -47,7 +47,7 @@ function AdministrarManejoFertilizantes() {
         setSelectedFinca(value);
         setSelectedParcela(null);
     };
-
+ 
     const handleParcelaChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
         const value = e.target.value;
         setSelectedParcela(parseInt(value));
@@ -62,13 +62,20 @@ function AdministrarManejoFertilizantes() {
                 if (identificacionString && idEmpresaString) {
 
                     const identificacion = identificacionString;
+                    
                     const usuariosAsignados = await ObtenerUsuariosAsignadosPorIdentificacion({ identificacion: identificacion });
                     const idFincasUsuario = usuariosAsignados.map((usuario: any) => usuario.idFinca);
+                    const idParcelasUsuario = usuariosAsignados.map((usuario: any) => usuario.idParcela);
+                    //se obtiene las fincas 
                     const fincasResponse = await ObtenerFincas();
+                    //se filtran las fincas con las fincas del usuario
                     const fincasUsuario = fincasResponse.filter((finca: any) => idFincasUsuario.includes(finca.idFinca));
-
-
                     setFincas(fincasUsuario);
+                    //se obtienen las parcelas
+                    const parcelasResponse = await ObtenerParcelas();
+                    //se filtran las parcelas con los idparcelasusuario
+                    const parcelasUsuario = parcelasResponse.filter((parcela: any) => idParcelasUsuario.includes(parcela.idParcela));
+                    setParcelas(parcelasUsuario)
                 } else {
                     console.error('La identificación y/o el ID de la empresa no están disponibles en el localStorage.');
                 }
@@ -83,12 +90,9 @@ function AdministrarManejoFertilizantes() {
     useEffect(() => {
         const obtenerParcelasDeFinca = async () => {
             try {
-                const parcelasResponse = await ObtenerParcelas();
-                let parcelasFinca = parcelasResponse;
-                if (selectedFinca !== null) {
-                    parcelasFinca = parcelasFinca.filter((parcela: any) => parcela.idFinca === selectedFinca);
-                    setParcelas(parcelasFinca);
-                }
+                const parcelasFinca = parcelas.filter(parcela => parcela.idFinca === selectedFinca);
+            //se asigna las parcelas de la IdFinca que se selecciona y se pone en parcelasfiltradas
+            setParcelasFiltradas(parcelasFinca);
 
             } catch (error) {
                 console.error('Error al obtener las parcelas de la finca:', error);
@@ -276,7 +280,7 @@ function AdministrarManejoFertilizantes() {
                     <div className="filtro-container" style={{ width: '300px' }}>
                         <select value={selectedParcela ? selectedParcela : ''} onChange={handleParcelaChange} className="custom-select">
                             <option value="">Seleccione la parcela...</option>
-                            {parcelas.map(parcela => (
+                            {parcelasFiltradas.map(parcela => (
                                 <option key={parcela.idParcela} value={parcela.idParcela}>{parcela.nombre}</option>
                             ))}
                         </select>

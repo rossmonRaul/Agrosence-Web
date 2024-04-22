@@ -22,6 +22,16 @@ const MantenimientoUsuariosAsignados = lazy(() => import('./pages/private/Manten
 const ManejodeFertilizantes = lazy(() => import('./pages/private/ManejodeFertilizantes/ManejodeFertilizantes'))
 const MedicionesdeSuelos = lazy(() => import('./pages/private/CalidadSuelo/CalidadSuelo'))
 const PreparacionTerreno = lazy(() => import('./pages/private/PreparacionTerreno/PreparacionTerreno'))
+const AdministrarRotacionCultivosEstacion = lazy(() => import('./pages/private/RotacionCultivosEstacion/RotacionCultivosEstacion'))
+const ProduccionCultivos = lazy(() => import('./pages/private/RegistroProductividadCultivo/RegistroProductividadCultivo'))
+const RegistroSeguimientoUsoAgua = lazy(() => import('./pages/private/RegistroSeguimientoUsoAgua/RegistroSeguimientoUsoAgua'))
+const Conductividadelectrica = lazy(() => import('./pages/private/ConductividadElectrica/ConductividadElectrica'))
+const ManejoResiduos = lazy(() => import('./pages/private/ManejoResiduos/ManejoResiduos'))
+const EficienciaRiego = lazy(() => import('./pages/private/EficienciaRiego/EficienciaRiego'))
+const PronosticoMeteorologico = lazy(() => import('./pages/private/PronosticoMeteorologico/PronosticoMeteorologico'))
+import CondicionesMeteorologicasClimaticas from './pages/private/RegistroCondicionesMetereologicas/RegistroCondicionesMetereologicas';
+const RiesgosNaturales = lazy(() => import('./pages/private/RiesgoNatural/RiesgoNatural'))
+const ProblemasPlagas = lazy(() => import('./pages/private/ProblemasPlagas/ProblemasPlagas'))
 function App() {
   return (
     // Suspense para manejar la carga de componentes lazy
@@ -47,7 +57,7 @@ function App() {
             <Route element={<RolGuard rol={Roles.SuperAdmin} />}>
               <Route path={PrivateRoutes.DASHBOARD} element={<Dashboard />} />
               {/* donde se crean los administradores */}
-              <Route path={PrivateRoutes.CREARUSUARIOSA} element={<AdministacionAdministradores />} /> 
+              <Route path={PrivateRoutes.CREARUSUARIOSA} element={<AdministacionAdministradores />} />
               <Route path={PrivateRoutes.ADMINISTRAREMPRESAS} element={<AdministrarEmpresas />} />
             </Route>
 
@@ -65,9 +75,17 @@ function App() {
               <Route path={PrivateRoutes.MANEJODEFERTILIZANTES} element={<ManejodeFertilizantes />} />
               <Route path={PrivateRoutes.MEDICIONESDESUELOS} element={<MedicionesdeSuelos />} />
               <Route path={PrivateRoutes.PREPARACIONTERRENOS} element={<PreparacionTerreno />} />
+              <Route path={PrivateRoutes.ROTACIONESCULTIVOSESTACION} element={<AdministrarRotacionCultivosEstacion />} />
+              <Route path={PrivateRoutes.RESIDUOS} element={<ManejoResiduos />} />
+              <Route path={PrivateRoutes.RIEGOS} element={<EficienciaRiego />} />
+              <Route path={PrivateRoutes.CONDUCTIVIDADELECTRICA} element={<Conductividadelectrica />} />
+              <Route path={PrivateRoutes.PRODUCCIONCULTIVOS} element={<ProduccionCultivos />} />
+              <Route path={PrivateRoutes.REGISTROSEGUIMIENTOUSOAGUA} element={<RegistroSeguimientoUsoAgua />} />
+              <Route path={PrivateRoutes.RIESGOSNATURALES} element={<RiesgosNaturales />} />
+              <Route path={PrivateRoutes.PROBLEMASPLAGAS} element={<ProblemasPlagas/>} />
 
-
-              
+              <Route path={PrivateRoutes.PRONOSTICOMETEOROLOGICO} element={<PronosticoMeteorologico />} />
+              <Route path={PrivateRoutes.CONDICIONESMETEOROLOGICASCLIMATICAS} element={<CondicionesMeteorologicasClimaticas />} />
             </Route>
           </RoutesWithNotFound>
         </BrowserRouter>

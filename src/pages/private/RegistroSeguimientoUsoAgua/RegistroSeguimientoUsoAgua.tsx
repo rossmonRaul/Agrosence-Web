@@ -7,38 +7,40 @@ import Topbar from "../../../components/topbar/Topbar.tsx";
 import { ObtenerParcelas } from "../../../servicios/ServicioParcelas.ts";
 import Swal from "sweetalert2";
 import { ObtenerFincas } from "../../../servicios/ServicioFincas.ts";
+import { CambiarEstadoRegistroSeguimientoUsoAgua, ObtenerUsoAgua } from "../../../servicios/ServicioUsoAgua.ts";
+
+import InsertarUsoAgua from "../../../components/usoAgua/InsertarUsoAgua.tsx";
+import ModificacionUsoAgua from "../../../components/usoAgua/EditarUsoAgua.tsx";
 import { ObtenerUsuariosAsignadosPorIdentificacion } from '../../../servicios/ServicioUsuario.ts';
 import '../../../css/FormSeleccionEmpresa.css'
-import InsertarCalidadCultivo from "../../../components/calidadcultivo/InsertarCalidadCultivo.tsx";
-import ModificarCalidadCultivo from "../../../components/calidadcultivo/ModificarCalidadCultivo.tsx";
-import { CambiarEstadoCalidadCultivo, ObtenerCalidadCultivos } from "../../../servicios/ServicioCultivo.ts";
 
-function RegistroCalidadCultivo() {
-    const [filtroNombreCultivo, setFiltroNombreCultivo] = useState('');
-    const [datosCalidadOriginales, setDatosCalidadOriginales] = useState<any[]>([]);
+function AdministrarRegistroSeguimientoUsoAgua() {
+    const [filtroActividad, setFiltroActividad] = useState('');
+    const [datosFertilizantesOriginales, setDatosFertilizantesOriginales] = useState<any[]>([]);
     const [modalEditar, setModalEditar] = useState(false);
     const [modalInsertar, setModalInsertar] = useState(false);
     const [selectedParcela, setSelectedParcela] = useState<number | null>(null);
     const [selectedDatos, setSelectedDatos] = useState({
         idFinca: '',
         idParcela: '',
-        idManejoCalidadSuelo: '',
+        idRegistroSeguimientoUsoAgua: '',
         fecha: '',
-        cultivo: '',
-        hora: '',
-        lote: '',
-        pesoTotal: '',
-        pesoPromedio: '',
-        calidad: '',
-        observaciones: ''
+        actividad: '', 
+        caudal: '',
+        consumoAgua: '',
+        observaciones: '',
+        estado:''
     });
     const [parcelas, setParcelas] = useState<any[]>([]);
-    const [datosCalidadFiltrados, setDatosCalidadFiltrados] = useState<any[]>([]);
+    const [parcelasFiltradas, setParcelasFiltradas] = useState<any[]>([]);
+    const [datosUsoAgua, setDatosUsoAgua] = useState<any[]>([]);
+    const [datosUsoAguaFiltrados, setDatosUsoAguaFiltrados] = useState<any[]>([]);
     const [selectedFinca, setSelectedFinca] = useState<number | null>(null);
     const [fincas, setFincas] = useState<any[]>([]);
 
     const handleFincaChange = async (e: React.ChangeEvent<HTMLSelectElement>) => {
         const value = parseInt(e.target.value);
+        setDatosUsoAgua([])
         setSelectedFinca(value);
         setSelectedParcela(null);
     };
@@ -57,12 +59,20 @@ function RegistroCalidadCultivo() {
                 if (identificacionString && idEmpresaString) {
 
                     const identificacion = identificacionString;
+                    
                     const usuariosAsignados = await ObtenerUsuariosAsignadosPorIdentificacion({ identificacion: identificacion });
                     const idFincasUsuario = usuariosAsignados.map((usuario: any) => usuario.idFinca);
+                    const idParcelasUsuario = usuariosAsignados.map((usuario: any) => usuario.idParcela);
+                    //se obtiene las fincas 
                     const fincasResponse = await ObtenerFincas();
+                    //se filtran las fincas con las fincas del usuario
                     const fincasUsuario = fincasResponse.filter((finca: any) => idFincasUsuario.includes(finca.idFinca));
-
                     setFincas(fincasUsuario);
+                    //se obtienen las parcelas
+                    const parcelasResponse = await ObtenerParcelas();
+                    //se filtran las parcelas con los idparcelasusuario
+                    const parcelasUsuario = parcelasResponse.filter((parcela: any) => idParcelasUsuario.includes(parcela.idParcela));
+                    setParcelas(parcelasUsuario)
                 } else {
                     console.error('La identificación y/o el ID de la empresa no están disponibles en el localStorage.');
                 }
@@ -73,16 +83,12 @@ function RegistroCalidadCultivo() {
         obtenerFincas();
     }, []);
 
-
     useEffect(() => {
         const obtenerParcelasDeFinca = async () => {
             try {
-                const parcelasResponse = await ObtenerParcelas();
-                let parcelasFinca = parcelasResponse;
-                if (selectedFinca !== null) {
-                    parcelasFinca = parcelasFinca.filter((parcela: any) => parcela.idFinca === selectedFinca);
-                    setParcelas(parcelasFinca);
-                }
+                const parcelasFinca = parcelas.filter(parcela => parcela.idFinca === selectedFinca);
+            //se asigna las parcelas de la IdFinca que se selecciona y se pone en parcelasfiltradas
+            setParcelasFiltradas(parcelasFinca);
 
             } catch (error) {
                 console.error('Error al obtener las parcelas de la finca:', error);
@@ -93,45 +99,52 @@ function RegistroCalidadCultivo() {
 
 
     const handleChangeFiltro = (e: React.ChangeEvent<HTMLInputElement>) => {
-        setFiltroNombreCultivo(e.target.value); // Convertir a minúsculas
+        setFiltroActividad(e.target.value); // Convertir a minúsculas
+
     };
 
     
     //este componente refrezca la tabla al momento
     useEffect(() => {
-        filtrarCalidad();
-    }, [selectedFinca, parcelas, selectedParcela, setFiltroNombreCultivo]);
+        filtrarUsoAgua();
+    }, [selectedFinca, parcelas, selectedParcela, filtroActividad]);
 
+    //  useEffect(() => {
+    //     obtenerInfo();
+    // }, []);
 
-    const filtrarCalidad = () => {
-        const datosFiltrados = filtroNombreCultivo
-            ? datosCalidadOriginales.filter((datos: any) =>
-                datos.cultivo.toLowerCase().includes(filtroNombreCultivo.toLowerCase())
+   
+    const filtrarUsoAgua = () => {
+        const UsoAguaFiltrados = filtroActividad
+            ? datosUsoAgua.filter((usoAgua: any) =>
+            usoAgua.actividad.toLowerCase().includes(filtroActividad.toLowerCase())
             )
-            : datosCalidadOriginales;
-            setDatosCalidadFiltrados(datosFiltrados);
+            : datosUsoAgua;
+            setDatosUsoAguaFiltrados(UsoAguaFiltrados);
+
     };
 
     const obtenerInfo = async () => {
         try {
-            const datosCalidad = await ObtenerCalidadCultivos();
+            const datosUsoAgua = await ObtenerUsoAgua();
 
             // Convertir el estado de 0 o 1 a palabras "Activo" o "Inactivo"
-            const datosCalidadConSEstado = datosCalidad.map((dato: any) => ({
+            const datosUsoAguaConSEstado = datosUsoAgua.map((dato: any) => ({
                 ...dato,
                 sEstado: dato.estado === 1 ? 'Activo' : 'Inactivo'
             }));
-
+   
             // Filtrar los datos para mostrar solo los correspondientes a la finca y parcela seleccionadas
-            const datosFiltrados = datosCalidadConSEstado.filter((dato: any) => {
+            const datosFiltrados = datosUsoAguaConSEstado.filter((dato: any) => {
                 //aca se hace el filtro y hasta que elija la parcela funciona
                 return dato.idFinca === selectedFinca && dato.idParcela === selectedParcela;
             });
             // Actualizar el estado con los datos filtrados
-            setDatosCalidadOriginales(datosFiltrados);
-            setDatosCalidadFiltrados(datosFiltrados);
+            setDatosUsoAgua(datosFiltrados);
+            setDatosUsoAguaFiltrados(datosFiltrados);
+
         } catch (error) {
-            console.error('Error al obtener los datos de los fertilizantes:', error);
+            console.error('Error al obtener los datos de registro y seguimiento del agua:', error);
         }
     };
 
@@ -155,7 +168,7 @@ function RegistroCalidadCultivo() {
         abrirCerrarModalEditar();
     };
 
-    const toggleStatus = async (datosTabla: any) => {
+    const toggleStatus = async (usoAgua: any) => {
         Swal.fire({
             title: "Cambiar Estado",
             text: "¿Estás seguro de que deseas actualizar el estado?",
@@ -167,9 +180,9 @@ function RegistroCalidadCultivo() {
             if (result.isConfirmed) {
                 try {
                     const datos = {
-                        idCalidadCultivo: datosTabla.idCalidadCultivo
+                        idRegistroSeguimientoUsoAgua: usoAgua.idRegistroSeguimientoUsoAgua
                     };
-                    const resultado = await CambiarEstadoCalidadCultivo(datos);
+                    const resultado = await CambiarEstadoRegistroSeguimientoUsoAgua(datos);
                     if (parseInt(resultado.indicador) === 1) {
                         Swal.fire({
                             icon: 'success',
@@ -191,24 +204,21 @@ function RegistroCalidadCultivo() {
         });
     };
 
-    const handleEditarCalidadCultivo = async () => {
+    const handleEditarUsoAgua = async () => {
         await obtenerInfo();
         abrirCerrarModalEditar();
     };
 
-    const handleAgregarCalidadCultivo = async () => {
+    const handleAgregarUsoAgua = async () => {
         await obtenerInfo();
         abrirCerrarModalInsertar();
     };
 
     const columns = [
-        { key: 'cultivo', header: 'Cultivo' },
         { key: 'fecha', header: 'Fecha' },
-        { key: 'hora', header: 'Hora' },
-        { key: 'lote', header: 'Lote' },
-        { key: 'pesoTotal', header: 'Peso Total (kg)' },
-        { key: 'pesoPromedio', header: 'Peso Promedio (g)' },
-        { key: 'calidad', header: 'Calidad' },
+        { key: 'actividad', header: 'Actividad' },
+        { key: 'caudal', header: 'Caudal(L/s)' },
+        { key: 'consumoAgua', header: 'Consumo de agua(m3)' },
         { key: 'observaciones', header: 'Observaciones' },
         { key: 'sEstado', header: 'Estado' },
         { key: 'acciones', header: 'Acciones', actions: true }
@@ -218,9 +228,9 @@ function RegistroCalidadCultivo() {
         <Sidebar>
             <div className="main-container">
                 <Topbar />
-                <BordeSuperior text="Manejo de Fertilizantes" />
+                <BordeSuperior text="Registros y seguimientos del uso del agua" />
                 <div className="content" col-md-12>
-                    <button onClick={() => abrirCerrarModalInsertar()} className="btn-crear">Ingresar registro de fertilizante</button>
+                    <button onClick={() => abrirCerrarModalInsertar()} className="btn-crear">Ingresar registro de seguimiento del uso del agua</button>
                     <div className="filtro-container" style={{ width: '300px' }}>
                         <select value={selectedFinca || ''} onChange={handleFincaChange} className="custom-select">
                             <option value="">Seleccione la finca...</option>
@@ -232,37 +242,37 @@ function RegistroCalidadCultivo() {
                     <div className="filtro-container" style={{ width: '300px' }}>
                         <select value={selectedParcela ? selectedParcela : ''} onChange={handleParcelaChange} className="custom-select">
                             <option value="">Seleccione la parcela...</option>
-                            {parcelas.map(parcela => (
+                            {parcelasFiltradas.map(parcela => (
                                 <option key={parcela.idParcela} value={parcela.idParcela}>{parcela.nombre}</option>
                             ))}
                         </select>
                     </div>
                     <div className="filtro-container">
-                        <label htmlFor="filtroNombreFertilizante">Filtrar por nombre de fertilizante:</label>
+                        <label htmlFor="filtroActividad">Filtrar por actividad:</label>
                         <input
                             type="text"
-                            id="filtroNombreFertilizante"
-                            value={filtroNombreCultivo}
+                            id="filtroActividad"
+                            value={filtroActividad}
                             onChange={handleChangeFiltro}
-                            placeholder="Ingrese el nombre del fertilizante"
+                            placeholder="Ingrese la actividad"
                             className="form-control"
                         />
                     </div>
-                    <TableResponsive columns={columns} data={datosCalidadFiltrados} openModal={openModal} btnActionName={"Editar"} toggleStatus={toggleStatus} />
+                    <TableResponsive columns={columns} data={datosUsoAguaFiltrados} openModal={openModal} btnActionName={"Editar"} toggleStatus={toggleStatus} />
                 </div>
             </div>
 
             <Modal
                 isOpen={modalInsertar}
                 toggle={abrirCerrarModalInsertar}
-                title="Manejo Fertilizantes"
+                title="Insertar registro de seguimiento del uso del agua"
                 onCancel={abrirCerrarModalInsertar}
             >
                 <div className='form-container'>
                     <div className='form-group'>
                         {/* este es el componente para crear el manejo fertilizante */}
-                        <InsertarCalidadCultivo
-                            onAdd={handleAgregarCalidadCultivo}
+                        <InsertarUsoAgua
+                            onAdd={handleAgregarUsoAgua}
                         />
                     </div>
                 </div>
@@ -271,24 +281,21 @@ function RegistroCalidadCultivo() {
             <Modal
                 isOpen={modalEditar}
                 toggle={abrirCerrarModalEditar}
-                title="Editar Manejo de Fertilizantes"
+                title="Editar registro de seguimiento del uso del agua"
                 onCancel={abrirCerrarModalEditar}
             >
                 <div className='form-container'>
                     <div className='form-group'>
-                        <ModificarCalidadCultivo
+                        <ModificacionUsoAgua
                             idFinca={parseInt(selectedDatos.idFinca)}
                             idParcela={parseInt(selectedDatos.idParcela)}
-                            idManejoCalidadCultivo={parseInt(selectedDatos.idManejoCalidadSuelo)}
-                            fecha={selectedDatos.fecha}
-                            cultivo={selectedDatos.cultivo}
-                            hora={selectedDatos.hora}
-                            lote={parseInt(selectedDatos.lote)}
-                            pesoTotal={parseInt(selectedDatos.pesoTotal)}
-                            pesoPromedio={parseInt(selectedDatos.pesoPromedio)}
-                            calidad={parseInt(selectedDatos.calidad)}
+                            idRegistroSeguimientoUsoAgua={parseInt(selectedDatos.idRegistroSeguimientoUsoAgua)}
+                            fecha={selectedDatos.fecha.toString()}
+                            actividad={selectedDatos.actividad}
+                            caudal={selectedDatos.caudal}
+                            consumoAgua={parseInt(selectedDatos.consumoAgua)}
                             observaciones={selectedDatos.observaciones}
-                            onEdit={handleEditarCalidadCultivo}
+                            onEdit={handleEditarUsoAgua}
                         />
                     </div>
                 </div>
@@ -297,4 +304,4 @@ function RegistroCalidadCultivo() {
     );
 }
 
-export default RegistroCalidadCultivo;
+export default AdministrarRegistroSeguimientoUsoAgua;

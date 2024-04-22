@@ -26,7 +26,8 @@ function AdministrarFincas() {
     // Estado para controlar la apertura y cierre del modal de inserción
     const [selectedFinca, setSelectedFinca] = useState({
         idFinca: '',
-        nombre: ''
+        nombre: '',
+        ubicacion:''
     });
     // Estado para almacenar todas las empresas
     const [fincas, setFinca] = useState<any[]>([]);
@@ -151,6 +152,7 @@ function AdministrarFincas() {
     // Definición de las columnas de la tabl
     const columns = [
         { key: 'nombre', header: 'Nombre Finca' },
+        { key: 'ubicacion', header: 'Ubicación' },
         { key: 'sEstado', header: 'Estado' },
         { key: 'acciones', header: 'Acciones', actions: true } // Columna para acciones
     ];
@@ -204,6 +206,7 @@ function AdministrarFincas() {
                         <EditarFinca
                             nombreEditar={selectedFinca.nombre}
                             idFinca={selectedFinca.idFinca}
+                            ubicacion={selectedFinca.ubicacion}
                             onEdit={handleEditarFinca}
                         />
                     </div>

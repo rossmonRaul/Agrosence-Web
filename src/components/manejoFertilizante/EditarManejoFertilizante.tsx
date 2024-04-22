@@ -86,7 +86,7 @@ const ModificacionManejoFertilizante: React.FC<FertilizanteSeleccionado> = ({
     const handleInputChange = (event: React.ChangeEvent<HTMLInputElement>) => {
         const { name, value } = event.target;
         setFormData((prevState: any) => ({
-            ...prevState, 
+            ...prevState,
             [name]: value
         }));
     };
@@ -97,7 +97,7 @@ const ModificacionManejoFertilizante: React.FC<FertilizanteSeleccionado> = ({
         const day = parts[0];
         const month = parts[1];
         const year = parts[2];
-        const fecha= year + '-' + month + '-' + day;
+        const fecha = year + '-' + month + '-' + day;
         setFormData({
             idFinca: idFinca,
             idParcela: idParcela,
@@ -125,10 +125,17 @@ const ModificacionManejoFertilizante: React.FC<FertilizanteSeleccionado> = ({
                     const identificacion = identificacionString;
                     const usuariosAsignados = await ObtenerUsuariosAsignadosPorIdentificacion({ identificacion: identificacion });
                     const idFincasUsuario = usuariosAsignados.map((usuario: any) => usuario.idFinca);
+                    const idParcelasUsuario = usuariosAsignados.map((usuario: any) => usuario.idParcela);
+                    //Se obtienen las fincas 
                     const fincasResponse = await ObtenerFincas();
+                    //Se filtran las fincas del usuario
                     const fincasUsuario = fincasResponse.filter((finca: any) => idFincasUsuario.includes(finca.idFinca));
-
                     setFincas(fincasUsuario);
+                    //se obtien las parcelas
+                    const parcelasResponse = await ObtenerParcelas();
+                    //se filtran las parcelas
+                    const parcelasUsuario = parcelasResponse.filter((parcela: any) => idParcelasUsuario.includes(parcela.idParcela));
+                    setParcelas(parcelasUsuario)
                 } else {
                     console.error('La identificación y/o el ID de la empresa no están disponibles en el localStorage.');
                 }
@@ -140,25 +147,12 @@ const ModificacionManejoFertilizante: React.FC<FertilizanteSeleccionado> = ({
     }, []);
 
 
-    useEffect(() => {
-        const obtenerParcelasDeFinca = async () => {
-            try {
-                const parcelasResponse = await ObtenerParcelas();
-                const parcelasFinca = parcelasResponse.filter((parcela: any) => parcela.idFinca === parseInt(selectedFinca));
-                setParcelas(parcelasFinca);
-            } catch (error) {
-                console.error('Error al obtener las parcelas de la finca:', error);
-            }
-        };
-        if (selectedFinca !== '') {
-            obtenerParcelasDeFinca();
-        }
-    }, [selectedFinca]);
-
     const filteredParcelas = parcelas.filter(parcela => parcela.idFinca === parseInt(selectedFinca));
 
     const handleFincaChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
         const value = e.target.value;
+        formData.idFinca = value
+        formData.idParcela = ""
         setSelectedFinca(value);
         setSelectedParcela('');
     };
@@ -176,8 +170,9 @@ const ModificacionManejoFertilizante: React.FC<FertilizanteSeleccionado> = ({
 
     const handleParcelaChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
         const value = e.target.value;
+        formData.idParcela = value
         setSelectedParcela(value);
-    }; 
+    };
 
     // Función para manejar el envío del formulario con validación
     const handleSubmitConValidacion = () => {
@@ -266,7 +261,7 @@ const ModificacionManejoFertilizante: React.FC<FertilizanteSeleccionado> = ({
         } else {
             newErrors.observaciones = '';
         }
-
+        
         // Actualizar los errores
         setErrors(newErrors);
 
@@ -321,7 +316,7 @@ const ModificacionManejoFertilizante: React.FC<FertilizanteSeleccionado> = ({
             };
 
             // vuelve a cargar la tabla
-            
+
             if (onEdit) {
                 onEdit();
             }
@@ -333,29 +328,32 @@ const ModificacionManejoFertilizante: React.FC<FertilizanteSeleccionado> = ({
 
     return (
         <div id='general' style={{ display: 'flex', flexDirection: 'column', paddingBottom: '0rem', width: '100%', margin: '0 auto' }}>
-            <div className="form-container-fse" style={{ display: 'flex', flexDirection: 'column', width: '50%' }}>
-                <h2>Manejo de fertilizantes</h2>
-                <FormGroup>
-                    <label htmlFor="fincas">Finca:</label>
-                    <select className="custom-select" id="fincas" value={selectedFinca} onChange={handleFincaChange}>
-                        <option key="default-finca" value="">Seleccione...</option>
-                        {filteredFincas.map((finca) => (
-                            <option key={`${finca.idFinca}-${finca.nombre || 'undefined'}`} value={finca.idFinca}>{finca.nombre || 'Undefined'}</option>
-                        ))}
-                    </select>
-                    {errors.finca && <FormFeedback>{errors.finca}</FormFeedback>}
-                </FormGroup>
-
-                <FormGroup>
-                    <label htmlFor="parcelas">Parcela:</label>
-                    <select className="custom-select" id="parcelas" value={selectedParcela} onChange={handleParcelaChange}>
-                        <option key="default-parcela" value="">Seleccione...</option>
-                        {filteredParcelas.map((parcela) => (
-                            <option key={`${parcela.idParcela}-${parcela.nombre || 'undefined'}`} value={parcela.idParcela}>{parcela.nombre || 'Undefined'}</option>
-                        ))}
-                    </select>
-                    {errors.parcela && <FormFeedback>{errors.parcela}</FormFeedback>}
-                </FormGroup>
+            <h2>Manejo de fertilizantes</h2>
+            <div className="form-container-fse" style={{ display: 'flex', flexDirection: 'row', width: '100%' }}>
+                <div style={{ marginRight: '10px', width: '50%' }}>
+                    <FormGroup>
+                        <label htmlFor="fincas">Finca:</label>
+                        <select className="custom-select" id="fincas" value={selectedFinca} onChange={handleFincaChange}>
+                            <option key="default-finca" value="">Seleccione...</option>
+                            {filteredFincas.map((finca) => (
+                                <option key={`${finca.idFinca}-${finca.nombre || 'undefined'}`} value={finca.idFinca}>{finca.nombre || 'Undefined'}</option>
+                            ))}
+                        </select>
+                        {errors.finca && <FormFeedback>{errors.finca}</FormFeedback>}
+                    </FormGroup>
+                </div>
+                <div style={{ marginRight: '0px', width: '50%' }}>
+                    <FormGroup>
+                        <label htmlFor="parcelas">Parcela:</label>
+                        <select className="custom-select" id="parcelas" value={selectedParcela} onChange={handleParcelaChange}>
+                            <option key="default-parcela" value="">Seleccione...</option>
+                            {filteredParcelas.map((parcela) => (
+                                <option key={`${parcela.idParcela}-${parcela.nombre || 'undefined'}`} value={parcela.idParcela}>{parcela.nombre || 'Undefined'}</option>
+                            ))}
+                        </select>
+                        {errors.parcela && <FormFeedback>{errors.parcela}</FormFeedback>}
+                    </FormGroup>
+                </div>
             </div>
             <div style={{ display: 'flex', flexDirection: 'row', marginBottom: '0rem' }}>
                 <div style={{ flex: 1, marginRight: '0.5rem', marginLeft: '0.5rem' }}>
@@ -507,7 +505,7 @@ const ModificacionManejoFertilizante: React.FC<FertilizanteSeleccionado> = ({
                     <Button onClick={handleSubmitConValidacion} className="btn-styled">Guardar</Button>
                 </Col>
             </FormGroup>
-        </div>
+        </div >
     );
 
 };

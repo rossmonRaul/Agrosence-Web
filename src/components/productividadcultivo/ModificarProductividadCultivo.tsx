@@ -7,21 +7,18 @@ import { ObtenerUsuariosAsignadosPorIdentificacion } from '../../servicios/Servi
 import '../../css/CrearCuenta.css';
 import { useSelector } from 'react-redux';
 import { AppStore } from '../../redux/Store.ts';
-import { EditarCalidadCultivo } from '../../servicios/ServicioCultivo.ts';
+import { EditarProductividadCultivo } from '../../servicios/ServicioCultivo.ts';
 
 // Interfaz para las propiedades del componente
 interface Props {
     idFinca: number;
     idParcela: number;
-    idManejoCalidadCultivo: number;
-    fecha: string;
+    idManejoProductividadCultivo: number;
     cultivo: string;
-    hora: string;
-    lote: number;
-    pesoTotal: number;
-    pesoPromedio: number;
-    calidad: number;
-    observaciones: string;
+    temporada: string;
+    area: number;
+    produccion: number;
+    productividad: number;
     onEdit?: () => void; // Hacer onEdit opcional agregando "?"
 }
 
@@ -33,55 +30,57 @@ interface Option {
     idFinca: number;
 }
 
+interface Temporada {
+    nombre: string;
+}
 const ModificarCalidadCultivo: React.FC<Props> = ({
     idFinca,
     idParcela,
-    idManejoCalidadCultivo,
-    fecha,
+    idManejoProductividadCultivo,
     cultivo,
-    hora,
-    lote,
-    pesoTotal,
-    pesoPromedio,
-    calidad,
-    observaciones,
+    temporada,
+    area,
+    produccion,
+    productividad,
     onEdit
 }) => {
 
     const [fincas, setFincas] = useState<Option[]>([]);
+    const [temporadas, setTemporadas] = useState<Temporada[]>([]);
+    useEffect(() => {
+        setTemporadas([
+            { nombre: 'Lluviosa' },
+            { nombre: 'Seca' }
+        ]);
+    }, []);
     const [parcelas, setParcelas] = useState<Option[]>([]);
     const userState = useSelector((store: AppStore) => store.user);
     //esto rellena los select de finca y parcela cuando se carga el modal
     const [selectedFinca, setSelectedFinca] = useState<string>(() => idFinca ? idFinca.toString() : '');
     const [selectedParcela, setSelectedParcela] = useState<string>(() => idParcela ? idParcela.toString() : '');
+    const [selectedTemporada, setSelectedTemporada] = useState<string>(() => temporada ? temporada.toString() : '');
 
     const [formData, setFormData] = useState<any>({
         idFinca: '',
         idParcela: '',
-        idManejoCalidadCultivo: '',
-        fechaCreacion: '',
+        idManejoProductividadCultivo: '',
         cultivo: '',
-        hora: '',
-        lote: '',
-        pesoTotal: '',
-        pesoPromedio: '',
-        calidad: '',
-        observaciones: ''
+        temporada: '',
+        area: '',
+        produccion: '',
+        productividad: ''
     });
 
     // Estado para almacenar los errores de validación del formulario
     const [errors, setErrors] = useState<Record<string, string>>({
         idFinca: '',
         idParcela: '',
-        idManejoCalidadCultivo: '',
-        fechaCreacion: '',
+        idManejoProductividadCultivo: '',
         cultivo: '',
-        hora: '',
-        lote: '',
-        pesoTotal: '',
-        pesoPromedio: '',
-        calidad: '',
-        observaciones: ''
+        temporada: '',
+        area: '',
+        produccion: '',
+        productividad: ''
     });
 
 
@@ -96,41 +95,40 @@ const ModificarCalidadCultivo: React.FC<Props> = ({
     };
 
     useEffect(() => {
-        // Actualizar el formData cuando las props cambien
-        const parts = fecha.split('/');
-        const day = parts[0];
-        const month = parts[1];
-        const year = parts[2];
-        const fechaFormateada = year + '-' + month + '-' + day;
         setFormData({
             idFinca: idFinca,
             idParcela: idParcela,
-            idManejoCalidadCultivo: idManejoCalidadCultivo,
-            fechaCreacion: fechaFormateada,
+            idManejoProductividadCultivo: idManejoProductividadCultivo,
             cultivo: cultivo,
-            hora: hora,
-            lote: lote,
-            pesoTotal: pesoTotal,
-            pesoPromedio: pesoPromedio,
-            calidad: calidad,
-            observaciones: observaciones
+            temporada: temporada,
+            area: area,
+            produccion: produccion,
+            productividad: productividad
         });
-    }, [idManejoCalidadCultivo]);
+    }, [idManejoProductividadCultivo]);
 
+    
 
     // Obtener las fincas al cargar la página
     useEffect(() => {
         const obtenerFincas = async () => {
             try {
-                const idEmpresaString = userState.idEmpresa.toString();
-                const identificacionString = userState.identificacion;
+                const idEmpresaString = localStorage.getItem('empresaUsuario');
+                const identificacionString = localStorage.getItem('identificacionUsuario');
                 if (identificacionString && idEmpresaString) {
+
                     const identificacion = identificacionString;
                     const usuariosAsignados = await ObtenerUsuariosAsignadosPorIdentificacion({ identificacion: identificacion });
                     const idFincasUsuario = usuariosAsignados.map((usuario: any) => usuario.idFinca);
+                    const idParcelasUsuario = usuariosAsignados.map((usuario: any) => usuario.idParcela);
+
                     const fincasResponse = await ObtenerFincas();
                     const fincasUsuario = fincasResponse.filter((finca: any) => idFincasUsuario.includes(finca.idFinca));
                     setFincas(fincasUsuario);
+                    const parcelasResponse = await ObtenerParcelas();
+                    const parcelasUsuario = parcelasResponse.filter((parcela: any) => idParcelasUsuario.includes(parcela.idParcela));
+                    setParcelas(parcelasUsuario)
+
                 } else {
                     console.error('La identificación y/o el ID de la empresa no están disponibles en el localStorage.');
                 }
@@ -139,28 +137,15 @@ const ModificarCalidadCultivo: React.FC<Props> = ({
             }
         };
         obtenerFincas();
-    }, []);
+    }, [setParcelas]);
 
-
-    useEffect(() => {
-        const obtenerParcelasDeFinca = async () => {
-            try {
-                const parcelasResponse = await ObtenerParcelas();
-                const parcelasFinca = parcelasResponse.filter((parcela: any) => parcela.idFinca === parseInt(selectedFinca));
-                setParcelas(parcelasFinca);
-            } catch (error) {
-                console.error('Error al obtener las parcelas de la finca:', error);
-            }
-        };
-        if (selectedFinca !== '') {
-            obtenerParcelasDeFinca();
-        }
-    }, [selectedFinca]);
 
     const filteredParcelas = parcelas.filter(parcela => parcela.idFinca === parseInt(selectedFinca));
 
     const handleFincaChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
         const value = e.target.value;
+        formData.idFinca = value
+        formData.idParcela = ""
         setSelectedFinca(value);
         setSelectedParcela('');
     };
@@ -178,9 +163,14 @@ const ModificarCalidadCultivo: React.FC<Props> = ({
 
     const handleParcelaChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
         const value = e.target.value;
+        formData.idParcela = value
         setSelectedParcela(value);
     };
 
+    const handleTemporadaChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
+        const value = e.target.value;
+        setSelectedTemporada(value);
+    };
     // Función para manejar el envío del formulario con validación
     const handleSubmitConValidacion = () => {
         // Validar campos antes de avanzar al siguiente paso
@@ -200,17 +190,11 @@ const ModificarCalidadCultivo: React.FC<Props> = ({
             newErrors.parcela = '';
         }
 
-        if (!formData.fechaCreacion.trim()) {
-            newErrors.fechaCreacion = 'La fecha es requerida';
+        // Validar selección de temporada
+        if (!selectedTemporada) {
+            newErrors.temporada = 'Debe seleccionar una temporada';
         } else {
-            // Validar que la fecha esté en el rango desde el 2015 hasta la fecha actual
-            const minDate = new Date('2015-01-01');
-            const selectedDate = new Date(formData.fechaCreacion);
-            if (selectedDate < minDate || selectedDate > new Date()) {
-                newErrors.fechaCreacion = 'La fecha debe estar entre 2015 y la fecha actual';
-            } else {
-                newErrors.fechaCreacion = '';
-            }
+            newErrors.temporada = '';
         }
 
         if (!formData.cultivo.trim()) {
@@ -221,57 +205,22 @@ const ModificarCalidadCultivo: React.FC<Props> = ({
             newErrors.cultivo = '';
         }
 
-        if (!formData.hora.trim()) {
-            newErrors.hora = 'La hora es requerida';
-        } else if (!/^([01]?[0-9]|2[0-3]):[0-5][0-9]$/.test(formData.hora.trim())) {
-            newErrors.hora = 'El formato de la hora debe ser ##:##';
+        if (!formData.area) {
+            newErrors.area = 'El área es requerida';
         } else {
-            newErrors.hora = '';
+            newErrors.area = '';
         }
 
-        if (!formData.lote) {
-            newErrors.lote = 'El número de lote es requerido';
-        } else if (!/^\d+$/.test(formData.dosis)) {
-            newErrors.lote = 'El número de lote debe de ser un número';
+        if (!formData.produccion) {
+            newErrors.produccion = 'La produccion es requerida';
         } else {
-            newErrors.lote = '';
+            newErrors.produccion = '';
         }
 
-        if (!formData.pesoTotal) {
-            newErrors.pesoTotal = 'El  peso es requerido';
-        } else if (!/^\d+$/.test(formData.dosis)) {
-            newErrors.pesoTotal = 'El peso debe de ser un número';
+        if (!formData.productividad) {
+            newErrors.productividad = 'La productividad es requerida';
         } else {
-            newErrors.pesoTotal = '';
-        }
-
-        if (!formData.pesoPromedio) {
-            newErrors.pesoPromedio = 'El  peso promedio es requerido';
-        } else if (!/^\d+$/.test(formData.dosis)) {
-            newErrors.pesoPromedio = 'El peso promedio debe de ser un número';
-        } else {
-            newErrors.pesoPromedio = '';
-        }
-
-        if (!formData.calidad) {
-            newErrors.calidad = 'La calidad es requerida';
-        } else if (!/^\d+$/.test(formData.calidad)) {
-            newErrors.calidad = 'La calidad debe ser un número';
-        } else {
-            const calidadNumber = parseInt(formData.calidad);
-            if (calidadNumber < 0 || calidadNumber > 5) {
-                newErrors.calidad = 'La calidad debe ser un número entre 0 y 5';
-            } else {
-                newErrors.calidad = '';
-            }
-        }
-
-        if (!formData.observaciones.trim()) {
-            newErrors.observaciones = 'Las observaciones son requeridas';
-        } else if (formData.observaciones.length > 200) {
-            newErrors.observaciones = 'Las observaciones no pueden tener más de 200 caracteres';
-        } else {
-            newErrors.observaciones = '';
+            newErrors.productividad = '';
         }
 
         // Actualizar los errores
@@ -286,21 +235,19 @@ const ModificarCalidadCultivo: React.FC<Props> = ({
     // Función para manejar el envío del formulario
     const handleSubmit = async () => {
         const datos = {
-            idFinca: selectedFinca,
-            idParcela: selectedParcela,
-            idManejoCalidadCultivo: formData.idManejoCalidadCultivo,
-            fechaCreacion: formData.fechaCreacion,
-            cultivo: formData.cultivo,
-            hora: formData.hora,
-            lote: formData.lote,
-            pesoTotal: formData.pesoTotal,
-            pesoPromedio: formData.pesoPromedio,
-            calidad: formData.calidad,
-            observaciones: formData.observaciones
+            IdFinca: selectedFinca,
+            IdParcela: selectedParcela,
+            IdManejoProductividadCultivo: idManejoProductividadCultivo,
+            Cultivo: formData.cultivo,
+            Temporada: selectedTemporada,
+            Area: formData.area,
+            Produccion: formData.produccion,
+            Productividad: formData.productividad,
+            Usuario: userState.identificacion
         };
 
         try {
-            const resultado = await EditarCalidadCultivo(datos);
+            const resultado = await EditarProductividadCultivo(datos);
             if (resultado.indicador === 1) {
                 Swal.fire({
                     icon: 'success',
@@ -325,10 +272,21 @@ const ModificarCalidadCultivo: React.FC<Props> = ({
         }
     };
 
+    const handleInputBlur = (fieldName: string) => {
+        // Eliminar el mensaje de error para el campo cuando el identificacion comienza a escribir en él
+        if (errors[fieldName]) {
+            setErrors((prevErrors: any) => ({
+                ...prevErrors,
+                [fieldName]: ''
+            }));
+        }
+    };
+
     return (
         <div id='general' style={{ display: 'flex', flexDirection: 'column', paddingBottom: '0rem', width: '100%', margin: '0 auto' }}>
-            <div className="form-container-fse" style={{ display: 'flex', flexDirection: 'column', width: '50%' }}>
-                <h2>Calidad de Cultivos</h2>
+            <h2>Productividad de Cultivos</h2>
+            <div className="form-container-fse" style={{ display: 'flex', flexDirection: 'column', width: '60%', marginLeft: '0.5rem' }}>
+
                 <FormGroup>
                     <label htmlFor="fincas">Finca:</label>
                     <select className="custom-select" id="fincas" value={selectedFinca} onChange={handleFincaChange}>
@@ -350,26 +308,20 @@ const ModificarCalidadCultivo: React.FC<Props> = ({
                     </select>
                     {errors.parcela && <FormFeedback>{errors.parcela}</FormFeedback>}
                 </FormGroup>
+
+                <FormGroup>
+                    <label htmlFor="temporadas">Temporada:</label>
+                    <select className="custom-select" id="temporadas" value={selectedTemporada} onChange={handleTemporadaChange}>
+                        <option key="default-temporada" value="">Seleccione...</option>
+                        {temporadas.map((temporada) => (
+                            <option key={`${temporada.nombre}}-${temporada.nombre || 'undefined'}`} value={temporada.nombre}>{temporada.nombre || 'Undefined'}</option>
+                        ))}
+                    </select>
+                    {errors.temporada && <FormFeedback>{errors.temporada}</FormFeedback>}
+                </FormGroup>
             </div>
 
             <div style={{ display: 'flex', flexDirection: 'row', marginBottom: '0rem' }}>
-                <div style={{ flex: 1, marginRight: '0.5rem', marginLeft: '0.5rem' }}>
-                    <FormGroup row>
-                        <Label for="fechaCreacion" sm={4} className="input-label">Fecha</Label>
-                        <Col sm={8}>
-                            <Input
-                                type="date"
-                                id="fechaCreacion"
-                                name="fechaCreacion"
-                                value={formData.fechaCreacion}
-                                onChange={handleInputChange}
-                                className={errors.fechaCreacion ? 'input-styled input-error' : 'input-styled'}
-                                placeholder="Selecciona una fecha"
-                            />
-                            <FormFeedback>{errors.fechaCreacion}</FormFeedback>
-                        </Col>
-                    </FormGroup>
-                </div>
 
                 <div style={{ flex: 1, marginRight: '0.5rem', marginLeft: '0.5rem' }}>
                     <FormGroup row>
@@ -382,6 +334,7 @@ const ModificarCalidadCultivo: React.FC<Props> = ({
                                 value={formData.cultivo}
                                 onChange={handleInputChange}
                                 className={errors.cultivo ? 'input-styled input-error' : 'input-styled'}
+                                onBlur={() => handleInputBlur('cultivo')}
                                 placeholder="Nombre del Cultivo"
                                 maxLength={50}
                             />
@@ -392,19 +345,19 @@ const ModificarCalidadCultivo: React.FC<Props> = ({
 
                 <div style={{ flex: 1, marginRight: '0.5rem', marginLeft: '0.5rem' }}>
                     <FormGroup row>
-                        <Label for="hora" sm={4} className="input-label">Hora:</Label>
+                        <Label for="area" sm={4} className="input-label">Área (ha):</Label>
                         <Col sm={8}>
                             <Input
-                                type="text"
-                                id="hora"
-                                name="hora"
-                                value={formData.hora}
+                                type="number"
+                                id="area"
+                                name="area"
+                                value={formData.area}
                                 onChange={handleInputChange}
-                                className="input-styled"
-                                placeholder="08:00"
-                                maxLength={5}
+                                onBlur={() => handleInputBlur('area')}
+                                className={errors.area ? 'input-styled input-error' : 'input-styled'}
+                                placeholder="Número de lote"
                             />
-                            <FormFeedback>{errors.hora}</FormFeedback>
+                            <FormFeedback>{errors.area}</FormFeedback>
                         </Col>
                     </FormGroup>
                 </div>
@@ -413,18 +366,19 @@ const ModificarCalidadCultivo: React.FC<Props> = ({
             <div style={{ display: 'flex', flexDirection: 'row', marginBottom: '0rem' }}>
                 <div style={{ flex: 1, marginRight: '0.5rem', marginLeft: '0.5rem' }}>
                     <FormGroup row>
-                        <Label for="lote" sm={4} className="input-label">Lote:</Label>
+                        <Label for="produccion" sm={4} className="input-label">Produccion (ton):</Label>
                         <Col sm={8}>
                             <Input
                                 type="number"
-                                id="dosis"
-                                name="dosis"
-                                value={formData.lote}
+                                id="produccion"
+                                name="produccion"
+                                value={formData.produccion}
                                 onChange={handleInputChange}
-                                className={errors.lote ? 'input-styled input-error' : 'input-styled'}
-                                placeholder="Número de lote"
+                                onBlur={() => handleInputBlur('produccion')}
+                                className={errors.produccion ? 'input-styled input-error' : 'input-styled'}
+                                placeholder="Produccion"
                             />
-                            <FormFeedback>{errors.lote}</FormFeedback>
+                            <FormFeedback>{errors.produccion}</FormFeedback>
                         </Col>
                     </FormGroup>
                 </div>
@@ -432,79 +386,25 @@ const ModificarCalidadCultivo: React.FC<Props> = ({
 
                 <div style={{ flex: 1, marginRight: '0.5rem', marginLeft: '0.5rem' }}>
                     <FormGroup row>
-                        <Label for="pesoTotal" sm={4} className="input-label">Peso Total:</Label>
+                        <Label for="productividad" sm={4} className="input-label">Productividad:</Label>
                         <Col sm={8}>
                             <Input
                                 type="number"
-                                id="pesoTotal"
-                                name="pesoTotal"
-                                value={formData.pesoTotal}
+                                id="productividad"
+                                name="productividad"
+                                value={formData.productividad}
                                 onChange={handleInputChange}
-                                className={errors.pesoTotal ? 'input-styled input-error' : 'input-styled'}
-                                placeholder="Peso Total"
+                                onBlur={() => handleInputBlur('productividad')}
+                                className={errors.productividad ? 'input-styled input-error' : 'input-styled'}
+                                placeholder="Productividad"
                             />
-                            <FormFeedback>{errors.pesoTotal}</FormFeedback>
-                        </Col>
-                    </FormGroup>
-                </div>
-
-
-                <div style={{ flex: 1, marginRight: '0.5rem', marginLeft: '0.5rem' }}>
-                    <FormGroup row>
-                        <Label for="pesoPromedio" sm={4} className="input-label">Peso Promedio:</Label>
-                        <Col sm={8}>
-                            <Input
-                                type="number"
-                                id="pesoPromedio"
-                                name="pesoPromedio"
-                                value={formData.pesoPromedio}
-                                onChange={handleInputChange}
-                                className={errors.pesoPromedio ? 'input-styled input-error' : 'input-styled'}
-                                placeholder="Peso Promedio"
-                            />
-                            <FormFeedback>{errors.pesoPromedio}</FormFeedback>
-                        </Col>
-                    </FormGroup>
-                </div>
-
-                <div style={{ flex: 1, marginRight: '0.5rem', marginLeft: '0.5rem' }}>
-                    <FormGroup row>
-                        <Label for="calidad" sm={4} className="input-label">Calidad:</Label>
-                        <Col sm={8}>
-                            <Input
-                                type="number"
-                                id="calidad"
-                                name="calidad"
-                                value={formData.calidad}
-                                onChange={handleInputChange}
-                                className={errors.calidad ? 'input-styled input-error' : 'input-styled'}
-                                placeholder="0 al 5"
-                            />
-                            <FormFeedback>{errors.calidad}</FormFeedback>
+                            <FormFeedback>{errors.productividad}</FormFeedback>
                         </Col>
                     </FormGroup>
                 </div>
 
             </div>
 
-            <FormGroup row>
-                <Label for="observaciones" sm={2} className="input-label">Observaciones</Label>
-                <Col sm={10}>
-                    <Input
-                        type="textarea"
-                        id="observaciones"
-                        name="observaciones"
-                        value={formData.observaciones}
-                        onChange={handleInputChange}
-                        className="input-styled"
-                        style={{ height: '75px', resize: "none" }}
-                        placeholder="Observaciones"
-                        maxLength={200}
-
-                    />
-                    <FormFeedback>{errors.observaciones}</FormFeedback>
-                </Col>
-            </FormGroup>
             <FormGroup row>
                 <Col sm={{ size: 10, offset: 2 }}>
                     {/* Agregar aquí el botón de cancelar proporcionado por el modal */}

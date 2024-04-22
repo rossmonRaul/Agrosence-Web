@@ -1,0 +1,32 @@
+.dropzone {
+    
+    border: 2px dashed #cccccc;
+    padding: 20px;
+    text-align: center;
+    width: 400px;
+    margin: 0 auto; /* Centrar el componente */
+  }
+  
+  .file-list {
+    margin-top: 20px;
+    max-height: 200px; /* Altura máxima de la lista de archivos */
+    overflow-y: auto; /* Agregar scroll vertical si el contenido excede la altura máxima */
+  }
+  
+  .file-item {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 5px;
+    background-color: #f0f0f0;
+    border-radius: 5px;
+    margin-bottom: 5px;
+  }
+  
+  .file-item span {
+    margin-right: 10px;
+  }
+  .button{
+    background-color: #FAB1B1;
+    color:black;
+  }

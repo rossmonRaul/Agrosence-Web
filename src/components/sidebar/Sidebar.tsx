@@ -54,12 +54,6 @@ const Sidebar = ({ children }: { children: React.ReactNode }) => {
             roles: [1]
         },
         {
-            path: "/asignarempresa",
-            name: "Habilitar Usuarios",
-            icon: <FaUserAlt />,
-            roles: [2]
-        },
-        {
             path: "/administrarusuariosasignados",
             name: "Usuarios Asignados",
             icon: <FaUserCog />,
@@ -69,67 +63,135 @@ const Sidebar = ({ children }: { children: React.ReactNode }) => {
         {
             path: "/administrarfincas",
             name: "Fincas",
-            icon: <img src='/field.png'style={{width: '22px'}}/>,
+            icon: <img src='/field.png' style={{ width: '22px' }} />,
             roles: [2]
         },
 
         {
             path: "/administrarparcelas",
             name: "Parcelas",
-            icon: <img src='/tractor.png'style={{width: '30px'}}/>,
+            icon: <img src='/tractor.png' style={{ width: '30px' }} />,
             roles: [2]
         },
         {
             path: "/suelos",
             name: "Suelos",
-            icon: <img src='/suelos.png'style={{width: '22px'}}/>, // Puedes usar cualquier icono que desees aquí
+            icon: <img src='/suelos.png' style={{ width: '22px' }} />, // Puedes usar cualquier icono que desees aquí
             roles: [3], // Especifica los roles que pueden ver esta opción
             children: [
                 {
                     path: "/manejodefertilizantes",
                     name: "Manejo de Fertilizantes",
-                    icon: <img src='/fertilizer.png'style={{width: '30px'}}/>,
+                    icon: <img src='/fertilizer.png' style={{ width: '30px' }} />,
                 },
                 {
                     path: "/medicionesdesuelos",
                     name: "Mediciones de Suelos",
-                    icon: <img src='/calidadsuelo.png'style={{width: '30px'}}/>,
+                    icon: <img src='/calidadsuelo.png' style={{ width: '30px' }} />,
                 }
             ]
         },
-                {
-            path: "/manejodecultivos",
-            name: "Menú desplegable 2",
-            icon: <IoBusiness/>, // Puedes usar cualquier icono que desees aquí
+        {
+            path: "/cultivos",
+            name: "Cultivos",
+            icon: <img src='/cultivos.png' style={{ width: '22px' }} />, // Puedes usar cualquier icono que desees aquí
             roles: [3], // Especifica los roles que pueden ver esta opción
             children: [
                 {
-                    path: "/manejodefertilizantes",
-                    name: "Opción desplegable 1",
-                    icon: <IoBusiness/>,
+                    path: "/rotacionescultivosestacion",
+                    name: "Rotacion",
+                    icon: <img src='/rotacionCultivos.png' style={{ width: '22px' }} />,
                 },
                 {
-                    path: "/manejodefertilizantes",
-                    name: "Opción desplegable 2",
-                    icon: <IoBusiness/>,
-                },
-                {
-                    path: "/manejodefertilizantes",
-                    name: "Opción desplegable 3",
-                    icon: <IoBusiness/>,
-                },
-                {
-                    path: "/medicionesdesuelos",
-                    name: "Opción desplegable 4",
-                    icon: <IoBusiness/>,
+                    path: "/manejoresiduos",
+                    name: "Manejo de residuos",
+                    icon: <img src='/historial.png' style={{ width: '22px' }} />,
                 },
                 {
                     path: "/preparaciondeterrenos",
-                    name: "Opción desplegable 5",
-                    icon: <IoBusiness/>,
+                    name: "Preparación de terreno",
+                    icon: <img src='/montana.png' style={{ width: '22px' }} />,
+                },
+                {
+                    path: "/productividadcultivos",
+                    name: "Productividad",
+                    icon: <img src='/productividad.png' style={{ width: '22px' }} />,
                 }
             ]
         },
+        {
+            path: "/menuhidrico",
+            name: "Hidrico",
+            icon: <img src='/water-filter.png' style={{ width: '22px' }} />, // Puedes usar cualquier icono que desees aquí
+            roles: [3], // Especifica los roles que pueden ver esta opción
+            children: [
+                {
+                    path: "/registroseguimientousoagua",
+                    name: "Rotacion",
+                    icon: <img src='/water.png' style={{ width: '22px' }} />,
+                },
+                {
+                    path: "/eficienciariego",
+                    name: "Eficiencia Riego",
+                    icon: <img src='/sistema-de-agua.png' style={{ width: '22px' }} />,
+                },
+                {
+                    path: "/conductividadelectrica",
+                    name: "Estrés Hídrico",
+                    icon: <img src='/agua-del-grifo.png' style={{ width: '22px' }} />,
+                },
+                {
+                    path: "/opcion4",
+                    name: "opcion4",
+                    icon: <img src='/productividad.png' style={{ width: '22px' }} />,
+                }
+            ]
+        },
+
+        {
+            path: "/menucondicionesclimaticas",
+            name: "Clima",
+            icon: <img src='/weather-forecast.png' style={{ width: '22px' }} />, // Puedes usar cualquier icono que desees aquí
+            roles: [3], // Especifica los roles que pueden ver esta opción
+            children: [
+                {
+                    path: "/pronosticometereologico",
+                    name: "Pronóstico Meteorológico",
+                    icon: <img src='/weather.png' style={{ width: '22px' }} />,
+                },
+                {
+                    path: "/condicionesmetereologicasclimaticas",
+                    name: "Condiciones Meteorológicas y Climáticas",
+                    icon: <img src='/condiciones-climaticas.png' style={{ width: '22px' }} />,
+                },
+                {
+                    path: "/riesgonatural",
+                    name: "Riesgos Naturales",
+                    icon: <img src='/calentamiento-global.png' style={{ width: '22px' }} />,
+                },
+                
+            ]
+        },
+        {
+            path: "/menuplagas",
+            name: "Gestion Plagas",
+            icon: <img src='/plagasmenu.png' style={{ width: '22px' }} />, // Puedes usar cualquier icono que desees aquí
+            roles: [3], // Especifica los roles que pueden ver esta opción
+            children: [
+                {
+                    path: "/problemasplagas",
+                    name: "Problemas Plagas",
+                    icon: <img src='/plagas.png' style={{ width: '22px' }} />,
+                },
+                {
+                    path: "/condicionesmetereologicasclimaticas",
+                    name: "Condiciones Meteorológicas y Climáticas",
+                    icon: <img src='/condiciones-climaticas.png' style={{ width: '22px' }} />,
+                },
+                
+            ]
+        },
+
         {
             path: "#", // Utilizar "#" como un enlace que no lleva a ninguna parte para los multi-seleccion
             name: "Pages",

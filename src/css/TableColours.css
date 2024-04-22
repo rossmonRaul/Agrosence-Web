@@ -1,0 +1,152 @@
+.table-container {
+    margin-left: auto;
+    margin-right: auto;
+    margin-top: 5px;
+    margin-bottom: 50px;
+}
+
+.table {
+    width: 100%;
+    /* Opcional: ajusta el ancho de la tabla según sea necesario */
+    border-collapse: collapse;
+    /* Otros estilos para la tabla */
+    text-align: center;
+}
+
+.btn-desvincular {
+    background-color: rgb(255, 8, 0);
+    color: #ddd;
+    min-width: 80px;
+    margin-left: 10px;
+
+}
+
+.btn-asignaciones {
+    background-color: rgb(168, 43, 21);
+    color: #ddd;
+    min-width: 80px;
+    margin-left: 10px;
+}
+
+.btn-edit {
+    margin-right: 10px;
+    background-color: rgb(44, 140, 219);
+    color: #ddd;
+    min-width: 80px;
+}
+
+.btn-inactivate {
+    background-color: rgb(255, 8, 0);
+    color: #ddd;
+    min-width: 80px;
+}
+
+.pagination {
+    text-align: center;
+    margin-top: 10px;
+}
+
+.btn-previous {
+    margin-right: 4px;
+    background-color: rgb(255, 42, 42);
+    color: #ddd;
+    border: rgb(255, 42, 42);
+}
+
+.btn-next {
+    margin-left: 4px;
+    background-color: #548454;
+    color: #ddd;
+    border: #548454;
+}
+
+.btn-disablednext {
+    margin-left: 4px;
+    background-color: grey;
+    color: #ddd;
+    border: grey;
+}
+
+.btn-activate {
+    background-color: #548454;
+    color: #ddd;
+    min-width: 100px;
+}
+
+.btn-disabledprevious {
+    margin-right: 4px;
+    background-color: grey;
+    color: #ddd;
+    border: grey;
+}
+
+.table th,
+.table td {
+    border: 1px solid #ddd;
+    /* Borde de las celdas */
+    padding: 8px;
+    /* Espaciado interno de las celdas */
+}
+
+.table th {
+    background-color: #f2f2f2;
+    /* Color de fondo de las celdas del encabezado */
+    text-align: center;
+    /* Alineación del texto en las celdas del encabezado */
+}
+
+.table thead {
+    background-color: #f2f2f2;
+    /* Color de fondo de las celdas del encabezado */
+    text-align: center;
+    /* Alineación del texto en las celdas del encabezado */
+}
+
+.registros-pagina {
+
+    /* Color de fondo de las celdas del encabezado */
+    text-align: right;
+    margin-bottom: 10px;
+    /* Alineación del texto en las celdas del encabezado */
+}
+
+/* Estilos para hacer la tabla responsive con barra de desplazamiento */
+@media screen and (max-width: 768px) {
+    .table-container {
+        overflow-x: auto;
+        /* Agregar desplazamiento horizontal */
+        width: 100%;
+        /* Asegurarse de que el contenedor se ajuste al ancho de la pantalla */
+    }
+
+    .table {
+        min-width: 768px;
+        /* Ancho mínimo de la tabla para permitir el desplazamiento horizontal */
+    }
+
+    .pagination {
+        text-align: left;
+        margin-left: 12px;
+        margin-top: 10px;
+        font-size: 15px;
+    }
+
+    .btn-disabledprevious {
+        min-width: 100px;
+        margin-bottom: 3px;
+        margin-left: 4px;
+    }
+
+    .btn-previous {
+        min-width: 100px;
+        margin-bottom: 3px;
+        margin-left: 4px;
+    }
+
+    .registros-pagina {
+        /* Color de fondo de las celdas del encabezado */
+        text-align: left;
+        /* Alineación del texto en las celdas del encabezado */
+    }
+}
+

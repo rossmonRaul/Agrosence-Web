@@ -1,3 +1,5 @@
+
+
 export const PublicRoutes = {
     LOGIN: 'login'
 };
@@ -15,8 +17,17 @@ export const PrivateRoutes = {
     MATENIMIENTOUSUARIOSASIGNADOS: 'administrarusuariosasignados',
     ADMINISTRARFINCAS: 'administrarfincas',
     ADMINISTRARPARCELAS: 'administrarparcelas',
-    MEDICIONESDESUELOS:'medicionesdesuelos',
+    MEDICIONESDESUELOS: 'medicionesdesuelos',
     MANEJODEFERTILIZANTES: 'manejodefertilizantes',
-    PREPARACIONTERRENOS: 'preparaciondeterrenos'
+    REGISTROSEGUIMIENTOUSOAGUA: 'registroseguimientousoagua',
+    PREPARACIONTERRENOS: 'preparaciondeterrenos',
+    ROTACIONESCULTIVOSESTACION: 'rotacionescultivosestacion',
+    PRODUCCIONCULTIVOS: 'productividadcultivos',
+    RESIDUOS: 'manejoresiduos',
+    RIEGOS: 'eficienciariego',
+    CONDUCTIVIDADELECTRICA: 'conductividadelectrica',
+    PRONOSTICOMETEOROLOGICO: 'pronosticometereologico',
+    RIESGOSNATURALES:'riesgonatural',
+    CONDICIONESMETEOROLOGICASCLIMATICAS: 'condicionesmetereologicasclimaticas',
+    PROBLEMASPLAGAS: 'problemasplagas'
 };
-  

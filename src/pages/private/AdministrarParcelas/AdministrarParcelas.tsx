@@ -16,15 +16,17 @@ function AdministrarParcelas() {
     const [modalInsertar, setModalInsertar] = useState(false);
     const [selectedParcela, setSelectedParcela] = useState({
         idParcela: '',
+        idFinca: '',
         nombre: ''
     });
     const [parcelas, setParcelas] = useState<any[]>([]);
     const [parcelasFiltradas, setParcelasFiltradas] = useState<any[]>([]);
-    const [selectedFinca, setSelectedFinca] = useState<number | null>(null);
+    const [selectedFinca, setSelectedFinca] = useState<string>('');
     const [fincas, setFincas] = useState<any[]>([]);
 
+    // Función para manejar cambios en la selección de finca
     const handleFincaChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
-        const value = parseInt(e.target.value);
+        const value = e.target.value;
         setSelectedFinca(value);
     };
 
@@ -45,54 +47,49 @@ function AdministrarParcelas() {
         obtenerFincas();
     }, []);
 
-    
+
     const handleChangeFiltro = (e: React.ChangeEvent<HTMLInputElement>) => {
         const { value } = e.target;
         setFiltroNombre(value);
     };
 
+    // Obtener parcelas cuando cambie la finca seleccionada
     useEffect(() => {
         obtenerParcelas();
     }, [selectedFinca]);
 
+    // Filtrar parcelas cuando cambien la finca seleccionada, las parcelas o el filtro por nombre
     useEffect(() => {
         filtrarParcelas();
     }, [selectedFinca, parcelas, filtroNombre]);
 
+    // Función para filtrar las parcelas
     const filtrarParcelas = () => {
         let parcelasFiltradasPorFinca = selectedFinca
-            ? parcelas.filter(parcela => parcela.idFinca === selectedFinca)
-            : parcelas;
-    
-        // Si hay alguna parcela seleccionada, aplicar el filtro por nombre a las parcelas seleccionadas
-        if (selectedParcela.idParcela) {
-            parcelasFiltradasPorFinca = parcelasFiltradasPorFinca.filter(parcela =>
-                parcela.idParcela === selectedParcela.idParcela
-            );
-        } else {
-            // Si no hay ninguna parcela seleccionada, aplicar el filtro por nombre a todas las parcelas
+            ? parcelas.filter(parcela => parcela.idFinca === parseInt(selectedFinca))
+            : parcelas
+
+        // Filtrar por nombre si hay un filtro aplicado
+        if (filtroNombre.trim() !== '') {
             parcelasFiltradasPorFinca = parcelasFiltradasPorFinca.filter(parcela =>
                 parcela.nombre.toLowerCase().includes(filtroNombre.toLowerCase())
             );
         }
-    
         setParcelasFiltradas(parcelasFiltradasPorFinca);
     };
-    
 
+    // Obtener las parcelas
     const obtenerParcelas = async () => {
         try {
             const idEmpresaUsuario = localStorage.getItem('empresaUsuario');
             if (idEmpresaUsuario) {
 
                 const fincas = await ObtenerFincas();
-
                 const fincasEmpresaUsuario = fincas.filter((finca: any) => finca.idEmpresa === parseInt(idEmpresaUsuario));
 
                 const parcelasResponse = await ObtenerParcelas();
 
                 const parcelasFincasEmpresaUsuario: any[] = [];
-
 
                 fincasEmpresaUsuario.forEach((finca: any) => {
                     const parcelasFinca = parcelasResponse.filter((parcela: any) => parcela.idFinca === finca.idFinca);
@@ -104,27 +101,31 @@ function AdministrarParcelas() {
                     ...parcela,
                     sEstado: parcela.estado === 1 ? 'Activo' : 'Inactivo'
                 }));
-
                 setParcelas(parcelasConEstado);
+                setParcelasFiltradas(parcelasConEstado);
             }
         } catch (error) {
             console.error('Error al obtener las parcelas:', error);
         }
     };
 
+    // Abrir/cerrar modal de inserción
     const abrirCerrarModalInsertar = () => {
         setModalInsertar(!modalInsertar);
     };
 
+    // Abrir/cerrar modal de edición
     const abrirCerrarModalEditar = () => {
         setModalEditar(!modalEditar);
     };
 
+    // Abrir modal de edición
     const openModal = (parcela: any) => {
         setSelectedParcela(parcela);
         abrirCerrarModalEditar();
     };
 
+    // Cambiar estado de la parcela
     const toggleStatus = async (parcela: any) => {
         Swal.fire({
             title: "Cambiar Estado",
@@ -162,16 +163,19 @@ function AdministrarParcelas() {
         });
     };
 
+    // Manejar la edición de parcela
     const handleEditarParcela = async () => {
         await obtenerParcelas();
         abrirCerrarModalEditar();
     };
 
+    // Manejar la inserción de parcela
     const handleAgregarParcela = async () => {
         await obtenerParcelas();
         abrirCerrarModalInsertar();
     };
 
+    // Configuración de columnas para la tabla
     const columns = [
         { key: 'nombre', header: 'Nombre Parcela' },
         { key: 'sEstado', header: 'Estado' },
@@ -183,11 +187,11 @@ function AdministrarParcelas() {
             <div className="main-container">
                 <Topbar />
                 <BordeSuperior text="Administrar Parcelas" />
-                <div className="content" col-md-12>
+                <div className="content col-md-12" >
                     <button onClick={() => abrirCerrarModalInsertar()} className="btn-crear">Crear Parcela</button>
                     <div className="filtro-container" style={{ width: '300px' }}>
                         <select value={selectedFinca || ''} onChange={handleFincaChange} className="custom-select">
-                            <option value="">Todas las fincas</option>
+                            <option value={''}>Todas las fincas</option>
                             {fincas.map(finca => (
                                 <option key={finca.idFinca} value={finca.idFinca}>{finca.nombre}</option>
                             ))}

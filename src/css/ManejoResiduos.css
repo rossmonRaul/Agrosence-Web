@@ -1,0 +1,31 @@
+.custom-select {
+    width: 100%;
+    padding: 0.375rem 2.25rem 0.375rem 0.75rem;
+    font-size: 1rem;
+    line-height: 1.5;
+    border: 1px solid #ced4da;
+    border-radius: 0.25rem;
+    background-color: #fff;
+    margin-bottom: 20px;
+    color: black;
+}
+
+.form-container-fse {
+
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: left;
+}
+
+.btn-styled-danger {
+    border-radius: 5px;
+    padding: 8px 16px;
+    background-color: red;
+    border: 1px solid red;
+    color: #fff;
+    width: calc(100% - 0px);
+    cursor: pointer;
+    transition: background-color 0.3s ease-in-out;
+   margin-top: 5px;
+}
