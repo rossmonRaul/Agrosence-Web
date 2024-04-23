@@ -74,6 +74,12 @@ const Sidebar = ({ children }: { children: React.ReactNode }) => {
             roles: [2]
         },
         {
+            path: "/administrarsensores",
+            name: "Sensores",
+            icon: <img src='/tractor.png' style={{ width: '30px' }} />,
+            roles: [2]
+        },
+        {
             path: "/suelos",
             name: "Suelos",
             icon: <img src='/suelos.png' style={{ width: '22px' }} />, // Puedes usar cualquier icono que desees aquí
@@ -169,7 +175,7 @@ const Sidebar = ({ children }: { children: React.ReactNode }) => {
                     name: "Riesgos Naturales",
                     icon: <img src='/calentamiento-global.png' style={{ width: '22px' }} />,
                 },
-                
+
             ]
         },
         {
@@ -188,7 +194,7 @@ const Sidebar = ({ children }: { children: React.ReactNode }) => {
                     name: "Condiciones Meteorológicas y Climáticas",
                     icon: <img src='/condiciones-climaticas.png' style={{ width: '22px' }} />,
                 },
-                
+
             ]
         },
 
