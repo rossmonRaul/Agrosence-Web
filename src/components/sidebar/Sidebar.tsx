@@ -164,6 +164,31 @@ const Sidebar = ({ children }: { children: React.ReactNode }) => {
                     name: "Condiciones Meteorológicas y Climáticas",
                     icon: <img src='/condiciones-climaticas.png' style={{ width: '22px' }} />,
                 },
+                {
+                    path: "/riesgonatural",
+                    name: "Riesgos Naturales",
+                    icon: <img src='/calentamiento-global.png' style={{ width: '22px' }} />,
+                },
+                
+            ]
+        },
+        {
+            path: "/menuplagas",
+            name: "Gestion Plagas",
+            icon: <img src='/plagasmenu.png' style={{ width: '22px' }} />, // Puedes usar cualquier icono que desees aquí
+            roles: [3], // Especifica los roles que pueden ver esta opción
+            children: [
+                {
+                    path: "/problemasplagas",
+                    name: "Problemas Plagas",
+                    icon: <img src='/plagas.png' style={{ width: '22px' }} />,
+                },
+                {
+                    path: "/condicionesmetereologicasclimaticas",
+                    name: "Condiciones Meteorológicas y Climáticas",
+                    icon: <img src='/condiciones-climaticas.png' style={{ width: '22px' }} />,
+                },
+                
             ]
         },
 

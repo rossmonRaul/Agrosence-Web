@@ -1,3 +1,5 @@
+
+
 export const PublicRoutes = {
     LOGIN: 'login'
 };
@@ -25,5 +27,7 @@ export const PrivateRoutes = {
     RIEGOS: 'eficienciariego',
     CONDUCTIVIDADELECTRICA: 'conductividadelectrica',
     PRONOSTICOMETEOROLOGICO: 'pronosticometereologico',
-    CONDICIONESMETEOROLOGICASCLIMATICAS: 'condicionesmetereologicasclimaticas'
+    RIESGOSNATURALES:'riesgonatural',
+    CONDICIONESMETEOROLOGICASCLIMATICAS: 'condicionesmetereologicasclimaticas',
+    PROBLEMASPLAGAS: 'problemasplagas'
 };

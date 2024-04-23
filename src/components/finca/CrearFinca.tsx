@@ -15,7 +15,7 @@ const CrearFinca: React.FC<AgregarFinca> = ({ onAdd }) => {
 
     // Estado para almacenar los errores de validación del formulario
     const [errors, setErrors] = useState<Record<string, string>>({ nombre: '',ubicacion: '' });
-
+    const [showAdditionalInfo, setShowAdditionalInfo] = useState(true); 
     // Estado para almacenar los datos del formulario
     const [formData, setFormData] = useState<any>({
         idEmpresa: localStorage.getItem('empresaUsuario'),
@@ -25,15 +25,21 @@ const CrearFinca: React.FC<AgregarFinca> = ({ onAdd }) => {
 
     // Función para manejar cambios en los inputs del formulario
     const handleInputChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+        setShowAdditionalInfo(false);
         const { name, value } = event.target;
         setFormData((prevState: FormData) => ({
             ...prevState,
             [name]: value
         }));
+
+        if(event.target.value==""){
+            setShowAdditionalInfo(true);
+        }
     };
 
     // Función para manejar el blur de los inputs y eliminar mensajes de error
     const handleInputBlur = (fieldName: string) => {
+        
         // Eliminar el mensaje de error para el campo cuando el identificacion comienza a escribir en él
         if (errors[fieldName]) {
             setErrors((prevErrors: any) => ({
@@ -116,7 +122,7 @@ const CrearFinca: React.FC<AgregarFinca> = ({ onAdd }) => {
                     </Col>
                 </FormGroup>
                 <FormGroup row>
-                    <Label for="ubicacion" sm={2} className="input-label">Ubicacion: </Label>
+                    <Label for="ubicacion" sm={2} className="input-label">Ubicación: </Label>
                     <Col sm={12}>
                         <Input
                             type="text"
@@ -124,11 +130,14 @@ const CrearFinca: React.FC<AgregarFinca> = ({ onAdd }) => {
                             name="ubicacion"
                             placeholder="Ingrese la ubicación"
                             value={formData.ubicacion}
+                            title="La ubicación puede llevar cantón o distrito de ser necesario"
                             onChange={handleInputChange}
                             onBlur={() => handleInputBlur('ubicacion')} // Manejar blur para quitar el mensaje de error
                             className={errors.ubicacion ? 'input-styled input-error' : 'input-styled'} // Aplicar clase 'is-invalid' si hay un error
                         />
                         <FormFeedback>{errors.ubicacion}</FormFeedback>
+                        {/* <span className="additional-info">Puede indicar cantón o distrito</span> */}
+                        {showAdditionalInfo && <span className="additional-info">Puede llevar cantón o distrito</span>}
                     </Col>
                 </FormGroup>
 
