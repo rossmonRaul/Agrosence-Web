@@ -124,7 +124,7 @@ function CondicionesMeteorologicasClimaticas() {
     //Se activa al recibir un cambio en el campo del filtro por nombre de cultivo
     useEffect(() => {
         const datosFiltrados = datosProduccionOriginales.filter((datos: any) => {
-            return datos.hora.toLowerCase().includes(filtroNombreCultivo.toLowerCase());
+            return datos.fecha.toLowerCase().includes(filtroNombreCultivo.toLowerCase());
         });
         setDatosProduccionFiltrados(datosFiltrados);
     }, [filtroNombreCultivo, datosProduccionOriginales]); // Agregar filtroNombreCultivo y datosProduccionOriginales aquí
@@ -232,8 +232,6 @@ function CondicionesMeteorologicasClimaticas() {
         { key: 'temperatura', header: 'Temperatura(°C)' },
         { key: 'humedadAcumulada', header: 'Humedad acumulada(%)' },
         { key: 'temperaturaAcumulada', header: 'Temperatura acumulada(°C)' },
-        { key: 'finca', header: 'Finca' },
-        { key: 'parcela', header: 'Parcela' },
         { key: 'sEstado', header: 'Estado' },
         { key: 'acciones', header: 'Acciones', actions: true }
     ];
@@ -244,35 +242,49 @@ function CondicionesMeteorologicasClimaticas() {
                 <Topbar />
                 <BordeSuperior text="Registro y seguimiento de condiciones meteorológicas y climáticas" />
                 <div className="content" col-md-12>
-                    <button onClick={() => abrirCerrarModalInsertar()} className="btn-crear">Ingresar registro condiciones meteorológicas y climáticas</button>
-                    <div className="filtro-container" style={{ width: '265px' }}>
-                        <select value={selectedFinca || ''} onChange={handleFincaChange} className="custom-select">
-                            <option value="">Seleccione la finca...</option>
-                            {filteredFincas.map(finca => (
-                                <option key={finca.idFinca} value={finca.idFinca}>{finca.nombre}</option>
-                            ))}
-                        </select>
-                    </div>
-                    <div className="filtro-container" style={{ width: '265px' }}>
-                        <select value={selectedParcela ? selectedParcela : ''} onChange={handleParcelaChange} className="custom-select">
-                            <option value="">Seleccione la parcela...</option>
-                            {parcelasFiltradas.map(parcela => (
-                                <option key={parcela.idParcela} value={parcela.idParcela}>{parcela.nombre}</option>
-                            ))}
-                        </select>
-                    </div>
-                    <div className="filtro-container">
-                        <label htmlFor="filtroNombreCultivo">Filtrar por hora:</label>
-                        <input
-                            type="text"
-                            id="filtroNombreCultivo"
-                            value={filtroNombreCultivo}
-                            onChange={handleChangeFiltro}
-                            placeholder="Ingrese la hora"
-                            className="form-control"
-                        />
+                    <button onClick={() => abrirCerrarModalInsertar()} className="btn-crear">Ingresar registro condiciones</button>
+                    <div className="content" style={{ display: 'flex', flexDirection: 'row', flexWrap: 'wrap', gap: '20px' }}>
+
+                        <div className="filtro-container" style={{ width: '265px' }}>
+                            <label >Filtrar por finca:</label>
+                            <select style={{ marginTop: '10px' }} value={selectedFinca || ''} onChange={handleFincaChange} className="custom-select">
+                                <option value="">Seleccione la finca...</option>
+                                {filteredFincas.map(finca => (
+                                    <option key={finca.idFinca} value={finca.idFinca}>{finca.nombre}</option>
+                                ))}
+                            </select>
+                        </div>
+
+                        <div className="filtro-container" style={{ width: '265px' }}>
+                            <label >Filtrar por parcela:</label>
+                            <select style={{ marginTop: '10px' }} value={selectedParcela ? selectedParcela : ''} onChange={handleParcelaChange} className="custom-select">
+                                <option value="">Seleccione la parcela...</option>
+                                {parcelasFiltradas.map(parcela => (
+                                    <option key={parcela.idParcela} value={parcela.idParcela}>{parcela.nombre}</option>
+                                ))}
+                            </select>
+                        </div>
+                        <div className="filtro-container" >
+                            <label htmlFor="filtroNombreCultivo" >Filtrar por fecha:</label>
+                            <input
+
+                                type="text"
+                                id="filtroNombreCultivo"
+                                value={filtroNombreCultivo}
+                                onChange={handleChangeFiltro}
+                                placeholder="Ingrese la fecha"
+                                style={{ marginTop: '10px', width: '239px', height: '19px' }}
+                                className="form-control"
+                            />
+                        </div>
                     </div>
 
+                    <div className="content" style={{ display: 'flex', flexDirection: 'row', alignItems: 'center', gap: '20px' }}>
+
+                        <div>
+
+                        </div>
+                    </div>
                     <TableResponsive columns={columns} data={datosProduccionFiltrados} openModal={openModal} btnActionName={"Editar"} toggleStatus={toggleStatus} />
 
                 </div>
