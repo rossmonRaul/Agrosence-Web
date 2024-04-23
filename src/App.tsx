@@ -29,9 +29,11 @@ const Conductividadelectrica = lazy(() => import('./pages/private/ConductividadE
 const ManejoResiduos = lazy(() => import('./pages/private/ManejoResiduos/ManejoResiduos'))
 const EficienciaRiego = lazy(() => import('./pages/private/EficienciaRiego/EficienciaRiego'))
 const PronosticoMeteorologico = lazy(() => import('./pages/private/PronosticoMeteorologico/PronosticoMeteorologico'))
-import CondicionesMeteorologicasClimaticas from './pages/private/RegistroCondicionesMetereologicas/RegistroCondicionesMetereologicas';
+//import CondicionesMeteorologicasClimaticas from './pages/private/RegistroCondicionesMetereologicas/RegistroCondicionesMetereologicas';
+const CondicionesMeteorologicasClimaticas = lazy(() => import('./pages/private/RegistroCondicionesMetereologicas/RegistroCondicionesMetereologicas'))
 const RiesgosNaturales = lazy(() => import('./pages/private/RiesgoNatural/RiesgoNatural'))
 const ProblemasPlagas = lazy(() => import('./pages/private/ProblemasPlagas/ProblemasPlagas'))
+const PuntoMedicion = lazy(() => import('./pages/private/PuntoMedicion/PuntoMedicion'))
 const RegistroSensores = lazy(() => import('./pages/private/RegistroSensores/RegistroSensores'));
 function App() {
   return (
@@ -69,6 +71,7 @@ function App() {
               <Route path={PrivateRoutes.MATENIMIENTOUSUARIOSASIGNADOS} element={<MantenimientoUsuariosAsignados />} />
               <Route path={PrivateRoutes.ADMINISTRARFINCAS} element={<AdministrarFincas />} />
               <Route path={PrivateRoutes.ADMINISTRARPARCELAS} element={<AdministrarParcelas />} />
+              <Route path={PrivateRoutes.PUNTOMEDICION} element={<PuntoMedicion />} />
               <Route path={PrivateRoutes.SENSORES} element={<RegistroSensores />} />
             </Route>
             {/* Rutas accesibles solo para el rol de usuario asignado */}

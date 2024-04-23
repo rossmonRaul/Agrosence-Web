@@ -30,5 +30,6 @@ export const PrivateRoutes = {
     PRONOSTICOMETEOROLOGICO: 'pronosticometereologico',
     RIESGOSNATURALES: 'riesgonatural',
     CONDICIONESMETEOROLOGICASCLIMATICAS: 'condicionesmetereologicasclimaticas',
-    PROBLEMASPLAGAS: 'problemasplagas'
+    PROBLEMASPLAGAS: 'problemasplagas',
+    PUNTOMEDICION: 'puntomedicion'
 };
