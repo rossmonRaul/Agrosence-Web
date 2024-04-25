@@ -58,18 +58,12 @@ const InsertarPuntoMedicion: React.FC<InsertarPuntoMedicionProps> = ({ onAdd }) 
                 const idEmpresaString = localStorage.getItem('empresaUsuario');
                 const identificacionString = localStorage.getItem('identificacionUsuario');
                 if (identificacionString && idEmpresaString) {
-                    const identificacion = identificacionString;
-                    
-                    const usuariosAsignados = await ObtenerUsuariosAsignadosPorIdentificacion({ identificacion: identificacion });
-                    const idFincasUsuario = usuariosAsignados.map((usuario: any) => usuario.idFinca);
-                    const idParcelasUsuario = usuariosAsignados.map((usuario: any) => usuario.idParcela);
-                    
                     const fincasResponse = await ObtenerFincas();
-                    const fincasUsuario = fincasResponse.filter((finca: any) => idFincasUsuario.includes(finca.idFinca));
-                    setFincas(fincasUsuario);
+                    const fincasFiltradas = fincasResponse.filter((f: any) => f.idEmpresa === parseInt(idEmpresaString));
+                    setFincas(fincasFiltradas);
                     const parcelasResponse = await ObtenerParcelas();
-                    const parcelasUsuario = parcelasResponse.filter((parcela: any) => idParcelasUsuario.includes(parcela.idParcela));
-                    setParcelas(parcelasUsuario)
+                    const parcelasFiltradas = parcelasResponse.filter((parcela: any) => fincasFiltradas.some((f: any) => f.idFinca === parcela.idFinca));
+                    setParcelas(parcelasFiltradas);
                 } else {
                     console.error('La identificación y/o el ID de la empresa no están disponibles en el localStorage.');
                 }
@@ -151,7 +145,7 @@ const InsertarPuntoMedicion: React.FC<InsertarPuntoMedicionProps> = ({ onAdd }) 
 
 
         if (!formData.latitud.trim()) {
-            newErrors.latitud = 'La latitud son requeridas';
+            newErrors.latitud = 'La latitud es requerida';
         } else if (formData.latitud.length > 50) {
             newErrors.latitud = 'La latitud no pueden tener más de 50 caracteres';
         } else {
@@ -159,7 +153,7 @@ const InsertarPuntoMedicion: React.FC<InsertarPuntoMedicionProps> = ({ onAdd }) 
         }
   
         if (!formData.longitud.trim()) {
-            newErrors.longitud = 'La longitud son requeridas';
+            newErrors.longitud = 'La longitud  es requerida';
         } else if (formData.longitud.length > 50) {
             newErrors.longitud = 'La longitud no pueden tener más de 50 caracteres';
         } else {
@@ -202,8 +196,9 @@ const InsertarPuntoMedicion: React.FC<InsertarPuntoMedicionProps> = ({ onAdd }) 
 
     return (
         <div id='general' style={{ display: 'flex', flexDirection: 'column', paddingBottom: '0rem', width: '100%', margin: '0 auto' }}>
-            <div className="form-container-fse" style={{ display: 'flex', flexDirection: 'column', width: '50%'}}>
-                <h2>Preparación de Terreno</h2>
+                <h2>Punto de Medición</h2>
+                <div style={{ display: 'flex', flexDirection: 'row', marginBottom: '0rem' }}>
+                <div style={{ flex: 1, marginRight: '0.5rem', marginLeft: '0.5rem' }}>
                 <FormGroup> 
                     <label htmlFor="fincas">Finca:</label>
                     <select className="custom-select" id="fincas" value={selectedFinca} onChange={handleFincaChange}>
@@ -214,7 +209,8 @@ const InsertarPuntoMedicion: React.FC<InsertarPuntoMedicionProps> = ({ onAdd }) 
                     </select>
                     {errors.finca && <FormFeedback>{errors.finca}</FormFeedback>}
                 </FormGroup>
-    
+                </div>
+                <div style={{ flex: 1, marginRight: '0.5rem', marginLeft: '0.5rem' }}>
                 <FormGroup>
                     <label htmlFor="parcelas">Parcela:</label>
                     <select className="custom-select" id="parcelas" value={selectedParcela} onChange={handleParcelaChange}>
@@ -225,11 +221,12 @@ const InsertarPuntoMedicion: React.FC<InsertarPuntoMedicionProps> = ({ onAdd }) 
                     </select>
                     {errors.parcela && <FormFeedback>{errors.parcela}</FormFeedback>}
                 </FormGroup>
+                </div>
             </div>
             <div style={{ display: 'flex', flexDirection: 'row', marginBottom: '0rem' }}>
                 <div style={{ flex: 1, marginRight: '0.5rem', marginLeft: '0.5rem' }}>
                     <FormGroup row>
-                        <Label for="codigo" sm={4} className="input-label">Codigo</Label>
+                        <Label for="codigo" sm={4} className="input-label">Código</Label>
                         <Col sm={8}>
                             <Input
                                 type="text"
@@ -238,7 +235,7 @@ const InsertarPuntoMedicion: React.FC<InsertarPuntoMedicionProps> = ({ onAdd }) 
                                 value={formData.codigo}
                                 onChange={handleInputChange}
                                 className={errors.codigo ? 'input-styled input-error' : 'input-styled'}
-                                placeholder="codigo"
+                                placeholder="código"
                                 maxLength={50}
                             />
                             <FormFeedback>{errors.codigo}</FormFeedback>
@@ -247,7 +244,7 @@ const InsertarPuntoMedicion: React.FC<InsertarPuntoMedicionProps> = ({ onAdd }) 
                 </div>
                 <div style={{ flex: 1, marginRight: '0.5rem', marginLeft: '0.5rem' }}>
                     <FormGroup row>
-                        <Label for="altitud" sm={4} className="input-label">altitud</Label>
+                        <Label for="altitud" sm={4} className="input-label">Altitud</Label>
                         <Col sm={8}>
                             <Input
                                 type="text"
@@ -257,15 +254,18 @@ const InsertarPuntoMedicion: React.FC<InsertarPuntoMedicionProps> = ({ onAdd }) 
                                 onChange={handleInputChange}
                                 className={errors.altitud ? 'input-styled input-error' : 'input-styled'}
                                 placeholder="altitud"
-                                maxLength={500}
+                                maxLength={50}
                             />
                             <FormFeedback>{errors.altitud}</FormFeedback>
                         </Col>
                     </FormGroup>
                 </div>
+                
+            </div>
+            <div style={{ display: 'flex', flexDirection: 'row', marginBottom: '0rem' }}>
                 <div style={{ flex: 1, marginRight: '0.5rem', marginLeft: '0.5rem' }}>
                     <FormGroup row>
-                        <Label for="latitud" sm={4} className="input-label">latitud</Label>
+                        <Label for="latitud" sm={4} className="input-label">Latitud</Label>
                         <Col sm={8}>
                             <Input
                                 type="text"
@@ -273,33 +273,34 @@ const InsertarPuntoMedicion: React.FC<InsertarPuntoMedicionProps> = ({ onAdd }) 
                                 name="latitud"
                                 value={formData.latitud}
                                 onChange={handleInputChange}
-                                className="input-styled"
+                                className={errors.latitud ? 'input-styled input-error' : 'input-styled'}
                                 placeholder="latitud"
                                 maxLength={50}
                             />
+                            <FormFeedback>{errors.latitud}</FormFeedback>
                         </Col>
                     </FormGroup>
                 </div>
+                <div style={{ flex: 1, marginRight: '0.5rem', marginLeft: '0.5rem' }}>
+                    <FormGroup row>
+                        <Label for="longitud" sm={4} className="input-label">Longitud</Label>
+                        <Col sm={8}>
+                            <Input
+                                type="text"
+                                id="longitud"
+                                name="longitud"
+                                value={formData.longitud}
+                                onChange={handleInputChange}
+                                className={errors.longitud ? 'input-styled input-error' : 'input-styled'}
+                                placeholder="longitud"
+                                maxLength={50}
+                            />
+                            <FormFeedback>{errors.longitud}</FormFeedback>
+                        </Col>
+                    </FormGroup>
+                </div>
+                
             </div>
-
-            <FormGroup row>
-                <Label for="longitud" sm={2} className="input-label">longitud</Label>
-                <Col sm={10}>
-                    <Input
-                        type="textarea"
-                        id="longitud"
-                        name="longitud"
-                        value={formData.longitud}
-                        onChange={handleInputChange}
-                        className="input-styled"
-                        style={{ height: '75px', resize: "none" }}
-                        placeholder="longitud"
-                        maxLength={50}
-                        
-                    />
-                    <FormFeedback>{errors.longitud}</FormFeedback>
-                </Col>
-            </FormGroup>
             <FormGroup row>
                 <Col sm={{ size: 10, offset: 2 }}>
                     {/* Agregar aquí el botón de cancelar proporcionado por el modal */}

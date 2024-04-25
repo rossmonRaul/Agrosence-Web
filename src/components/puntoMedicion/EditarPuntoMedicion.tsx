@@ -5,18 +5,18 @@ import { ObtenerFincas } from '../../servicios/ServicioFincas.ts';
 import { ObtenerParcelas } from '../../servicios/ServicioParcelas.ts';
 import { ObtenerUsuariosAsignadosPorIdentificacion } from '../../servicios/ServicioUsuario.ts';
 //import { EditarManejoFertilizantes } from "../../servicios/ServicioFertilizantes.ts";
-import { ModificarPreparacionTerreno } from "../../servicios/ServicioPreparacionTerreno.ts";
+import { ModificarRegistroPuntoMedicion } from "../../servicios/ServicioPuntoMedicion.ts";
 import '../../css/CrearCuenta.css';
 
 // Interfaz para las propiedades del componente
-interface PreparacionTerrenoSeleccionado {
+interface PuntoMedicionSeleccionado {
     idFinca: number;
     idParcela: number;
-    idPreparacionTerreno: number;
-    fecha: string;
-    actividad   : string;
-    maquinaria  : string;
-    observaciones: string;
+    idPuntoMedicion : number;
+    codigo: string;
+    altitud   : string;
+    latitud  : string;
+    longitud: string;
    // usuarioCreacionModificacion: string;
     onEdit?: () => void; // Hacer onEdit opcional agregando "?"
 }
@@ -29,14 +29,14 @@ interface Option {
     idFinca: number;
 }
 
-const ModificacionPuntoMedicion: React.FC<PreparacionTerrenoSeleccionado> = ({
+const ModificacionPuntoMedicion: React.FC<PuntoMedicionSeleccionado> = ({
     idFinca,
     idParcela,
-    idPreparacionTerreno,
-    fecha,
-    actividad,
-    maquinaria,
-    observaciones,
+    idPuntoMedicion,
+    codigo,
+    altitud,
+    latitud,
+    longitud,
     //usuarioCreacionModificacion,
     onEdit
 }) => {
@@ -52,21 +52,21 @@ const ModificacionPuntoMedicion: React.FC<PreparacionTerrenoSeleccionado> = ({
     const [errors, setErrors] = useState<Record<string, string>>({
         idFinca: '',
         idParcela: '',
-        idPreparacionTerreno: '',
-        fecha: '',
-        actividad: '',
-        maquinaria: '',
-        observaciones: ''
+        idPuntoMedicion: '',
+        codigo: '',
+        altitud: '',
+        latitud: '',
+        longitud: ''
     });
 
     const [formData, setFormData] = useState<any>({
         idFinca: '',
         idParcela: '',
-        idPreparacionTerreno: '',
-        fecha: '',
-        actividad: '',
-        maquinaria: '',
-        observaciones: '',
+        idPuntoMedicion: '',
+        codigo: '',
+        altitud: '',
+        latitud: '',
+        longitud: '',
         usuarioCreacionModificacion:''
     });
 
@@ -81,21 +81,16 @@ const ModificacionPuntoMedicion: React.FC<PreparacionTerrenoSeleccionado> = ({
 
     useEffect(() => {
         // Actualizar el formData cuando las props cambien
-        const parts = fecha.split('/');
-        const day = parts[0];
-        const month = parts[1];
-        const year = parts[2];
-        const fechaformateada= year + '-' + month + '-' + day;
         setFormData({
             idFinca: idFinca,
             idParcela: idParcela,
-            idPreparacionTerreno: idPreparacionTerreno,
-            fecha: fechaformateada,
-            actividad: actividad,
-            maquinaria: maquinaria,
-            observaciones: observaciones
+            idPuntoMedicion: idPuntoMedicion,
+            codigo: codigo,
+            altitud: altitud,
+            latitud: latitud,
+            longitud: longitud 
         });
-    }, [idPreparacionTerreno]);
+    }, [idPuntoMedicion]);
 
 
     // Obtener las fincas al cargar la página
@@ -104,21 +99,14 @@ const ModificacionPuntoMedicion: React.FC<PreparacionTerrenoSeleccionado> = ({
             try {
                 const idEmpresaString = localStorage.getItem('empresaUsuario');
                 const identificacionString = localStorage.getItem('identificacionUsuario');
-                console.log("AAA "+ identificacionString);
+               
                 if (identificacionString && idEmpresaString) {
-                    const identificacion = identificacionString;
-                    const usuariosAsignados = await ObtenerUsuariosAsignadosPorIdentificacion({ identificacion: identificacion });
-                    const idFincasUsuario = usuariosAsignados.map((usuario: any) => usuario.idFinca);
-                    const idParcelasUsuario = usuariosAsignados.map((usuario: any) => usuario.idParcela);
-
                     const fincasResponse = await ObtenerFincas();
-                    const fincasUsuario = fincasResponse.filter((finca: any) => idFincasUsuario.includes(finca.idFinca));
-                    setFincas(fincasUsuario);
+                    const fincasFiltradas = fincasResponse.filter((f: any) => f.idEmpresa === parseInt(idEmpresaString));
+                    setFincas(fincasFiltradas);
                     const parcelasResponse = await ObtenerParcelas();
-                    const parcelasUsuario = parcelasResponse.filter((parcela: any) => idParcelasUsuario.includes(parcela.idParcela));
-                    setParcelas(parcelasUsuario)
-
-                    setFincas(fincasUsuario);
+                    const parcelasFiltradas = parcelasResponse.filter((parcela: any) => fincasFiltradas.some((f: any) => f.idFinca === parcela.idFinca));
+                    setParcelas(parcelasFiltradas);
                 } else {
                     console.error('La identificación y/o el ID de la empresa no están disponibles en el localStorage.');
                 }
@@ -175,44 +163,38 @@ const ModificacionPuntoMedicion: React.FC<PreparacionTerrenoSeleccionado> = ({
             newErrors.parcela = '';
         }
 
-        if (!formData.fecha.trim()) {
-            newErrors.fecha = 'La fecha es requerida';
+        if (!formData.codigo.trim()) {
+            newErrors.codigo = 'El codigo es requerido';
+        } else if (formData.codigo.length > 50) {
+            newErrors.codigo = 'El codigo no puede tener más de 50 caracteres';
         } else {
-            // Validar que la fecha esté en el rango desde el 2015 hasta la fecha actual
-            const minDate = new Date('2015-01-01');
-            const selectedDate = new Date(formData.fecha);
-            if (selectedDate < minDate || selectedDate > new Date()) {
-                newErrors.fecha = 'La fecha debe estar entre 2015 y la fecha actual';
-            } else {
-                newErrors.fecha = '';
-            }
+            newErrors.codigo = '';
         }
 
-        if (!formData.actividad.trim()) {
-            newErrors.actividad = 'El tipo de actividad es requerido';
-        } else if (formData.actividad.length > 200) {
-            newErrors.actividad = 'El tipo de actividad no puede tener más de 200 caracteres';
+        if (!formData.altitud.trim()) {
+            newErrors.altitud = 'La altitud es requerida';
+        } else if (formData.altitud.length > 50) {
+            newErrors.altitud = 'La altitud no puede tener más de 50 caracteres';
         } else {
-            newErrors.actividad = '';
-        }
-
-        if (!formData.maquinaria.trim()) {
-            newErrors.maquinaria = 'La maquinaria es requerida';
-        } else if (formData.maquinaria.length > 50) {
-            newErrors.maquinaria = 'La maquinaria no puede tener más de 50 caracteres';
-        } else {
-            newErrors.maquinaria = '';
+            newErrors.altitud = '';
         }
 
 
-        if (!formData.observaciones.trim()) {
-            newErrors.observaciones = 'Las observaciones son requeridas';
-        } else if (formData.observaciones.length > 200) {
-            newErrors.observaciones = 'Las observaciones no pueden tener más de 200 caracteres';
+        if (!formData.latitud.trim()) {
+            newErrors.latitud = 'La latitud son requeridas';
+        } else if (formData.latitud.length > 50) {
+            newErrors.latitud = 'La latitud no pueden tener más de 50 caracteres';
         } else {
-            newErrors.observaciones = '';
+            newErrors.latitud = '';
         }
-
+  
+        if (!formData.longitud.trim()) {
+            newErrors.longitud = 'La longitud son requeridas';
+        } else if (formData.longitud.length > 50) {
+            newErrors.longitud = 'La longitud no pueden tener más de 50 caracteres';
+        } else {
+            newErrors.longitud = '';
+        }
         // Actualizar los errores
         setErrors(newErrors);
 
@@ -223,44 +205,34 @@ const ModificacionPuntoMedicion: React.FC<PreparacionTerrenoSeleccionado> = ({
     };
 
     // Función para formatear la fecha en el formato yyyy-MM-dd
-    function formatDate(inputDate: any) {
-        const parts = inputDate.split('/');
-        const day = parts[0];
-        const month = parts[1];
-        const year = parts[2];
-        return year + '-' + month + '-' + day;
-    }
-
-    // Suponiendo que formData.fechaCreacion contiene la fecha recibida (08/03/2024)
-    const formattedDate = formatDate(formData.fecha);
 
     // Función para manejar el envío del formulario
     const handleSubmit = async () => {
         const datos = {
             idFinca: selectedFinca,
             idParcela: selectedParcela,
-            idPreparacionTerreno: formData.idPreparacionTerreno,
-            fecha: formData.fecha,
-            actividad: formData.actividad,
-            maquinaria: formData.maquinaria,
-            observaciones: formData.observaciones,
+            idPuntoMedicion: formData.idPuntoMedicion,
+            codigo: formData.codigo,
+            altitud: formData.altitud,
+            latitud: formData.latitud,
+            longitud: formData.longitud,
             usuarioCreacionModificacion:localStorage.getItem('identificacionUsuario')  
         };
-            console.log("data");
-            console.log(datos);
-            console.log("data");
+            // console.log("data");
+            // console.log(datos);
+            // console.log("data");
         try {
-            const resultado = await ModificarPreparacionTerreno(datos);
+            const resultado = await ModificarRegistroPuntoMedicion(datos);
             if (resultado.indicador === 1) {
                 Swal.fire({
                     icon: 'success',
-                    title: 'Preparacion Terreno Actualizado! ',
-                    text: 'Preparacion Terreno actualizado con éxito.',
+                    title: 'Punto medición actualizado! ',
+                    text: 'Punto medición actualizado con éxito.',
                 });
             } else {
                 Swal.fire({
                     icon: 'error',
-                    title: 'Error al actualizar la Preparacion Terreno.',
+                    title: 'Error al actualizar el punto medición.',
                     text: resultado.mensaje,
                 });
             };
@@ -278,8 +250,11 @@ const ModificacionPuntoMedicion: React.FC<PreparacionTerrenoSeleccionado> = ({
 
     return (
         <div id='general' style={{ display: 'flex', flexDirection: 'column', paddingBottom: '0rem', width: '100%', margin: '0 auto' }}>
-            <div className="form-container-fse" style={{ display: 'flex', flexDirection: 'column', width: '50%' }}>
-                <h2>Preparacion de Terreno</h2>
+            <div className="form-container-fse" style={{ display: 'flex', flexDirection: 'column', width: '100%' }}>
+                <h2>Punto de medición</h2>
+
+                <div style={{ display: 'flex', flexDirection: 'row', marginBottom: '0rem' }}>
+                <div style={{ flex: 1, marginRight: '0.5rem', marginLeft: '0.5rem' }}>
                 <FormGroup>
                     <label htmlFor="fincas">Finca:</label>
                     <select className="custom-select" id="fincas" value={selectedFinca} onChange={handleFincaChange}>
@@ -290,7 +265,8 @@ const ModificacionPuntoMedicion: React.FC<PreparacionTerrenoSeleccionado> = ({
                     </select>
                     {errors.finca && <FormFeedback>{errors.finca}</FormFeedback>}
                 </FormGroup>
-
+                </div>
+                <div style={{ flex: 1, marginRight: '0.5rem', marginLeft: '0.5rem' }}>
                 <FormGroup>
                     <label htmlFor="parcelas">Parcela:</label>
                     <select className="custom-select" id="parcelas" value={selectedParcela} onChange={handleParcelaChange}>
@@ -301,79 +277,87 @@ const ModificacionPuntoMedicion: React.FC<PreparacionTerrenoSeleccionado> = ({
                     </select>
                     {errors.parcela && <FormFeedback>{errors.parcela}</FormFeedback>}
                 </FormGroup>
+                </div>
+            </div>
             </div>
             <div style={{ display: 'flex', flexDirection: 'row', marginBottom: '0rem' }}>
                 <div style={{ flex: 1, marginRight: '0.5rem', marginLeft: '0.5rem' }}>
-                    <FormGroup row>
-                        <Label for="fecha" sm={4} className="input-label">Fecha</Label>
-                        <Col sm={8}>
-                            <Input
-                                type="date"
-                                id="fecha"
-                                name="fecha"
-                                value={formData.fecha}
-                                onChange={handleInputChange}
-                                className={errors.fecha ? 'input-styled input-error' : 'input-styled'}
-                                placeholder="Selecciona una fecha"
-                            />
-                            <FormFeedback>{errors.fecha}</FormFeedback>
-                        </Col>
-                    </FormGroup>
-                </div>
-                <div style={{ flex: 1, marginRight: '0.5rem', marginLeft: '0.5rem' }}>
-                    <FormGroup row>
-                        <Label for="actividad" sm={4} className="input-label">Actividad</Label>
+                <FormGroup row>
+                        <Label for="codigo" sm={4} className="input-label">Código</Label>
                         <Col sm={8}>
                             <Input
                                 type="text"
-                                id="actividad"
-                                name="actividad"
-                                value={formData.actividad}
+                                id="codigo"
+                                name="codigo"
+                                value={formData.codigo}
                                 onChange={handleInputChange}
-                                className={errors.actividad ? 'input-styled input-error' : 'input-styled'}
-                                placeholder="actividad"
-                                maxLength={200}
-                            />
-                            <FormFeedback>{errors.actividad}</FormFeedback>
-                        </Col>
-                    </FormGroup>
-                </div>
-                <div style={{ flex: 1, marginRight: '0.5rem', marginLeft: '0.5rem' }}>
-                    <FormGroup row>
-                        <Label for="maquinaria" sm={4} className="input-label">Maquinaria</Label>
-                        <Col sm={8}>
-                            <Input
-                                type="text"
-                                id="maquinaria"
-                                name="maquinaria"
-                                value={formData.maquinaria}
-                                onChange={handleInputChange}
-                                className="input-styled"
-                                placeholder="maquinaria"
+                                className={errors.codigo ? 'input-styled input-error' : 'input-styled'}
+                                placeholder="código"
                                 maxLength={50}
                             />
+                            <FormFeedback>{errors.codigo}</FormFeedback>
+                        </Col>
+                    </FormGroup>
+                </div>
+                <div style={{ flex: 1, marginRight: '0.5rem', marginLeft: '0.5rem' }}>
+                    <FormGroup row>
+                        <Label for="altitud" sm={4} className="input-label">Altitud</Label>
+                        <Col sm={8}>
+                            <Input
+                                type="text"
+                                id="altitud"
+                                name="altitud"
+                                value={formData.altitud}
+                                onChange={handleInputChange}
+                                className={errors.altitud ? 'input-styled input-error' : 'input-styled'}
+                                placeholder="altitud"
+                                maxLength={50}
+                            />
+                            <FormFeedback>{errors.altitud}</FormFeedback>
+                        </Col>
+                    </FormGroup>
+                </div>
+
+            </div>
+            
+            <div style={{ display: 'flex', flexDirection: 'row', marginBottom: '0rem' }}>
+                <div style={{ flex: 1, marginRight: '0.5rem', marginLeft: '0.5rem' }}>
+                    <FormGroup row>
+                        <Label for="latitud" sm={4} className="input-label">Latitud</Label>
+                        <Col sm={8}>
+                            <Input
+                                type="text"
+                                id="latitud"
+                                name="latitud"
+                                value={formData.latitud}
+                                onChange={handleInputChange}
+                                className={errors.latitud ? 'input-styled input-error' : 'input-styled'}
+                                placeholder="latitud"
+                                maxLength={50}
+                            />
+                            <FormFeedback>{errors.latitud}</FormFeedback>
+                        </Col>
+                    </FormGroup>
+                </div>
+                <div style={{ flex: 1, marginRight: '0.5rem', marginLeft: '0.5rem' }}>
+                    <FormGroup row>
+                        <Label for="longitud" sm={4} className="input-label">Longitud</Label>
+                        <Col sm={8}>
+                            <Input
+                                type="text"
+                                id="longitud"
+                                name="longitud"
+                                value={formData.longitud}
+                                onChange={handleInputChange}
+                                className={errors.longitud ? 'input-styled input-error' : 'input-styled'}
+                                placeholder="longitud"
+                                maxLength={50}
+                            />
+                            <FormFeedback>{errors.longitud}</FormFeedback>
                         </Col>
                     </FormGroup>
                 </div>
             </div>
-            <FormGroup row>
-                <Label for="observaciones" sm={2} className="input-label">Observaciones</Label>
-                <Col sm={10}>
-                    <Input
-                        type="textarea"
-                        id="observaciones"
-                        name="observaciones"
-                        value={formData.observaciones}
-                        onChange={handleInputChange}
-                        className="input-styled"
-                        style={{ height: '75px', resize: "none" }}
-                        placeholder="Observaciones"
-                        maxLength={200}
-
-                    />
-                    <FormFeedback>{errors.observaciones}</FormFeedback>
-                </Col>
-            </FormGroup>
             <FormGroup row>
                 <Col sm={{ size: 10, offset: 2 }}>
                     {/* Agregar aquí el botón de cancelar proporcionado por el modal */}
