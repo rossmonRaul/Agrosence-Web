@@ -79,18 +79,24 @@ const Sidebar = ({ children }: { children: React.ReactNode }) => {
             icon: <img src='/tractor.png' style={{ width: '30px' }} />,
             roles: [2]
         },
-
         {
-            path: "/puntomedicion",
-            name: "Punto Medición",
-            icon: <img src='/tractor.png' style={{ width: '30px' }} />,
-            roles: [2]
-        },
-        {
-            path: "/administrarsensores",
+            path: "/menusensores",
             name: "Sensores",
-            icon: <img src='/tractor.png' style={{ width: '30px' }} />,
-            roles: [2]
+            icon: <img src='/sensores.png' style={{ width: '22px' }} />, // Puedes usar cualquier icono que desees aquí
+            roles: [2], // Especifica los roles que pueden ver esta opción
+            children: [
+                {
+                    path: "/administrarsensores",
+                    name: "Sensores",
+                    icon: <img src='/sensor.png' style={{ width: '22px' }} />,
+                },
+                {
+                    path: "/puntomedicion",
+                    name: "Punto Medición",
+                    icon: <img src='/condiciones-climaticas.png' style={{ width: '22px' }} />,
+                },
+
+            ]
         },
         {
             path: "/suelos",
