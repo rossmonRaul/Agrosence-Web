@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { NavLink, useLocation } from 'react-router-dom';
-import { FaBars, FaUserAlt, FaTh, FaUserCog, FaAngleRight, FaAngleDown } from "react-icons/fa";
+import { FaBars, FaUserAlt, FaTh, FaUserCog, FaAngleRight, FaAngleDown, FaChartBar } from "react-icons/fa";
 import '../../css/Sidebar.css';
 import { useSelector } from 'react-redux';
 import { AppStore } from '../../redux/Store';
@@ -51,6 +51,12 @@ const Sidebar = ({ children }: { children: React.ReactNode }) => {
             path: "/usuariosadmin",
             name: "Administradores",
             icon: <FaUserAlt />,
+            roles: [1]
+        },
+        {
+            path: "/medicionessensor",
+            name: "Mediciones Sensor",
+            icon: <FaChartBar />,
             roles: [1]
         },
         {

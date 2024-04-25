@@ -30,8 +30,10 @@ const ManejoResiduos = lazy(() => import('./pages/private/ManejoResiduos/ManejoR
 const EficienciaRiego = lazy(() => import('./pages/private/EficienciaRiego/EficienciaRiego'))
 const PronosticoMeteorologico = lazy(() => import('./pages/private/PronosticoMeteorologico/PronosticoMeteorologico'))
 import CondicionesMeteorologicasClimaticas from './pages/private/RegistroCondicionesMetereologicas/RegistroCondicionesMetereologicas';
+
 const RiesgosNaturales = lazy(() => import('./pages/private/RiesgoNatural/RiesgoNatural'))
 const ProblemasPlagas = lazy(() => import('./pages/private/ProblemasPlagas/ProblemasPlagas'))
+const MedicionesSensor = lazy(() => import('./pages/private/MedicionesSensor/MedicionesSensor'))
 function App() {
   return (
     // Suspense para manejar la carga de componentes lazy
@@ -59,6 +61,7 @@ function App() {
               {/* donde se crean los administradores */}
               <Route path={PrivateRoutes.CREARUSUARIOSA} element={<AdministacionAdministradores />} />
               <Route path={PrivateRoutes.ADMINISTRAREMPRESAS} element={<AdministrarEmpresas />} />
+              <Route path={PrivateRoutes.MEDICIONESSENSOR} element={<MedicionesSensor/>} />
             </Route>
 
             {/* Rutas accesibles solo para el rol de Admin */}
@@ -83,6 +86,7 @@ function App() {
               <Route path={PrivateRoutes.REGISTROSEGUIMIENTOUSOAGUA} element={<RegistroSeguimientoUsoAgua />} />
               <Route path={PrivateRoutes.RIESGOSNATURALES} element={<RiesgosNaturales />} />
               <Route path={PrivateRoutes.PROBLEMASPLAGAS} element={<ProblemasPlagas/>} />
+              
 
               <Route path={PrivateRoutes.PRONOSTICOMETEOROLOGICO} element={<PronosticoMeteorologico />} />
               <Route path={PrivateRoutes.CONDICIONESMETEOROLOGICASCLIMATICAS} element={<CondicionesMeteorologicasClimaticas />} />
