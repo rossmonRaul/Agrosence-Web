@@ -167,32 +167,36 @@ const ModificarSensores: React.FC<Props> = ({
         }
         // Validar que se ingrese el identificador del sensor
         if (!formData.identificadorSensor) {
-            newErrors.identificadorSensor = 'El identificador es requerido';
+            newErrors.identificadorSensor = 'Identificador requerido';
+        } else if (formData.identificadorSensor.length > 100) {
+            1
+            newErrors.identificadorSensor = 'El identificador no puede exceder los 100 caracteres';
         } else if (/^\s/.test(formData.identificadorSensor)) {
-            newErrors.identificadorSensor = 'El identificador no puede comenzar con espacios en blanco';
+            newErrors.identificadorSensor = 'No puede comenzar con espacios';
         } else {
             newErrors.identificadorSensor = '';
         }
-
         // Validar el nombre
         if (!formData.nombre) {
-            newErrors.nombre = 'El nombre es requerido';
+            newErrors.nombre = 'Nombre requerido';
+        } else if (formData.nombre.length > 50) {
+            newErrors.nombre = 'El nombre no puede exceder los 50 caracteres';
         } else if (/^\s/.test(formData.nombre)) {
-            newErrors.nombre = 'El nombre no puede comenzar con espacios en blanco';
+            newErrors.nombre = 'No puede comenzar con espacios';
         } else {
             newErrors.nombre = '';
         }
 
         // Validar el modelo
         if (!formData.modelo) {
-            newErrors.modelo = 'El modelo es requerido';
+            newErrors.modelo = 'Modelo requerido';
+        } else if (formData.modelo.length > 150) {
+            newErrors.modelo = 'El modelo no puede exceder los 150 caracteres';
         } else if (/^\s/.test(formData.modelo)) {
-            newErrors.modelo = 'El modelo no puede comenzar con espacios en blanco';
+            newErrors.modelo = 'No puede comenzar con espacios';
         } else {
             newErrors.modelo = '';
         }
-
-
 
 
         // Actualizar los errores
