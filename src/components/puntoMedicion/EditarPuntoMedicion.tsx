@@ -172,10 +172,10 @@ const ModificacionPuntoMedicion: React.FC<PuntoMedicionSeleccionado> = ({
         }
 
         if (!formData.altitud.trim()) {
-            newErrors.altitud = 'La altitud es requerida';
-        } else if (formData.altitud.length > 50) {
-            newErrors.altitud = 'La altitud no puede tener más de 50 caracteres';
-        } else {
+            newErrors.altitud = 'La elevación es requerida';
+        } else if (!/^\d+(\.\d+)?$/.test(formData.altitud.trim())){
+            newErrors.altitud = 'La elevación debe ser un número';
+        }else {
             newErrors.altitud = '';
         }
 
@@ -301,7 +301,7 @@ const ModificacionPuntoMedicion: React.FC<PuntoMedicionSeleccionado> = ({
                 </div>
                 <div style={{ flex: 1, marginRight: '0.5rem', marginLeft: '0.5rem' }}>
                     <FormGroup row>
-                        <Label for="altitud" sm={4} className="input-label">Altitud</Label>
+                        <Label for="altitud" sm={4} className="input-label">Elevación(m s. n. m.)</Label>
                         <Col sm={8}>
                             <Input
                                 type="text"
@@ -310,7 +310,7 @@ const ModificacionPuntoMedicion: React.FC<PuntoMedicionSeleccionado> = ({
                                 value={formData.altitud}
                                 onChange={handleInputChange}
                                 className={errors.altitud ? 'input-styled input-error' : 'input-styled'}
-                                placeholder="altitud"
+                                placeholder="elevación"
                                 maxLength={50}
                             />
                             <FormFeedback>{errors.altitud}</FormFeedback>

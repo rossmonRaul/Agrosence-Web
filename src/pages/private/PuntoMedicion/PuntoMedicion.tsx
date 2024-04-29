@@ -98,7 +98,7 @@ function AdministrarPuntoMedicion() {
         // Filtrar por nombre si hay un filtro aplicado
         if (filtroNombre.trim() !== '') {
             puntosMedicionFiltradosPorFinca = puntosMedicionFiltradosPorFinca.filter(puntoMedicion =>
-                puntoMedicion.nombreParcela.toLowerCase().includes(filtroNombre.toLowerCase())
+                puntoMedicion.codigo.toLowerCase().includes(filtroNombre.toLowerCase())
             );
         }
         setPuntoMedicionFiltrados(puntosMedicionFiltradosPorFinca);
@@ -192,8 +192,8 @@ function AdministrarPuntoMedicion() {
 
     const columns2 = [
         { key: 'nombreParcela', header: 'Parcela' },
-        { key: 'codigo', header: 'Sensor' },
-        { key: 'altitud', header: 'Altitud' },
+        { key: 'codigo', header: 'Código' },
+        { key: 'altitud', header: 'Elevación(m s. n. m.)' },
         { key: 'latitud', header: 'Latitud' },
         { key: 'longitud', header: 'Longitud' },
         { key: 'sEstado', header: 'Estado' },
@@ -216,13 +216,13 @@ function AdministrarPuntoMedicion() {
                         </select>
                     </div>
                     <div className="filtro-container">
-                        <label htmlFor="filtroNombre">Filtrar por parcela:</label>
+                        <label htmlFor="filtroNombre">Filtrar por código:</label>
                         <input
                             type="text"
                             id="filtroNombre"
                             value={filtroNombre}
                             onChange={handleChangeFiltro}
-                            placeholder="Ingrese el nombre de la parcela"
+                            placeholder="Ingrese algún código"
                             className="form-control"
                         />
                     </div>
