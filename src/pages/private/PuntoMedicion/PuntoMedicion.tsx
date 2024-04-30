@@ -27,7 +27,6 @@ interface Option {
 }
 function AdministrarPuntoMedicion() {
     const [filtroNombre, setFiltroNombre] = useState('');
-    const [datosPreparacionTerrenoOriginales, setDatosPreparacionTerrenoOriginales] = useState<any[]>([]);
     const [modalEditar, setModalEditar] = useState(false);
     const [modalInsertar, setModalInsertar] = useState(false);
     const [selectedDatos, setSelectedDatos] = useState({
@@ -41,7 +40,7 @@ function AdministrarPuntoMedicion() {
         nombreParcela:''
     });
     const [parcelas, setParcelas] = useState<any[]>([]);
-    const [puntoMedicionFiltradas, setPuntoMedicionFiltradas] = useState<any[]>([]);
+    const [puntoMedicionFiltrados, setPuntoMedicionFiltrados] = useState<any[]>([]);
     const [datosPreparacionTerreno, setDatosPreparacionTerreno] = useState<any[]>([]);
     const [datosPreparacionTerrenoFiltrados, setdatosPreparacionTerrenoFiltrados] = useState<any[]>([]);
     const [selectedFinca, setSelectedFinca] = useState<string>('');
@@ -61,9 +60,12 @@ function AdministrarPuntoMedicion() {
             try {
                 const idEmpresaUsuario = localStorage.getItem('empresaUsuario');
                 if (idEmpresaUsuario) {
-                    const fincasResponse = await ObtenerFincas(); // Suponiendo que ObtenerFincas devuelve las fincas de una empresa específica
-                    const fincasFiltradas = fincasResponse.filter((finca: any) => finca.idEmpresa === parseInt(idEmpresaUsuario));
+                    const fincasResponse = await ObtenerFincas();
+                    const fincasFiltradas = fincasResponse.filter((f: any) => f.idEmpresa === parseInt(idEmpresaUsuario));
                     setFincas(fincasFiltradas);
+                    const parcelasResponse = await ObtenerParcelas();
+                    const parcelasFiltradas = parcelasResponse.filter((parcela: any) => fincasFiltradas.some((f: any) => f.idFinca === parcela.idFinca));
+                    setParcelas(parcelasFiltradas);
                 }
             } catch (error) {
                 console.error('Error al obtener las fincas:', error);
@@ -89,17 +91,17 @@ function AdministrarPuntoMedicion() {
     }, [selectedFinca, puntoMedicion, filtroNombre]);
      // Función para filtrar las parcelas
     const filtrarParcelas = () => {
-        let parcelasFiltradasPorFinca = selectedFinca
-            ? puntoMedicion.filter(parcela => parcela.idFinca === parseInt(selectedFinca))
+        let puntosMedicionFiltradosPorFinca = selectedFinca
+            ? puntoMedicion.filter(puntoMedicion => puntoMedicion.idFinca === parseInt(selectedFinca))
             : puntoMedicion
 
         // Filtrar por nombre si hay un filtro aplicado
         if (filtroNombre.trim() !== '') {
-            parcelasFiltradasPorFinca = parcelasFiltradasPorFinca.filter(parcela =>
-                parcela.nombre.toLowerCase().includes(filtroNombre.toLowerCase())
+            puntosMedicionFiltradosPorFinca = puntosMedicionFiltradosPorFinca.filter(puntoMedicion =>
+                puntoMedicion.codigo.toLowerCase().includes(filtroNombre.toLowerCase())
             );
         }
-        setPuntoMedicionFiltradas(parcelasFiltradasPorFinca);
+        setPuntoMedicionFiltrados(puntosMedicionFiltradosPorFinca);
     };
 
 
@@ -109,28 +111,19 @@ function AdministrarPuntoMedicion() {
             const idEmpresaUsuario = localStorage.getItem('empresaUsuario');
             if (idEmpresaUsuario) {
 
-                const fincas = await ObtenerFincas();
-                const fincasEmpresaUsuario = fincas.filter((finca: any) => finca.idEmpresa === parseInt(idEmpresaUsuario));
+                //const fincas = await ObtenerFincas();
+                //const fincasEmpresaUsuario = fincas.filter((finca: any) => finca.idEmpresa === parseInt(idEmpresaUsuario));
 
-                const parcelasResponse = await ObtenerRegistroPuntoMedicion({IdEmpresa:idEmpresa});
-
-                /*const parcelasFincasEmpresaUsuario: any[] = [];
-
-                fincasEmpresaUsuario.forEach((finca: any) => {
-                    const parcelasFinca = parcelasResponse.filter((parcela: any) => parcela.idFinca === finca.idFinca);
-                    parcelasFincasEmpresaUsuario.push(...parcelasFinca);
-                });*/
-
-                //ajustar para fertilizantes
-                const parcelasConEstado = parcelasResponse.map((parcela: any) => ({
-                    ...parcela,
-                    sEstado: parcela.estado === 1 ? 'Activo' : 'Inactivo'
+                const puntosMedicionResponse = await ObtenerRegistroPuntoMedicion({IdEmpresa:idEmpresa});
+                const puntosMedicionConEstado = puntosMedicionResponse.map((puntoMedicion: any) => ({
+                    ...puntoMedicion,
+                    sEstado: puntoMedicion.estado === 1 ? 'Activo' : 'Inactivo'
                 }));
-                setPuntoMedicion(parcelasConEstado);
-                setPuntoMedicionFiltradas(parcelasConEstado);
+                setPuntoMedicion(puntosMedicionConEstado);
+                setPuntoMedicionFiltrados(puntosMedicionConEstado);
             }
         } catch (error) {
-            console.error('Error al obtener las parcelas:', error);
+            console.error('Error al obtener los puntos de medición:', error);
         }
     };
 
@@ -145,8 +138,8 @@ function AdministrarPuntoMedicion() {
     };
 
     // Abrir modal de edición
-    const openModal = (parcela: any) => {
-        //setSelectedParcela(parcela);
+    const openModal = (puntomedicion: any) => {
+        setSelectedDatos(puntomedicion);
         abrirCerrarModalEditar();
     };
     
@@ -154,11 +147,16 @@ function AdministrarPuntoMedicion() {
         await obtenerRegistroPuntoMedicion();
         abrirCerrarModalInsertar();
     };
+
+    const handleEditarPuntoMedicion = async () => {
+        await obtenerRegistroPuntoMedicion();
+        abrirCerrarModalEditar();
+    };
     // Cambiar estado de la parcela
     const toggleStatus = async (puntomedicion: any) => {
         Swal.fire({
             title: "Cambiar Estado",
-            text: "¿Estás seguro de que deseas actualizar el estado del punto de medicion: " + puntomedicion.codigo + "?",
+            text: "¿Estás seguro de que deseas actualizar el estado del punto de medición: " + puntomedicion.codigo + "?",
             icon: "warning",
             showCancelButton: true,
             confirmButtonText: "Sí",
@@ -185,7 +183,7 @@ function AdministrarPuntoMedicion() {
                         });
                     };
                 } catch (error) {
-                    Swal.fire("Error al actualizar el estado de la parcela", "", "error");
+                    Swal.fire("Error al actualizar el estado del punto de medición", "", "error");
                 }
             }
         });
@@ -194,8 +192,8 @@ function AdministrarPuntoMedicion() {
 
     const columns2 = [
         { key: 'nombreParcela', header: 'Parcela' },
-        { key: 'codigo', header: 'Sensor' },
-        { key: 'altitud', header: 'Altitud' },
+        { key: 'codigo', header: 'Código' },
+        { key: 'altitud', header: 'Elevación(m s. n. m.)' },
         { key: 'latitud', header: 'Latitud' },
         { key: 'longitud', header: 'Longitud' },
         { key: 'sEstado', header: 'Estado' },
@@ -218,24 +216,24 @@ function AdministrarPuntoMedicion() {
                         </select>
                     </div>
                     <div className="filtro-container">
-                        <label htmlFor="filtroNombreActividad">Filtrar por nombre de actividad:</label>
+                        <label htmlFor="filtroNombre">Filtrar por código:</label>
                         <input
                             type="text"
-                            id="filtroNombreActividad"
+                            id="filtroNombre"
                             value={filtroNombre}
                             onChange={handleChangeFiltro}
-                            placeholder="Ingrese el nombre del Actividad"
+                            placeholder="Ingrese algún código"
                             className="form-control"
                         />
                     </div>
-                    <TableResponsive columns={columns2} data={puntoMedicion} openModal={openModal} btnActionName={"Editar"} toggleStatus={toggleStatus} />
+                    <TableResponsive columns={columns2} data={puntoMedicionFiltrados} openModal={openModal} btnActionName={"Editar"} toggleStatus={toggleStatus} />
                 </div>
             </div>
 
             <Modal
                 isOpen={modalInsertar}
                 toggle={abrirCerrarModalInsertar}
-                title="Preparacion Terreno"
+                title="Insertar punto de medición"
                 onCancel={abrirCerrarModalInsertar}
             >
                 <div className='form-container'>
@@ -251,12 +249,12 @@ function AdministrarPuntoMedicion() {
             <Modal
                 isOpen={modalEditar}
                 toggle={abrirCerrarModalEditar}
-                title="Editar Preparacion de Terreno"
+                title="Editar Punto de medición"
                 onCancel={abrirCerrarModalEditar}
             >
                 <div className='form-container'>
                     <div className='form-group'>
-                        {/* <ModificacionPuntoMedicion
+                           <ModificacionPuntoMedicion
                             idFinca={parseInt(selectedDatos.idFinca)}
                             idParcela={parseInt(selectedDatos.idParcela)}
                             idPuntoMedicion={parseInt(selectedDatos.idPuntoMedicion)}
@@ -264,8 +262,8 @@ function AdministrarPuntoMedicion() {
                             altitud={selectedDatos.altitud}
                             latitud ={selectedDatos.latitud }
                             longitud={selectedDatos.longitud}
-                            onEdit={handleEditarPreparacionTerreno}
-                        />  */}
+                            onEdit={handleEditarPuntoMedicion}
+                        />  
                     </div>
                 </div>
             </Modal> 

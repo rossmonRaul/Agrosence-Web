@@ -12,6 +12,7 @@ export const PrivateRoutes = {
     ASIGNAREMPRESA: 'asignarempresa',
     //
     ASIGNARFINCAPARCELA: 'asignarfincaparcela',
+    SENSORES: 'administrarsensores',
     // pagina de sa para administrar las empresas ↓
     ADMINISTRAREMPRESAS: 'administrarempresas',
     MATENIMIENTOUSUARIOSASIGNADOS: 'administrarusuariosasignados',
@@ -27,7 +28,7 @@ export const PrivateRoutes = {
     RIEGOS: 'eficienciariego',
     CONDUCTIVIDADELECTRICA: 'conductividadelectrica',
     PRONOSTICOMETEOROLOGICO: 'pronosticometereologico',
-    RIESGOSNATURALES:'riesgonatural',
+    RIESGOSNATURALES: 'riesgonatural',
     CONDICIONESMETEOROLOGICASCLIMATICAS: 'condicionesmetereologicasclimaticas',
     PROBLEMASPLAGAS: 'problemasplagas',
     MEDICIONESSENSOR: 'medicionessensor',

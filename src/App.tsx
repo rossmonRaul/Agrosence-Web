@@ -36,6 +36,7 @@ const RiesgosNaturales = lazy(() => import('./pages/private/RiesgoNatural/Riesgo
 const ProblemasPlagas = lazy(() => import('./pages/private/ProblemasPlagas/ProblemasPlagas'))
 const MedicionesSensor = lazy(() => import('./pages/private/MedicionesSensor/MedicionesSensor'))
 const PuntoMedicion = lazy(() => import('./pages/private/PuntoMedicion/PuntoMedicion'))
+const RegistroSensores = lazy(() => import('./pages/private/RegistroSensores/RegistroSensores'));
 function App() {
   return (
     // Suspense para manejar la carga de componentes lazy
@@ -63,7 +64,7 @@ function App() {
               {/* donde se crean los administradores */}
               <Route path={PrivateRoutes.CREARUSUARIOSA} element={<AdministacionAdministradores />} />
               <Route path={PrivateRoutes.ADMINISTRAREMPRESAS} element={<AdministrarEmpresas />} />
-              <Route path={PrivateRoutes.MEDICIONESSENSOR} element={<MedicionesSensor/>} />
+              <Route path={PrivateRoutes.MEDICIONESSENSOR} element={<MedicionesSensor />} />
             </Route>
 
             {/* Rutas accesibles solo para el rol de Admin */}
@@ -74,6 +75,7 @@ function App() {
               <Route path={PrivateRoutes.ADMINISTRARFINCAS} element={<AdministrarFincas />} />
               <Route path={PrivateRoutes.ADMINISTRARPARCELAS} element={<AdministrarParcelas />} />
               <Route path={PrivateRoutes.PUNTOMEDICION} element={<PuntoMedicion />} />
+              <Route path={PrivateRoutes.SENSORES} element={<RegistroSensores />} />
             </Route>
             {/* Rutas accesibles solo para el rol de usuario asignado */}
             <Route element={<RolGuard rol={Roles.UsuarioAsignado} />}>
@@ -88,11 +90,12 @@ function App() {
               <Route path={PrivateRoutes.PRODUCCIONCULTIVOS} element={<ProduccionCultivos />} />
               <Route path={PrivateRoutes.REGISTROSEGUIMIENTOUSOAGUA} element={<RegistroSeguimientoUsoAgua />} />
               <Route path={PrivateRoutes.RIESGOSNATURALES} element={<RiesgosNaturales />} />
-              <Route path={PrivateRoutes.PROBLEMASPLAGAS} element={<ProblemasPlagas/>} />
-              
+              <Route path={PrivateRoutes.PROBLEMASPLAGAS} element={<ProblemasPlagas />} />
+
 
               <Route path={PrivateRoutes.PRONOSTICOMETEOROLOGICO} element={<PronosticoMeteorologico />} />
               <Route path={PrivateRoutes.CONDICIONESMETEOROLOGICASCLIMATICAS} element={<CondicionesMeteorologicasClimaticas />} />
+
             </Route>
           </RoutesWithNotFound>
         </BrowserRouter>
