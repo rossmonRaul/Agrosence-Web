@@ -21,6 +21,7 @@ const InsertarMedicionSensor: React.FC<AgregarMedicion> = ({ onAdd }) => {
         idMedicion: 0,
         nombre: '',
         unidadMedida: '',
+        nomenclatura: ''
     });
 
     // Función para manejar cambios en los inputs del formulario
@@ -49,13 +50,25 @@ const InsertarMedicionSensor: React.FC<AgregarMedicion> = ({ onAdd }) => {
         const newErrors: Record<string, string> = {};
         if (!formData.nombre.trim()) {
             newErrors.nombre = 'El nombre es requerido';
+        }else if (formData.nombre.length > 50) {
+            newErrors.nombre = 'El nombre no puede tener más de 50 caracteres';
         } else {
             newErrors.nombre = '';
         }
         if (!formData.unidadMedida.trim()) {
             newErrors.unidadMedida = 'El unidad medida es requerido';
+        }else if (formData.unidadMedida.length > 150) {
+            newErrors.unidadMedida = 'La unidad no puede tener más de 150 caracteres';
         } else {
             newErrors.unidadMedida = '';
+        }
+
+        if (!formData.nomenclatura.trim()) {
+            newErrors.nomenclatura = 'La nomenclatura es requerida es requerido';
+        }else if (formData.nomenclatura.length > 7) {
+            newErrors.nomenclatura = 'La nomenclatura no puede tener más de 7 caracteres';
+        }  else {
+            newErrors.nomenclatura = '';
         }
         // Actualizar los errores
         setErrors(newErrors);
@@ -79,6 +92,7 @@ const InsertarMedicionSensor: React.FC<AgregarMedicion> = ({ onAdd }) => {
         const datos = {
             nombre: formData.nombre,
             unidadMedida: formData.unidadMedida,
+            nomenclatura: formData.nomenclatura,
             usuarioCreacionModificacion: idUsuario
         };
         try {
@@ -138,6 +152,22 @@ const InsertarMedicionSensor: React.FC<AgregarMedicion> = ({ onAdd }) => {
                             className={errors.unidadMedida ? 'input-styled input-error' : 'input-styled'} // Aplicar clase 'is-invalid' si hay un error
                         />
                         <FormFeedback>{errors.unidadMedida}</FormFeedback>
+                    </Col>
+                </FormGroup>
+                <FormGroup row>
+                    <Label for="nomenclatura" sm={2} className="input-label">Nomenclatura: </Label>
+                    <Col sm={12}>
+                        <Input
+                            type="text"
+                            id="nomenclatura"
+                            name="nomenclatura"
+                            placeholder="Ingrese la nomenclatura"
+                            value={formData.nomenclatura}
+                            onChange={handleInputChange}
+                            onBlur={() => handleInputBlur('nomenclatura')} // Manejar blur para quitar el mensaje de error
+                            className={errors.nomenclatura ? 'input-styled input-error' : 'input-styled'} // Aplicar clase 'is-invalid' si hay un error
+                        />
+                        <FormFeedback>{errors.nomenclatura}</FormFeedback>
                     </Col>
                 </FormGroup>
             </div>

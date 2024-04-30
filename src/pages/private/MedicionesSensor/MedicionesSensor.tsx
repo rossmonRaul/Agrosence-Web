@@ -3,32 +3,25 @@
 import { useEffect, useState } from "react";
 import Sidebar from "../../../components/sidebar/Sidebar";
 import '../../../css/AdministacionAdministradores.css';
-import TableResponsive from "../../../components/table/table.tsx";
 import BordeSuperior from "../../../components/bordesuperior/BordeSuperior.tsx";
 import Modal from "../../../components/modal/Modal.tsx";
 import Topbar from "../../../components/topbar/Topbar.tsx";
 import { CambiarEstadoMedicionSensor, ObtenerMedicionesSensor } from "../../../servicios/ServicioMedicionesSensor.ts";
 import Swal from "sweetalert2";
 import InsertarMedicionSensor from "../../../components/medicionesSensor/InsertarMedicionesSensor.tsx";
-import EditarMedicionesSensor from "../../../components/medicionesSensor/EditarMedicionesSensor.tsx";
+import TableResponsiveState from "../../../components/table/tableState.tsx";
 
 
 function MedicionesSensor() {
-   
+
     const [filtroNombre, setFiltroNombre] = useState('')
-     // Estado para controlar la apertura y cierre del modal de edición
-    const [modalEditar, setModalEditar] = useState(false);
+
     // Estado para controlar la apertura y cierre del modal de inserción
     const [modalInsertar, setModalInsertar] = useState(false);
-    // Estado para controlar la apertura y cierre del modal de inserción
-    const [selectedMedicion, setSelectedMedicion] = useState({
-        idMedicion: '',
-        nombre: '',
-        unidadMedida: ''
-    });
-    
+
+
     const [mediciones, setMediciones] = useState<any[]>([]);
-    
+
     const [medicionesFiltrados, setMedicionesFiltrados] = useState<any[]>([]);
 
     // Obtener las mediciones al cargar la página
@@ -37,7 +30,7 @@ function MedicionesSensor() {
     }, []); // Ejecutar solo una vez al montar el componente
 
     // Función para obtener todas las mediciones
-    const obtenerMediciones = async () => {  
+    const obtenerMediciones = async () => {
         try {
             const mediciones = await ObtenerMedicionesSensor();
 
@@ -77,18 +70,7 @@ function MedicionesSensor() {
         setModalInsertar(!modalInsertar);
     }
 
-    
-    const abrirCerrarModalEditar = () => {
-        setModalEditar(!modalEditar);
-    }
-
-
-    const openModal = (medicion: any) => {
-        setSelectedMedicion(medicion);
-        abrirCerrarModalEditar();
-    };
-
-     // Función para cambiar el estado de una medicion
+    // Función para cambiar el estado de una medicion
     const toggleStatus = (medicion: any) => {
         Swal.fire({
             title: "Cambiar Estado",
@@ -100,24 +82,32 @@ function MedicionesSensor() {
         }).then(async (result) => {
             if (result.isConfirmed) {
                 try {
-                    const datos = {
-                        idMedicion: medicion.idMedicion
-                    };
-                    const resultado = await CambiarEstadoMedicionSensor(datos);
-                    if (parseInt(resultado.indicador) === 1) {
-                        Swal.fire({
-                            icon: 'success',
-                            title: '¡Estado Actualizado! ',
-                            text: 'Actualización exitosa.',
-                        });
-                        await obtenerMediciones();
+                    const idUsuario = localStorage.getItem('identificacionUsuario');
+
+                    if (idUsuario !== null) {
+                        const datos = {
+                            idMedicion: medicion.idMedicion,
+                            usuarioCreacionModificacion: idUsuario
+                        };
+                        const resultado = await CambiarEstadoMedicionSensor(datos);
+                        if (parseInt(resultado.indicador) === 1) {
+                            Swal.fire({
+                                icon: 'success',
+                                title: '¡Estado Actualizado! ',
+                                text: 'Actualización exitosa.',
+                            });
+                            await obtenerMediciones();
+                        } else {
+                            Swal.fire({
+                                icon: 'error',
+                                title: 'Error al actualizar el estado.',
+                                text: resultado.mensaje,
+                            });
+                        };
                     } else {
-                        Swal.fire({
-                            icon: 'error',
-                            title: 'Error al actualizar el estado.',
-                            text: resultado.mensaje,
-                        });
-                    };
+                        console.error('El valor de identificacionUsuario en localStorage es nulo.');
+                    }
+
                 } catch (error) {
                     Swal.fire("Error al asignar al usuario", "", "error");
                 }
@@ -125,10 +115,9 @@ function MedicionesSensor() {
         });
     };
 
-    // Funciónes para manejar la edición y la adicion de una medicion (actualizar tabla)
-    const handleEditarMedicion= async () => {
-        await obtenerMediciones();
-        abrirCerrarModalEditar();
+    // Funciones para manejar el estado de los modales
+    const openModal = () => {
+
     };
 
     const handleAgregarMedicion = async () => {
@@ -140,6 +129,7 @@ function MedicionesSensor() {
     const columns = [
         { key: 'nombre', header: 'Nombre Medicion' },
         { key: 'unidadMedida', header: 'Unidad Medida' },
+        { key: 'nomenclatura', header: 'Nomenclatura' },
         { key: 'acciones', header: 'Acciones', actions: true } // Columna para acciones
     ];
 
@@ -161,8 +151,8 @@ function MedicionesSensor() {
                             className="form-control"
                         />
                     </div>
-                    <TableResponsive columns={columns} data={medicionesFiltrados} openModal={openModal}  btnActionName={"Editar"} toggleStatus={toggleStatus} />
-   
+                    <TableResponsiveState columns={columns} data={medicionesFiltrados} openModal={openModal} toggleStatus={toggleStatus} btnActionName={"Editar"} />
+
                 </div>
             </div>
 
@@ -181,23 +171,7 @@ function MedicionesSensor() {
                 </div>
             </Modal>
 
-            <Modal
-                isOpen={modalEditar}
-                toggle={abrirCerrarModalEditar}
-                title="Editar Medicion"
-                onCancel={abrirCerrarModalEditar}
-            >
-                <div className='form-container'>
-                    <div className='form-group'>
-                        <EditarMedicionesSensor
-                            nombrebase={selectedMedicion.nombre}
-                            idMedicion={selectedMedicion.idMedicion}
-                            unidadMedida={selectedMedicion.unidadMedida}
-                            onEdit={handleEditarMedicion}
-                        />
-                    </div>
-                </div>
-            </Modal>
+
 
         </Sidebar>
 
