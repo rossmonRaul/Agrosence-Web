@@ -23,6 +23,7 @@ interface Option {
     codigo: string;
     idPuntoMedicion: number;
     idMedicion: number;
+    nomenclatura: string;
 }
 
 
@@ -431,7 +432,7 @@ const InsertarRegistroSensores: React.FC<InsertarManejoFertilizanteProps> = ({ o
                                     >
                                         <option value="">Seleccione...</option>
                                         {medicionesSensor.map((medicion) => (
-                                            <option key={medicion.idMedicion} value={medicion.idMedicion}>{medicion.nombre}</option>
+                                            <option key={medicion.idMedicion} value={medicion.idMedicion}>{medicion.nombre + ' (' + medicion.nomenclatura + ')'}</option>
                                         ))}
                                     </select>
                                     {index !== 0 && (

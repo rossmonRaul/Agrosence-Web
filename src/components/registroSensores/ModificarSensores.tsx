@@ -34,6 +34,8 @@ interface Option {
     codigo: string;
     idPuntoMedicion: number;
     idMedicion: number;
+    nomenclatura: string;
+
 }
 
 const ModificarSensores: React.FC<Props> = ({
@@ -533,7 +535,7 @@ const ModificarSensores: React.FC<Props> = ({
                                     >
                                         <option value="">Seleccione...</option>
                                         {medicionesSensor.map((medicion) => (
-                                            <option key={medicion.idMedicion} value={medicion.idMedicion}>{medicion.nombre}</option>
+                                            <option key={medicion.idMedicion} value={medicion.idMedicion}>{medicion.nombre + ' (' + medicion.nomenclatura + ')'}</option>
                                         ))}
                                     </select>
                                     <Button className="btn btn-danger" onClick={() => handleRemoveInput(index)}> X </Button>
