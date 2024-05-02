@@ -9,15 +9,12 @@ import Topbar from "../../../components/topbar/Topbar.tsx";
 import { ObtenerParcelas } from "../../../servicios/ServicioParcelas.ts";
 import Swal from "sweetalert2";
 import { ObtenerFincas } from "../../../servicios/ServicioFincas.ts";
-import { ObtenerUsuariosAsignadosPorIdentificacion } from '../../../servicios/ServicioUsuario.ts';
 import '../../../css/FormSeleccionEmpresa.css'
 import InsertarRegistroSensores from "../../../components/registroSensores/InsertarSensores.tsx";
 import ModificarSensores from "../../../components/registroSensores/ModificarSensores.tsx";
-import ModificarCondicionesMeteorologicasClimaticas from "../../../components/condicionesMeteorologicasClimaticas/ModificarCondicionesMeteorologicasClimaticas.tsx";
 import { useSelector } from "react-redux";
 import { AppStore } from "../../../redux/Store.ts";
-import { ObtenerSensores, CambiarEstadoSensor } from "../../../servicios/ServicioSensor.ts";
-
+import { ObtenerSensores, CambiarEstadoSensor, ObtenerMedicionesAutorizadasSensor } from "../../../servicios/ServicioSensor.ts";
 interface Option {
     identificacion: string;
     idEmpresa: number;
@@ -42,6 +39,7 @@ function RegistroSensores() {
         modelo: '',
         idEstado: '',
         idPuntoMedicion: '',
+        idMediciones: [],
     });
     const [parcelas, setParcelas] = useState<any[]>([]);
     const [datosProduccionFiltrados, setDatosProduccionFiltrados] = useState<any[]>([]);
@@ -129,7 +127,7 @@ function RegistroSensores() {
     const obtenerInfo = async () => {
         try {
             const datosProduccion = await ObtenerSensores();
-
+            const datosSensoresAutorizados = await ObtenerMedicionesAutorizadasSensor();
             // Convertir el estado de 0 o 1 a palabras "Activo" o "Inactivo"
             const datosProduccionConSEstado = datosProduccion.map((dato: any) => ({
                 ...dato,
@@ -141,9 +139,19 @@ function RegistroSensores() {
                 //aca se hace el filtro y hasta que elija la parcela funciona
                 return dato.idFinca === selectedFinca && dato.idParcela === selectedParcela;
             });
+            const datosConAutorizacion = datosFiltrados.map((dato: any) => {
+                const sensoresAutorizados = datosSensoresAutorizados.filter((sensor: any) => sensor.idSensor === dato.idSensor);
+                const medicionesAutorizadas = sensoresAutorizados.map((sensor: any) => sensor.medicionAutorizadaSensor).join(', ');
+                const idMediciones = sensoresAutorizados.map((sensor: any) => [sensor.idMedicionAutorizadaSensor, sensor.idMedicion]); // Nuevo array de IdMedicion
+                return {
+                    ...dato,
+                    medicionesAutorizadaSensor: medicionesAutorizadas,
+                    idMediciones: idMediciones // Nueva propiedad con array de IdMedicion
+                };
+            });
             // Actualizar el estado con los datos filtrados
-            setDatosProduccionOriginales(datosFiltrados);
-            setDatosProduccionFiltrados(datosFiltrados);
+            setDatosProduccionOriginales(datosConAutorizacion);
+            setDatosProduccionFiltrados(datosConAutorizacion);
         } catch (error) {
             console.error('Error al obtener los datos de los sensores:', error);
         }
@@ -210,9 +218,13 @@ function RegistroSensores() {
         });
     };
 
-    const handleEditarCondicionesMetereologicas = async () => {
+    const handleEditarCondicionesMetereologicas = async (option: number) => {
         await obtenerInfo();
-        abrirCerrarModalEditar();
+        if (option === 0) {
+            abrirCerrarModalEditar();
+        } if (option === 1) {
+            return
+        }
     };
 
     const handleAgregarCondicionesMetereologicas = async () => {
@@ -226,6 +238,7 @@ function RegistroSensores() {
         { key: 'modelo', header: 'Modelo' },
         { key: 'estadoSensor', header: 'Estado sensor' },
         { key: 'codigoPuntoMedicion', header: 'Punto medición' },
+        { key: 'medicionesAutorizadaSensor', header: 'Mediciones' },
         { key: 'sEstado', header: 'Estado' },
         { key: 'acciones', header: 'Acciones', actions: true }
     ];
@@ -316,7 +329,8 @@ function RegistroSensores() {
                             modelo={selectedDatos.modelo}
                             idEstado={parseInt(selectedDatos.idEstado)}
                             idPuntoMedicion={parseFloat(selectedDatos.idPuntoMedicion)}
-                            onEdit={handleEditarCondicionesMetereologicas}
+                            idMediciones={selectedDatos.idMediciones}
+                            onEdit={() => handleEditarCondicionesMetereologicas}
                         />
                     </div>
                 </div>
