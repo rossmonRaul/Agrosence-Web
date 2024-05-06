@@ -165,6 +165,7 @@ const InsertarPuntoMedicion: React.FC<InsertarPuntoMedicionProps> = ({ onAdd }) 
             try {
                 formData.idFinca = selectedFinca;
                 formData.idParcela = selectedParcela;
+                formData.altitud=formData.altitud.trim();
 
                 const resultado = await InsertarRegistroPuntoMedicion(formData);
                 if (resultado.indicador === 1) {
