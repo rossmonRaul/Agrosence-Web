@@ -39,7 +39,7 @@ const FormularioInicioSesion: React.FC<{
     onSubmit(formData);
   };
 
-  const [empresaUsuario, setEmpresaUsuario] =  useState<string>(() => localStorage.getItem('empresaUsuario') || '');
+  const [empresaUsuario, setEmpresaUsuario] = useState<string>(() => localStorage.getItem('empresaUsuario') || '');
 
   return (
     <>
@@ -109,7 +109,7 @@ const FormularioCrearCuenta: React.FC<{
   return (
     <>
       <form onSubmit={handleSubmit}>
-        <CrearCuentaUsuario  toggleForm={toggleForm}/>
+        <CrearCuentaUsuario toggleForm={toggleForm} />
       </form>
       <div className='container-btn-crear-iniciar'>
         <p >¿Ya tienes una cuenta? <Button color="link" onClick={toggleForm}>Iniciar Sesión</Button></p>
@@ -164,9 +164,9 @@ const Login: React.FC = () => {
   // Almacenar errores
   const [errors, setErrors] = useState<Record<string, string>>({ usuario: '', contrasena: '' });
 
-   
+
   // Manejar la validación del formulario de inicio de sesión.
-  
+
   const handleSubmitConValidacion = () => {
     // Validar campos antes de enviar los datos al servidor
     const newErrors: Record<string, string> = {};
@@ -213,27 +213,27 @@ const Login: React.FC = () => {
 
     try {
       const usuarioEncontrado = await ValidarUsuario(formDataLogin);
-      if (usuarioEncontrado.mensaje === "Usuario no encontrado.") {
+      if (usuarioEncontrado.usuario.mensaje === "Usuario no encontrado.") {
         Swal.fire({
           icon: 'error',
           title: '¡Credenciales incorrectas!',
           text: 'Los datos del usuario ingresado no existen',
         });
-      } else if (usuarioEncontrado.mensaje === "Usuario encontrado.") {
-        dispatch(createUser(usuarioEncontrado))
+      } else if (usuarioEncontrado.usuario.mensaje === "Usuario encontrado.") {
+        dispatch(createUser(usuarioEncontrado.usuario))
         //localstorage datos guardados
-        localStorage.setItem('empresaUsuario', usuarioEncontrado.idEmpresa); 
-        localStorage.setItem('identificacionUsuario', usuarioEncontrado.identificacion);
-
+        localStorage.setItem('empresaUsuario', usuarioEncontrado.usuario.idEmpresa);
+        localStorage.setItem('identificacionUsuario', usuarioEncontrado.usuario.identificacion);
+        localStorage.setItem('token', usuarioEncontrado.token);
         navigate(`/${PrivateRoutes.PRIVATE}`, { replace: true });
         setIsLoggedIn(true);
-      } else if (usuarioEncontrado.mensaje === "Credenciales incorrectas.") {
+      } else if (usuarioEncontrado.usuario.mensaje === "Credenciales incorrectas.") {
         Swal.fire({
           icon: 'error',
           title: '¡Credenciales incorrectas!',
           text: 'Los datos del usuario ingresado son incorrectas',
         });
-      } else if (usuarioEncontrado.mensaje === "Usuario o empresa inactivos.") {
+      } else if (usuarioEncontrado.usuario.mensaje === "Usuario o empresa inactivos.") {
         Swal.fire({
           icon: 'error',
           title: 'No puedes iniciar sesión',
@@ -243,7 +243,7 @@ const Login: React.FC = () => {
         Swal.fire({
           icon: 'error',
           title: '¡Oops!',
-          text: usuarioEncontrado.mensaje,
+          text: usuarioEncontrado.usuario.mensaje,
         });
       }
     } catch (error) {
@@ -253,26 +253,26 @@ const Login: React.FC = () => {
 
   return (
     <div className={`container ${isLoggedIn ? '' : 'login-bg'}`}>
-    <div className="container-lg">
-      <div className="form-container">
-        {formData.mostrarCrearCuenta ? (
-          <FormularioCrearCuenta
-            toggleForm={toggleForm}
-            formData={formData}
-            handleInputChange={handleInputChange}
-          />
-        ) : (
-          <FormularioInicioSesion
-            onSubmit={handleSubmitConValidacion}
-            toggleForm={toggleForm}
-            formData={formData}
-            handleInputChange={handleInputChange}
-            handleInputBlur={handleInputBlur}
-            errors={errors}
-          />
-        )}
+      <div className="container-lg">
+        <div className="form-container">
+          {formData.mostrarCrearCuenta ? (
+            <FormularioCrearCuenta
+              toggleForm={toggleForm}
+              formData={formData}
+              handleInputChange={handleInputChange}
+            />
+          ) : (
+            <FormularioInicioSesion
+              onSubmit={handleSubmitConValidacion}
+              toggleForm={toggleForm}
+              formData={formData}
+              handleInputChange={handleInputChange}
+              handleInputBlur={handleInputBlur}
+              errors={errors}
+            />
+          )}
+        </div>
       </div>
-    </div>
     </div>
   );
 };
