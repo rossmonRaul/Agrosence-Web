@@ -1,11 +1,14 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { NavLink, useLocation } from 'react-router-dom';
 import { FaBars, FaUserAlt, FaTh, FaUserCog, FaAngleRight, FaAngleDown, FaChartBar } from "react-icons/fa";
 import '../../css/Sidebar.css';
 import { useSelector } from 'react-redux';
 import { AppStore } from '../../redux/Store';
 import { IoBusiness } from 'react-icons/io5';
-
+import { clearSessionStorage } from '../../utilities';
+import { UserKey, resetUser } from '../../redux/state/User';
+import { useNavigate } from 'react-router-dom';
+import { PublicRoutes } from '../../models';
 /**
  * Definición de la interfaz para los elementos del menú.
  */
@@ -17,6 +20,14 @@ interface MenuItem {
     children?: MenuItem[]; // Para elementos colapsables
 }
 
+const isTokenExpired = (token: string | null) => {
+    if (!token) return true;
+    const tokenData = JSON.parse(atob(token.split('.')[1]));
+    const tokenExpiration = tokenData.exp * 1000;
+    console.log("🚀 ~ isTokenExpired ~ tokenExpiration:", tokenExpiration)
+    const currentTime = new Date().getTime();
+    return currentTime >= tokenExpiration;
+};
 // Componente Sidebar que muestra un menú lateral.
 const Sidebar = ({ children }: { children: React.ReactNode }) => {
     const location = useLocation();
@@ -33,6 +44,17 @@ const Sidebar = ({ children }: { children: React.ReactNode }) => {
         }));
     };
 
+    const navigate = useNavigate();
+
+    const userToken = localStorage.getItem('token');
+
+    useEffect(() => {
+        if (isTokenExpired(userToken)) {
+            localStorage.removeItem('token');
+            resetUser()
+            navigate(`/${PublicRoutes.LOGIN}`, { replace: true });
+        }
+    }, [userToken, history]);
     // Items que se desean que tenga el menu
     const menuItem: MenuItem[] = [
         {

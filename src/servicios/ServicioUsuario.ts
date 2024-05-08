@@ -36,6 +36,11 @@ export const ObtenerUsuariosPorFinca = async (data: any) => {
     const url = `http://localhost:5271/api/v1.0/${controlador}/ObtenerUsuariosPorRol3`;
     return await ProcesarDatosApi('POST', url, data);
 }
+export const CerrarSesion = async () => {
+    //const url = `${controlador}/ObtenerUsuarios`;
+    const url = `http://localhost:5271/api/v1.0/${controlador}/CerrarSesion`;
+    return await ProcesarDatosApi('GET', url, '');
+}
 
 export const InsertarUsuario = async (data: any) => {
     const url = `http://localhost:5271/api/v1.0/${controlador}/GuardarUsuario`;
@@ -60,7 +65,7 @@ export const ActualizarUsuarioAdministrador = async (data: any) => {
 export const ActualizarAsignarUsuario = async (data: any) => {
     const url = `http://localhost:5271/api/v1.0/${controlador}/ActualizarDatosUsuario`;
     return await ProcesarDatosApi('PUT', url, data);
-} 
+}
 
 
 export const AsignarFincaParcelaUsuario = async (data: any) => {
