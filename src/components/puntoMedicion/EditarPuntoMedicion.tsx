@@ -171,16 +171,16 @@ const ModificacionPuntoMedicion: React.FC<PuntoMedicionSeleccionado> = ({
             newErrors.codigo = '';
         }
 
-        if (!formData.altitud.trim()) {
+        if (!formData.altitud) {
             newErrors.altitud = 'La elevación es requerida';
-        } else if (!/^\d+(\.\d+)?$/.test(formData.altitud.trim())){
+        } else if (!/^\d+(\.\d+)?$/.test(formData.altitud)){
             newErrors.altitud = 'La elevación debe ser un número';
         }else {
             newErrors.altitud = '';
         }
 
 
-        if (!formData.latitud.trim()) {
+        if (!formData.latitud) {
             newErrors.latitud = 'La latitud son requeridas';
         } else if (formData.latitud.length > 50) {
             newErrors.latitud = 'La latitud no pueden tener más de 50 caracteres';
@@ -188,7 +188,7 @@ const ModificacionPuntoMedicion: React.FC<PuntoMedicionSeleccionado> = ({
             newErrors.latitud = '';
         }
   
-        if (!formData.longitud.trim()) {
+        if (!formData.longitud) {
             newErrors.longitud = 'La longitud son requeridas';
         } else if (formData.longitud.length > 50) {
             newErrors.longitud = 'La longitud no pueden tener más de 50 caracteres';
@@ -213,9 +213,9 @@ const ModificacionPuntoMedicion: React.FC<PuntoMedicionSeleccionado> = ({
             idParcela: selectedParcela,
             idPuntoMedicion: formData.idPuntoMedicion,
             codigo: formData.codigo,
-            altitud: formData.altitud,
-            latitud: formData.latitud,
-            longitud: formData.longitud,
+            altitud: formData.altitud.trim(),
+            latitud: formData.latitud.trim(),
+            longitud: formData.longitud.trim(),
             usuarioCreacionModificacion:localStorage.getItem('identificacionUsuario')  
         };
             // console.log("data");
