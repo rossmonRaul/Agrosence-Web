@@ -218,11 +218,17 @@ function RegistroSensores() {
         });
     };
 
-    const handleEditarCondicionesMetereologicas = async (option: number) => {
+    const handleEditarCondicionesMetereologicas = async (option?: number) => {
         await obtenerInfo();
         if (option === 0) {
+            setSelectedFinca(null);
+            setSelectedParcela(null);
             abrirCerrarModalEditar();
+
         } if (option === 1) {
+
+            setSelectedFinca(null);
+            setSelectedParcela(null);
             return
         }
     };
@@ -330,7 +336,7 @@ function RegistroSensores() {
                             idEstado={parseInt(selectedDatos.idEstado)}
                             idPuntoMedicion={parseFloat(selectedDatos.idPuntoMedicion)}
                             idMediciones={selectedDatos.idMediciones}
-                            onEdit={() => handleEditarCondicionesMetereologicas}
+                            onEdit={() => handleEditarCondicionesMetereologicas()}
                         />
                     </div>
                 </div>
