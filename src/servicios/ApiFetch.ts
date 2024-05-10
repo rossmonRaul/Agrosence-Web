@@ -4,7 +4,6 @@ export const ProcesarDatosApi = async (method: string, url: string, data: any) =
     let token
     if (storedToken) {
         token = storedToken
-        console.log("🚀 ~ ProcesarDatosApi ~ token:", token)
     }
     let headers: Record<string, string> = {
         "Content-type": "application/json;charset=UTF-8",

@@ -152,7 +152,6 @@ const ModificarSensores: React.FC<Props> = ({
         const dataIdMedicionAutorizadaSensor = {
             idMedicionAutorizadaSensor: obtenerPrimerValor()
         };
-        console.log("🚀 ~ handleRemoveInput ~ dataIdMedicionAutorizadaSensor:", dataIdMedicionAutorizadaSensor);
 
         // Mostrar la alerta al usuario
         const result = await Swal.fire({
@@ -428,7 +427,7 @@ const ModificarSensores: React.FC<Props> = ({
             {step === 1 && (
                 <div>
                     <h2>Registro de Datos</h2>
-                    <div className="form-container-fse" style={{ display: 'flex', flexDirection: 'column', width: '95%', marginLeft: '0.5rem' }}>
+                    <div className="form-container-fse" style={{ display: 'flex', flexDirection: 'column', width: '600px', marginLeft: '0.5rem' }}>
 
                         <div style={{ display: 'flex', flexDirection: 'row', marginBottom: '0rem' }}>
                             <div style={{ flex: 1, marginRight: '0.5rem', marginLeft: '0.5rem' }}>
@@ -523,7 +522,7 @@ const ModificarSensores: React.FC<Props> = ({
                 <div>
 
                     <h2>Registro de Datos</h2>
-                    <div className="form-container-fse" style={{ display: 'flex', flexDirection: 'column', width: '95%', marginLeft: '0.5rem' }}>
+                    <div className="form-container-fse" style={{ display: 'flex', flexDirection: 'column', width: '600px', marginLeft: '0.5rem' }}>
                         <label htmlFor="">Mediciones autorizadas del sensor</label>
                         <div style={{ overflow: 'auto', maxHeight: '200px', padding: '10px', marginBottom: '20px' }}>
                             {inputs.map((input, index) => (
@@ -531,7 +530,7 @@ const ModificarSensores: React.FC<Props> = ({
                                     <select
                                         value={input}
                                         onChange={(e) => handleInputsChange(index, e)}
-                                        style={{ padding: '5px', borderRadius: '5px', height: '40px', border: '1px solid #ccc' }}
+                                        style={{ width: '90%', padding: '5px', borderRadius: '5px', height: '40px', border: '1px solid #ccc' }}
                                     >
                                         <option value="">Seleccione...</option>
                                         {medicionesSensor.map((medicion) => (

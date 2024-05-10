@@ -24,7 +24,6 @@ const isTokenExpired = (token: string | null) => {
     if (!token) return true;
     const tokenData = JSON.parse(atob(token.split('.')[1]));
     const tokenExpiration = tokenData.exp * 1000;
-    console.log("🚀 ~ isTokenExpired ~ tokenExpiration:", tokenExpiration)
     const currentTime = new Date().getTime();
     return currentTime >= tokenExpiration;
 };
