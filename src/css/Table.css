@@ -16,29 +16,40 @@
 .btn-desvincular {
   background-color: rgb(255, 8, 0);
   color: #ddd;
-  min-width: 80px;
   margin-left: 10px;
-
 }
 
 .btn-asignaciones {
   background-color: rgb(168, 43, 21);
   color: #ddd;
-  min-width: 80px;
   margin-left: 10px;
+}
+
+.table-btn-container {
+  max-width: 160px;
+  display: flex;
+  align-items: center;
+  flex-direction: column;
+  justify-content: center;
+  gap: 5px;
+  padding: 10px;
+  margin: auto;
+}
+
+.table-btn-container button {
+  width: 150px;
+  margin: auto;
 }
 
 .btn-edit {
   margin-right: 10px;
   background-color: rgb(44, 140, 219);
   color: #ddd;
-  min-width: 80px;
 }
 
 .btn-inactivate {
   background-color: rgb(255, 8, 0);
   color: #ddd;
-  min-width: 80px;
 }
 
 .pagination {
@@ -70,7 +81,6 @@
 .btn-activate {
   background-color: #548454;
   color: #ddd;
-  min-width: 100px;
 }
 
 .btn-disabledprevious {
@@ -84,15 +94,31 @@
 .table td {
   border: 1px solid #ddd;
   /* Borde de las celdas */
-  padding: 8px;
+  padding: 4px;
   /* Espaciado interno de las celdas */
 }
 
+.table td {
+  min-width: 180px;
+  max-width: 190px;
+  justify-content: center;
+  align-items: center;
+  text-align: center;
+  white-space: nowrap;
+  overflow: hidden;
+}
+
+
 .table th {
   background-color: #f2f2f2;
+  align-items: center;
   /* Color de fondo de las celdas del encabezado */
   text-align: center;
   /* Alineación del texto en las celdas del encabezado */
+  white-space: nowrap;
+  /* Evita que el texto se desborde hacia abajo */
+  overflow: hidden;
+  /* Oculta el texto que sobresale */
 }
 
 .table thead {
