@@ -32,5 +32,6 @@ export const PrivateRoutes = {
     CONDICIONESMETEOROLOGICASCLIMATICAS: 'condicionesmetereologicasclimaticas',
     PROBLEMASPLAGAS: 'problemasplagas',
     MEDICIONESSENSOR: 'medicionessensor',
-    PUNTOMEDICION: 'puntomedicion'
+    PUNTOMEDICION: 'puntomedicion',
+    ORDENCOMPRA: 'ordencompra'
 };

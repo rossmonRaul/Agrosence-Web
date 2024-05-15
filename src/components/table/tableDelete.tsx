@@ -1,6 +1,8 @@
 import React, { useEffect, useState } from 'react';
 import '../../css/Table.css'
 import { Table } from 'reactstrap'
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faTimes, faCheck, faPenToSquare } from '@fortawesome/free-solid-svg-icons';
 
 // Interface que define la estructura de una columna de la tabla.
 interface Column {
@@ -27,7 +29,7 @@ interface TableProps {
   propClassNameOpcional?: string; // Prop opcional para cambiar el estilo del boton
 }
 
-const TableResponsiveDelete: React.FC<TableProps> = ({ propClassNameOpcional, columns, data, openModal, toggleStatus, itemsPerPage: defaultItemsPerPage = 5, btnActionName, toggleOptionalStatus, btnToggleOptionalStatus }) => {
+const TableResponsive: React.FC<TableProps> = ({ propClassNameOpcional, columns, data, openModal, toggleStatus, itemsPerPage: defaultItemsPerPage = 5, btnActionName, toggleOptionalStatus, btnToggleOptionalStatus }) => {
   const [currentPage, setCurrentPage] = useState<number>(1);
   const [itemsPerPage, setItemsPerPage] = useState<number>(defaultItemsPerPage);
 
@@ -40,7 +42,7 @@ const TableResponsiveDelete: React.FC<TableProps> = ({ propClassNameOpcional, co
   const indexOfFirstItem: number = indexOfLastItem - itemsPerPage;
   const [currentData, setCurrentData] = useState<TableRow[]>(data);
   const currentItems: TableRow[] = currentData.slice(indexOfFirstItem, indexOfLastItem);
- 
+
   //para devolver la tabla a la primera pagina
   useEffect(() => {
     setCurrentData(data);
@@ -87,17 +89,37 @@ const TableResponsiveDelete: React.FC<TableProps> = ({ propClassNameOpcional, co
                   {columns.map((column: Column, colIndex: number) => (
                     <td key={colIndex}>
                       {column.actions ? (
-                        <div>
-                          <button className='btn-edit' onClick={() => openModal(item)}>
-                            {btnActionName}
-                          </button>
+                        <div className='table-btn-container'>
+                          {btnActionName === 'Editar' ? (
+                            <>
+                              <button className='btn-edit' onClick={() => openModal(item)}>
+                                <FontAwesomeIcon icon={faPenToSquare} /> {btnActionName}
+                              </button></>
+
+                          ) : (
+                            <>
+                              <button className='btn-edit' onClick={() => openModal(item)}>{btnActionName}
+                              </button>
+                            </>
+                          )
+                          }
+
                           {toggleStatus && (
-                            <button
-                              className={item.estado === 1 ? 'btn-inactivate' : 'btn-activate'}
-                              onClick={() => toggleStatus(item)}
-                            >
-                              {item.estado === 1 ? 'Eliminar' : 'Activar'}
-                            </button>
+                            <div className="status-toggle">
+                              {item.estado === 1 ? (
+                                <>
+                                  <button className="btn-inactivate" onClick={() => toggleStatus(item)}>
+                                    <FontAwesomeIcon icon={faTimes} /> Eliminar
+                                  </button>
+                                </>
+                              ) : (
+                                <>
+                                  <button className="btn-activate" onClick={() => toggleStatus(item)}>
+                                    <FontAwesomeIcon icon={faCheck} /> Activar
+                                  </button>
+                                </>
+                              )}
+                            </div>
                           )}
                           {btnToggleOptionalStatus && toggleOptionalStatus && (
                             <button className={propClassNameOpcional === 'btn-desvincular' ? propClassNameOpcional : 'btn-asignaciones'} onClick={() => toggleOptionalStatus(item)}>{btnToggleOptionalStatus}</button>
@@ -130,4 +152,4 @@ const TableResponsiveDelete: React.FC<TableProps> = ({ propClassNameOpcional, co
   );
 };
 
-export default TableResponsiveDelete;
+export default TableResponsive;

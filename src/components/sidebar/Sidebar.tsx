@@ -186,11 +186,6 @@ const Sidebar = ({ children }: { children: React.ReactNode }) => {
                     name: "Estrés Hídrico",
                     icon: <img src='/agua-del-grifo.png' style={{ width: '22px' }} />,
                 },
-                {
-                    path: "/opcion4",
-                    name: "opcion4",
-                    icon: <img src='/productividad.png' style={{ width: '22px' }} />,
-                }
             ]
         },
 
@@ -229,10 +224,19 @@ const Sidebar = ({ children }: { children: React.ReactNode }) => {
                     name: "Problemas Plagas",
                     icon: <img src='/plagas.png' style={{ width: '22px' }} />,
                 },
+
+            ]
+        },
+        {
+            path: "/menuadministracion",
+            name: "Administración",
+            icon: <img src='/administrar.png' style={{ width: '22px' }} />, // Puedes usar cualquier icono que desees aquí
+            roles: [3], // Especifica los roles que pueden ver esta opción
+            children: [
                 {
-                    path: "/condicionesmetereologicasclimaticas",
-                    name: "Condiciones Meteorológicas y Climáticas",
-                    icon: <img src='/condiciones-climaticas.png' style={{ width: '22px' }} />,
+                    path: "/ordencompra",
+                    name: "Ordenes de Compras",
+                    icon: <img src='/compra.png' style={{ width: '22px' }} />,
                 },
 
             ]
