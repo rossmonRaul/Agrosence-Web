@@ -328,10 +328,10 @@ const CrearOrdenCompra: React.FC<CrearOrdenCompraProps> = ({ onAdd }) => {
                                 <Label for="numeroDeOrden" sm={4} className="input-label">Numero de orden</Label>
                                 <Col sm={8}>
                                     <Input
-                                        type="number"
+                                        type="text"
                                         id="numeroDeOrden"
                                         name="numeroDeOrden"
-                                        value={formData.numeroDeOrden.toString()}
+                                        value={formData.numeroDeOrden}
                                         onChange={handleInputChange}
                                         className={errors.numeroDeOrden ? 'input-styled input-error' : 'input-styled'}
                                         placeholder="Numero de Orden"
