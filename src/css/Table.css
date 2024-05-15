@@ -98,15 +98,7 @@
   /* Espaciado interno de las celdas */
 }
 
-.table td {
-  min-width: 180px;
-  max-width: 190px;
-  justify-content: center;
-  align-items: center;
-  text-align: center;
-  white-space: nowrap;
-  overflow: hidden;
-}
+
 
 
 .table th {
@@ -114,8 +106,6 @@
   align-items: center;
   /* Color de fondo de las celdas del encabezado */
   text-align: center;
-  /* Alineación del texto en las celdas del encabezado */
-  white-space: nowrap;
   /* Evita que el texto se desborde hacia abajo */
   overflow: hidden;
   /* Oculta el texto que sobresale */
