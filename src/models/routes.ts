@@ -33,5 +33,6 @@ export const PrivateRoutes = {
     PROBLEMASPLAGAS: 'problemasplagas',
     MEDICIONESSENSOR: 'medicionessensor',
     PUNTOMEDICION: 'puntomedicion',
-    ORDENCOMPRA: 'ordencompra'
+    ORDENCOMPRA: 'ordencompra',
+    ENTRADAYSALIDA: 'entradasysalidas',
 };

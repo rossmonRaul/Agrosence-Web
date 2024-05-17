@@ -238,6 +238,11 @@ const Sidebar = ({ children }: { children: React.ReactNode }) => {
                     name: "Ordenes de Compras",
                     icon: <img src='/compra.png' style={{ width: '22px' }} />,
                 },
+                {
+                    path: "/entradasysalidas",
+                    name: "Entradas y Salidas",
+                    icon: <img src='/entradasalida.png' style={{ width: '22px' }} />,
+                },
 
             ]
         },

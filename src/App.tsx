@@ -38,6 +38,7 @@ const MedicionesSensor = lazy(() => import('./pages/private/MedicionesSensor/Med
 const PuntoMedicion = lazy(() => import('./pages/private/PuntoMedicion/PuntoMedicion'))
 const RegistroSensores = lazy(() => import('./pages/private/RegistroSensores/RegistroSensores'));
 const OrdenCompra = lazy(() => import('./pages/private/OrdenCompra/OrdenCompra'));
+const EntradasYSalidas = lazy(() => import('./pages/private/EntradasYSalidas/EntradasYSalidas'));
 function App() {
   return (
     // Suspense para manejar la carga de componentes lazy
@@ -93,6 +94,7 @@ function App() {
               <Route path={PrivateRoutes.RIESGOSNATURALES} element={<RiesgosNaturales />} />
               <Route path={PrivateRoutes.PROBLEMASPLAGAS} element={<ProblemasPlagas />} />
               <Route path={PrivateRoutes.ORDENCOMPRA} element={<OrdenCompra />} />
+              <Route path={PrivateRoutes.ENTRADAYSALIDA} element={<EntradasYSalidas />} />
 
 
               <Route path={PrivateRoutes.PRONOSTICOMETEOROLOGICO} element={<PronosticoMeteorologico />} />
