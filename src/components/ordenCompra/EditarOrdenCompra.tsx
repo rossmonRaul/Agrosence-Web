@@ -341,7 +341,7 @@ const EditarOrdenCompra: React.FC<OrdenCompraSeleccionado> = ({
             } else {
                 console.error('El valor de identificacionUsuario en localStorage es nulo.');
             }
-            console.log("sdvsffvsffvb",formData)
+            
             const resultado = await ModificarOrdenDeCompra(formData);
 
             if (resultado.indicador === 1) {

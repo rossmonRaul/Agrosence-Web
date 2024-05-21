@@ -101,6 +101,12 @@ const Sidebar = ({ children }: { children: React.ReactNode }) => {
             roles: [2]
         },
         {
+            path: "/manoobra",
+            name: "Mano Obra",
+            icon: <img src='/mano-obra.png' style={{ width: '30px' }} />,
+            roles: [2]
+        },
+        {
             path: "/menusensores",
             name: "Sensores",
             icon: <img src='/sensores.png' style={{ width: '22px' }} />, // Puedes usar cualquier icono que desees aquí
@@ -237,6 +243,11 @@ const Sidebar = ({ children }: { children: React.ReactNode }) => {
                     path: "/ordencompra",
                     name: "Ordenes de Compras",
                     icon: <img src='/compra.png' style={{ width: '22px' }} />,
+                },
+                {
+                    path: "/entradasysalidas",
+                    name: "Entradas y Salidas",
+                    icon: <img src='/entradasalida.png' style={{ width: '22px' }} />,
                 },
                 {
                     path: "/entradasysalidas",

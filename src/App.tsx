@@ -39,6 +39,7 @@ const PuntoMedicion = lazy(() => import('./pages/private/PuntoMedicion/PuntoMedi
 const RegistroSensores = lazy(() => import('./pages/private/RegistroSensores/RegistroSensores'));
 const OrdenCompra = lazy(() => import('./pages/private/OrdenCompra/OrdenCompra'));
 const EntradasYSalidas = lazy(() => import('./pages/private/EntradasYSalidas/EntradasYSalidas'));
+const ManoObra = lazy(() => import('./pages/private/ManoObra/ManoObra'));
 function App() {
   return (
     // Suspense para manejar la carga de componentes lazy
@@ -78,6 +79,7 @@ function App() {
               <Route path={PrivateRoutes.ADMINISTRARPARCELAS} element={<AdministrarParcelas />} />
               <Route path={PrivateRoutes.PUNTOMEDICION} element={<PuntoMedicion />} />
               <Route path={PrivateRoutes.SENSORES} element={<RegistroSensores />} />
+              <Route path={PrivateRoutes.MANOOBRA} element={<ManoObra />} />
             </Route>
             {/* Rutas accesibles solo para el rol de usuario asignado */}
             <Route element={<RolGuard rol={Roles.UsuarioAsignado} />}>
@@ -95,6 +97,7 @@ function App() {
               <Route path={PrivateRoutes.PROBLEMASPLAGAS} element={<ProblemasPlagas />} />
               <Route path={PrivateRoutes.ORDENCOMPRA} element={<OrdenCompra />} />
               <Route path={PrivateRoutes.ENTRADAYSALIDA} element={<EntradasYSalidas />} />
+              
 
 
               <Route path={PrivateRoutes.PRONOSTICOMETEOROLOGICO} element={<PronosticoMeteorologico />} />

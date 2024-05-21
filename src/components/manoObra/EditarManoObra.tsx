@@ -2,20 +2,19 @@ import React, { useEffect, useState } from 'react';
 import { FormGroup, Label, Input, Col, FormFeedback, Button } from 'reactstrap';
 import Swal from 'sweetalert2';
 import { ObtenerFincas } from '../../servicios/ServicioFincas.ts';
-import { ObtenerUsuariosAsignadosPorIdentificacion } from '../../servicios/ServicioUsuario.ts';
 import '../../css/CrearCuenta.css';
-import { ModificarRegistroEntradaSalida } from '../../servicios/ServicioEntradaYSalida.ts';
+import { ModificarRegistroManoObra } from '../../servicios/ServicioManoObra.ts';
 
 // Interfaz para las propiedades del componente
-interface EntradaYSalidaSeleccionado {
+interface ManoObraSeleccionado {
     idFinca: number;
-    idRegistroEntradaSalida: number,
-    tipo: string,
+    idRegistroManoObra: number,
+    actividad: string,
     fecha: string,
-    precioUnitario: string,
-    cantidad: number,
-    montoTotal: string,
-    detalles: string,
+    trabajador: string,
+    horasTrabajadas: number,
+    pagoPorHora: string,
+    totalPago: string,
     onEdit?: () => void; // Hacer onEdit opcional agregando "?"
 }
 
@@ -26,15 +25,15 @@ interface Option {
     idFinca: number;
 }
 
-const EditarEntradaYSalida: React.FC<EntradaYSalidaSeleccionado> = ({
+const EditarManoObra: React.FC<ManoObraSeleccionado> = ({
     idFinca,
-    idRegistroEntradaSalida,
-    tipo,
+    idRegistroManoObra,
+    actividad,
     fecha,
-    precioUnitario,
-    cantidad,
-    montoTotal,
-    detalles,
+    trabajador,
+    horasTrabajadas,
+    pagoPorHora,
+    totalPago,
     onEdit
 }) => {
 
@@ -43,30 +42,28 @@ const EditarEntradaYSalida: React.FC<EntradaYSalidaSeleccionado> = ({
     //esto rellena los select de finca y parcela cuando se carga el modal
     const [selectedFinca, setSelectedFinca] = useState<string>(() => idFinca ? idFinca.toString() : '');
 
-    const [selectedTipo, setSelectedTipo] = useState<string>('');
-
 
     // Estado para almacenar los errores de validación del formulario
     const [errors, setErrors] = useState<Record<string, string>>({
         idFinca: '',
-        idRegistroEntradaSalida: '',
-        tipo: '',
+        idRegistroManoObra: '',
+        actividad: '',
         fecha: '',
-        precioUnitario: '',
-        cantidad: '',
-        montoTotal: '',
-        detalles: ''
+        trabajador: '',
+        horasTrabajadas: '',
+        pagoPorHoraotal: '',
+        totalPago: ''
     });
 
     const [formData, setFormData] = useState<any>({
         idFinca: '',
-        idRegistroEntradaSalida: '',
-        tipo: '',
+        idRegistroManoObra: '',
+        actividad: '',
         fecha: '',
-        precioUnitario: '',
-        cantidad: '',
-        montoTotal: '',
-        detallesCompraVenta: '',
+        trabajador: '',
+        horasTrabajadas: '',
+        pagoPorHoraotal: '',
+        totalPago: '',
         usuarioCreacionModificacion: '',
     });
 
@@ -78,25 +75,20 @@ const EditarEntradaYSalida: React.FC<EntradaYSalidaSeleccionado> = ({
             [name]: value
         }));
 
-        // Calculate monto total
-        if (name === "cantidad" || name === "precioUnitario") {
-            const cantidadValue = name === "cantidad" ? parseFloat(value) : formData.cantidad;
-            const precioUnitarioValue = name === "precioUnitario" ? parseFloat(value) : formData.precioUnitario;
+        // Calculate total pago
+        if (name === "horasTrabajadas" || name === "pagoPorHora") {
+            const horasTrabajadasValue = name === "horasTrabajadas" ? parseFloat(value) : formData.horasTrabajadas;
+            const pagoPorHoraValue = name === "pagoPorHora" ? parseFloat(value) : formData.pagoPorHora;
     
-            // Check if both cantidadValue and precioUnitarioValue are valid numbers
-            if (!isNaN(cantidadValue as number) && !isNaN(precioUnitarioValue as number)) {
-                const montoTotal = (cantidadValue as number) * (precioUnitarioValue as number);
-                formData.montoTotal = montoTotal.toString();
+            // verificar que los valores sean numéricos
+            if (!isNaN(horasTrabajadasValue as number) && !isNaN(pagoPorHoraValue as number)) {
+                const pagoTotal = (horasTrabajadasValue as number) * (pagoPorHoraValue as number);
+                formData.totalPago = pagoTotal.toString();
             } else {
-                // If either input value is not a number, reset the total amount
-                formData.montoTotal = "";
+                
+                formData.totalPago = "";
             }
         }
-    };
-    const handleTipoChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
-        const value = e.target.value;
-        formData.tipo = value;
-        setSelectedTipo(value);
     };
 
 
@@ -108,15 +100,10 @@ const EditarEntradaYSalida: React.FC<EntradaYSalidaSeleccionado> = ({
                 const idEmpresaString = localStorage.getItem('empresaUsuario');
                 const identificacionString = localStorage.getItem('identificacionUsuario');
                 if (identificacionString && idEmpresaString) {
-
-                    const identificacion = identificacionString;
-                    const usuariosAsignados = await ObtenerUsuariosAsignadosPorIdentificacion({ identificacion: identificacion });
-                    const idFincasUsuario = usuariosAsignados.map((usuario: any) => usuario.idFinca);
-                    //Se obtienen las fincas 
                     const fincasResponse = await ObtenerFincas();
                     //Se filtran las fincas del usuario
-                    const fincasUsuario = fincasResponse.filter((finca: any) => idFincasUsuario.includes(finca.idFinca));
-                    setFincas(fincasUsuario);
+                    const fincasFiltradas = fincasResponse.filter((finca: any) => finca.idEmpresa === parseInt(idEmpresaString));
+                    setFincas(fincasFiltradas);
 
                 } else {
                     console.error('La identificación y/o el ID de la empresa no están disponibles en el localStorage.');
@@ -152,19 +139,18 @@ const EditarEntradaYSalida: React.FC<EntradaYSalidaSeleccionado> = ({
         const year = parts[2];
         const fechaString = year + '-' + month + '-' + day;
 
-        setSelectedTipo(tipo)
         setFormData({
             idFinca: idFinca,
-            idRegistroEntradaSalida: idRegistroEntradaSalida,
-            tipo: tipo,
+            idRegistroManoObra: idRegistroManoObra,
+            actividad: actividad,
             fecha: fechaString,
-            precioUnitario: precioUnitario,
-            cantidad: cantidad,
-            montoTotal: montoTotal,
-            detallesCompraVenta: detalles,
+            trabajador: trabajador,
+            horasTrabajadas: horasTrabajadas,
+            pagoPorHora: pagoPorHora,
+            totalPago: totalPago,
         });
 
-    }, [idRegistroEntradaSalida]);
+    }, [idRegistroManoObra]);
 
     // Función para manejar el envío del formulario con validación
     const handleSubmitConValidacion = () => {
@@ -177,34 +163,34 @@ const EditarEntradaYSalida: React.FC<EntradaYSalidaSeleccionado> = ({
             newErrors.finca = '';
         }
 
-        if (!formData.tipo || formData.tipo === "") {
-            newErrors.tipo = 'El tipo es obligatorio';
+        if (!formData.actividad || formData.actividad === "") {
+            newErrors.actividad = 'La actividad es obligatoria';
         } else {
-            newErrors.tipo = '';
+            newErrors.actividad = '';
         }
 
         if (!formData.fecha || formData.fecha === "") {
             newErrors.fecha = 'La fecha generacion es obligatoria';
         }
 
-        if (!formData.cantidad) {
-            newErrors.cantidad = 'La cantidad es obligatoria';
+        if (!formData.horasTrabajadas) {
+            newErrors.horasTrabajadas = 'Las horas trabajadas es obligatoria';
         } else {
-            newErrors.cantidad = '';
+            newErrors.horasTrabajadas = '';
         }
 
-        if (!formData.detallesCompraVenta || formData.detallesCompraVenta === "") {
-            newErrors.detalles = 'Los detalles son obligatorios';
-        } else if (formData.detallesCompraVenta.length > 200) {
-            newErrors.detalles = 'Los detalles no pueden ser más de 200 carateres';
+        if (!formData.trabajador || formData.trabajador === "") {
+            newErrors.trabajador = 'El trabajador son obligatorios';
+        } else if (formData.trabajador.length > 200) {
+            newErrors.trabajador = 'El trabajador no puede ser más de 200 carateres';
         } else {
-            newErrors.detalles = '';
+            newErrors.trabajador = '';
         }
 
-        if (!formData.precioUnitario || formData.precioUnitario === "") {
-            newErrors.precioUnitario = 'El precio unitario es obligatorio';
+        if (!formData.pagoPorHora || formData.pagoPorHora === "") {
+            newErrors.pagoPorHora = 'El pago por hora es obligatorio';
         } else {
-            newErrors.precioUnitario = '';
+            newErrors.pagoPorHora = '';
         }
 
         const fechaParts = formData.fecha.split("/");
@@ -242,12 +228,12 @@ const EditarEntradaYSalida: React.FC<EntradaYSalidaSeleccionado> = ({
                 console.error('El valor de identificacionUsuario en localStorage es nulo.');
             }
             
-            const resultado = await ModificarRegistroEntradaSalida(formData);
+            const resultado = await ModificarRegistroManoObra(formData);
             
             if (resultado.indicador === 1) {
                 Swal.fire({
                     icon: 'success',
-                    title: '¡Entrada o Salida Actualizada! ',
+                    title: '¡Mano de obra Actualizada! ',
                     text: 'Se ha actualizado con éxito.',
                 });
             } else {
@@ -267,12 +253,11 @@ const EditarEntradaYSalida: React.FC<EntradaYSalidaSeleccionado> = ({
 
     return (
         <div id='general' style={{ display: 'flex', flexDirection: 'column', paddingBottom: '0rem', width: '90%', margin: '0 auto' }}>
-
             <div>
-                <h2>Entrada o Salida</h2>
+                <h2>Mano de obra</h2>
                 <div className="form-container-fse" style={{ display: 'flex', flexDirection: 'row', width: '100%' }}>
                     <div style={{ marginRight: '10px', width: '50%' }}>
-                        <FormGroup>
+                    <FormGroup>
                             <label htmlFor="fincas">Finca:</label>
                             <select className="custom-select input-styled" id="fincas" value={selectedFinca} onChange={handleFincaChange}>
                                 <option key="default-finca" value="">Seleccione...</option>
@@ -283,16 +268,21 @@ const EditarEntradaYSalida: React.FC<EntradaYSalidaSeleccionado> = ({
                             {errors.finca && <FormFeedback>{errors.finca}</FormFeedback>}
                         </FormGroup>
                     </div>
-                    <div className="col-sm-4" style={{ marginRight: "0px", width: '50%' }}>
+                    <div className="col-sm-4" style={{ width: '50%' }}>
                         <FormGroup row>
-                            <label htmlFor="tipos">Tipo:</label>
-                            <select className="custom-select input-styled" id="tipo" value={selectedTipo} onChange={handleTipoChange}>
-                                <option key="default-tipo" value="">Seleccione un tipo...</option>
-                                <option key="compra" value="Compra">Compra</option>
-                                <option key="venta" value="Venta">Venta</option>
-                            </select>
-                            {errors.tipo && <FormFeedback>{errors.tipo}</FormFeedback>}
-
+                            <Label for="actividad" sm={4} className="input-label">Actividad</Label>
+                            <Col sm={8}>
+                                <Input
+                                    type="text"
+                                    id="actividad"
+                                    name="actividad"
+                                    value={formData.actividad}
+                                    onChange={handleInputChange}
+                                    className={errors.actividad ? 'input-styled input-error' : 'input-styled'}
+                                    placeholder="Actividad"
+                                />
+                                <FormFeedback>{errors.actividad}</FormFeedback>
+                            </Col>
                         </FormGroup>
                     </div>
 
@@ -300,18 +290,18 @@ const EditarEntradaYSalida: React.FC<EntradaYSalidaSeleccionado> = ({
                 <div className="row" style={{ display: "flex", flexDirection: 'row', width: '100%' }}>
                     <div className="col-sm-4" style={{ width: '100%' }}>
                         <FormGroup row>
-                            <Label for="detallesCompraVenta" sm={4} className="input-label">Detalles</Label>
+                            <Label for="trabajador" sm={4} className="input-label">Trabajador</Label>
                             <Col sm={8}>
                                 <Input
                                     type="text"
-                                    id="detallesCompraVenta"
-                                    name="detallesCompraVenta"
-                                    value={formData.detallesCompraVenta}
+                                    id="trabajador"
+                                    name="trabajador"
+                                    value={formData.trabajador}
                                     onChange={handleInputChange}
-                                    className={errors.detalles ? 'input-styled input-error' : 'input-styled'}
-                                    placeholder="Detalles"
+                                    className={errors.trabajador ? 'input-styled input-error' : 'input-styled'}
+                                    placeholder="Trabajador"
                                 />
-                                <FormFeedback>{errors.detalles}</FormFeedback>
+                                <FormFeedback>{errors.trabajador}</FormFeedback>
                             </Col>
                         </FormGroup>
                     </div>
@@ -337,19 +327,19 @@ const EditarEntradaYSalida: React.FC<EntradaYSalidaSeleccionado> = ({
                     </div>
                     <div className="col-sm-4" style={{ width: '50%' }}>
                         <FormGroup row>
-                            <Label for="cantidad" sm={4} className="input-label">Cantidad</Label>
+                            <Label for="horasTrabajadas" sm={4} className="input-label">Horas Trabajadas</Label>
                             <Col sm={8}>
                                 <Input
                                     type="number"
-                                    id="cantidad"
-                                    name="cantidad"
-                                    value={formData.cantidad.toString()}
+                                    id="horasTrabajadas"
+                                    name="horasTrabajadas"
+                                    value={formData.horasTrabajadas}
                                     onChange={handleInputChange}
-                                    className={errors.cantidad ? 'input-styled input-error' : 'input-styled'}
+                                    className={errors.horasTrabajadas ? 'input-styled input-error' : 'input-styled'}
                                     placeholder="0.0"
                                     maxLength={50}
                                 />
-                                <FormFeedback>{errors.cantidad}</FormFeedback>
+                                <FormFeedback>{errors.horasTrabajadas}</FormFeedback>
                             </Col>
                         </FormGroup>
                     </div>
@@ -357,22 +347,22 @@ const EditarEntradaYSalida: React.FC<EntradaYSalidaSeleccionado> = ({
 
                 </div>
                 <div className="row" style={{ display: "flex", flexDirection: 'row', width: '100%' }}>
-
+                    
                     <div className="col-sm-4" style={{ marginRight: "10px", width: '50%' }}>
                         <FormGroup row>
-                            <Label for="precioUnitario" sm={4} className="input-label">Precio Unitario (₡)</Label>
+                            <Label for="pagoPorHora" sm={4} className="input-label">Pago por Hora (₡)</Label>
                             <Col sm={8}>
                                 <Input
                                     type="number"
-                                    id="precioUnitario"
-                                    name="precioUnitario"
-                                    value={formData.precioUnitario.toString()}
+                                    id="pagoPorHora"
+                                    name="pagoPorHora"
+                                    value={formData.pagoPorHora}
                                     onChange={handleInputChange}
-                                    className={errors.precioUnitario ? 'input-styled input-error' : 'input-styled'}
+                                    className={errors.pagoPorHora ? 'input-styled input-error' : 'input-styled'}
                                     placeholder="0.0"
                                     maxLength={50}
                                 />
-                                <FormFeedback>{errors.precioUnitario}</FormFeedback>
+                                <FormFeedback>{errors.pagoPorHora}</FormFeedback>
                             </Col>
                         </FormGroup>
                     </div>
@@ -385,7 +375,7 @@ const EditarEntradaYSalida: React.FC<EntradaYSalidaSeleccionado> = ({
                                     type="number"
                                     id="montoTotal"
                                     name="montoTotal"
-                                    value={formData.montoTotal.toString()}
+                                    value={formData.totalPago}
                                     onChange={handleInputChange}
                                     className={errors.montoTotal ? 'input-styled input-error' : 'input-styled'}
                                     placeholder="0.0"
@@ -411,4 +401,4 @@ const EditarEntradaYSalida: React.FC<EntradaYSalidaSeleccionado> = ({
     );
 };
 
-export default EditarEntradaYSalida;
+export default EditarManoObra;

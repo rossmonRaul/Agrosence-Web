@@ -35,4 +35,5 @@ export const PrivateRoutes = {
     PUNTOMEDICION: 'puntomedicion',
     ORDENCOMPRA: 'ordencompra',
     ENTRADAYSALIDA: 'entradasysalidas',
+    MANOOBRA: 'manoobra',
 };
