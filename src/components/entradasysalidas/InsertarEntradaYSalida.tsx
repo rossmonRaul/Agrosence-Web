@@ -189,7 +189,7 @@ const CrearEntradasSalidas: React.FC<CrearEntradasYSalidasProps> = ({ onAdd }) =
                     Swal.fire({
                         icon: 'success',
                         title: '¡Registro insertado!',
-                        text: 'Se ha insertado  un la entrada o salida'
+                        text: 'Se ha insertado la entrada o salida'
                     });
                     if (onAdd) {
                         onAdd();
