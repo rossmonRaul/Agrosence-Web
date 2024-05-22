@@ -6,6 +6,10 @@ export const ObtenerRegistroEntradaSalida = async () => {
     const url = `http://localhost:5271/api/v1.0/${controlador}/ObtenerDatosRegistroEntradaSalida`;
     return await ProcesarDatosApi('GET', url, '');
 }
+export const ObtenerDatosRegistroEntradaSalidaPorVentasFecha = async () => {
+    const url = `http://localhost:5271/api/v1.0/${controlador}/ObtenerDatosRegistroEntradaSalidaPorVentasFecha`;
+    return await ProcesarDatosApi('GET', url, '');
+}
 
 
 /*Metodos POST */

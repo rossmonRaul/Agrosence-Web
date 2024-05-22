@@ -36,4 +36,5 @@ export const PrivateRoutes = {
     ORDENCOMPRA: 'ordencompra',
     ENTRADAYSALIDA: 'entradasysalidas',
     MANOOBRA: 'manoobra',
+    FLUJOCAJA: 'flujocaja',
 };
