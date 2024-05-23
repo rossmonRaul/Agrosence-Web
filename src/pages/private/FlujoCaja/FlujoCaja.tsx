@@ -157,7 +157,7 @@ function FlujoCaja() {
             if (idEmpresa) {
                 const fincasResponse = await ObtenerFincas();
                 const fincasFiltradas = fincasResponse.filter((finca: any) => finca.idEmpresa === parseInt(idEmpresa));
-                ;
+                
                 // Extraer los identificadores de finca
                 const idsFincasFiltradas = fincasFiltradas.map((finca: any) => finca.idFinca);
 
