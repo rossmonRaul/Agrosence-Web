@@ -3,11 +3,11 @@ const controlador = "RegistroEntradaSalida";
 
 /*Metodos GET */
 export const ObtenerRegistroEntradaSalida = async () => {
-    const url = `http://localhost:5271/api/v1.0/${controlador}/ObtenerDatosRegistroSalidaPorFecha`;
+    const url = `http://localhost:5271/api/v1.0/${controlador}/ObtenerDatosRegistroEntradaSalida`;
     return await ProcesarDatosApi('GET', url, '');
 }
 export const ObtenerRegistroSalidaPorFecha = async () => {
-    const url = `http://localhost:5271/api/v1.0/${controlador}/ObtenerRegistroSalidaPorFecha`;
+    const url = `http://localhost:5271/api/v1.0/${controlador}/ObtenerDatosRegistroSalidaPorFecha`;
     return await ProcesarDatosApi('GET', url, '');
 }
 
