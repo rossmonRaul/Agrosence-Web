@@ -9,11 +9,11 @@ import Sidebar from "../../../components/sidebar/Sidebar"
 import '../../../css/FlujoCaja.css'
 import TableResponsive from "../../../components/table/tableDelete.tsx";
 import BordeSuperior from "../../../components/bordesuperior/BordeSuperior.tsx";
-import Swal from "sweetalert2";
+
 import { saveAs } from 'file-saver';
 import * as XLSX from 'xlsx';
 import Topbar from "../../../components/topbar/Topbar.tsx";
-import { ObtenerDatosRegistroEntradaSalidaPorVentasFecha } from "../../../servicios/ServicioEntradaYSalida.ts";
+import { ObtenerRegistroSalidaPorFecha } from "../../../servicios/ServicioEntradaYSalida.ts";
 import { ObtenerFincas } from "../../../servicios/ServicioFincas.ts";
 
 
@@ -26,7 +26,6 @@ function FlujoCaja() {
     // Estado para almacenar todos los usuarios asignados
     const [flujoCaja, setflujoCaja] = useState<any[]>([]);
 
-    const [flujoCajaFinca, setflujoCajaFinca] = useState<any[]>([]);
 
     // Estado para almacenar los datos filtrados
     const [flujoCajaFiltrados, setFlujoCajaFiltrados] = useState<any[]>([]);
@@ -57,7 +56,14 @@ function FlujoCaja() {
         const excelBuffer = XLSX.write(wb, { bookType: 'xlsx', type: 'array' });
         const dataBlob = new Blob([excelBuffer], { type: 'application/octet-stream' });
 
-        saveAs(dataBlob, 'flujoCaja.xlsx');
+        // Obtener la fecha actual en formato dd-mm-yyyy
+        const date = new Date();
+        const formattedDate = `${date.getDate()}-${date.getMonth() + 1}-${date.getFullYear()}`;
+
+        // Nombrar el archivo con "Flujo de Caja" y la fecha actual
+        const fileName = `Flujo de Caja ${formattedDate}.xlsx`;
+
+        saveAs(dataBlob, fileName);
     };
 
     // Función para manejar cambios en la selección de finca
@@ -104,7 +110,7 @@ function FlujoCaja() {
         const fechaFin = filtroInputFin ? new Date(filtroInputFin) : null;
 
         const filteredData = flujoCaja.filter(item => {
-            
+
 
             // Formatear fecha del flujo de caja sin modificar las fechas de entrada
             const fechaItemFormatted = formatDate(item.fecha);
@@ -130,7 +136,7 @@ function FlujoCaja() {
                 ...ordenCompra,
             }));
             setFlujoCajaFiltrados(filteredDataConFinca);
-        }else{
+        } else {
             setFlujoCajaFiltrados(filteredData);
         }
 
@@ -146,7 +152,7 @@ function FlujoCaja() {
         try {
             const idEmpresa = localStorage.getItem('empresaUsuario');
 
-            const datosFlujoCaja = await ObtenerDatosRegistroEntradaSalidaPorVentasFecha();
+            const datosFlujoCaja = await ObtenerRegistroSalidaPorFecha();
 
             if (idEmpresa) {
                 const fincasResponse = await ObtenerFincas();
@@ -225,7 +231,7 @@ function FlujoCaja() {
                                 className="form-control"
                             />
                         </div>
-                        
+
                         <button onClick={exportToExcel} className="btn-importar">Exportar</button>
                     </div>
 
