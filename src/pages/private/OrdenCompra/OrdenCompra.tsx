@@ -6,18 +6,30 @@
  */
 import { useEffect, useState } from "react";
 import Sidebar from "../../../components/sidebar/Sidebar"
-import '../../../css/AdministacionAdministradores.css'
+import '../../../css/OrdenCompra.css'
 import TableResponsive from "../../../components/table/tableDelete.tsx";
 import BordeSuperior from "../../../components/bordesuperior/BordeSuperior.tsx";
 import Modal from "../../../components/modal/Modal.tsx"
 import Swal from "sweetalert2";
 import Topbar from "../../../components/topbar/Topbar.tsx";
 import CrearOrdenCompra from "../../../components/ordenCompra/InsertarOrdenCompra.tsx";
-
-import { ObtenerUsuariosAsignados } from "../../../servicios/ServicioUsuario.ts"
-import { CambiarEstadoOrdenDeCompra, ObtenerDatosOrdenDeCompra } from "../../../servicios/ServicioOrdenCompra.ts";
+import { saveAs } from 'file-saver';
+import * as XLSX from 'xlsx';
+import { CambiarEstadoOrdenDeCompra, ObtenerDatosOrdenDeCompra, ObtenerDetallesOrdenDeCompraExportar } from "../../../servicios/ServicioOrdenCompra.ts";
 import EditarOrdenCompra from "../../../components/ordenCompra/EditarOrdenCompra.tsx";
+import { IoAddCircleOutline, IoDocumentTextSharp } from "react-icons/io5";
+import { ObtenerFincas } from "../../../servicios/ServicioFincas.ts";
 
+
+interface DetalleOrdenCompra {
+    id: string;
+    idOrdenDeCompra: string;
+    producto: string;
+    cantidad: number;
+    precioUnitario: number;
+    iva: number;
+    total: number;
+}
 
 
 /**
@@ -50,7 +62,7 @@ function OrdenCompra() {
         proveedor: '',
         productosAdquiridos: '',
         precioUnitario: '',
-        montoTotal: '',
+        total: '',
         observaciones: '',
         finca: '',
         parcela: '',
@@ -80,7 +92,52 @@ function OrdenCompra() {
 
     useEffect(() => {
         filtrarDatos();
-    }, [filtroInput, ordenCompra]); // Ejecutar cada vez que el filtro o los datos originales cambien
+    }, [filtroInput, ordenCompra]);
+
+    // Función para exportar datos a Excel
+    const exportToExcel = async () => {
+        const idsOrdenCompra = OrdenCompraFiltrados.map(item => item.idOrdenDeCompra).join(',');
+
+        // Obtener los detalles de la orden de compra
+        const detallesOrdenCompra: DetalleOrdenCompra[] = await ObtenerDetallesOrdenDeCompraExportar({ ListaIdsExportar: idsOrdenCompra });
+
+
+        // Definir las columnas y sus encabezados
+        const columns = [
+            { key: 'idOrdenDeCompra', header: 'Numero de Orden' },
+            { key: 'idDetalleOrdenDeCompra', header: 'ID Detalle' },
+            { key: 'producto', header: 'Nombre del Producto' },
+            { key: 'cantidad', header: 'Cantidad' },
+            { key: 'precioUnitario', header: 'Precio Unitario' },
+            { key: 'iva', header: 'IVA' },
+            { key: 'total', header: 'Total' },
+
+        ];
+
+        // Filtrar los detalles para excluir el campo 'id'
+        const detallesFiltrados = detallesOrdenCompra.map(({ id, ...rest }: DetalleOrdenCompra) => rest);
+
+        // Crear la hoja de cálculo con las claves como encabezados
+        const ws = XLSX.utils.json_to_sheet(detallesFiltrados, { header: columns.map(col => col.key) });
+        const wb = XLSX.utils.book_new();
+        XLSX.utils.book_append_sheet(wb, ws, 'Datos');
+
+        // Ajustar los encabezados
+        XLSX.utils.sheet_add_aoa(ws, [columns.map(col => col.header)], { origin: 'A1' });
+
+        // Generar el buffer de Excel
+        const excelBuffer = XLSX.write(wb, { bookType: 'xlsx', type: 'array' });
+        const dataBlob = new Blob([excelBuffer], { type: 'application/octet-stream' });
+
+        // Obtener la fecha actual en formato dd-mm-yyyy
+        const date = new Date();
+        const formattedDate = `${date.getDate()}-${date.getMonth() + 1}-${date.getFullYear()}`;
+
+        // Nombrar el archivo con "Orden de compra" y la fecha actual
+        const fileName = `Orden de Compra ${formattedDate}.xlsx`;
+
+        saveAs(dataBlob, fileName);
+    };
 
     // Función para filtrar cada vez que cambie el filtro 
     const filtrarDatos = () => {
@@ -96,12 +153,12 @@ function OrdenCompra() {
 
 
     const abrirCerrarModalEditar = () => {
-        
+
         setModalEditar(!modalEditar);
     }
 
     const handleEditarOrdenCompra = async () => {
-        
+
         // Después de editar exitosamente, actualiza la lista de usuarios Asignados
         await obtenerDatosOrdenCompra();
         abrirCerrarModalEditar();
@@ -112,35 +169,33 @@ function OrdenCompra() {
         obtenerDatosOrdenCompra();
     }, []); // Ejecutar solo una vez al montar el componente
 
-    const obtenerDatosOrdenCompra= async () => {
+    const obtenerDatosOrdenCompra = async () => {
         try {
             const idEmpresa = localStorage.getItem('empresaUsuario');
-            const idUsuario = localStorage.getItem('identificacionUsuario');
-            const datosUsuarios = await ObtenerUsuariosAsignados({ idEmpresa: idEmpresa });
             const datosOrdenCompra = await ObtenerDatosOrdenDeCompra();
 
-            const usuarioActual = datosUsuarios.find((usuario: any) => usuario.identificacion === idUsuario);
+            const fincasResponse = await ObtenerFincas();
+            if (idEmpresa) {
+                const fincasFiltradas = fincasResponse.filter((finca: any) => finca.idEmpresa === parseInt(idEmpresa));
 
-            if (!usuarioActual) {
-                console.error('No se encontró el usuario actual');
-                return;
+                // Extraer los identificadores de finca
+                const idsFincasFiltradas = fincasFiltradas.map((finca: any) => finca.idFinca)
+
+                // Filtrar con las parcelas del usuario actual
+                const ordenCompraFiltradas = datosOrdenCompra.filter((ordenCompra: any) => {
+                    return idsFincasFiltradas.includes(ordenCompra.idFinca);
+                }).map((ordenCompra: any) => ({
+                    ...ordenCompra,
+                    sEstado: ordenCompra.estado === 1 ? 'Activo' : 'Inactivo',
+                }));
+
+
+                //debo de poner 2 arreglos aca para poder cargar la tabla siempre que se cambia
+                // la palabra del input de filtro
+
+                setOrdenCompra(ordenCompraFiltradas);
+                setOrdenCompraFiltrados(ordenCompraFiltradas);
             }
-
-            const parcelasUsuarioActual = datosUsuarios.filter((usuario: any) => usuario.identificacion === idUsuario).map((usuario: any) => usuario.idParcela);
-            
-            // Filtrar con las parcelas del usuario actual
-            const ordenCompraFiltradas = datosOrdenCompra.filter((ordenCompra: any) => {
-                return parcelasUsuarioActual.includes(ordenCompra.idParcela);
-            }).map((ordenCompra: any) => ({
-                ...ordenCompra,
-                sEstado: ordenCompra.estado === 1 ? 'Activo' : 'Inactivo',
-            }));
-
-            //debo de poner 2 arreglos aca para poder cargar la tabla siempre que se cambia
-            // la palabra del input de filtro
-            
-            setOrdenCompra(ordenCompraFiltradas);
-            setOrdenCompraFiltrados(ordenCompraFiltradas);
         } catch (error) {
             console.error('Error al obtener las mediciones:', error);
         }
@@ -151,7 +206,7 @@ function OrdenCompra() {
     const toggleStatus = async (ordenCompra: any) => {
         Swal.fire({
             title: "Eliminar",
-            text: "¿Estás seguro de que deseas eliminar la Orden de Compra: "+ ordenCompra.numeroDeOrden +"  ?",
+            text: "¿Estás seguro de que deseas eliminar la Orden de Compra: " + ordenCompra.numeroDeOrden + "  ?",
             icon: "warning",
             showCancelButton: true,
             confirmButtonText: "Sí",
@@ -160,10 +215,11 @@ function OrdenCompra() {
             if (result.isConfirmed) {
                 try {
                     const datos = {
-                        idOrdenDeCompra: ordenCompra.idOrdenDeCompra, //aca revisar que si sea idOrdenCompra
+                        IdOrdenDeCompra: ordenCompra.idOrdenDeCompra,
                     };
-                    
+
                     const resultado = await CambiarEstadoOrdenDeCompra(datos);
+
 
                     if (parseInt(resultado.indicador) === 1) {
                         await obtenerDatosOrdenCompra();
@@ -193,10 +249,9 @@ function OrdenCompra() {
         { key: 'numeroDeOrden', header: 'Numero de orden' },
         { key: 'fechaOrden', header: 'Fecha de Orden' },
         { key: 'fechaEntrega', header: 'Fecha de Entrega' },
-        { key: 'productosAdquiridos', header: 'Producto Adquirido' },
-        { key: 'cantidad', header: 'Cantidad' },
-        { key: 'precioUnitario', header: 'Precio Unitario' },
-        { key: 'montoTotal', header: 'Monto Total' },
+        { key: 'observaciones', header: 'Observaciones' },
+        { key: 'proveedor', header: 'Proveedor' },
+        { key: 'total', header: 'Monto Total' },
         { key: 'acciones', header: 'Acciones', actions: true } // Columna para acciones
     ];
 
@@ -208,22 +263,36 @@ function OrdenCompra() {
                 <Topbar />
                 <BordeSuperior text="Sección de Orden de Compra" />
                 <div className="content">
-                    <button onClick={() => abrirCerrarModalCrearOrdenCompra()} className="btn-crear">Crear Orden</button>
                     <div className="filtro-container">
-                        <label htmlFor="filtroIdentificacion">Filtrar:</label>
-                        <input
-                            type="text"
-                            id="filtroIdentificacion"
-                            value={filtroInput}
-                            onChange={handleChangeFiltro}
-                            placeholder="Buscar por Finca, Parcela o Número de Orden"
-                            className="form-control"
-                        />
+                        <div className="filtro-item">
+
+                            <label htmlFor="filtroIdentificacion">Filtrar:</label>
+                            <input
+                                type="text"
+                                id="filtroIdentificacion"
+                                value={filtroInput}
+                                onChange={handleChangeFiltro}
+                                placeholder="Buscar"
+                                style={{ fontSize: '16px', padding: '10px' }}
+                                className="form-control"
+                            />
+
+                        </div>
+                        <button onClick={() => abrirCerrarModalCrearOrdenCompra()} className="btn-crear-style" style={{ display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
+                            <IoAddCircleOutline size={27} />
+                            <span style={{ marginLeft: '5px' }}>Crear Registro</span>
+                        </button>
+                        <button onClick={exportToExcel} className="btn-exportar" style={{ display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
+
+                            <IoDocumentTextSharp size={27} />
+                            <span style={{ marginLeft: '5px' }}>Exportar</span>
+
+                        </button>
                     </div>
                     <TableResponsive columns={columns} data={OrdenCompraFiltrados} openModal={openModal} btnActionName={"Editar"} toggleStatus={toggleStatus} />
                 </div>
             </div>
-            
+
             <Modal
                 isOpen={modalEditar}
                 toggle={abrirCerrarModalEditar}
@@ -235,18 +304,15 @@ function OrdenCompra() {
                         {/* hay que modificar el nombre porque modifica mas datos */}
                         {/* <CambiarContrasenaAsignados */}
                         <EditarOrdenCompra
-                            idFinca={selectedDatos.idFinca}
-                            idParcela={selectedDatos.idParcela}
+                            idFinca={selectedDatos.idFinca.toString()}
+                            idParcela={selectedDatos.idParcela.toString()}
                             idOrdenDeCompra={selectedDatos.idOrdenDeCompra}
                             numeroDeOrden={selectedDatos.numeroDeOrden}
                             fechaEntrega={selectedDatos.fechaEntrega}
                             fechaOrden={selectedDatos.fechaOrden}
-                            productosAdquiridos={selectedDatos.productosAdquiridos}
-                            cantidad={selectedDatos.cantidad.toString()}
-                            proveedor={selectedDatos.proveedor}
-                            precioUnitario={selectedDatos.precioUnitario}
-                            montoTotal={selectedDatos.montoTotal}
+                            total={selectedDatos.total}
                             observaciones={selectedDatos.observaciones}
+                            proveedor={selectedDatos.proveedor}
 
                             //aqui agregas las props que ocupa que reciba el componente, (todos los datos para editar)
                             onEdit={handleEditarOrdenCompra}

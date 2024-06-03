@@ -6,11 +6,23 @@ export const ObtenerDatosOrdenDeCompra = async () => {
     const url = `http://localhost:5271/api/v1.0/${controlador}/ObtenerDatosOrdenDeCompra`;
     return await ProcesarDatosApi('GET', url, '');
 }
+export const ObtenerUltimoIdOrdenDeCompra = async () => {
+    const url = `http://localhost:5271/api/v1.0/${controlador}/ObtenerUltimoIdOrdenDeCompra`;
+    return await ProcesarDatosApi('GET', url, '');
+}
 
 
 /*Metodos POST */
 export const InsertarOrdenDeCompra = async (data: any) => {
     const url = `http://localhost:5271/api/v1.0/${controlador}/InsertarOrdenDeCompra`;
+    return await ProcesarDatosApi('POST', url, data);
+}
+export const ObtenerDetalleOrdenDeCompraPorId = async (data: any) => {
+    const url = `http://localhost:5271/api/v1.0/${controlador}/ObtenerDetalleOrdenDeCompraPorId`;
+    return await ProcesarDatosApi('POST', url, data);
+}
+export const ObtenerDetallesOrdenDeCompraExportar = async (data: any) => {
+    const url = `http://localhost:5271/api/v1.0/${controlador}/ObtenerDetallesOrdenDeCompraExportar`;
     return await ProcesarDatosApi('POST', url, data);
 }
 
@@ -22,6 +34,6 @@ export const ModificarOrdenDeCompra= async (data: any) => {
 }
 
 export const CambiarEstadoOrdenDeCompra = async (data: any) => {
-    const url = `http://localhost:5271/api/v1.0/${controlador}/CambiarOrdenDeCompra`;
+    const url = `http://localhost:5271/api/v1.0/${controlador}/CambiarEstadoOrdenDeCompra`;
     return await ProcesarDatosApi('PUT', url, data);
 }

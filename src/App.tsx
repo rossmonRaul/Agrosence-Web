@@ -82,6 +82,8 @@ function App() {
               <Route path={PrivateRoutes.SENSORES} element={<RegistroSensores />} />
               <Route path={PrivateRoutes.MANOOBRA} element={<ManoObra />} />
               <Route path={PrivateRoutes.FLUJOCAJA} element={<FlujoCaja />} />
+              <Route path={PrivateRoutes.ORDENCOMPRA} element={<OrdenCompra />} />
+              <Route path={PrivateRoutes.ENTRADAYSALIDA} element={<EntradasYSalidas />} />
             </Route>
             {/* Rutas accesibles solo para el rol de usuario asignado */}
             <Route element={<RolGuard rol={Roles.UsuarioAsignado} />}>
@@ -97,12 +99,7 @@ function App() {
               <Route path={PrivateRoutes.REGISTROSEGUIMIENTOUSOAGUA} element={<RegistroSeguimientoUsoAgua />} />
               <Route path={PrivateRoutes.RIESGOSNATURALES} element={<RiesgosNaturales />} />
               <Route path={PrivateRoutes.PROBLEMASPLAGAS} element={<ProblemasPlagas />} />
-              <Route path={PrivateRoutes.ORDENCOMPRA} element={<OrdenCompra />} />
-              <Route path={PrivateRoutes.ENTRADAYSALIDA} element={<EntradasYSalidas />} />
               
-              
-
-
               <Route path={PrivateRoutes.PRONOSTICOMETEOROLOGICO} element={<PronosticoMeteorologico />} />
               <Route path={PrivateRoutes.CONDICIONESMETEOROLOGICASCLIMATICAS} element={<CondicionesMeteorologicasClimaticas />} />
 

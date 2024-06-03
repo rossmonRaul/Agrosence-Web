@@ -100,18 +100,7 @@ const Sidebar = ({ children }: { children: React.ReactNode }) => {
             icon: <img src='/tractor.png' style={{ width: '30px' }} />,
             roles: [2]
         },
-        {
-            path: "/manoobra",
-            name: "Mano Obra",
-            icon: <img src='/mano-obra.png' style={{ width: '30px' }} />,
-            roles: [2]
-        },
-        {
-            path: "/flujocaja",
-            name: "Flujo Caja",
-            icon: <img src='/flujo-caja.png' style={{ width: '30px' }} />,
-            roles: [2]
-        },
+        
         {
             path: "/menusensores",
             name: "Sensores",
@@ -127,6 +116,30 @@ const Sidebar = ({ children }: { children: React.ReactNode }) => {
                     path: "/puntomedicion",
                     name: "Punto Medición",
                     icon: <img src='/punto-medicion.png' style={{ width: '22px' }} />,
+                },
+
+            ]
+        },
+        {
+            path: "/menuadministracion",
+            name: "Finanzas",
+            icon: <img src='/administrar.png' style={{ width: '22px' }} />, // Puedes usar cualquier icono que desees aquí
+            roles: [2], // Especifica los roles que pueden ver esta opción
+            children: [
+                {
+                    path: "/ordencompra",
+                    name: "Ordenes de Compras",
+                    icon: <img src='/compra.png' style={{ width: '22px' }} />,
+                },
+                {
+                    path: "/entradasysalidas",
+                    name: "Entradas y Salidas",
+                    icon: <img src='/entradasalida.png' style={{ width: '22px' }} />,
+                },
+                {
+                    path: "/manoobra",
+                    name: "Mano Obra",
+                    icon: <img src='/mano-obra.png' style={{ width: '30px' }} />,
                 },
 
             ]
@@ -239,25 +252,7 @@ const Sidebar = ({ children }: { children: React.ReactNode }) => {
 
             ]
         },
-        {
-            path: "/menuadministracion",
-            name: "Administración",
-            icon: <img src='/administrar.png' style={{ width: '22px' }} />, // Puedes usar cualquier icono que desees aquí
-            roles: [3], // Especifica los roles que pueden ver esta opción
-            children: [
-                {
-                    path: "/ordencompra",
-                    name: "Ordenes de Compras",
-                    icon: <img src='/compra.png' style={{ width: '22px' }} />,
-                },
-                {
-                    path: "/entradasysalidas",
-                    name: "Entradas y Salidas",
-                    icon: <img src='/entradasalida.png' style={{ width: '22px' }} />,
-                },
-
-            ]
-        },
+       
 
         {
             path: "#", // Utilizar "#" como un enlace que no lleva a ninguna parte para los multi-seleccion
