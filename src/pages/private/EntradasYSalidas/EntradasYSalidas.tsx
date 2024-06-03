@@ -6,19 +6,28 @@
  */
 import { useEffect, useState } from "react";
 import Sidebar from "../../../components/sidebar/Sidebar"
-import '../../../css/AdministacionAdministradores.css'
 import TableResponsive from "../../../components/table/tableDelete.tsx";
 import BordeSuperior from "../../../components/bordesuperior/BordeSuperior.tsx";
 import Modal from "../../../components/modal/Modal.tsx"
 import Swal from "sweetalert2";
+import '../../../css/EntradaYSalida.css'
 import Topbar from "../../../components/topbar/Topbar.tsx";
-import { ObtenerUsuariosAsignados } from "../../../servicios/ServicioUsuario.ts"
 import CrearEntradasSalidas from "../../../components/entradasysalidas/InsertarEntradaYSalida.tsx";
 import EditarEntradaYSalida from "../../../components/entradasysalidas/EditarEntradaYSalida.tsx";
-import { CambiarEstadoRegistroEntradaSalida, ObtenerRegistroEntradaSalida } from "../../../servicios/ServicioEntradaYSalida.ts";
+import { CambiarEstadoRegistroEntradaSalida, ObtenerDetallesRegistroEntradaSalidaExportar, ObtenerRegistroEntradaSalida } from "../../../servicios/ServicioEntradaYSalida.ts";
+import { saveAs } from 'file-saver';
+import * as XLSX from 'xlsx';
+import { IoAddCircleOutline, IoDocumentTextSharp } from "react-icons/io5";
+import { ObtenerFincas } from "../../../servicios/ServicioFincas.ts";
 
-
-
+interface DetalleEntradasSalidas {
+    id: string;
+    Producto: string;
+    cantidad: string;
+    PrecioUnitario: string;
+    Total: string;
+    iva: string;
+}
 /**
  * Componente funcional que representa la página de entradas y salidas
  */
@@ -44,9 +53,7 @@ function EntradasYSalidas() {
         fecha: '',
         tipo: '',
         detallesCompraVenta: '',
-        cantidad: 0,
-        precioUnitario: '',
-        montoTotal: '',
+        total: '',
         finca: '',
     });
 
@@ -80,7 +87,9 @@ function EntradasYSalidas() {
     const filtrarDatos = () => {
         const datosFiltrados = filtroInput
             ? entradasYSalidas.filter((datosTabla: any) =>
-                datosTabla.finca.toLowerCase().includes(filtroInput.toLowerCase())
+                datosTabla.finca.toLowerCase().includes(filtroInput.toLowerCase()) ||
+                datosTabla.fecha.toLowerCase().includes(filtroInput.toLowerCase()) ||
+                datosTabla.tipo.toLowerCase().includes(filtroInput.toLowerCase())
             )
             : entradasYSalidas;
         setEntradasYSalidasFiltrados(datosFiltrados);
@@ -88,12 +97,12 @@ function EntradasYSalidas() {
 
 
     const abrirCerrarModalEditar = () => {
-        
+
         setModalEditar(!modalEditar);
     }
 
     const handleEditarEntradasYSalidas = async () => {
-        
+
         // Después de editar exitosamente, actualiza la lista de usuarios Asignados
         await obtenerDatosEntradasYSalidas();
         abrirCerrarModalEditar();
@@ -104,35 +113,32 @@ function EntradasYSalidas() {
         obtenerDatosEntradasYSalidas();
     }, []); // Ejecutar solo una vez al montar el componente
 
-    const obtenerDatosEntradasYSalidas= async () => {
+    const obtenerDatosEntradasYSalidas = async () => {
         try {
             const idEmpresa = localStorage.getItem('empresaUsuario');
-            const idUsuario = localStorage.getItem('identificacionUsuario');
-            const datosUsuarios = await ObtenerUsuariosAsignados({ idEmpresa: idEmpresa });
             const datosEntradasYSalidas = await ObtenerRegistroEntradaSalida();
+            const fincasResponse = await ObtenerFincas();
+            if (idEmpresa) {
+                const fincasFiltradas = fincasResponse.filter((finca: any) => finca.idEmpresa === parseInt(idEmpresa));
 
-            const usuarioActual = datosUsuarios.find((usuario: any) => usuario.identificacion === idUsuario);
-            
-            if (!usuarioActual) {
-                console.error('No se encontró el usuario actual');
-                return;
+                // Extraer los identificadores de finca
+                const idsFincasFiltradas = fincasFiltradas.map((finca: any) => finca.idFinca);
+                
+                // Filtrar con las parcelas del usuario actual
+                const EntradasYSalidasFiltradas = datosEntradasYSalidas.filter((entradasYSalidas: any) => {
+                    return idsFincasFiltradas.includes(entradasYSalidas.idFinca);
+                }).map((entradasYSalidas: any) => ({
+                    ...entradasYSalidas,
+                    sEstado: entradasYSalidas.estado === 1 ? 'Activo' : 'Inactivo',
+                }));
+
+                //debo de poner 2 arreglos aca para poder cargar la tabla siempre que se cambia
+                // la palabra del input de filtro
+
+                setEntradasYSalidas(EntradasYSalidasFiltradas);
+                setEntradasYSalidasFiltrados(EntradasYSalidasFiltradas);
             }
 
-            const fincasUsuarioActual = datosUsuarios.filter((usuario: any) => usuario.identificacion === idUsuario).map((usuario: any) => usuario.idFinca);
-            
-            // Filtrar con las parcelas del usuario actual
-            const EntradasYSalidasFiltradas = datosEntradasYSalidas.filter((entradasYSalidas: any) => {
-                return fincasUsuarioActual.includes(entradasYSalidas.idFinca);
-            }).map((entradasYSalidas: any) => ({
-                ...entradasYSalidas,
-                sEstado: entradasYSalidas.estado === 1 ? 'Activo' : 'Inactivo',
-            }));
-
-            //debo de poner 2 arreglos aca para poder cargar la tabla siempre que se cambia
-            // la palabra del input de filtro
-            
-            setEntradasYSalidas(EntradasYSalidasFiltradas);
-            setEntradasYSalidasFiltrados(EntradasYSalidasFiltradas);
         } catch (error) {
             console.error('Error al obtener las mediciones:', error);
         }
@@ -143,7 +149,7 @@ function EntradasYSalidas() {
     const toggleStatus = async (entradasYSalidas: any) => {
         Swal.fire({
             title: "Eliminar",
-            text: "¿Estás seguro de que deseas eliminar la entrada o salida: "+ entradasYSalidas.detallesCompraVenta +"  ?",
+            text: "¿Estás seguro de que deseas eliminar la entrada o salida: " + entradasYSalidas.detallesCompraVenta + "  ?",
             icon: "warning",
             showCancelButton: true,
             confirmButtonText: "Sí",
@@ -154,7 +160,7 @@ function EntradasYSalidas() {
                     const datos = {
                         idRegistroEntradaSalida: entradasYSalidas.idRegistroEntradaSalida, //aca revisar que si sea idOrdenCompra
                     };
-                    
+
                     const resultado = await CambiarEstadoRegistroEntradaSalida(datos);
 
                     if (parseInt(resultado.indicador) === 1) {
@@ -185,11 +191,52 @@ function EntradasYSalidas() {
         { key: 'fecha', header: 'Fecha' },
         { key: 'tipo', header: 'Tipo' },
         { key: 'detallesCompraVenta', header: 'Detalles' },
-        { key: 'cantidad', header: 'Cantidad' },
-        { key: 'precioUnitario', header: 'Precio Unitario (₡)' },
-        { key: 'montoTotal', header: 'Monto Total (₡)'},
+        { key: 'total', header: 'Total' },
         { key: 'acciones', header: 'Acciones', actions: true } // Columna para acciones
     ];
+
+    // Función para exportar datos a Excel
+    const exportToExcel = async () => {
+        const idsEntradasYSalidas = EntradasYSalidasFiltrados.map(item => item.idRegistroEntradaSalida).join(',');
+
+        // Obtener los detalles de las entradas y salidas
+        const detallesEntradasYSalidas: DetalleEntradasSalidas[] = await ObtenerDetallesRegistroEntradaSalidaExportar({ ListaIdsExportar: idsEntradasYSalidas });
+        // Definir las columnas y sus encabezados
+        const columns = [
+            { key: 'idRegistroEntradaSalida', header: 'Numero de Orden' },
+            { key: 'idDetalleRegistroEntradaSalida', header: 'ID Detalle' },
+            { key: 'producto', header: 'Nombre del Producto' },
+            { key: 'cantidad', header: 'Cantidad' },
+            { key: 'precioUnitario', header: 'Precio Unitario' },
+            { key: 'iva', header: 'IVA' },
+            { key: 'total', header: 'Total' },
+
+        ];
+
+        // Filtrar los detalles para excluir el campo 'id'
+        const detallesFiltrados = detallesEntradasYSalidas.map(({ id, ...rest }: DetalleEntradasSalidas) => rest);
+
+        // Crear la hoja de cálculo con las claves como encabezados
+        const ws = XLSX.utils.json_to_sheet(detallesFiltrados, { header: columns.map(col => col.key) });
+        const wb = XLSX.utils.book_new();
+        XLSX.utils.book_append_sheet(wb, ws, 'Datos');
+
+        // Ajustar los encabezados
+        XLSX.utils.sheet_add_aoa(ws, [columns.map(col => col.header)], { origin: 'A1' });
+
+        // Generar el buffer de Excel
+        const excelBuffer = XLSX.write(wb, { bookType: 'xlsx', type: 'array' });
+        const dataBlob = new Blob([excelBuffer], { type: 'application/octet-stream' });
+
+        // Obtener la fecha actual en formato dd-mm-yyyy
+        const date = new Date();
+        const formattedDate = `${date.getDate()}-${date.getMonth() + 1}-${date.getFullYear()}`;
+
+        // Nombrar el archivo con "Orden de compra" y la fecha actual
+        const fileName = `Entradas y Salidas ${formattedDate}.xlsx`;
+
+        saveAs(dataBlob, fileName);
+    };
 
 
 
@@ -199,22 +246,36 @@ function EntradasYSalidas() {
                 <Topbar />
                 <BordeSuperior text="Entradas y Salidas de la Finca" />
                 <div className="content">
-                    <button onClick={() => abrirCerrarModalCrearEntradasYSalidas()} className="btn-crear">Crear Entrada o Salida</button>
                     <div className="filtro-container">
-                        <label htmlFor="filtroIdentificacion">Filtrar:</label>
-                        <input
-                            type="text"
-                            id="filtroIdentificacion"
-                            value={filtroInput}
-                            onChange={handleChangeFiltro}
-                            placeholder="Buscar por Finca"
-                            className="form-control"
-                        />
+                        <div className="filtro-item">
+
+                            <label htmlFor="filtroIdentificacion">Filtrar:</label>
+                            <input
+                                type="text"
+                                id="filtroIdentificacion"
+                                value={filtroInput}
+                                onChange={handleChangeFiltro}
+                                placeholder="Buscar"
+                                style={{ fontSize: '16px', padding: '10px' }}
+                                className="form-control"
+                            />
+
+                        </div>
+                        <button onClick={() => abrirCerrarModalCrearEntradasYSalidas()} className="btn-crear-style" style={{ display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
+                            <IoAddCircleOutline size={27} />
+                            <span style={{ marginLeft: '5px' }}>Crear Registro</span>
+                        </button>
+                        <button onClick={exportToExcel} className="btn-exportar" style={{ display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
+
+                            <IoDocumentTextSharp size={27} />
+                            <span style={{ marginLeft: '5px' }}>Exportar</span>
+
+                        </button>
                     </div>
                     <TableResponsive columns={columns} data={EntradasYSalidasFiltrados} openModal={openModal} btnActionName={"Editar"} toggleStatus={toggleStatus} />
                 </div>
             </div>
-            
+
             <Modal
                 isOpen={modalEditar}
                 toggle={abrirCerrarModalEditar}
@@ -223,16 +284,14 @@ function EntradasYSalidas() {
             >
                 <div className='form-container'>
                     <div className='form-group'>
-                       
+
                         <EditarEntradaYSalida
-                            idFinca={selectedDatos.idFinca}
+                            idFinca={selectedDatos.idFinca.toString()}
                             idRegistroEntradaSalida={selectedDatos.idRegistroEntradaSalida}
                             tipo={selectedDatos.tipo}
                             fecha={selectedDatos.fecha}
-                            detalles={selectedDatos.detallesCompraVenta}
-                            cantidad={selectedDatos.cantidad}
-                            precioUnitario={selectedDatos.precioUnitario}
-                            montoTotal={selectedDatos.montoTotal}
+                            detallesCompraVenta={selectedDatos.detallesCompraVenta}
+                            total={selectedDatos.total}
 
                             //aqui agregas las props que ocupa que reciba el componente, (todos los datos para editar)
                             onEdit={handleEditarEntradasYSalidas}

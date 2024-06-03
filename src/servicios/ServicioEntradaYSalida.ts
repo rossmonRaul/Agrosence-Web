@@ -17,6 +17,14 @@ export const InsertarRegistroEntradaSalida = async (data: any) => {
     const url = `http://localhost:5271/api/v1.0/${controlador}/InsertarRegistroEntradaSalida`;
     return await ProcesarDatosApi('POST', url, data);
 }
+export const ObtenerDetalleRegistroEntradaSalidaPorId = async (data: any) => {
+    const url = `http://localhost:5271/api/v1.0/${controlador}/ObtenerDetalleRegistroEntradaSalidaPorId`;
+    return await ProcesarDatosApi('POST', url, data);
+}
+export const ObtenerDetallesRegistroEntradaSalidaExportar = async (data: any) => {
+    const url = `http://localhost:5271/api/v1.0/${controlador}/ObtenerDetallesRegistroEntradaSalidaExportar`;
+    return await ProcesarDatosApi('POST', url, data);
+}
 
 
 /*Metodos PUT */
