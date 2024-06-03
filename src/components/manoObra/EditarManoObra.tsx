@@ -12,6 +12,7 @@ interface ManoObraSeleccionado {
     actividad: string,
     fecha: string,
     trabajador: string,
+    identificacion: string, 
     horasTrabajadas: number,
     pagoPorHora: string,
     totalPago: string,
@@ -31,6 +32,7 @@ const EditarManoObra: React.FC<ManoObraSeleccionado> = ({
     actividad,
     fecha,
     trabajador,
+    identificacion, 
     horasTrabajadas,
     pagoPorHora,
     totalPago,
@@ -49,6 +51,7 @@ const EditarManoObra: React.FC<ManoObraSeleccionado> = ({
         idRegistroManoObra: '',
         actividad: '',
         fecha: '',
+        identificacion: '', 
         trabajador: '',
         horasTrabajadas: '',
         pagoPorHoraotal: '',
@@ -60,6 +63,7 @@ const EditarManoObra: React.FC<ManoObraSeleccionado> = ({
         idRegistroManoObra: '',
         actividad: '',
         fecha: '',
+        identificacion: '', 
         trabajador: '',
         horasTrabajadas: '',
         pagoPorHoraotal: '',
@@ -79,13 +83,13 @@ const EditarManoObra: React.FC<ManoObraSeleccionado> = ({
         if (name === "horasTrabajadas" || name === "pagoPorHora") {
             const horasTrabajadasValue = name === "horasTrabajadas" ? parseFloat(value) : formData.horasTrabajadas;
             const pagoPorHoraValue = name === "pagoPorHora" ? parseFloat(value) : formData.pagoPorHora;
-    
+
             // verificar que los valores sean numéricos
             if (!isNaN(horasTrabajadasValue as number) && !isNaN(pagoPorHoraValue as number)) {
                 const pagoTotal = (horasTrabajadasValue as number) * (pagoPorHoraValue as number);
                 formData.totalPago = pagoTotal.toString();
             } else {
-                
+
                 formData.totalPago = "";
             }
         }
@@ -145,6 +149,7 @@ const EditarManoObra: React.FC<ManoObraSeleccionado> = ({
             actividad: actividad,
             fecha: fechaString,
             trabajador: trabajador,
+            identificacion: identificacion, 
             horasTrabajadas: horasTrabajadas,
             pagoPorHora: pagoPorHora,
             totalPago: totalPago,
@@ -168,6 +173,12 @@ const EditarManoObra: React.FC<ManoObraSeleccionado> = ({
         } else {
             newErrors.actividad = '';
         }
+        if (!formData.identificacion.trim()) {
+            newErrors.identificacion = 'La identificacion es obligatoria';
+        } else {
+            newErrors.identificacion = '';
+        }
+
 
         if (!formData.fecha || formData.fecha === "") {
             newErrors.fecha = 'La fecha generacion es obligatoria';
@@ -175,6 +186,8 @@ const EditarManoObra: React.FC<ManoObraSeleccionado> = ({
 
         if (!formData.horasTrabajadas) {
             newErrors.horasTrabajadas = 'Las horas trabajadas es obligatoria';
+        }else if (parseFloat(formData.horasTrabajadas) <= 0) {
+            newErrors.horasTrabajadas = 'Las horas trabajadas deben ser mayor a 0';
         } else {
             newErrors.horasTrabajadas = '';
         }
@@ -189,6 +202,8 @@ const EditarManoObra: React.FC<ManoObraSeleccionado> = ({
 
         if (!formData.pagoPorHora || formData.pagoPorHora === "") {
             newErrors.pagoPorHora = 'El pago por hora es obligatorio';
+        }else if (parseFloat(formData.pagoPorHora) <= 0) {
+            newErrors.pagoPorHora = 'El pago por hora debe ser mayor a 0';
         } else {
             newErrors.pagoPorHora = '';
         }
@@ -227,9 +242,9 @@ const EditarManoObra: React.FC<ManoObraSeleccionado> = ({
             } else {
                 console.error('El valor de identificacionUsuario en localStorage es nulo.');
             }
-            
+
             const resultado = await ModificarRegistroManoObra(formData);
-            
+
             if (resultado.indicador === 1) {
                 Swal.fire({
                     icon: 'success',
@@ -257,7 +272,7 @@ const EditarManoObra: React.FC<ManoObraSeleccionado> = ({
                 <h2>Mano de obra</h2>
                 <div className="form-container-fse" style={{ display: 'flex', flexDirection: 'row', width: '100%' }}>
                     <div style={{ marginRight: '10px', width: '50%' }}>
-                    <FormGroup>
+                        <FormGroup>
                             <label htmlFor="fincas">Finca:</label>
                             <select className="custom-select input-styled" id="fincas" value={selectedFinca} onChange={handleFincaChange}>
                                 <option key="default-finca" value="">Seleccione...</option>
@@ -288,7 +303,24 @@ const EditarManoObra: React.FC<ManoObraSeleccionado> = ({
 
                 </div>
                 <div className="row" style={{ display: "flex", flexDirection: 'row', width: '100%' }}>
-                    <div className="col-sm-4" style={{ width: '100%' }}>
+                    <div className="col-sm-4" style={{ marginRight: "10px", width: '50%' }}>
+                        <FormGroup row>
+                            <Label for="identificacion" sm={4} className="input-label">Identificación</Label>
+                            <Col sm={8}>
+                                <Input
+                                    type="text"
+                                    id="identificacion"
+                                    name="identificacion"
+                                    value={formData.identificacion}
+                                    onChange={handleInputChange}
+                                    className={errors.identificacion ? 'input-styled input-error' : 'input-styled'}
+                                    placeholder="Identificación"
+                                />
+                                <FormFeedback>{errors.identificacion}</FormFeedback>
+                            </Col>
+                        </FormGroup>
+                    </div>
+                    <div className="col-sm-4" style={{ width: '50%' }}>
                         <FormGroup row>
                             <Label for="trabajador" sm={4} className="input-label">Trabajador</Label>
                             <Col sm={8}>
@@ -347,7 +379,7 @@ const EditarManoObra: React.FC<ManoObraSeleccionado> = ({
 
                 </div>
                 <div className="row" style={{ display: "flex", flexDirection: 'row', width: '100%' }}>
-                    
+
                     <div className="col-sm-4" style={{ marginRight: "10px", width: '50%' }}>
                         <FormGroup row>
                             <Label for="pagoPorHora" sm={4} className="input-label">Pago por Hora (₡)</Label>

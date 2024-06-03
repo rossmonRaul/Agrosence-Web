@@ -25,6 +25,7 @@ const CrearManoObra: React.FC<CrearManoObraProps> = ({ onAdd }) => {
         idFinca: '',
         fecha: '',
         actividad: '',
+        identificacion: '', 
         trabajador: '',
         horasTrabajadas: '',
         pagoPorHora: '',
@@ -126,9 +127,17 @@ const CrearManoObra: React.FC<CrearManoObraProps> = ({ onAdd }) => {
             newErrors.fecha = 'La fecha es obligatoria';
         }
 
+        if (!formData.identificacion.trim()) {
+            newErrors.identificacion = 'La identificacion es obligatoria';
+        } else {
+            newErrors.identificacion = '';
+        }
+
         if (!formData.horasTrabajadas) {
             newErrors.horasTrabajadas = 'Las horas trabajadas son obligatorias';
-        } else {
+        } else if (parseFloat(formData.horasTrabajadas) <= 0) {
+            newErrors.horasTrabajadas = 'Las horas trabajadas deben ser mayor a 0';
+        }else {
             newErrors.horasTrabajadas = '';
         }
 
@@ -142,7 +151,9 @@ const CrearManoObra: React.FC<CrearManoObraProps> = ({ onAdd }) => {
 
         if (!formData.pagoPorHora.trim()) {
             newErrors.pagoPorHora = 'El pago por hora es obligatorio';
-        } else {
+        } else if (parseFloat(formData.pagoPorHora) <= 0) {
+            newErrors.pagoPorHora = 'El pago por hora debe ser mayor a 0';
+        }else {
             newErrors.pagoPorHora = '';
         }
 
@@ -210,7 +221,9 @@ const CrearManoObra: React.FC<CrearManoObraProps> = ({ onAdd }) => {
                     <div style={{ marginRight: '10px', width: '50%' }}>
                         <FormGroup>
                             <label htmlFor="fincas">Finca:</label>
-                            <select className="custom-select input-styled" id="fincas" value={selectedFinca} onChange={handleFincaChange}>
+                            <select className={errors.finca ? 'input-styled input-error' : 'input-styled'} id="fincas" 
+                            style={{ fontSize: '16px', padding: '10px', width: '100%' }}
+                            value={selectedFinca} onChange={handleFincaChange}>
                                 <option key="default-finca" value="">Seleccione...</option>
                                 {filteredFincas.map((finca) => (
                                     <option key={`${finca.idFinca}-${finca.nombre || 'undefined'}`} value={finca.idFinca}>{finca.nombre || 'Undefined'}</option>
@@ -239,7 +252,24 @@ const CrearManoObra: React.FC<CrearManoObraProps> = ({ onAdd }) => {
 
                 </div>
                 <div className="row" style={{ display: "flex", flexDirection: 'row', width: '100%' }}>
-                    <div className="col-sm-4" style={{ width: '100%' }}>
+                    <div className="col-sm-4" style={{ marginRight: "10px", width: '50%' }}>
+                        <FormGroup row>
+                            <Label for="identificacion" sm={4} className="input-label">Identificación</Label>
+                            <Col sm={8}>
+                                <Input
+                                    type="text"
+                                    id="identificacion"
+                                    name="identificacion"
+                                    value={formData.identificacion}
+                                    onChange={handleInputChange}
+                                    className={errors.identificacion ? 'input-styled input-error' : 'input-styled'}
+                                    placeholder="Identificación"
+                                />
+                                <FormFeedback>{errors.identificacion}</FormFeedback>
+                            </Col>
+                        </FormGroup>
+                    </div>
+                    <div className="col-sm-4" style={{ width: '50%' }}>
                         <FormGroup row>
                             <Label for="trabajador" sm={4} className="input-label">Trabajador</Label>
                             <Col sm={8}>
@@ -259,7 +289,7 @@ const CrearManoObra: React.FC<CrearManoObraProps> = ({ onAdd }) => {
                 </div>
 
                 <div className="row" style={{ display: "flex", flexDirection: 'row', width: '100%' }}>
-                    <div style={{ marginRight: "10px", flex: 1 }}>
+                    <div style={{ marginRight: "10px", width: '50%' }}>
                         <FormGroup row>
                             <Label for="fecha" sm={4} className="input-label">Fecha</Label>
                             <Col sm={8}>

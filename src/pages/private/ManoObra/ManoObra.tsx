@@ -46,6 +46,7 @@ function ManoObra() {
         actividad: '',
         fecha: '',
         trabajador: '',
+        identificacion: '', 
         horasTrabajadas: 0,
         pagoPorHora: '',
         totalPago: '',
@@ -229,6 +230,7 @@ function ManoObra() {
                             fecha={selectedDatos.fecha}
                             actividad={selectedDatos.actividad}
                             trabajador={selectedDatos.trabajador}
+                            identificacion={selectedDatos.identificacion}
                             horasTrabajadas={selectedDatos.horasTrabajadas}
                             pagoPorHora={selectedDatos.pagoPorHora}
                             totalPago={selectedDatos.totalPago}
