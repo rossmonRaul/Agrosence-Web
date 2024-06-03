@@ -40,7 +40,6 @@ const RegistroSensores = lazy(() => import('./pages/private/RegistroSensores/Reg
 const OrdenCompra = lazy(() => import('./pages/private/OrdenCompra/OrdenCompra'));
 const EntradasYSalidas = lazy(() => import('./pages/private/EntradasYSalidas/EntradasYSalidas'));
 const ManoObra = lazy(() => import('./pages/private/ManoObra/ManoObra'));
-const FlujoCaja = lazy(() => import('./pages/private/FlujoCaja/FlujoCaja'));
 function App() {
   return (
     // Suspense para manejar la carga de componentes lazy
@@ -81,7 +80,6 @@ function App() {
               <Route path={PrivateRoutes.PUNTOMEDICION} element={<PuntoMedicion />} />
               <Route path={PrivateRoutes.SENSORES} element={<RegistroSensores />} />
               <Route path={PrivateRoutes.MANOOBRA} element={<ManoObra />} />
-              <Route path={PrivateRoutes.FLUJOCAJA} element={<FlujoCaja />} />
               <Route path={PrivateRoutes.ORDENCOMPRA} element={<OrdenCompra />} />
               <Route path={PrivateRoutes.ENTRADAYSALIDA} element={<EntradasYSalidas />} />
             </Route>
