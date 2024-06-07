@@ -1,3 +1,4 @@
+import ReportePlanilla from "../pages/private/ReportePlanilla/ReportePlanilla";
 
 
 export const PublicRoutes = {
@@ -36,4 +37,9 @@ export const PrivateRoutes = {
     ORDENCOMPRA: 'ordencompra',
     ENTRADAYSALIDA: 'entradasysalidas',
     MANOOBRA: 'manoobra',
+    REPORTEENTRADASYSALIDAS: 'reporteentradasysalidas',
+    REPORTESALIDAS: 'reportesalidas',
+    REPORTEENTRADAS: 'reporteentradas',
+    REPORTEPLANILLA: 'reporteplanilla',
+    REPORTEORDENCOMPRA: 'reporteordendecompra',
 };

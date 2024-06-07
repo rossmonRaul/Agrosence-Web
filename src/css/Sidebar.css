@@ -85,7 +85,8 @@ main {
 }
 
 .sub-menu .link {
-    margin-left: 20px; /* Ajusta el margen izquierdo para mover los nuevos iconos un poco más a la derecha */
+    margin-left: 20px;
+    /* Ajusta el margen izquierdo para mover los nuevos iconos un poco más a la derecha */
 }
 
 /* Estilos para pantallas más pequeñas */
@@ -115,3 +116,24 @@ main {
         height: 100vh;
     }
 }
+
+/* Estilo para la barra de desplazamiento */
+.sidebar::-webkit-scrollbar {
+    width: 8px; /* Ancho de la barra de desplazamiento */
+  }
+  
+  /* Estilo para el riel de la barra de desplazamiento */
+  .sidebar::-webkit-scrollbar-track {
+    background-color: rgba(241, 241, 241, 0.8); /* Color de fondo del riel de la barra con transparencia */
+  }
+  
+  /* Estilo para el agarre de la barra de desplazamiento */
+  .sidebar::-webkit-scrollbar-thumb {
+    background-color: rgba(180, 180, 180, 0.6); /* Color del agarre de la barra con transparencia */
+    border-radius: 4px; /* Radio de borde del agarre */
+  }
+  
+  /* Estilo cuando el mouse está sobre la barra de desplazamiento */
+  .sidebar::-webkit-scrollbar-thumb:hover {
+    background-color: rgba(85, 85, 85, 0.8); /* Color del agarre de la barra al pasar el mouse con transparencia */
+  }

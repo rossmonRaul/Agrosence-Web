@@ -1,0 +1,116 @@
+.content {
+    width: 80%;
+}
+
+.form-control {
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    box-sizing: border-box;
+    
+}
+
+.btn-filtrar {
+    background-color: #548454;
+    color: white;
+    margin-top: 10px;
+    border-color: #548454;
+}
+
+.btn-exportar {
+    background-color: #548454;
+    color: white;
+    margin-top: 10px;
+    border-color: #548454;
+    margin-left: auto;
+}
+
+/* Estilos para el contenedor del filtro */
+.filtro-container {
+    margin-top: 20px;
+    /* Espacio entre el botón y el filtro */
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+
+.filtro-container label {
+    margin-right: 10px;
+    
+}
+
+/* Estilos para el input del filtro */
+.filtro-container input {
+    width: 25%;
+    
+    margin-top: 5px;
+   
+}
+
+.form-control,
+.form-select {
+
+    min-width: 180px;
+}
+.form-control {
+    display: block;
+    padding: 12px;
+    font-size: 1rem;
+    color: #495057;
+    background-color: #fff;
+    background-clip: padding-box;
+    border: 1px solid #ced4da;
+    border-radius: 0.25rem;
+    transition: border-color 0.15s ease-in-out, box-shadow 0.15s ease-in-out;
+    width: calc(100% - 1.5rem);
+}
+.form-select {
+    display: block;
+    padding: 12px;
+    font-size: 1rem;
+    color: #495057;
+    background-color: #fff;
+    background-clip: padding-box;
+    border: 1px solid #ced4da;
+    border-radius: 0.25rem;
+    transition: border-color 0.15s ease-in-out, box-shadow 0.15s ease-in-out;
+    margin-top: 5.7px;
+    width: calc(100% - 5rem);
+}
+
+.btn-filtrar, .btn-exportar {
+    margin-top: auto;
+}
+/* Media Queries para Responsividad */
+@media (max-width: 768px) {
+    .filtro-container {
+        justify-content: center;
+        /* Centra los elementos en pantallas más pequeñas */
+    }
+
+    .btn-exportar {
+        margin-left: 10px;
+        /* Quita margin-left: auto en pantallas pequeñas */
+    }
+}
+
+@media (max-width: 480px) {
+    .filtro-container {
+        flex-direction: column;
+        align-items: flex-start;
+    }
+
+    .form-control,
+    .btn-filtrar,
+    .btn-importar {
+        width: 100%;
+        margin-left: 0;
+        min-width: unset;
+        /* Resetea el min-width para pantallas pequeñas */
+    }
+
+    .btn-importar {
+        margin-top: 10px;
+        /* Asegura que el botón de importar tenga espacio arriba */
+    }
+}

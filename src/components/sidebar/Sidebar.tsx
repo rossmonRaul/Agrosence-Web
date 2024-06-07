@@ -145,6 +145,40 @@ const Sidebar = ({ children }: { children: React.ReactNode }) => {
             ]
         },
         {
+            path: "/menureporteria",
+            name: "Reportes",
+            icon: <img src='/reporte.png' style={{ width: '22px' }} />, // Puedes usar cualquier icono que desees aquí
+            roles: [2], // Especifica los roles que pueden ver esta opción
+            children: [
+                {
+                    path: "/reporteentradasysalidas",
+                    name: "Reporte de Entradas y Salidas",
+                    icon: <img src='/entradasalida.png' style={{ width: '22px' }} />,
+                },
+                {
+                    path: "/reporteentradas",
+                    name: "Reporte de entrada total",
+                    icon: <img src='/entrada.png' style={{ width: '22px' }} />,
+                },
+                {
+                    path: "/reportesalidas",
+                    name: "Reporte de salida total",
+                    icon: <img src='/salida.png' style={{ width: '30px' }} />,
+                },
+                {
+                    path: "/reporteordendecompra",
+                    name: "Reporte de orden de compra",
+                    icon: <img src='/orden-compra.png' style={{ width: '30px' }} />,
+                },
+                {
+                    path: "/reporteplanilla",
+                    name: "Reporte de planilla",
+                    icon: <img src='/mano-obra.png' style={{ width: '30px' }} />,
+                },
+
+            ]
+        },
+        {
             path: "/suelos",
             name: "Suelos",
             icon: <img src='/suelos.png' style={{ width: '22px' }} />, // Puedes usar cualquier icono que desees aquí
@@ -288,9 +322,9 @@ const Sidebar = ({ children }: { children: React.ReactNode }) => {
     const userState = useSelector((store: AppStore) => store.user);
 
     return (
-        <div style={{ marginLeft: isOpen ? "200px" : "70px" }} className="container">
+        <div style={{ marginLeft: isOpen ? "200px" : "83px" }} className="container">
 
-            <div style={{ width: isOpen ? "200px" : "70px" }} className="sidebar">
+            <div style={{ width: isOpen ? "200px" : "83px", overflowY: "auto", overflowX: "hidden"}} className="sidebar">
                 <div className="top-section">
                     <h1 style={{ display: isOpen ? "block" : "none" }} className="logo">Logo</h1>
                     <div style={{ marginLeft: isOpen ? "50px" : "0px" }} className="bars">

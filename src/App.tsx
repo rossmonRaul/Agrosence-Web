@@ -39,6 +39,11 @@ const PuntoMedicion = lazy(() => import('./pages/private/PuntoMedicion/PuntoMedi
 const RegistroSensores = lazy(() => import('./pages/private/RegistroSensores/RegistroSensores'));
 const OrdenCompra = lazy(() => import('./pages/private/OrdenCompra/OrdenCompra'));
 const EntradasYSalidas = lazy(() => import('./pages/private/EntradasYSalidas/EntradasYSalidas'));
+const ReporteEntradasYSalidas = lazy(() => import('./pages/private/ReporteEntradasySalidas/ReporteEntradasySalidas'));
+const ReporteEntradas = lazy(() => import('./pages/private/ReporteEntradas/ReporteEntradas'));
+const ReporteSalidas = lazy(() => import('./pages/private/ReporteSalidas/ReporteSalidas'));
+const ReportePlanilla = lazy(() => import('./pages/private/ReportePlanilla/ReportePlanilla'));
+const ReporteOrdenDeCompra = lazy(() => import('./pages/private/ReporteOrdenDeCompra/ReporteOrdenDeCompra'));
 const ManoObra = lazy(() => import('./pages/private/ManoObra/ManoObra'));
 function App() {
   return (
@@ -82,6 +87,11 @@ function App() {
               <Route path={PrivateRoutes.MANOOBRA} element={<ManoObra />} />
               <Route path={PrivateRoutes.ORDENCOMPRA} element={<OrdenCompra />} />
               <Route path={PrivateRoutes.ENTRADAYSALIDA} element={<EntradasYSalidas />} />
+              <Route path={PrivateRoutes.REPORTEENTRADASYSALIDAS} element={<ReporteEntradasYSalidas />} />
+              <Route path={PrivateRoutes.REPORTEENTRADAS} element={<ReporteEntradas />} />
+              <Route path={PrivateRoutes.REPORTESALIDAS} element={<ReporteSalidas />} />
+              <Route path={PrivateRoutes.REPORTEPLANILLA} element={<ReportePlanilla/>} />
+              <Route path={PrivateRoutes.REPORTEORDENCOMPRA} element={<ReporteOrdenDeCompra/>} />
             </Route>
             {/* Rutas accesibles solo para el rol de usuario asignado */}
             <Route element={<RolGuard rol={Roles.UsuarioAsignado} />}>
