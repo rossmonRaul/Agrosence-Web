@@ -1,7 +1,4 @@
-/**
- * Página para el manejo de la flujo de caja
- * Permite ver, filtrar y editar las flujo caja.
- */
+
 import { useEffect, useState } from "react";
 import Sidebar from "../../../components/sidebar/Sidebar"
 import '../../../css/Reportes.css'
@@ -16,9 +13,7 @@ import { IoDocumentTextSharp, IoFilter } from "react-icons/io5";
 
 
 
-/**
- * Componente funcional que representa la página de flujo de caja
- */
+
 function ReporteEntradas() {
 
     // Estado para almacenar todos los usuarios asignados
