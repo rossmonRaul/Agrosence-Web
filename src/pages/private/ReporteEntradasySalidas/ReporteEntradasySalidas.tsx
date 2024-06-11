@@ -125,7 +125,7 @@ function ReporteEntradasYSalidas() {
                     gastoTotal += item.montoGasto;
                     ingresoTotal += item.montoIngreso;
                 });
-                console.log(datos);
+                
                 balanceTotal = ingresoTotal - gastoTotal;
 
 

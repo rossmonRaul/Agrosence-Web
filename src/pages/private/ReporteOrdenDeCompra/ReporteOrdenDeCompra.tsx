@@ -124,11 +124,23 @@ const exportToExcel = () => {
                     gastoTotal += item.total;
                 });
 
+                // Función para formatear números
+                const formatearNumero = (numero: number) => {
+                    return numero.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
+                }
+
+                // Crear nueva lista de datos con los totales formateados
+                const datosConFormato = datos.map((item: any) => ({
+                    ...item,
+                    montoGastoFormateado: formatearNumero(item.total),
+                    
+                }));
+
                 // Actualizar estado con los totales calculados
-                setMontoGasto(gastoTotal.toString());
+                setMontoGasto(formatearNumero(gastoTotal));
 
                 // Actualizar datos de la tabla
-                setApiData(datos);
+                setApiData(datosConFormato);
             }
 
         } catch (error) {
@@ -170,7 +182,7 @@ const exportToExcel = () => {
         { key: 'fechaEntrega', header: 'Fecha Entrega' },
         { key: 'observaciones', header: 'Observaciones' },
         { key: 'proveedor', header: 'Proveedor' },
-        { key: 'total', header: 'Monto Gasto' },
+        { key: 'montoGastoFormateado', header: 'Monto Gasto' },
     ];
 
     return (
@@ -224,7 +236,7 @@ const exportToExcel = () => {
                         }
                     </div>
                     {apiData.length > 0 &&
-                        <TableResponsive columns={columns} data={apiData} totales={[parseInt(montoGasto)]} />
+                        <TableResponsive columns={columns} data={apiData} totales={[montoGasto]} />
 
                     }
                 </div>

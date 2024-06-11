@@ -117,19 +117,30 @@ function ReportePlanilla() {
             console.log(formData);
             if (idEmpresa) {
                 const datos = await ObtenerReportePlanilla(formData);
-                console.log(datos);
+                
                 // Calcular totales desde los datos obtenidos
                 let pagoTotal = 0;
 
                 datos.forEach((item: any) => {
                     pagoTotal += item.totalPago;
                 });
+                // Función para formatear números
+                const formatearNumero = (numero: number) => {
+                    return numero.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
+                }
+
+                // Crear nueva lista de datos con los totales formateados
+                const datosConFormato = datos.map((item: any) => ({
+                    ...item,
+                    totalPagoFormateado: formatearNumero(item.totalPago),
+                    
+                }));
 
                 // Actualizar estado con los totales calculados
-                setMontoTotal(pagoTotal.toString());
+                setMontoTotal(formatearNumero(pagoTotal));
 
                 // Actualizar datos de la tabla
-                setApiData(datos);
+                setApiData(datosConFormato);
             }
 
         } catch (error) {
@@ -172,7 +183,7 @@ function ReportePlanilla() {
         { key: 'actividad', header: 'Actividad' },
         { key: 'horasTrabajadas', header: 'Horas Trabajadas' },
         { key: 'pagoPorHora', header: 'Pago por Hora' },
-        { key: 'totalPago', header: 'Total Pago' },
+        { key: 'totalPagoFormateado', header: 'Total Pago' },
     ];
 
     return (
@@ -226,7 +237,7 @@ function ReportePlanilla() {
                         }
                     </div>
                     {apiData.length > 0 &&
-                        <TableResponsive columns={columns} data={apiData} totales={[parseInt(montoTotal)]} />
+                        <TableResponsive columns={columns} data={apiData} totales={[montoTotal]} />
 
                     }
                 </div>

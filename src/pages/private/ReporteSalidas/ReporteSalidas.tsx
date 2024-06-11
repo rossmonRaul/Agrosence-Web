@@ -120,7 +120,7 @@ function ReporteEntradas() {
             
             if (idEmpresa) {
                 const datos = await ObtenerReporteSalidaTotal(formData);
-                console.log(datos);
+                
                 // Calcular totales desde los datos obtenidos
                 let gastoTotal = 0;
 
@@ -128,11 +128,23 @@ function ReporteEntradas() {
                     gastoTotal += item.montoGasto;
                 });
 
+                // Función para formatear números
+                const formatearNumero = (numero: number) => {
+                    return numero.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
+                }
+
+                // Crear nueva lista de datos con los totales formateados
+                const datosConFormato = datos.map((item: any) => ({
+                    ...item,
+                    montoGastoFormateado: formatearNumero(item.montoGasto),
+                    
+                }));
+
                 // Actualizar estado con los totales calculados
-                setMontoGasto(gastoTotal.toString());
+                setMontoGasto(formatearNumero(gastoTotal));
 
                 // Actualizar datos de la tabla
-                setApiData(datos);
+                setApiData(datosConFormato);
             }
 
         } catch (error) {
@@ -226,7 +238,7 @@ function ReporteEntradas() {
                         }
                     </div>
                     {apiData.length > 0 &&
-                        <TableResponsive columns={columns} data={apiData} totales={[parseInt(montoGasto)]} />
+                        <TableResponsive columns={columns} data={apiData} totales={[montoGasto]} />
 
                     }
                 </div>

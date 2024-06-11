@@ -116,7 +116,7 @@ function ReporteEntradas() {
             
             if (idEmpresa) {
                 const datos = await ObtenerReporteEntradaTotal(formData);
-                console.log(datos);
+                
                 // Calcular totales desde los datos obtenidos
                 let gastoTotal = 0;
                 let ingresoTotal = 0;
@@ -126,11 +126,23 @@ function ReporteEntradas() {
                     ingresoTotal += item.montoIngreso;
                 });
 
+                // Función para formatear números
+                const formatearNumero = (numero: number) => {
+                    return numero.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
+                }
+
+                // Crear nueva lista de datos con los totales formateados
+                const datosConFormato = datos.map((item: any) => ({
+                    ...item,
+                    montoIngresoFormateado: formatearNumero(item.montoIngreso),
+                    
+                }));
+
                 // Actualizar estado con los totales calculados
-                setMontoIngreso(ingresoTotal.toString());
+                setMontoIngreso(formatearNumero(ingresoTotal));
 
                 // Actualizar datos de la tabla
-                setApiData(datos);
+                setApiData(datosConFormato);
             }
 
         } catch (error) {
@@ -170,7 +182,7 @@ function ReporteEntradas() {
         { key: 'fecha', header: 'Fecha' },
         { key: 'detallesCompraVenta', header: 'Detalles' },
         { key: 'tipo', header: 'Tipo' },
-        { key: 'montoIngreso', header: 'Monto Ingreso' },
+        { key: 'montoIngresoFormateado', header: 'Monto Ingreso' },
     ];
 
     return (
@@ -224,7 +236,7 @@ function ReporteEntradas() {
                         }
                     </div>
                     {apiData.length > 0 &&
-                        <TableResponsive columns={columns} data={apiData} totales={[parseInt(montoIngreso)]} />
+                        <TableResponsive columns={columns} data={apiData} totales={[montoIngreso]} />
 
                     }
                 </div>
