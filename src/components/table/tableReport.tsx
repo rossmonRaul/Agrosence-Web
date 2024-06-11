@@ -19,7 +19,7 @@ interface TableProps {
   columns: Column[];
   data: TableRow[];
   itemsPerPage?: number;
-  totales: number[];
+  totales: string[];
 }
 
 const TableResponsive: React.FC<TableProps> = ({ columns, data, itemsPerPage: defaultItemsPerPage = 5, totales }) => {

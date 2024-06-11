@@ -129,13 +129,26 @@ function ReporteEntradasYSalidas() {
                 balanceTotal = ingresoTotal - gastoTotal;
 
 
+                // Función para formatear números
+                const formatearNumero = (numero: number) => {
+                    return numero.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
+                }
+
+                // Crear nueva lista de datos con los totales formateados
+                const datosConFormato = datos.map((item: any) => ({
+                    ...item,
+                    montoGastoFormateado: formatearNumero(item.montoGasto),
+                    montoIngresoFormateado: formatearNumero(item.montoIngreso),
+                    balanceFormateado: formatearNumero(item.balance)
+                }));
+
                 // Actualizar estado con los totales calculados
-                setMontoGasto(gastoTotal.toString());
-                setMontoIngreso(ingresoTotal.toString());
-                setMontoBalance(balanceTotal.toString());
+                setMontoGasto(formatearNumero(gastoTotal));
+                setMontoIngreso(formatearNumero(ingresoTotal));
+                setMontoBalance(formatearNumero(balanceTotal));
 
                 // Actualizar datos de la tabla
-                setApiData(datos);
+                setApiData(datosConFormato);
             }
 
         } catch (error) {
@@ -175,9 +188,9 @@ function ReporteEntradasYSalidas() {
         { key: 'fecha', header: 'Fecha' },
         { key: 'detallesCompraVenta', header: 'Detalles' },
         { key: 'tipo', header: 'Tipo' },
-        { key: 'montoIngreso', header: 'Monto Ingreso' },
-        { key: 'montoGasto', header: 'MontoGasto' },
-        { key: 'balance', header: 'Balance' },
+        { key: 'montoIngresoFormateado', header: 'Monto Ingreso' },
+        { key: 'montoGastoFormateado', header: 'MontoGasto' },
+        { key: 'balanceFormateado', header: 'Balance' },
     ];
 
     return (
@@ -217,8 +230,8 @@ function ReporteEntradasYSalidas() {
                                 className="form-control"
                             />
                         </div>
-                        <button onClick={filtrarDatos} className="btn-filtrar"  style={{ display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
-                            <IoFilter size={27}/>
+                        <button onClick={filtrarDatos} className="btn-filtrar" style={{ display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
+                            <IoFilter size={27} />
                             <span style={{ marginLeft: '5px' }}>Filtrar</span>
                         </button>
                         {apiData.length > 0 &&
@@ -231,7 +244,7 @@ function ReporteEntradasYSalidas() {
                         }
                     </div>
                     {apiData.length > 0 &&
-                        <TableResponsive columns={columns} data={apiData} totales={[parseInt(montoIngreso), parseInt(montoGasto), parseInt(montoBalance)]} />
+                        <TableResponsive columns={columns} data={apiData} totales={[montoIngreso, montoGasto, montoBalance]} />
                     }
 
                 </div>
