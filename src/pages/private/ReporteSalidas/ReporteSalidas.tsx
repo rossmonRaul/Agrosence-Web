@@ -184,7 +184,7 @@ function ReporteEntradas() {
         { key: 'fecha', header: 'Fecha' },
         { key: 'detallesCompraVenta', header: 'Detalles' },
         { key: 'tipo', header: 'Tipo' },
-        { key: 'montoGasto', header: 'Monto Gasto' },
+        { key: 'montoGastoFormateado', header: 'Monto Gasto' },
     ];
 
     return (
