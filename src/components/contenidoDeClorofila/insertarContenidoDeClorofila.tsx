@@ -34,8 +34,6 @@ const InsertarContenidoDeClorofila: React.FC<InsertarContenidoDeClorofilaProps> 
         fecha: '',
         valorDeClorofila: '',
         idPuntoMedicion: '',
-        temperatura: '',
-        humedad: '',
         observaciones: '',
         usuarioCreacionModificacion: ''
     });
@@ -115,7 +113,7 @@ const InsertarContenidoDeClorofila: React.FC<InsertarContenidoDeClorofilaProps> 
         obtenerParcelasDeFinca(value)
     };
 
-    const  handleParcelaChange = async (e: React.ChangeEvent<HTMLSelectElement>) => {
+    const handleParcelaChange = async (e: React.ChangeEvent<HTMLSelectElement>) => {
         const value = e.target.value;
         setSelectedParcela(value);
 
@@ -171,9 +169,17 @@ const InsertarContenidoDeClorofila: React.FC<InsertarContenidoDeClorofilaProps> 
         }
 
         if (!formData.valorDeClorofila) {
-            newErrors.valorDeClorofila = 'El valor de clorofila es requerido';
+            newErrors.valorDeClorofila   = 'El valor de clorofila es requerido';
+        } else if (parseInt(formData.valorDeClorofila) < 0) {
+            newErrors.valorDeClorofila = 'El valor de clorofila no puede ser menor a 0';
         } else {
             newErrors.valorDeClorofila = '';
+        }
+
+        if (!selectedPuntoMedicion) {
+            newErrors.puntoMedicion = 'Debe seleccionar un punto de medición';
+        } else {
+            newErrors.puntoMedicion = '';
         }
 
         if (!formData.observaciones.trim()) {
@@ -203,13 +209,15 @@ const InsertarContenidoDeClorofila: React.FC<InsertarContenidoDeClorofilaProps> 
 
         console.log('formData')
         console.log(formData)
-        console.log('formData') 
+        console.log('formData')
 
         setErrors(newErrors);
 
         console.log('newErrors')
         console.log(newErrors)
         console.log('newErrors')
+
+
         if (Object.values(newErrors).every(error => error === '')) {
             try {
                 formData.idFinca = selectedFinca;
@@ -226,7 +234,7 @@ const InsertarContenidoDeClorofila: React.FC<InsertarContenidoDeClorofilaProps> 
 
                 console.log('formData')
                 console.log(formData)
-                console.log('formData') 
+                console.log('formData')
 
 
                 const resultado = await InsertarRegistroContenidoDeClorofila(formData);

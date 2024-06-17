@@ -316,18 +316,29 @@ const Sidebar = ({ children }: { children: React.ReactNode }) => {
                 }
             ]
         },
+ 
         {
-            path: "/contenidodeclorofila",
-            name: "Contenido de Clorofila",
-            icon: <FaChartBar />,
-            roles: [3]
+            path: "/agriculturadeprecision",
+            name: "Agricultura de precisión",
+            icon: <img src='/agricultura-precision.png' style={{ width: '22px' }} />, // Puedes usar cualquier icono que desees aquí
+            roles: [3], // Especifica los roles que pueden ver esta opción
+            children: [
+                {
+                    path: "/contenidodeclorofila",
+                    name: "Contenido de Clorofila",
+                    icon: <img src='/clorofila.png' style={{ width: '22px' }} />,
+                    roles: [3]
+                },
+                {
+                    path: "/saludplanta",
+                    name: "Salud de la Planta",
+                    icon: <img src='/salud-planta.png' style={{ width: '22px' }} />,
+                    roles: [3]
+                }
+            ]
         },
-        {
-            path: "/saludplanta",
-            name: "Salud de la Planta",
-            icon: <FaChartBar />,
-            roles: [3]
-        }
+
+
     ];
 
     // Obtener el estado del usuario del almacenamiento Redux

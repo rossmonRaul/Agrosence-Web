@@ -151,7 +151,7 @@ function RiesgoNatural() {
                         Swal.fire({
                             icon: 'success',
                             title: '¡Eliminacion exitosa! ',
-                            text: 'Se puedo eliminar la salud de la planta.',
+                            text: 'Se eliminó el registro salud de la planta.',
                         });
                     } else {
                         Swal.fire({

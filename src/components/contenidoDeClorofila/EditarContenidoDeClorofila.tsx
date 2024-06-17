@@ -71,6 +71,7 @@ const ModificacionContenidoDeClorofila: React.FC<ContenidoDeClorofilaSeleccionad
         cultivo: '',
         fecha: '',
         valorDeClorofila: 0,
+        idPuntoMedicion: 0,
         temperatura: 0,
         humedad: 0,
         observaciones: '',
@@ -181,13 +182,6 @@ const ModificacionContenidoDeClorofila: React.FC<ContenidoDeClorofilaSeleccionad
             idFinca: selectedFinca,
             idParcela: value
         }
-        console.log('fincaParcela')
-        console.log(fincaParcela)
-        console.log('fincaParcela')
-
-        console.log('value')
-        console.log(value)
-        console.log('value')
         
         setpuntosMedicion([]);
         setSelectedPuntoMedicion('');
@@ -195,9 +189,6 @@ const ModificacionContenidoDeClorofila: React.FC<ContenidoDeClorofilaSeleccionad
             const puntosMedicion = await ObtenerPuntoMedicionFincaParcela(fincaParcela);
             setpuntosMedicion(puntosMedicion)
         }
-        console.log('puntosMedicion')
-        console.log(puntosMedicion)
-        console.log('puntosMedicion')
         
     };
 
@@ -297,6 +288,7 @@ const ModificacionContenidoDeClorofila: React.FC<ContenidoDeClorofilaSeleccionad
             cultivo: formData.cultivo,
             fecha: formData.fecha,
             valorDeClorofila: formData.valorDeClorofila,
+            idPuntoMedicion: selectedPuntoMedicion,
             temperatura: formData.temperatura,
             humedad: formData.humedad,
             observaciones: formData.observaciones,

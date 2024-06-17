@@ -156,7 +156,7 @@ const CrearSaludDeLaPlanta: React.FC<CrearSaludDeLaPlantaProps> = ({ onAdd }) =>
             ...prevState,
             [name]: value
         }));
-    };
+    }; 
 
     useEffect(() => {
         const obtenerDatosUsuario = async () => {

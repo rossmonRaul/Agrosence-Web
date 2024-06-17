@@ -36,7 +36,7 @@ import { ObtenerUsuariosAsignados, ObtenerUsuariosAsignadosPorIdentificacion } f
 // }
 
 
-function AdministrarPuntoMedicion() {
+function AdministrarContenidoDeClorofila() {
     const [filtroNombre, setFiltroNombre] = useState('');
     const [modalEditar, setModalEditar] = useState(false);
     const [modalInsertar, setModalInsertar] = useState(false);
@@ -62,7 +62,7 @@ function AdministrarPuntoMedicion() {
 
     ///////////////////////////////////////////////
 
-    const [selectedFinca, setSelectedFinca] = useState<string>('');
+    const [selectedFinca, setSelectedFinca] = useState<number | null>(null);
     const [fincas, setFincas] = useState<any[]>([]);
 
     /////////////////////////////////////
@@ -71,7 +71,7 @@ function AdministrarPuntoMedicion() {
 
 
     const handleFincaChange = async (e: React.ChangeEvent<HTMLSelectElement>) => {
-        const value = e.target.value;
+        const value = parseInt(e.target.value);
         setSelectedFinca(value);
         setSelectedParcela(null);
     };
@@ -104,10 +104,6 @@ function AdministrarPuntoMedicion() {
                     //se filtran las parcelas con los idparcelasusuario
                     const parcelasUsuario = parcelasResponse.filter((parcela: any) => idParcelasUsuario.includes(parcela.idParcela));
 
-                    console.log('parcelasUsuario')
-                    console.log(parcelasUsuario)
-                    console.log('parcelasUsuario')
-                    
                     setParcelas(parcelasUsuario)
                 } else {
                     console.error('La identificación y/o el ID de la empresa no están disponibles en el localStorage.');
@@ -119,37 +115,47 @@ function AdministrarPuntoMedicion() {
         obtenerFincas();
     }, []);
 
+    
     const handleChangeFiltro = (e: React.ChangeEvent<HTMLInputElement>) => {
-        const { value } = e.target;
-        setFiltroNombre(value);
+        setFiltroNombre(e.target.value);
     };
 
 
     // Obtener parcelas cuando cambie la finca seleccionada
     useEffect(() => {
         obtenerRegistroContenidoDeClorofila();
-    }, [selectedFinca]);
+    }, [selectedParcela]);
+
+
 
     // Filtrar parcelas cuando cambien la finca seleccionada, las parcelas o el filtro por nombre
     useEffect(() => {
         filtrarParcelas();
     }, [selectedFinca, contenidoDeClorofila, filtroNombre]);
 
+
+
+
     // Función para filtrar las parcelas
     const filtrarParcelas = () => {
-        let contenidoDeClorofilaFiltradosPorFinca = selectedFinca
-            ? contenidoDeClorofila.filter(contenidoDeClorofila => contenidoDeClorofila.idFinca === parseInt(selectedFinca))
-            : contenidoDeClorofila
 
-        // Filtrar por nombre si hay un filtro aplicado
-        if (filtroNombre.trim() !== '') {
-            contenidoDeClorofilaFiltradosPorFinca = contenidoDeClorofilaFiltradosPorFinca.filter(contenidoDeClorofila =>
-                contenidoDeClorofila.cultivo.toLowerCase().includes(filtroNombre.toLowerCase()) ||
-                contenidoDeClorofila.codigo.toLowerCase().includes(filtroNombre.toLowerCase())
-            );
-        }
-        setContenidoDeClorofilaFiltrados(contenidoDeClorofilaFiltradosPorFinca);
+        const ContenidoClorofilaFiltrado = filtroNombre
+
+        
+
+
+        ? contenidoDeClorofila.filter((contenidoDeClorofila: any) =>
+            contenidoDeClorofila.cultivo.toLowerCase().includes(filtroNombre.toLowerCase()) ||
+            contenidoDeClorofila.codigo.toLowerCase().includes(filtroNombre.toLowerCase())
+        )
+        : contenidoDeClorofila;
+
+        setContenidoDeClorofilaFiltrados(ContenidoClorofilaFiltrado);
     };
+
+
+
+
 
     useEffect(() => {
         const obtenerParcelasDeFinca = async () => {
@@ -187,11 +193,6 @@ function AdministrarPuntoMedicion() {
                 // devuelve las parcelas del usuario
                 // const parcelasUsuarioActual = datosUsuarios.filter((usuario: any) => usuario.identificacion === idUsuario).map((usuario: any) => usuario.idParcela);
 
-                // Filtrar las manejo de riesgo de  de las parcelas del usuario actual
-                console.log('contenidoDeClorofilaResponse, antes del filtro')
-                console.log(contenidoDeClorofilaResponse)
-                console.log('contenidoDeClorofilaResponse')
-
                 const contenidoDeClorofilaConEstado = contenidoDeClorofilaResponse.map((datoContenidoDeClorofila: any) => ({
                     ...datoContenidoDeClorofila,
                     sEstado: datoContenidoDeClorofila.estado === 1 ? 'Activo' : 'Inactivo'
@@ -199,15 +200,12 @@ function AdministrarPuntoMedicion() {
 
                 const contenidoDeClorofilaFiltrados = contenidoDeClorofilaConEstado.filter((contenidoDeClorofila: any) => {
 
-                    console.log('contenidoDeClorofila despues del filtro')
-                    console.log(contenidoDeClorofila)
-                    console.log('contenidoDeClorofila')
 
                     return contenidoDeClorofila.idFinca === selectedFinca && contenidoDeClorofila.idParcela === selectedParcela;
 
                 });
 
-                // setContenidoDeClorofila(contenidoDeClorofilaFiltradas);
+                setContenidoDeClorofila(contenidoDeClorofilaFiltrados);
                 setContenidoDeClorofilaFiltrados(contenidoDeClorofilaFiltrados);
             }
         } catch (error) {
@@ -257,9 +255,7 @@ function AdministrarPuntoMedicion() {
                     const datos = {
                         IdContenidoDeClorofila: contenidoDeClorofila.idContenidoDeClorofila,
                     };
-                    console.log('datos')
-                    console.log(datos)
-                    console.log('datos')
+                    
                     const resultado = await CambiarEstadoRegistroContenidoDeClorofila(datos);
                     if (parseInt(resultado.indicador) === 1) {
                         Swal.fire({
@@ -374,4 +370,4 @@ function AdministrarPuntoMedicion() {
     );
 }
 
-export default AdministrarPuntoMedicion;
+export default AdministrarContenidoDeClorofila;
