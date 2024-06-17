@@ -273,13 +273,6 @@ const CrearSaludDeLaPlanta: React.FC<CrearSaludDeLaPlantaProps> = ({ onAdd }) =>
             newErrors.fecha = 'La fecha es obligatoria';
         }
 
-
-        if (!formData.cultivo.trim()) {
-            newErrors.riesgoNatural = 'El Riesgo Natural es obligatorio';
-        } else {
-            newErrors.riesgoNatural = '';
-        }
-
         if (!formData.cultivo.trim()) {
             newErrors.cultivo = 'El cultivo es obligatorio';
         } else if (formData.cultivo.length > 50) {
@@ -289,27 +282,27 @@ const CrearSaludDeLaPlanta: React.FC<CrearSaludDeLaPlantaProps> = ({ onAdd }) =>
         }
 
         if (!formData.idColorHojas.trim()) {
-            newErrors.riesgoNatural = 'El Riesgo Natural es obligatorio';
+            newErrors.idColorHojas = 'El color de hojas es obligatorio';
         } else {
-            newErrors.riesgoNatural = '';
+            newErrors.idColorHojas = '';
         }
 
         if (!formData.idTamanoFormaHoja) {
-            newErrors.practicaPreventiva = 'La Practica Preventiva es obligatoria';
+            newErrors.idTamanoFormaHoja = 'El tamaño de la forma de la hoja es obligatorio';
         } else {
-            newErrors.practicaPreventiva = '';
+            newErrors.idTamanoFormaHoja = '';
         }
 
         if (!formData.idEstadoTallo.trim()) {
-            newErrors.resultadoPractica = 'El Resultado Practica es obligatorio';
+            newErrors.idEstadoTallo = 'El estado del tallo es obligatorio';
         } else {
-            newErrors.resultadoPractica = '';
+            newErrors.idEstadoTallo = '';
         }
 
         if (!formData.idEstadoRaiz.trim()) {
-            newErrors.resultadoPractica = 'El Resultado Practica es obligatorio';
+            newErrors.idEstadoRaiz = 'El estado de la raíz es obligatorio';
         } else {
-            newErrors.resultadoPractica = '';
+            newErrors.idEstadoRaiz = '';
         }
 
         const fechaParts = formData.fecha.split("/");

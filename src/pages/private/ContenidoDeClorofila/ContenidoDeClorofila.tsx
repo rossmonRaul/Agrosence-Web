@@ -7,6 +7,7 @@ import Topbar from "../../../components/topbar/Topbar.tsx";
 import { ObtenerParcelas } from "../../../servicios/ServicioParcelas.ts";
 import Swal from "sweetalert2";
 import { ObtenerFincas } from "../../../servicios/ServicioFincas.ts";
+import TableResponsiveDetalles from "../../../components/table/tableDetails.tsx";
 //import { ObtenerManejoFertilizantes, CambiarEstadoManejoFertilizantes } from "../../../servicios/ServicioFertilizantes.ts";
 
 
@@ -224,8 +225,8 @@ function AdministrarContenidoDeClorofila() {
     };
 
     // Abrir modal de edición
-    const openModal = (puntomedicion: any) => {
-        setSelectedDatos(puntomedicion);
+    const openModal = (contenidoDeClorofila: any) => {
+        setSelectedDatos(contenidoDeClorofila);
         abrirCerrarModalEditar();
     };
 
@@ -351,7 +352,7 @@ function AdministrarContenidoDeClorofila() {
                 onCancel={abrirCerrarModalEditar}
             >
                 <div className='form-container'>
-                    <div className='    -group'>
+                    <div className='form-group'>
                         <EditarContenidoDeClorofila
                             idFinca={selectedDatos.idFinca}
                             idParcela={selectedDatos.idParcela}
