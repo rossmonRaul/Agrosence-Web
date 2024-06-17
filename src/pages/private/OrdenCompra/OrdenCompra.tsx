@@ -10,7 +10,7 @@ import '../../../css/OrdenCompra.css'
 import TableResponsive from "../../../components/table/tableDelete.tsx";
 import BordeSuperior from "../../../components/bordesuperior/BordeSuperior.tsx";
 import Modal from "../../../components/modal/Modal.tsx"
-import Swal from "sweetalert2";
+import Swal from "sweetalert2"; 
 import Topbar from "../../../components/topbar/Topbar.tsx";
 import CrearOrdenCompra from "../../../components/ordenCompra/InsertarOrdenCompra.tsx";
 import { saveAs } from 'file-saver';
@@ -247,6 +247,7 @@ function OrdenCompra() {
     // Columnas de la tabla
     const columns = [
         { key: 'numeroDeOrden', header: 'Numero de orden' },
+        { key: 'finca', header: 'Finca' },
         { key: 'fechaOrden', header: 'Fecha de Orden' },
         { key: 'fechaEntrega', header: 'Fecha de Entrega' },
         { key: 'observaciones', header: 'Observaciones' },
@@ -272,8 +273,8 @@ function OrdenCompra() {
                                 id="filtroIdentificacion"
                                 value={filtroInput}
                                 onChange={handleChangeFiltro}
-                                placeholder="Buscar"
-                                style={{ fontSize: '16px', padding: '10px' }}
+                                placeholder="Número de orden o finca"
+                                style={{ fontSize: '16px', padding: '10px', minWidth: '200px' }}
                                 className="form-control"
                             />
 

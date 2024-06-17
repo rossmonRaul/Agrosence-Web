@@ -315,6 +315,18 @@ const Sidebar = ({ children }: { children: React.ReactNode }) => {
                     name: "Blank Page",
                 }
             ]
+        },
+        {
+            path: "/contenidodeclorofila",
+            name: "Contenido de Clorofila",
+            icon: <FaChartBar />,
+            roles: [3]
+        },
+        {
+            path: "/saludplanta",
+            name: "Salud de la Planta",
+            icon: <FaChartBar />,
+            roles: [3]
         }
     ];
 
@@ -361,7 +373,7 @@ const Sidebar = ({ children }: { children: React.ReactNode }) => {
                             </div>
                         );
                     }
-                    return null; // Si el usuario no tiene permiso para ver el enlace, devolver null
+                    return null; 
                 })}
             </div>
             <main>{children}</main>

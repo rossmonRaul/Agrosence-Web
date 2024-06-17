@@ -39,7 +39,6 @@ function ProblemasPlagas() {
 
     const handleFincaChange = async (e: React.ChangeEvent<HTMLSelectElement>) => {
         const value = parseInt(e.target.value);
-
         setSelectedFinca(value);
         setSelectedParcela(null);
     };
@@ -113,6 +112,10 @@ function ProblemasPlagas() {
                 return dato.idFinca === selectedFinca && dato.idParcela === selectedParcela;
             });
 
+
+            console.log('datosFiltrados')
+            console.log(datosFiltrados)
+            console.log('datosFiltrados')
 
             setdatosProblemasFiltrados(datosFiltrados);
         } catch (error) {

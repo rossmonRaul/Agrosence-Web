@@ -189,6 +189,7 @@ function EntradasYSalidas() {
     // Columnas de la tabla
     const columns = [
         { key: 'fecha', header: 'Fecha' },
+        { key: 'finca', header: 'Finca' },
         { key: 'tipo', header: 'Tipo' },
         { key: 'detallesCompraVenta', header: 'Detalles' },
         { key: 'total', header: 'Total' },
@@ -255,8 +256,8 @@ function EntradasYSalidas() {
                                 id="filtroIdentificacion"
                                 value={filtroInput}
                                 onChange={handleChangeFiltro}
-                                placeholder="Buscar"
-                                style={{ fontSize: '16px', padding: '10px' }}
+                                placeholder="Finca, fecha o tipo"
+                                style={{ fontSize: '16px', padding: '10px', minWidth: '200px' }}
                                 className="form-control"
                             />
 

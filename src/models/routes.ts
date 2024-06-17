@@ -42,4 +42,6 @@ export const PrivateRoutes = {
     REPORTEENTRADAS: 'reporteentradas',
     REPORTEPLANILLA: 'reporteplanilla',
     REPORTEORDENCOMPRA: 'reporteordendecompra',
+    CONTENIDODECLOROFILA: "contenidodeclorofila",
+    SALUDPLANTA: "saludplanta",
 };

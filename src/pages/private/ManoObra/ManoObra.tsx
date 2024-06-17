@@ -183,6 +183,7 @@ function ManoObra() {
     // Columnas de la tabla
     const columns = [
         { key: 'fecha', header: 'Fecha' },
+        { key: 'finca', header: 'Finca' },
         { key: 'actividad', header: 'Actividad' },
         { key: 'trabajador', header: 'Trabajador' },
         { key: 'horasTrabajadas', header: 'Horas Trabajadas' },

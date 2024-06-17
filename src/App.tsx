@@ -45,6 +45,8 @@ const ReporteSalidas = lazy(() => import('./pages/private/ReporteSalidas/Reporte
 const ReportePlanilla = lazy(() => import('./pages/private/ReportePlanilla/ReportePlanilla'));
 const ReporteOrdenDeCompra = lazy(() => import('./pages/private/ReporteOrdenDeCompra/ReporteOrdenDeCompra'));
 const ManoObra = lazy(() => import('./pages/private/ManoObra/ManoObra'));
+const ContenidoDeClorofila = lazy(() => import('./pages/private/ContenidoDeClorofila/ContenidoDeClorofila'))
+const SaludPlanta = lazy(() => import('./pages/private/SaludPlanta/SaludPlanta'))
 function App() {
   return (
     // Suspense para manejar la carga de componentes lazy
@@ -110,7 +112,9 @@ function App() {
               
               <Route path={PrivateRoutes.PRONOSTICOMETEOROLOGICO} element={<PronosticoMeteorologico />} />
               <Route path={PrivateRoutes.CONDICIONESMETEOROLOGICASCLIMATICAS} element={<CondicionesMeteorologicasClimaticas />} />
-
+              <Route path={PrivateRoutes.CONTENIDODECLOROFILA} element={<ContenidoDeClorofila/>} />
+              <Route path={PrivateRoutes.SALUDPLANTA} element={<SaludPlanta/>} />
+              
             </Route>
           </RoutesWithNotFound>
         </BrowserRouter>

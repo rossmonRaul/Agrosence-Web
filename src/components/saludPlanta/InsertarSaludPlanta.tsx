@@ -8,9 +8,10 @@ import { ObtenerUsuariosAsignadosPorIdentificacion } from '../../servicios/Servi
 import '../../css/ManejoResiduos.css';
 import '../../css/DropZoneComponent.css';
 import { InsertarDocumentacionRiesgoNatural, InsertarRiesgoNatural } from '../../servicios/ServicioRiesgoNatural.ts';
+import { InsertarDocumentacionSaludDeLaPlanta, InsertarSaludDeLaPlanta } from '../../servicios/ServicioSaludPlanta.ts';
 
 
-interface CrearRiesgosNaturalesProps {
+interface CrearSaludDeLaPlantaProps {
     onAdd: () => void;
 }
 
@@ -25,7 +26,7 @@ interface Option {
 }
 
 
-const CrearRiesgosNaturales: React.FC<CrearRiesgosNaturalesProps> = ({ onAdd }) => {
+const CrearSaludDeLaPlanta: React.FC<CrearSaludDeLaPlantaProps> = ({ onAdd }) => {
 
     const [files, setFiles] = useState<File[]>([]);
 
@@ -33,9 +34,9 @@ const CrearRiesgosNaturales: React.FC<CrearRiesgosNaturalesProps> = ({ onAdd }) 
 
 
         const onDrop = useCallback((acceptedFiles: File[]) => {
-            
-            // Validar que no se exceda el límite de 5 archivos
-            if (files.length + acceptedFiles.length > 5) {
+
+            // Validar que no se exceda el límite de 3 archivos
+            if (files.length + acceptedFiles.length > 3) {
                 Swal.fire({
                     icon: 'error',
                     title: 'Error',
@@ -107,18 +108,17 @@ const CrearRiesgosNaturales: React.FC<CrearRiesgosNaturalesProps> = ({ onAdd }) 
         idFinca: '',
         idParcela: '',
         fecha: '',
-        riesgoNatural: '',
-        practicaPreventiva: '',
-        responsable: '',
-        resultadoPractica: '',
-        accionesCorrectivas: '',
-        observaciones: '',
+        cultivo: '',
+        idColorHojas: '',
+        idTamanoFormaHoja: '',
+        idEstadoTallo: '',
+        idEstadoRaiz: '',
         usuarioCreacionModificacion: ''
 
     });
 
     const [formDataDocument] = useState({
-        idRiesgoNatural: '',
+        idSaludDeLaPlanta: '',
         Documento: '',
         NombreDocumento: '',
         usuarioCreacionModificacion: ''
@@ -132,8 +132,13 @@ const CrearRiesgosNaturales: React.FC<CrearRiesgosNaturalesProps> = ({ onAdd }) 
     const [parcelasFiltradas, setParcelasFiltradas] = useState<Option[]>([]);
     const [selectedFinca, setSelectedFinca] = useState<string>('');
     const [selectedParcela, setSelectedParcela] = useState<string>('');
-    const [selectedRiesgo, setSelectedRiesgo] = useState<string>('');
-    const [selectedResultadoPractica, setSelectedResultadoPractica] = useState<string>('');
+
+    const [selectedColorHojas, setSelectedColorHojas] = useState<string>('');
+    const [selectedTamanoFormaHoja, setSelectedTamanoFormaHoja] = useState<string>('');
+    const [selectedEstadoTallo, setSelectedEstadoTallo] = useState<string>('');
+    const [selectedEstadoRaiz, setSelectedEstadoRaiz] = useState<string>('');
+
+
     const [step, setStep] = useState(1);
 
     const handleNextStep = () => {
@@ -220,18 +225,33 @@ const CrearRiesgosNaturales: React.FC<CrearRiesgosNaturalesProps> = ({ onAdd }) 
         formData.idParcela = value;
         setSelectedParcela(value);
     };
-
-    const handleRiesgoChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
+    //dropsdown customs
+    const handleColorHojasChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
         const value = e.target.value;
-        formData.riesgoNatural = value;
-        setSelectedRiesgo(value);
+        formData.idColorHojas = value;
+        setSelectedColorHojas(value);
     };
 
-    const handleResultadoPracticaChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
+    const handleTamanoFormaHojaChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
         const value = e.target.value;
-        formData.resultadoPractica = value;
-        setSelectedResultadoPractica(value);
+        formData.idTamanoFormaHoja = value;
+        setSelectedTamanoFormaHoja(value);
     };
+
+    //dropsdown customs
+    const handleEstadoTalloChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
+        const value = e.target.value;
+        formData.idEstadoTallo = value;
+        setSelectedEstadoTallo(value);
+    };
+
+    const handleEstadoRaizChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
+        const value = e.target.value;
+        formData.idEstadoRaiz = value;
+        setSelectedEstadoRaiz(value);
+    };
+
+    ///////
 
     const handleSubmit = async () => {
         // Realizar validación de campos antes de enviar el formulario
@@ -249,50 +269,47 @@ const CrearRiesgosNaturales: React.FC<CrearRiesgosNaturalesProps> = ({ onAdd }) 
             newErrors.parcela = '';
         }
 
-        if (!formData.riesgoNatural.trim()) {
+        if (!formData.fecha.trim()) {
+            newErrors.fecha = 'La fecha es obligatoria';
+        }
+
+
+        if (!formData.cultivo.trim()) {
             newErrors.riesgoNatural = 'El Riesgo Natural es obligatorio';
         } else {
             newErrors.riesgoNatural = '';
         }
 
-        if (!formData.fecha.trim()) {
-            newErrors.fecha = 'La fecha es obligatoria';
+        if (!formData.cultivo.trim()) {
+            newErrors.cultivo = 'El cultivo es obligatorio';
+        } else if (formData.cultivo.length > 50) {
+            newErrors.cultivo = 'El cultivo no puede ser mayor a 50 caracteres';
+        } else {
+            newErrors.cultivo = '';
         }
 
-        if (!formData.practicaPreventiva) {
+        if (!formData.idColorHojas.trim()) {
+            newErrors.riesgoNatural = 'El Riesgo Natural es obligatorio';
+        } else {
+            newErrors.riesgoNatural = '';
+        }
+
+        if (!formData.idTamanoFormaHoja) {
             newErrors.practicaPreventiva = 'La Practica Preventiva es obligatoria';
         } else {
             newErrors.practicaPreventiva = '';
         }
 
-        if (!formData.responsable.trim()) {
-            newErrors.responsable = 'El responsable es obligatoria';
-        } else if (formData.responsable.length > 100) {
-            newErrors.responsable = 'El responsable no pueden mas de 100 carateres';
-        } else {
-            newErrors.responsable = '';
-        }
-
-        if (!formData.resultadoPractica.trim()) {
+        if (!formData.idEstadoTallo.trim()) {
             newErrors.resultadoPractica = 'El Resultado Practica es obligatorio';
-        }else {
+        } else {
             newErrors.resultadoPractica = '';
         }
 
-        if (!formData.accionesCorrectivas.trim()) {
-            newErrors.accionesCorrectivas = 'Las Acciones Correctivas son obligatorias';
-        } else if (formData.accionesCorrectivas.length > 250) {
-            newErrors.accionesCorrectivas = 'Las Acciones Correctivas no pueden ser más de 250 carateres';
+        if (!formData.idEstadoRaiz.trim()) {
+            newErrors.resultadoPractica = 'El Resultado Practica es obligatorio';
         } else {
-            newErrors.accionesCorrectivas = '';
-        }
-
-        if (!formData.observaciones.trim()) {
-            newErrors.observaciones = 'Las Observaciones son obligatorias';
-        } else if (formData.observaciones.length > 250) {
-            newErrors.observaciones = 'Las Observaciones no puede ser mayor a 250 caracteres';
-        } else {
-            newErrors.observaciones = '';
+            newErrors.resultadoPractica = '';
         }
 
         const fechaParts = formData.fecha.split("/");
@@ -318,17 +335,22 @@ const CrearRiesgosNaturales: React.FC<CrearRiesgosNaturalesProps> = ({ onAdd }) 
 
                     formData.usuarioCreacionModificacion = idUsuario;
                     formDataDocument.usuarioCreacionModificacion = idUsuario
+
                 } else {
                     console.error('El valor de identificacionUsuario en localStorage es nulo.');
                 }
 
-                const resultado = await InsertarRiesgoNatural(formData);
+                console.log('formData')
+                console.log(formData)
+                console.log('formData')
+
+                const resultado = await InsertarSaludDeLaPlanta(formData);
 
                 let errorEnviandoArchivos = false; // Variable para rastrear si hubo un error al enviar archivos
 
                 if (resultado.indicador === 1) {
 
-                    formDataDocument.idRiesgoNatural = resultado.mensaje
+                    formDataDocument.idSaludDeLaPlanta = resultado.mensaje
 
                     for (let documento of files) {
                         const reader = new FileReader();
@@ -341,7 +363,7 @@ const CrearRiesgosNaturales: React.FC<CrearRiesgosNaturalesProps> = ({ onAdd }) 
                             formDataDocument.Documento = contenidoArchivo as string;
 
 
-                            const resultadoDocumento = await InsertarDocumentacionRiesgoNatural(formDataDocument)
+                            const resultadoDocumento = await InsertarDocumentacionSaludDeLaPlanta(formDataDocument)
 
                             if (resultadoDocumento.indicador !== 1) {
                                 errorEnviandoArchivos = true; // Marcar que hubo un error
@@ -361,7 +383,7 @@ const CrearRiesgosNaturales: React.FC<CrearRiesgosNaturalesProps> = ({ onAdd }) 
                         Swal.fire({
                             icon: 'success',
                             title: '¡Registro insertado!',
-                            text: 'Se ha insertado un registro de riesgos naturales'
+                            text: 'Se ha insertado un registro de salud de la planta'
                         });
                         if (onAdd) {
                             onAdd();
@@ -372,16 +394,16 @@ const CrearRiesgosNaturales: React.FC<CrearRiesgosNaturalesProps> = ({ onAdd }) 
                 } else {
                     Swal.fire({
                         icon: 'error',
-                        title: 'Error al insertar el registro de riesgos naturales',
+                        title: 'Error al insertar el registro de salud de la planta',
                         text: resultado.message
                     });
                 }
             } catch (error) {
-                console.error('Error al insertar el riesgo natural:', error);
+                console.error('Error al insertar la salud de la planta:', error);
                 Swal.fire({
                     icon: 'error',
-                    title: 'Error al insertar el riesgo natural',
-                    text: 'Ocurrió un error al intentar insertar el riesgo natural.'
+                    title: 'Error al insertar la salud de la planta',
+                    text: 'Ocurrió un error al intentar insertar la salud de la planta.'
                 });
             }
         }
@@ -391,7 +413,7 @@ const CrearRiesgosNaturales: React.FC<CrearRiesgosNaturalesProps> = ({ onAdd }) 
         <div id='general' style={{ display: 'flex', flexDirection: 'column', paddingBottom: '0rem', width: '90%', margin: '0 auto', minWidth: '650px' }}>
             {step === 1 && (
                 <div>
-                    <h2>Riesgos Naturales</h2>
+                    <h2>Salud de la Planta</h2>
                     <div className="form-container-fse" style={{ display: 'flex', flexDirection: 'row', width: '100%' }}>
                         <div style={{ marginRight: '10px', width: '50%' }}>
                             <FormGroup>
@@ -420,24 +442,7 @@ const CrearRiesgosNaturales: React.FC<CrearRiesgosNaturalesProps> = ({ onAdd }) 
                         </div>
                     </div>
 
-
                     <div className="row" style={{ display: "flex" }}>
-                        <div className="col-sm-4" style={{ marginRight: '10px', width: '50%' }}>
-                            <FormGroup row>
-                                <label htmlFor="riesgos">Riesgo Natural:</label>
-                                <select className="custom-select" id="riesgoNatural" value={selectedRiesgo} onChange={handleRiesgoChange}>
-                                    <option key="default-riesgos" value="">Seleccione...</option>
-                                    <option key="terremoto" value="Terremoto">Terremoto</option>
-                                    <option key="deslizamiento" value="Deslizamiento">Deslizamiento</option>
-                                    <option key="inundacion" value="Inundacion">Inundacion</option>
-                                    <option key="incendio" value="Incendio">Incendio</option>
-                                    <option key="sequia" value="Sequia">Sequía</option>
-                                    <option key="huracan" value="Huracan">Huracan</option>
-                                </select>
-                                {errors.riesgoNatural && <FormFeedback>{errors.riesgoNatural}</FormFeedback>}
-
-                            </FormGroup>
-                        </div>
                         <div className="row" style={{ display: "flex", flexDirection: 'row', width: '50%' }}>
                             <div style={{ flex: 1, marginRight: '0px' }}>
                                 <FormGroup row>
@@ -459,109 +464,92 @@ const CrearRiesgosNaturales: React.FC<CrearRiesgosNaturalesProps> = ({ onAdd }) 
 
 
                         </div>
-                    </div>
-
-                    <div className="row" style={{ display: "flex" }}>
-                        <div className="col-sm-4" style={{ marginRight: '0px', width: '100%' }}>
+                        <div style={{ flex: 1, marginRight: '0px' }}>
                             <FormGroup row>
-                                <Label for="practicaPreventiva" sm={4} className="input-label">Practica Preventiva</Label>
+                                <Label for="cultivo" sm={4} className="input-label">Cultivo</Label>
                                 <Col sm={8}>
                                     <Input
                                         type="text"
-                                        id="practicaPreventiva"
-                                        name="practicaPreventiva"
-                                        value={formData.practicaPreventiva}
+                                        id="cultivo"
+                                        name="cultivo"
+                                        value={formData.cultivo}
                                         onChange={handleInputChange}
-                                        className={errors.practicaPreventiva ? 'input-styled input-error' : 'input-styled'}
-                                        placeholder="Practica Preventiva"
+                                        className={errors.cultivo ? 'input-styled input-error' : 'input-styled'}
+                                        placeholder="Cultivo"
                                     />
-                                    <FormFeedback>{errors.practicaPreventiva}</FormFeedback>
+                                    <FormFeedback>{errors.cultivo}</FormFeedback>
                                 </Col>
                             </FormGroup>
+
+
                         </div>
 
                     </div>
 
-
                     <button onClick={handleNextStep} className="btn-styled">Siguiente</button>
                 </div>
             )}
+
             {step === 2 && (
                 <div>
                     <h2>Salud de la Planta</h2>
                     <div className="row" style={{ display: "flex" }}>
                         <div className="col-sm-4" style={{ marginRight: '10px', width: '50%' }}>
-                            <FormGroup row>
-                                <Label for="resultadoPractica" sm={4} className="input-label">Resultado Practica Preventiva</Label>
+                        <FormGroup row>
+                                <Label for="colorHojas" sm={4} className="input-label">Color de las hojas</Label>
 
-                                <select className="custom-select" id="resultadoPractica" value={selectedResultadoPractica} onChange={handleResultadoPracticaChange}>
+                                <select className="custom-select" id="colorHojas" value={selectedColorHojas} onChange={handleColorHojasChange}>
                                     <option key="default-resultado" value="">Seleccione...</option>
-                                    <option key="bueno" value="Bueno">Bueno</option>
-                                    <option key="regular" value="Regular">Regular</option>
-                                    <option key="incendio" value="Incendio">Malo</option>
+                                    <option key="1" value="1">Verde Saludable</option>
+                                    <option key="2" value="2">Amarillento (clorosis)</option>
+                                    <option key="3" value="3">Marrón o quemado</option>
+                                    <option key="4" value="4">Manchas (indicativas de enfermedades o plagas)</option>   
                                 </select>
-                                {errors.resultadoPractica && <FormFeedback>{errors.resultadoPractica}</FormFeedback>}
+                                {errors.idColorHojas && <FormFeedback>{errors.idColorHojas}</FormFeedback>}
                             </FormGroup>
                         </div>
                         <div className="row" style={{ display: "flex", flexDirection: 'row', width: '50%' }}>
                             <div style={{ flex: 1, marginRight: '0px' }}>
-                                <FormGroup row>
-                                    <Label for="responsable" sm={4} className="input-label">Responsable</Label>
-                                    <Col sm={8}>
-                                        <Input
-                                            type="text"
-                                            id="responsable"
-                                            name="responsable"
-                                            value={formData.responsable}
-                                            onChange={handleInputChange}
-                                            className={errors.responsable ? 'input-styled input-error' : 'input-styled'}
-                                            placeholder="Responsable"
-                                        />
-                                        <FormFeedback>{errors.fecha}</FormFeedback>
-                                    </Col>
-                                </FormGroup>
+                            <FormGroup row>
+                                <Label for="tamanoFormaHoja" sm={4} className="input-label">Tamaño y forma de las hojas</Label>
+
+                                <select className="custom-select" id="tamanoFormaHoja" value={selectedTamanoFormaHoja} onChange={handleTamanoFormaHojaChange}>
+                                    <option key="default-resultado" value="">Seleccione...</option>
+                                    <option key="1" value="1">Tamaño adecuado según la especie</option>
+                                    <option key="2" value="2">Deformaciones o irregularidades</option>
+                                </select>
+                                {errors.idTamanoFormaHoja && <FormFeedback>{errors.idTamanoFormaHoja}</FormFeedback>}
+                            </FormGroup>
                             </div>
 
 
                         </div>
                     </div>
                     <div className="col-sm-4" style={{ marginRight: "0px" }}>
-                        <FormGroup row>
-                            <Label for="accionesCorrectivas" sm={4} className="input-label">Acciones Correctivas</Label>
-                            <Col sm={8}>
-                                <Input
-                                    type="text"
-                                    id="accionesCorrectivas"
-                                    name="accionesCorrectivas"
-                                    value={formData.accionesCorrectivas}
-                                    onChange={handleInputChange}
-                                    className={errors.accionesCorrectivas ? 'input-styled input-error' : 'input-styled'}
-                                    style={{ minWidth: '350px' }}
-                                    placeholder="Acciones Corretivas"
-                                    maxLength={100}
-                                />
-                                <FormFeedback>{errors.accionesCorrectivas}</FormFeedback>
-                            </Col>
-                        </FormGroup>
+                    <FormGroup row>
+                                <Label for="estadoTallo" sm={4} className="input-label">Estado del tallo</Label>
+
+                                <select className="custom-select" id="estadoTallo" value={selectedEstadoTallo} onChange={handleEstadoTalloChange}>
+                                    <option key="default-resultado" value="">Seleccione...</option>
+                                    <option key="1" value="1">Fuerza y firmeza</option>
+                                    <option key="2" value="2">Presencia de hongos o enfermedades</option>
+                                    <option key="3" value="3">Lesiones o daños fisicos</option>
+                                </select>
+                                {errors.idEstadoTallo && <FormFeedback>{errors.idEstadoTallo}</FormFeedback>}
+                            </FormGroup>
                     </div>
                     <div className="col-sm-4" style={{ marginRight: "0px" }}>
-                        <FormGroup row>
-                            <Label for="observaciones" sm={4} className="input-label">Observaciones</Label>
-                            <Col sm={8}>
-                                <Input
-                                    type="textarea"
-                                    id="observaciones"
-                                    name="observaciones"
-                                    value={formData.observaciones}
-                                    onChange={handleInputChange}
-                                    className={errors.observaciones ? 'input-styled input-error' : 'input-styled'}
-                                    style={{ minWidth: '350px' }}
-                                    placeholder="Observaciones"
-                                    maxLength={2000}
-                                />
-                                <FormFeedback>{errors.observaciones}</FormFeedback>
-                            </Col>
-                        </FormGroup>
+                    <FormGroup row>
+                                <Label for="estadoRaiz" sm={4} className="input-label">Estado de las raíces</Label>
+
+                                <select className="custom-select" id="estadoRaiz" value={selectedEstadoRaiz} onChange={handleEstadoRaizChange}>
+                                    <option key="default-resultado" value="">Seleccione...</option>
+                                    <option key="1" value="1">Salud (blancas y firmes)</option>
+                                    <option key="2" value="2">Daños o pudrición</option>
+                                    <option key="3" value="3">Plagas o enfermedades</option>
+                                </select>
+                                {errors.idEstadoRaiz && <FormFeedback>{errors.idEstadoRaiz}</FormFeedback>}
+                            </FormGroup>
                     </div>
                     <button onClick={handlePreviousStep} className='btn-styled-danger'>Anterior</button>
                     <button onClick={handleNextStep} className="btn-styled">Siguiente</button>
@@ -570,7 +558,7 @@ const CrearRiesgosNaturales: React.FC<CrearRiesgosNaturalesProps> = ({ onAdd }) 
             )}
             {step === 3 && (
                 <div>
-                    <h2>Riesgos Naturales</h2>
+                    <h2>Salud de la Planta</h2>
 
                     <div className="row" style={{ display: "flex", marginTop: "10px" }}>
                         <div className="col-sm-4" style={{ marginRight: '0px', width: '100%' }}>
@@ -587,11 +575,10 @@ const CrearRiesgosNaturales: React.FC<CrearRiesgosNaturalesProps> = ({ onAdd }) 
                         </Col>
                     </FormGroup>
                 </div>
-
             )}
         </div>
     );
 
 };
 
-export default CrearRiesgosNaturales;
+export default CrearSaludDeLaPlanta;

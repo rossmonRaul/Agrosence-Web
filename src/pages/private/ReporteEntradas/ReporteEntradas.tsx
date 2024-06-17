@@ -10,7 +10,7 @@ import Topbar from "../../../components/topbar/Topbar.tsx";
 import { ObtenerFincas } from "../../../servicios/ServicioFincas.ts";
 import { ObtenerReporteEntradaTotal } from "../../../servicios/ServicioReporte.ts";
 import { IoDocumentTextSharp, IoFilter } from "react-icons/io5";
-
+import Swal from 'sweetalert2';
 
 
 function ReporteEntradas() {
@@ -21,7 +21,7 @@ function ReporteEntradas() {
 
     // Estado para el filtro por identificación de usuario
 
-    
+
     const [montoIngreso, setMontoIngreso] = useState('');
     const [filtroInputInicio, setfiltroInputInicio] = useState('');
     const [filtroInputFin, setfiltroInputFin] = useState('');
@@ -102,6 +102,43 @@ function ReporteEntradas() {
         }
     };
 
+    // Función para validar las fechas
+    const validarFechas = () => {
+        const fechaInicio = new Date(filtroInputInicio).getTime();
+        const fechaFin = new Date(filtroInputFin).getTime();
+        const hoy = new Date().setHours(0, 0, 0, 0);
+
+        if (fechaInicio > hoy) {
+            Swal.fire({
+                icon: 'error',
+                title: 'Error',
+                text: 'La fecha de inicio no puede ser mayor que hoy.'
+            });
+            return false;
+        }
+
+        if (fechaInicio > fechaFin) {
+            Swal.fire({
+                icon: 'error',
+                title: 'Error',
+                text: 'La fecha de inicio no puede ser mayor que la fecha de fin.'
+            });
+            return false;
+        }
+
+        if (fechaFin > hoy) {
+            Swal.fire({
+                icon: 'error',
+                title: 'Error',
+                text: 'La fecha de fin no puede ser mayor que hoy.'
+            });
+            return false;
+        }
+
+        return true;
+    };
+
+
     // Función para filtrar datos
     const filtrarDatos = async () => {
 
@@ -113,10 +150,15 @@ function ReporteEntradas() {
                 fechaFin: filtroInputFin,
                 idFinca: selectedFinca
             }
-            
+
+            if (!validarFechas()) {
+                return;
+            }
+
+
             if (idEmpresa) {
                 const datos = await ObtenerReporteEntradaTotal(formData);
-                
+
                 // Calcular totales desde los datos obtenidos
                 let gastoTotal = 0;
                 let ingresoTotal = 0;
@@ -135,7 +177,7 @@ function ReporteEntradas() {
                 const datosConFormato = datos.map((item: any) => ({
                     ...item,
                     montoIngresoFormateado: formatearNumero(item.montoIngreso),
-                    
+
                 }));
 
                 // Actualizar estado con los totales calculados
@@ -222,8 +264,8 @@ function ReporteEntradas() {
                                 className="form-control"
                             />
                         </div>
-                        <button onClick={filtrarDatos} className="btn-filtrar"  style={{ display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
-                            <IoFilter size={27}/>
+                        <button onClick={filtrarDatos} className="btn-filtrar" style={{ display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
+                            <IoFilter size={27} />
                             <span style={{ marginLeft: '5px' }}>Filtrar</span>
                         </button>
                         {apiData.length > 0 &&

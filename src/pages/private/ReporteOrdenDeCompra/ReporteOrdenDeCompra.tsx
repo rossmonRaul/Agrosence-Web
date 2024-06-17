@@ -10,7 +10,7 @@ import Topbar from "../../../components/topbar/Topbar.tsx";
 import { ObtenerFincas } from "../../../servicios/ServicioFincas.ts";
 import { ObtenerReporteOrdenDeCompra } from "../../../servicios/ServicioReporte.ts";
 import { IoDocumentTextSharp, IoFilter } from "react-icons/io5";
-
+import Swal from 'sweetalert2';
 
 
 function ReporteOrdenDeCompra() {
@@ -21,70 +21,70 @@ function ReporteOrdenDeCompra() {
 
     // Estado para el filtro por identificación de usuario
 
-    
+
     const [montoGasto, setMontoGasto] = useState('');
     const [filtroInputInicio, setfiltroInputInicio] = useState('');
     const [filtroInputFin, setfiltroInputFin] = useState('');
     const [selectedFinca, setSelectedFinca] = useState<string>('');
     const [fincas, setFincas] = useState<any[]>([]);
 
-// Función para obtener la fecha y hora formateadas
-const getFormattedDateTime = () => {
-    const now = new Date();
-    const year = now.getFullYear();
-    const month = String(now.getMonth() + 1).padStart(2, '0');
-    const day = String(now.getDate()).padStart(2, '0');
-    const hours = String(now.getHours()).padStart(2, '0');
-    const minutes = String(now.getMinutes()).padStart(2, '0');
-    const seconds = String(now.getSeconds()).padStart(2, '0');
+    // Función para obtener la fecha y hora formateadas
+    const getFormattedDateTime = () => {
+        const now = new Date();
+        const year = now.getFullYear();
+        const month = String(now.getMonth() + 1).padStart(2, '0');
+        const day = String(now.getDate()).padStart(2, '0');
+        const hours = String(now.getHours()).padStart(2, '0');
+        const minutes = String(now.getMinutes()).padStart(2, '0');
+        const seconds = String(now.getSeconds()).padStart(2, '0');
 
-    return `${year}-${month}-${day}_${hours}-${minutes}-${seconds}`;
-};
+        return `${year}-${month}-${day}_${hours}-${minutes}-${seconds}`;
+    };
 
-// Función para exportar datos a Excel
-const exportToExcel = () => {
-    try {
-        // Crear una hoja de cálculo vacía
-        const ws = XLSX.utils.aoa_to_sheet([]);
+    // Función para exportar datos a Excel
+    const exportToExcel = () => {
+        try {
+            // Crear una hoja de cálculo vacía
+            const ws = XLSX.utils.aoa_to_sheet([]);
 
-        // Ajustar los encabezados según los nombres de columnas definidos
-        const headers = columns.map(col => col.header); // Obtener los encabezados de las columnas
-        XLSX.utils.sheet_add_aoa(ws, [headers], { origin: 'A1' }); // Agregar los encabezados a la hoja de cálculo
+            // Ajustar los encabezados según los nombres de columnas definidos
+            const headers = columns.map(col => col.header); // Obtener los encabezados de las columnas
+            XLSX.utils.sheet_add_aoa(ws, [headers], { origin: 'A1' }); // Agregar los encabezados a la hoja de cálculo
 
-        // Añadir los datos a la hoja de cálculo
-        apiData.forEach((dataRow, index) => {
-            const rowData = columns.map(col => dataRow[col.key] ?? ''); // Obtener los datos en el orden correcto
+            // Añadir los datos a la hoja de cálculo
+            apiData.forEach((dataRow, index) => {
+                const rowData = columns.map(col => dataRow[col.key] ?? ''); // Obtener los datos en el orden correcto
 
-            // Agregar los datos a la hoja de cálculo
-            XLSX.utils.sheet_add_aoa(ws, [rowData], { origin: `A${index + 2}` }); // +2 porque A1 es para encabezados
-        });
+                // Agregar los datos a la hoja de cálculo
+                XLSX.utils.sheet_add_aoa(ws, [rowData], { origin: `A${index + 2}` }); // +2 porque A1 es para encabezados
+            });
 
-        // Agregar los totales al final del archivo
-        const totalRow = ['Totales', '', '', montoGasto];
-        XLSX.utils.sheet_add_aoa(ws, [totalRow], { origin: `A${apiData.length + 2}` }); // Agregar después de los datos
+            // Agregar los totales al final del archivo
+            const totalRow = ['Totales', '', '', montoGasto];
+            XLSX.utils.sheet_add_aoa(ws, [totalRow], { origin: `A${apiData.length + 2}` }); // Agregar después de los datos
 
-        // Crear un nuevo libro de Excel y agregar la hoja de cálculo
-        const wb = XLSX.utils.book_new();
-        XLSX.utils.book_append_sheet(wb, ws, 'Datos');
+            // Crear un nuevo libro de Excel y agregar la hoja de cálculo
+            const wb = XLSX.utils.book_new();
+            XLSX.utils.book_append_sheet(wb, ws, 'Datos');
 
-        // Escribir el libro de Excel en un búfer
-        const excelBuffer = XLSX.write(wb, { bookType: 'xlsx', type: 'array' });
+            // Escribir el libro de Excel en un búfer
+            const excelBuffer = XLSX.write(wb, { bookType: 'xlsx', type: 'array' });
 
-        // Obtener la fecha y hora formateadas para el nombre del archivo
-        const formattedDateTime = getFormattedDateTime();
+            // Obtener la fecha y hora formateadas para el nombre del archivo
+            const formattedDateTime = getFormattedDateTime();
 
-        // Crear el nombre del archivo con la fecha y hora
-        const fileName = `reporte_orden_de_compra_${formattedDateTime}.xlsx`;
+            // Crear el nombre del archivo con la fecha y hora
+            const fileName = `reporte_orden_de_compra_${formattedDateTime}.xlsx`;
 
-        // Crear un blob con los datos del búfer para descargar
-        const dataBlob = new Blob([excelBuffer], { type: 'application/octet-stream' });
+            // Crear un blob con los datos del búfer para descargar
+            const dataBlob = new Blob([excelBuffer], { type: 'application/octet-stream' });
 
-        // Utilizar la función saveAs de file-saver para descargar el archivo con el nombre generado
-        saveAs(dataBlob, fileName);
-    } catch (error) {
-        console.error('Error al exportar a Excel:', error);
-    }
-};
+            // Utilizar la función saveAs de file-saver para descargar el archivo con el nombre generado
+            saveAs(dataBlob, fileName);
+        } catch (error) {
+            console.error('Error al exportar a Excel:', error);
+        }
+    };
 
     // Función para manejar cambios en la selección de finca
     const handleFincaChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
@@ -102,6 +102,43 @@ const exportToExcel = () => {
         }
     };
 
+    // Función para validar las fechas
+    const validarFechas = () => {
+        const fechaInicio = new Date(filtroInputInicio).getTime();
+        const fechaFin = new Date(filtroInputFin).getTime();
+        const hoy = new Date().setHours(0, 0, 0, 0);
+
+        if (fechaInicio > hoy) {
+            Swal.fire({
+                icon: 'error',
+                title: 'Error',
+                text: 'La fecha de inicio no puede ser mayor que hoy.'
+            });
+            return false;
+        }
+
+        if (fechaInicio > fechaFin) {
+            Swal.fire({
+                icon: 'error',
+                title: 'Error',
+                text: 'La fecha de inicio no puede ser mayor que la fecha de fin.'
+            });
+            return false;
+        }
+
+        if (fechaFin > hoy) {
+            Swal.fire({
+                icon: 'error',
+                title: 'Error',
+                text: 'La fecha de fin no puede ser mayor que hoy.'
+            });
+            return false;
+        }
+
+        return true;
+    };
+
+
     // Función para filtrar datos
     const filtrarDatos = async () => {
 
@@ -113,10 +150,15 @@ const exportToExcel = () => {
                 fechaFin: filtroInputFin,
                 idFinca: selectedFinca
             }
-            
+
+            if (!validarFechas()) {
+                return;
+            }
+
+
             if (idEmpresa) {
                 const datos = await ObtenerReporteOrdenDeCompra(formData);
-                
+
                 // Calcular totales desde los datos obtenidos
                 let gastoTotal = 0;
 
@@ -133,7 +175,7 @@ const exportToExcel = () => {
                 const datosConFormato = datos.map((item: any) => ({
                     ...item,
                     montoGastoFormateado: formatearNumero(item.total),
-                    
+
                 }));
 
                 // Actualizar estado con los totales calculados
@@ -222,8 +264,8 @@ const exportToExcel = () => {
                                 className="form-control"
                             />
                         </div>
-                        <button onClick={filtrarDatos} className="btn-filtrar"  style={{ display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
-                            <IoFilter size={27}/>
+                        <button onClick={filtrarDatos} className="btn-filtrar" style={{ display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
+                            <IoFilter size={27} />
                             <span style={{ marginLeft: '5px' }}>Filtrar</span>
                         </button>
                         {apiData.length > 0 &&
