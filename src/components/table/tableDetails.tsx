@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react';
 import '../../css/TableDetails.css';
 import { Table } from 'reactstrap';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faTimes, faCheck, faPenToSquare, faSearch } from '@fortawesome/free-solid-svg-icons';
+import { faTimes, faCheck, faPenToSquare, faSearch, faTrash } from '@fortawesome/free-solid-svg-icons';
 
 // Interface que define la estructura de una columna de la tabla.
 interface Column {
@@ -96,7 +96,7 @@ const TableResponsive: React.FC<TableProps> = ({
                                     <td key={colIndex}>
                                         {column.actions ? (
                                             <div className='table-btn-container'>
-                                                {btnActionName === 'Detalles' ? (
+                                                {btnActionNameDetails === 'Detalles' ? (
                                                     <>
                                                         <button className='btn-detalils' onClick={() => openModalDetalles(item)}>
                                                             <FontAwesomeIcon icon={faSearch} /> {btnActionNameDetails}
@@ -127,7 +127,7 @@ const TableResponsive: React.FC<TableProps> = ({
                                                     <div className='status-toggle'>
                                                         {item.estado === 1 ? (
                                                             <button className='btn-inactivate' onClick={() => toggleStatus(item)}>
-                                                                <FontAwesomeIcon icon={faTimes} /> Eliminar
+                                                                <FontAwesomeIcon icon={faTrash} /> Eliminar
                                                             </button>
                                                         ) : (
                                                             <button className='btn-activate' onClick={() => toggleStatus(item)}>
