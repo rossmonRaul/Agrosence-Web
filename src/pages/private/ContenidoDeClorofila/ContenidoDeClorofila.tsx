@@ -1,6 +1,5 @@
 import React, { useEffect, useState } from "react";
 import Sidebar from "../../../components/sidebar/Sidebar";
-import TableResponsive from "../../../components/table/table.tsx";
 import BordeSuperior from "../../../components/bordesuperior/BordeSuperior.tsx";
 import Modal from "../../../components/modal/Modal.tsx";
 import Topbar from "../../../components/topbar/Topbar.tsx";
@@ -25,6 +24,7 @@ import EditarContenidoDeClorofila from "../../../components/contenidoDeClorofila
 
 import '../../../css/FormSeleccionEmpresa.css'
 import { ObtenerUsuariosAsignados, ObtenerUsuariosAsignadosPorIdentificacion } from "../../../servicios/ServicioUsuario.ts";
+import DetallesContenidoDeClorofila from "../../../components/contenidoDeClorofila/DetallesContenidoDeClorofila.tsx";
 
 
 
@@ -40,6 +40,8 @@ import { ObtenerUsuariosAsignados, ObtenerUsuariosAsignadosPorIdentificacion } f
 function AdministrarContenidoDeClorofila() {
     const [filtroNombre, setFiltroNombre] = useState('');
     const [modalEditar, setModalEditar] = useState(false);
+    const [modalDetalles, setmodalDetalles] = useState(false);
+
     const [modalInsertar, setModalInsertar] = useState(false);
     //datos a editar
     const [selectedDatos, setSelectedDatos] = useState({
@@ -116,7 +118,7 @@ function AdministrarContenidoDeClorofila() {
         obtenerFincas();
     }, []);
 
-    
+
     const handleChangeFiltro = (e: React.ChangeEvent<HTMLInputElement>) => {
         setFiltroNombre(e.target.value);
     };
@@ -142,14 +144,14 @@ function AdministrarContenidoDeClorofila() {
 
         const ContenidoClorofilaFiltrado = filtroNombre
 
-        
 
 
-        ? contenidoDeClorofila.filter((contenidoDeClorofila: any) =>
-            contenidoDeClorofila.cultivo.toLowerCase().includes(filtroNombre.toLowerCase()) ||
-            contenidoDeClorofila.codigo.toLowerCase().includes(filtroNombre.toLowerCase())
-        )
-        : contenidoDeClorofila;
+
+            ? contenidoDeClorofila.filter((contenidoDeClorofila: any) =>
+                contenidoDeClorofila.cultivo.toLowerCase().includes(filtroNombre.toLowerCase()) ||
+                contenidoDeClorofila.codigo.toLowerCase().includes(filtroNombre.toLowerCase())
+            )
+            : contenidoDeClorofila;
 
         setContenidoDeClorofilaFiltrados(ContenidoClorofilaFiltrado);
     };
@@ -206,6 +208,10 @@ function AdministrarContenidoDeClorofila() {
 
                 });
 
+                console.log('contenidoDeClorofilaFiltrados')
+                console.log(contenidoDeClorofilaFiltrados)
+                console.log('contenidoDeClorofilaFiltrados')
+
                 setContenidoDeClorofila(contenidoDeClorofilaFiltrados);
                 setContenidoDeClorofilaFiltrados(contenidoDeClorofilaFiltrados);
             }
@@ -228,6 +234,20 @@ function AdministrarContenidoDeClorofila() {
     const openModal = (contenidoDeClorofila: any) => {
         setSelectedDatos(contenidoDeClorofila);
         abrirCerrarModalEditar();
+    };
+
+    const openModalDetalles = (contenidoDeClorofila: any) => {
+        console.log('datos')
+        console.log(contenidoDeClorofila)
+        console.log('datos')
+        setSelectedDatos(contenidoDeClorofila);
+        abrirCerrarModalDetalles();
+    };
+
+
+    // Abrir/cerrar modal de edición
+    const abrirCerrarModalDetalles = () => {
+        setmodalDetalles(!modalDetalles);
     };
 
     const handleAgregarContenidoDeClorofila = async () => {
@@ -256,7 +276,7 @@ function AdministrarContenidoDeClorofila() {
                     const datos = {
                         IdContenidoDeClorofila: contenidoDeClorofila.idContenidoDeClorofila,
                     };
-                    
+
                     const resultado = await CambiarEstadoRegistroContenidoDeClorofila(datos);
                     if (parseInt(resultado.indicador) === 1) {
                         Swal.fire({
@@ -285,12 +305,20 @@ function AdministrarContenidoDeClorofila() {
         { key: 'fecha', header: 'Fecha' },
         { key: 'valorDeClorofila', header: 'Valor de Clorofila' },
         { key: 'codigo', header: 'Punto de medición' },
-        { key: 'temperatura', header: 'Temperatura' },
-        { key: 'humedad', header: 'Humedad' },
-        { key: 'observaciones', header: 'Observaciones' },
-        { key: 'sEstado', header: 'Estado' },
-        { key: 'acciones', header: 'Acciones', actions: true }
+        // { key: 'temperatura', header: 'Temperatura' },
+        // { key: 'humedad', header: 'Humedad' },
+        // { key: 'observaciones', header: 'Observaciones' },
+        // { key: 'sEstado', header: 'Estado' },
+        { key: 'acciones', header: 'Acciones', actions: true } // Columna para acciones
     ];
+
+    //apartado para insertar codigo html en el header
+    const renderHeader = (header: any) => {
+        if (header === 'Valor de Clorofila') {
+            return <span>Valor de Clorofila (μmol m<sup>2</sup>)</span>;
+        }
+        return header;
+    };
 
     return (
         <Sidebar>
@@ -315,7 +343,7 @@ function AdministrarContenidoDeClorofila() {
                             ))}
                         </select>
                     </div>
-                    <div className="filtro-container">
+                    <div className="filtro-container" style={{ width: '1100px' }}>
                         <label htmlFor="filtroNombre">Filtrar:</label>
                         <input
                             type="text"
@@ -326,7 +354,18 @@ function AdministrarContenidoDeClorofila() {
                             className="form-control"
                         />
                     </div>
-                    <TableResponsive columns={columns2} data={contenidoDeClorofilaFiltrados} openModal={openModal} btnActionName={"Editar"} toggleStatus={toggleStatus} />
+
+                    {/* openModalDetalles */}
+
+                    <TableResponsiveDetalles
+                        //mapeo de las columnas para poder mostar texto con formato html de ser necesario
+                        columns={columns2.map(col => ({ ...col, header: renderHeader(col.header) }))}
+                        data={contenidoDeClorofilaFiltrados}
+                        openModalDetalles={openModalDetalles}
+                        btnActionNameDetails={"Detalles"}
+                        openModal={openModal}
+                        btnActionName={"Editar"}
+                        toggleStatus={toggleStatus} />
                 </div>
             </div>
 
@@ -363,6 +402,29 @@ function AdministrarContenidoDeClorofila() {
                             idPuntoMedicion={selectedDatos.idPuntoMedicion}
                             observaciones={selectedDatos.observaciones}
                             onEdit={handleEditarContenidoDeClorofila}
+                        />
+                    </div>
+                </div>
+            </Modal>}
+            {<Modal
+                isOpen={modalDetalles}
+                toggle={abrirCerrarModalDetalles}
+                title="Detalles Contenido de Clorofila"
+                onCancel={abrirCerrarModalDetalles}
+            >
+                <div className='form-container'>
+                    <div className='form-group'>
+                        <DetallesContenidoDeClorofila
+                            idFinca={selectedDatos.idFinca}
+                            idParcela={selectedDatos.idParcela}
+                            idContenidoDeClorofila={selectedDatos.idContenidoDeClorofila}
+                            cultivo={selectedDatos.cultivo}
+                            fecha={selectedDatos.fecha}
+                            valorDeClorofila={selectedDatos.valorDeClorofila}
+                            temperatura={selectedDatos.temperatura}
+                            humedad={selectedDatos.humedad}
+                            idPuntoMedicion={selectedDatos.idPuntoMedicion}
+                            observaciones={selectedDatos.observaciones}
                         />
                     </div>
                 </div>

@@ -285,28 +285,28 @@ const EditarSaludDeLaPlanta: React.FC<SaludDeLaPlantaSeleccionado> = ({
             newErrors.cultivo = '';
         }
 
-        if (!formData.idColorHojas) {
-            newErrors.riesgoNatural = 'El Riesgo Natural es obligatorio';
+        if (!formData.idColorHojas.trim()) {
+            newErrors.idColorHojas = 'El color de hojas es obligatorio';
         } else {
-            newErrors.riesgoNatural = '';
+            newErrors.idColorHojas = '';
         }
 
         if (!formData.idTamanoFormaHoja) {
-            newErrors.practicaPreventiva = 'La Practica Preventiva es obligatoria';
+            newErrors.idTamanoFormaHoja = 'El tamaño de la forma de la hoja es obligatorio';
         } else {
-            newErrors.practicaPreventiva = '';
+            newErrors.idTamanoFormaHoja = '';
         }
 
-        if (!formData.idEstadoTallo) {
-            newErrors.resultadoPractica = 'El Resultado Practica es obligatorio';
+        if (!formData.idEstadoTallo.trim()) {
+            newErrors.idEstadoTallo = 'El estado del tallo es obligatorio';
         } else {
-            newErrors.resultadoPractica = '';
+            newErrors.idEstadoTallo = '';
         }
 
-        if (!formData.idEstadoRaiz) {
-            newErrors.resultadoPractica = 'El Resultado Practica es obligatorio';
+        if (!formData.idEstadoRaiz.trim()) {
+            newErrors.idEstadoRaiz = 'El estado de la raíz es obligatorio';
         } else {
-            newErrors.resultadoPractica = '';
+            newErrors.idEstadoRaiz = '';
         }
 
         const fechaParts = formData.fecha.split("/");
@@ -400,10 +400,10 @@ const EditarSaludDeLaPlanta: React.FC<SaludDeLaPlantaSeleccionado> = ({
                 };
             };
         } catch (error) {
-            console.error('Error al editar el riesgo natural:', error);
+            console.error('Error al editar la salud de la planta:', error);
             Swal.fire({
                 icon: 'error',
-                title: 'Error al editar el riesgo natural',
+                title: 'Error al editar la salud de la planta',
                 text: 'Ocurrió un error. Por favor, inténtelo de nuevo más tarde.'
             });
         }

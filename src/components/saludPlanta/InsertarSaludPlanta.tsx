@@ -333,10 +333,6 @@ const CrearSaludDeLaPlanta: React.FC<CrearSaludDeLaPlantaProps> = ({ onAdd }) =>
                     console.error('El valor de identificacionUsuario en localStorage es nulo.');
                 }
 
-                console.log('formData')
-                console.log(formData)
-                console.log('formData')
-
                 const resultado = await InsertarSaludDeLaPlanta(formData);
 
                 let errorEnviandoArchivos = false; // Variable para rastrear si hubo un error al enviar archivos
