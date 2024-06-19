@@ -118,7 +118,7 @@ const DetallesSaludDeLaPlanta: React.FC<SaludDeLaPlantaSeleccionado> = ({
         console.log('MostrarImagen');
         console.log(item);
         const url = URL.createObjectURL(item.file);
-         setImageURL(url);
+        setImageURL(url);
         console.log('MostrarImagen');
     }
     // Función para manejar cambios en los inputs del formulario
@@ -137,7 +137,7 @@ const DetallesSaludDeLaPlanta: React.FC<SaludDeLaPlantaSeleccionado> = ({
         // { key: 'estadoRaiz', header: 'Estado de la raiz' },
         // { key: 'acciones', header: 'Acciones', actions: true } // Columna para acciones
     ];
-  
+
 
     // Obtener las fincas al cargar la página
     useEffect(() => {
@@ -170,8 +170,8 @@ const DetallesSaludDeLaPlanta: React.FC<SaludDeLaPlantaSeleccionado> = ({
                     setSelectedTamanoFormaHoja(idTamanoFormaHoja)
                     setSelectedEstadoTallo(idEstadoTallo)
                     setSelectedEstadoRaiz(idEstadoRaiz)
-                    
-                    
+
+
                     const archivos = documentos.map((doc: Documento) => {
                         // Convertir los datos base64 a un blob
                         const byteCharacters = atob(doc.documento.split(',')[1]);
@@ -192,21 +192,6 @@ const DetallesSaludDeLaPlanta: React.FC<SaludDeLaPlantaSeleccionado> = ({
 
                     setFiles(archivos);
 
-                    console.log("AAAAAAA")
-                    console.log(archivos)
-                    console.log(files)
-                    console.log("AAAAAAA")
-                    
-                    // archivos.forEach(element=> {
-                    //     const obj={idDocumento:element.idDocumento, name:element.file.name }
-                    //     listaImagenes.push(obj);
-                    // });
-
-                    // console.log("AAAAAAA")
-                    // console.log(listaImagenes)
-                    // console.log("AAAAAAA")
-                    // const url = URL.createObjectURL(archivos[0].file);
-                    // setImageURL(url);
                 } else {
                     console.error('La identificación y/o el ID de la empresa no están disponibles en el localStorage.');
                 }
@@ -230,7 +215,7 @@ const DetallesSaludDeLaPlanta: React.FC<SaludDeLaPlantaSeleccionado> = ({
         console.error('El valor de empresaUsuario en localStorage es nulo.');
     }
 
-    
+
     return (
         <div id='general' style={{ display: 'flex', flexDirection: 'column', paddingBottom: '0rem', width: '90%', margin: '0 auto', minWidth: '650px' }}>
             {step === 1 && (
@@ -264,8 +249,8 @@ const DetallesSaludDeLaPlanta: React.FC<SaludDeLaPlantaSeleccionado> = ({
                         </div>
                     </div>
 
-                    <div className="row" style={{ display: "flex", marginBottom:"30px", width: '100%'}}>
-                        <div className="row" style={{ marginRight: '10px', width: '50%'}}>
+                    <div className="row" style={{ display: "flex", marginBottom: "30px", width: '100%' }}>
+                        <div className="row" style={{ marginRight: '10px', width: '50%' }}>
                             <div style={{ marginRight: '10px', width: '98%' }}>
                                 <FormGroup row>
                                     <Label for="fecha" sm={4} className="input-label">Fecha</Label>
@@ -277,7 +262,7 @@ const DetallesSaludDeLaPlanta: React.FC<SaludDeLaPlantaSeleccionado> = ({
                                             value={fecha}
                                             readOnly
                                         />
-                                       
+
                                     </Col>
                                 </FormGroup>
                             </div>
@@ -295,7 +280,7 @@ const DetallesSaludDeLaPlanta: React.FC<SaludDeLaPlantaSeleccionado> = ({
                                         value={cultivo}
                                         readOnly
                                     />
-                                    
+
                                 </Col>
                             </FormGroup>
 
@@ -315,7 +300,7 @@ const DetallesSaludDeLaPlanta: React.FC<SaludDeLaPlantaSeleccionado> = ({
                                     <option key="3" value="3">Marrón o quemado</option>
                                     <option key="4" value="4">Manchas (indicativas de enfermedades o plagas)</option>
                                 </select>
-                                
+
                             </FormGroup>
                         </div>
                         <div className="row" style={{ display: "flex", flexDirection: 'row', width: '50%' }}>
@@ -328,7 +313,7 @@ const DetallesSaludDeLaPlanta: React.FC<SaludDeLaPlantaSeleccionado> = ({
                                         <option key="1" value="1">Tamaño adecuado según la especie</option>
                                         <option key="2" value="2">Deformaciones o irregularidades</option>
                                     </select>
-                                   
+
                                 </FormGroup>
                             </div>
                         </div>
@@ -337,13 +322,13 @@ const DetallesSaludDeLaPlanta: React.FC<SaludDeLaPlantaSeleccionado> = ({
                         <div className="col-sm-4" style={{ marginRight: '10px', width: '50%' }}>
                             <FormGroup row>
                                 <Label for="estadoTallo" sm={4} className="input-label">Estado del tallo</Label>
-				                <select className="custom-select" id="estadoTallo" value={selectedEstadoTallo} disabled>
-                                	<option key="default-resultado" value="">Seleccione...</option>
-                                	<option key="1" value="1">Fuerza y firmeza</option>
-                                	<option key="2" value="2">Presencia de hongos o enfermedades</option>
-                                	<option key="3" value="3">Lesiones o daños fisicos</option>
-                            	</select>
-                                
+                                <select className="custom-select" id="estadoTallo" value={selectedEstadoTallo} disabled>
+                                    <option key="default-resultado" value="">Seleccione...</option>
+                                    <option key="1" value="1">Fuerza y firmeza</option>
+                                    <option key="2" value="2">Presencia de hongos o enfermedades</option>
+                                    <option key="3" value="3">Lesiones o daños fisicos</option>
+                                </select>
+
                             </FormGroup>
                         </div>
                         <div className="row" style={{ display: "flex", flexDirection: 'row', width: '50%' }}>
@@ -352,12 +337,12 @@ const DetallesSaludDeLaPlanta: React.FC<SaludDeLaPlantaSeleccionado> = ({
                                     <Label for="estadoRaiz" sm={4} className="input-label">Estado de las raíces</Label>
 
                                     <select className="custom-select" id="estadoRaiz" value={selectedEstadoRaiz} disabled>
-                                          <option key="default-resultado" value="">Seleccione...</option>
-                                	  <option key="1" value="1">Salud (blancas y firmes)</option>
-                               		  <option key="2" value="2">Daños o pudrición</option>
-                                	  <option key="3" value="3">Plagas o enfermedades</option>
+                                        <option key="default-resultado" value="">Seleccione...</option>
+                                        <option key="1" value="1">Salud (blancas y firmes)</option>
+                                        <option key="2" value="2">Daños o pudrición</option>
+                                        <option key="3" value="3">Plagas o enfermedades</option>
                                     </select>
-                                   
+
                                 </FormGroup>
                             </div>
                         </div>
@@ -369,34 +354,35 @@ const DetallesSaludDeLaPlanta: React.FC<SaludDeLaPlantaSeleccionado> = ({
             {step === 2 && (
                 <div>
                     <h2>Listado de imágenes</h2>
-                    <div style={{ display: "flex",height: "100%",width: "100%", paddingBottom:'10px'}}>
-                    <table style={{ width: "50%", marginRight:"20px", textAlign:'center',borderCollapse:"collapse",  border: "1px solid #ddd", maxHeight:'200px',minHeight:'200px'}}>
-                    <thead style={{backgroundColor:"#f2f2f2",  border: "1px solid #ddd"}}>
-                        <tr style={{backgroundColor:"#f2f2f2", border: "1px solid #ddd"}}>
-                            <th style={{ border: "1px solid #ddd"}}>Nombre archivo</th>
-                            <th style={{ border: "1px solid #ddd"}}>Visualizar imagen</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        {files.map((item) => (
-                        <tr key={item.idDocumento} style={{ border: "1px solid #ddd"}}>
-                            <td style={{ border: "1px solid #ddd"}}>{item.file.name}</td>
-                            <td style={{ border: "1px solid #ddd"}}>
-                                <FontAwesomeIcon icon={faEye} onClick={() => MostrarImagen(item)} /> 
-                            </td>
-                        </tr>
-                        ))}
-                     </tbody>
-                     </table>
-                    {imageURL && (
-                    <div style={{ width: "45%", textAlign:'center'}}>
-                        <h4>Imagen seleccionada</h4>
-                    <img src={imageURL} alt="img" style={{ width: '175px', height: '175px' }} />
-                    </div>)}
+                    <div style={{ display: "flex", height: "100%", width: "900px", paddingBottom: '10px' }}>
+                        <table style={{ width: "65%", marginRight: "20px", textAlign: 'center', borderCollapse: "collapse", border: "1px solid #ddd", maxHeight: '200px', minHeight: '200px' }}>
+                            <thead style={{ backgroundColor: "#f2f2f2", border: "1px solid #ddd" }}>
+                                <tr style={{ backgroundColor: "#f2f2f2", border: "1px solid #ddd" }}>
+                                    <th style={{ border: "1px solid #ddd" }}>Nombre archivo</th>
+                                    <th style={{ border: "1px solid #ddd" }}>Visualizar imagen</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {files.map((item) => (
+                                    <tr key={item.idDocumento} style={{ border: "1px solid #ddd" }}>
+                                        <td style={{ border: "1px solid #ddd", wordBreak: "break-word", whiteSpace: "normal", maxWidth: "700px", padding: "15px" }}>{item.file.name}</td>
+                                        <td style={{ border: "1px solid #ddd" }}>
+                                            <FontAwesomeIcon icon={faEye} onClick={() => MostrarImagen(item)} />
+                                        </td>
+                                    </tr>
+                                ))}
+                            </tbody>
+                            
+                        </table>
+                        {imageURL && (
+                            <div style={{ width: "200px", textAlign: 'center' }}>
+                                <h4>Imagen seleccionada</h4>
+                                <img src={imageURL} alt="img" style={{ width: '175px', height: '175px' }} />
+                            </div>)}
+                    </div>
+                    <button onClick={handlePreviousStep} className='btn-styled-danger'>Anterior</button>
                 </div>
-                <button onClick={handlePreviousStep} className='btn-styled-danger'>Anterior</button>
-                </div>
-                
+
             )}
 
         </div>
