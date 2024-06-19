@@ -115,11 +115,9 @@ const DetallesSaludDeLaPlanta: React.FC<SaludDeLaPlantaSeleccionado> = ({
     };
 
     const MostrarImagen = (item: any) => {
-        console.log('MostrarImagen');
-        console.log(item);
+
         const url = URL.createObjectURL(item.file);
-        setImageURL(url);
-        console.log('MostrarImagen');
+
     }
     // Función para manejar cambios en los inputs del formulario
     const handleInputChange = (event: React.ChangeEvent<HTMLInputElement>) => {

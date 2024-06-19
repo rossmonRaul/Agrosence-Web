@@ -208,10 +208,6 @@ function AdministrarContenidoDeClorofila() {
 
                 });
 
-                console.log('contenidoDeClorofilaFiltrados')
-                console.log(contenidoDeClorofilaFiltrados)
-                console.log('contenidoDeClorofilaFiltrados')
-
                 setContenidoDeClorofila(contenidoDeClorofilaFiltrados);
                 setContenidoDeClorofilaFiltrados(contenidoDeClorofilaFiltrados);
             }

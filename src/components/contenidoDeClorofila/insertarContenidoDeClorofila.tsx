@@ -121,13 +121,9 @@ const InsertarContenidoDeClorofila: React.FC<InsertarContenidoDeClorofilaProps> 
             idFinca: selectedFinca,
             idParcela: value
         }
-        console.log('fincaParcela')
-        console.log(fincaParcela)
-        console.log('fincaParcela')
+
         const puntosMedicion = await ObtenerPuntoMedicionFincaParcela(fincaParcela);
-        console.log('puntosMedicion')
-        console.log(puntosMedicion)
-        console.log('puntosMedicion')
+
         setpuntosMedicion(puntosMedicion)
 
     };
@@ -206,17 +202,7 @@ const InsertarContenidoDeClorofila: React.FC<InsertarContenidoDeClorofilaProps> 
 
         formData.idPuntoMedicion = selectedPuntoMedicion;
 
-
-        console.log('formData')
-        console.log(formData)
-        console.log('formData')
-
         setErrors(newErrors);
-
-        console.log('newErrors')
-        console.log(newErrors)
-        console.log('newErrors')
-
 
         if (Object.values(newErrors).every(error => error === '')) {
             try {
@@ -231,11 +217,6 @@ const InsertarContenidoDeClorofila: React.FC<InsertarContenidoDeClorofilaProps> 
                 } else {
                     console.error('El valor de identificacionUsuario en localStorage es nulo.');
                 }
-
-                console.log('formData')
-                console.log(formData)
-                console.log('formData')
-
 
                 const resultado = await InsertarRegistroContenidoDeClorofila(formData);
                 if (resultado.indicador === 1) {
