@@ -11,9 +11,10 @@ import { ObtenerUsuariosAsignados } from "../../../servicios/ServicioUsuario.ts"
 
 import EditarSaludDeLaPlanta from "../../../components/saludPlanta/EditarSaludPlanta.tsx";
 
-import TableResponsiveDelete from "../../../components/table/tableDelete.tsx";
+import TableResponsiveDetails from "../../../components/table/tableDetails.tsx";
 import { CambiarEstadoSaludDeLaPlanta, ObtenerSaludDeLaPlanta } from "../../../servicios/ServicioSaludPlanta.ts";
 import CrearSaludDeLaPlanta from "../../../components/saludPlanta/InsertarSaludPlanta.tsx";
+import DetallesSaludDeLaPlanta from "../../../components/saludPlanta/DetallesSaludPlanta.tsx";
 
 
 /**
@@ -22,6 +23,7 @@ import CrearSaludDeLaPlanta from "../../../components/saludPlanta/InsertarSaludP
 function RiesgoNatural() {
     // Estado para controlar la apertura y cierre del modal de edición
     const [modalEditar, setModalEditar] = useState(false);
+    const [modalDetalles, setModalDetalles] = useState(false);
     // Estado para controlar la apertura y cierre del modal
     const [modalCrearSaludDeLaPlanta, setModalCrearSaludDeLaPlanta] = useState(false);
     const [saludDeLaPlanta, setSaludDeLaPlanta] = useState<any[]>([]);
@@ -48,6 +50,12 @@ function RiesgoNatural() {
         setSelectedDatos(fincaParcela);
         abrirCerrarModalEditar();
     };
+
+    const openModalDetalles = (fincaParcela: any) => {
+        setSelectedDatos(fincaParcela);
+        abrirCerrarModalDetalles();
+    };
+
 
     // Modal para crear la medicion
     const abrirCerrarModalCrearSaludDeLaPlanta = () => {
@@ -80,7 +88,9 @@ function RiesgoNatural() {
     const abrirCerrarModalEditar = () => {
         setModalEditar(!modalEditar);
     }
-
+    const abrirCerrarModalDetalles = () => {
+        setModalDetalles(!modalDetalles);
+    }
     const handleEditarSaludDeLaPlanta = async () => {
         // Después de editar exitosamente, actualiza la lista de usuarios Asignados
         await obtenerSaludDeLaPlanta();
@@ -175,9 +185,9 @@ function RiesgoNatural() {
         { key: 'fecha', header: 'Fecha' },
         { key: 'cultivo', header: 'Cultivo' },
         { key: 'colorHojas', header: 'Color de hojas' },
-        { key: 'tamanoFormaHoja', header: 'Tamaño de la forma de la hoja' },
-        { key: 'estadoTallo', header: 'Estado del tallo' },
-        { key: 'estadoRaiz', header: 'Estado de la raiz' },
+        // { key: 'tamanoFormaHoja', header: 'Tamaño de la forma de la hoja' },
+        // { key: 'estadoTallo', header: 'Estado del tallo' },
+        // { key: 'estadoRaiz', header: 'Estado de la raiz' },
         { key: 'acciones', header: 'Acciones', actions: true } // Columna para acciones
     ];
 
@@ -199,7 +209,7 @@ function RiesgoNatural() {
                             className="form-control"
                         />
                     </div>
-                    <TableResponsiveDelete columns={columns} data={SaludDeLaPlantaFiltrados} openModal={openModal} toggleStatus={toggleStatus} btnActionName={"Editar"} />
+                    <TableResponsiveDetails columns={columns} data={SaludDeLaPlantaFiltrados} openModal={openModal} toggleStatus={toggleStatus} btnActionName={"Editar"} openModalDetalles={openModalDetalles}  btnActionNameDetails={"Detalles"} />
                 </div>
             </div>
 
@@ -227,6 +237,29 @@ function RiesgoNatural() {
                 </div>
             </Modal>
 
+            <Modal
+                isOpen={modalDetalles}
+                toggle={abrirCerrarModalDetalles}
+                title="Detalles Salud de la Planta"
+                onCancel={abrirCerrarModalDetalles}
+            >
+                <div className='form-container'>
+                    <div className='form-group'>
+                        <DetallesSaludDeLaPlanta
+                            idFinca={selectedDatos.idFinca}
+                            idParcela={selectedDatos.idParcela}
+                            idSaludDeLaPlanta={(selectedDatos.idSaludDeLaPlanta).toString()}
+                            fecha={selectedDatos.fecha}
+                            cultivo={(selectedDatos.cultivo).toString()}
+                            idColorHojas={selectedDatos.idColorHojas}
+                            idTamanoFormaHoja={selectedDatos.idTamanoFormaHoja}
+                            idEstadoTallo={selectedDatos.idEstadoTallo}
+                            idEstadoRaiz={selectedDatos.idEstadoRaiz}
+                            onEdit={handleEditarSaludDeLaPlanta}
+                        />
+                    </div>
+                </div>
+            </Modal>
             {/* modal para crear riesgo */}
             <Modal
                 isOpen={modalCrearSaludDeLaPlanta}

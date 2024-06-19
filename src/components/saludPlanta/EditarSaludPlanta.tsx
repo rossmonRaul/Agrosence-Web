@@ -285,7 +285,7 @@ const EditarSaludDeLaPlanta: React.FC<SaludDeLaPlantaSeleccionado> = ({
             newErrors.cultivo = '';
         }
 
-        if (!formData.idColorHojas.trim()) {
+        if (!formData.idColorHojas) {
             newErrors.idColorHojas = 'El color de hojas es obligatorio';
         } else {
             newErrors.idColorHojas = '';
@@ -297,13 +297,13 @@ const EditarSaludDeLaPlanta: React.FC<SaludDeLaPlantaSeleccionado> = ({
             newErrors.idTamanoFormaHoja = '';
         }
 
-        if (!formData.idEstadoTallo.trim()) {
+        if (!formData.idEstadoTallo) {
             newErrors.idEstadoTallo = 'El estado del tallo es obligatorio';
         } else {
             newErrors.idEstadoTallo = '';
         }
 
-        if (!formData.idEstadoRaiz.trim()) {
+        if (!formData.idEstadoRaiz) {
             newErrors.idEstadoRaiz = 'El estado de la raíz es obligatorio';
         } else {
             newErrors.idEstadoRaiz = '';
@@ -320,6 +320,17 @@ const EditarSaludDeLaPlanta: React.FC<SaludDeLaPlantaSeleccionado> = ({
         if (fechaDate > today) {
             newErrors.fecha = 'Fecha no puede ser mayor a hoy';
         }
+
+        if (files.length<1) {
+            newErrors.files = 'Se debe insertar minimo una imagen';
+            Swal.fire({
+                icon: 'info',
+                title: 'No se puede guardar el registro',
+                text: 'Se debe insertar minimo una imagen'
+            });
+        }
+
+
         setErrors(newErrors);
 
         // Avanzar al siguiente paso si no hay errores

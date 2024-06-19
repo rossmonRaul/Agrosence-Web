@@ -40,7 +40,7 @@ const CrearSaludDeLaPlanta: React.FC<CrearSaludDeLaPlantaProps> = ({ onAdd }) =>
                 Swal.fire({
                     icon: 'error',
                     title: 'Error',
-                    text: 'No se puede ingresar más de 5 archivos'
+                    text: 'No se puede ingresar más de 3 archivos'
                 });
                 return;
             }
@@ -317,6 +317,15 @@ const CrearSaludDeLaPlanta: React.FC<CrearSaludDeLaPlantaProps> = ({ onAdd }) =>
             newErrors.fecha = 'Fecha no puede ser mayor a hoy';
         }
 
+        if (files.length<1) {
+            
+            newErrors.files = 'Se debe insertar minimo una imagen';
+            Swal.fire({
+                icon: 'info',
+                title: 'No se puede guardar el registro',
+                text: 'Se debe insertar minimo una imagen'
+            });
+        }
 
         setErrors(newErrors);
 
