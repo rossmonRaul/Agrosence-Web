@@ -280,7 +280,7 @@ const InsertarContenidoDeClorofila: React.FC<InsertarContenidoDeClorofilaProps> 
                         </select>
                         {errors.finca && <FormFeedback>{errors.finca}</FormFeedback>}
                     </FormGroup>
-                </div>
+                </div> 
                 <div style={{ flex: 1, marginRight: '0.5rem', marginLeft: '0.5rem' }}>
                     <FormGroup>
                         <label htmlFor="parcelas">Parcela:</label>
@@ -335,7 +335,7 @@ const InsertarContenidoDeClorofila: React.FC<InsertarContenidoDeClorofilaProps> 
             <div style={{ display: 'flex', flexDirection: 'row', marginBottom: '0rem', width: '100%' }}>
                 <div style={{ flex: 2, marginRight: '0.5rem', marginLeft: '0.5rem' }}>
                     <FormGroup row>
-                        <Label for="valorDeClorofila" sm={4} className="input-label">Valor de Clorofila</Label>
+                        <Label for="valorDeClorofila" sm={4} className="input-label">Valor de Clorofila (μmol m<sup>2</sup>)</Label>
                         <Col sm={8}>
                             <Input
                                 type="number"

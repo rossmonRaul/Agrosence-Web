@@ -253,6 +253,7 @@ const DetallesContenidoDeClorofila: React.FC<ContenidoDeClorofilaSeleccionado> =
                                 type="date"
                                 id="fecha"
                                 name="fecha"
+                                value={formData.fecha}
                                 readOnly
                             />
                             <FormFeedback>{errors.fecha}</FormFeedback>
@@ -264,7 +265,7 @@ const DetallesContenidoDeClorofila: React.FC<ContenidoDeClorofilaSeleccionado> =
             <div style={{ display: 'flex', flexDirection: 'row', marginBottom: '0rem', width: '100%' }}>
                 <div style={{ flex: 2, marginRight: '0.5rem', marginLeft: '0.5rem' }}>
                     <FormGroup row>
-                        <Label for="valorDeClorofila" sm={4} className="input-label">Valor de Clorofila</Label>
+                        <Label for="valorDeClorofila" sm={4} className="input-label">Valor de Clorofila (μmol m<sup>2</sup>)</Label>
                         <Col sm={8}>
                             <Input
                                 type="number"
@@ -317,7 +318,7 @@ const DetallesContenidoDeClorofila: React.FC<ContenidoDeClorofilaSeleccionado> =
                         </Col>
                     </FormGroup>
                 </div>
-            </div>
+            </div> 
 
             <div style={{ display: 'flex', flexDirection: 'row', marginBottom: '0rem' }}>
 

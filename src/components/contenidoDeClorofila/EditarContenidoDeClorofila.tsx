@@ -393,7 +393,7 @@ const ModificacionContenidoDeClorofila: React.FC<ContenidoDeClorofilaSeleccionad
             <div style={{ display: 'flex', flexDirection: 'row', marginBottom: '0rem', width: '100%' }}>
                 <div style={{ flex: 2, marginRight: '0.5rem', marginLeft: '0.5rem' }}>
                     <FormGroup row>
-                        <Label for="valorDeClorofila" sm={4} className="input-label">Valor de Clorofila</Label>
+                        <Label for="valorDeClorofila" sm={4} className="input-label">Valor de Clorofila (μmol m<sup>2</sup>)</Label>
                         <Col sm={8}>
                             <Input
                                 type="number"
@@ -446,7 +446,7 @@ const ModificacionContenidoDeClorofila: React.FC<ContenidoDeClorofilaSeleccionad
             </div>
             <FormGroup row>
                 <Col sm={{ size: 10, offset: 2 }}>
-                    <Button onClick={handleSubmit} className="btn-styled">Guardar</Button>
+                    <Button onClick={handleSubmitConValidacion} className="btn-styled">Guardar</Button>
                 </Col>
             </FormGroup>
         </div >

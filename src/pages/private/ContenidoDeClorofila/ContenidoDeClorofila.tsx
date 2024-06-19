@@ -237,9 +237,6 @@ function AdministrarContenidoDeClorofila() {
     };
 
     const openModalDetalles = (contenidoDeClorofila: any) => {
-        console.log('datos')
-        console.log(contenidoDeClorofila)
-        console.log('datos')
         setSelectedDatos(contenidoDeClorofila);
         abrirCerrarModalDetalles();
     };
@@ -264,8 +261,8 @@ function AdministrarContenidoDeClorofila() {
     // Cambiar estado de la parcela
     const toggleStatus = async (contenidoDeClorofila: any) => {
         Swal.fire({
-            title: "Cambiar Estado",
-            text: "¿Estás seguro de que deseas actualizar el estado del contenido de clorofila: " + contenidoDeClorofila.cultivo + "?",
+            title: "Eliminar Contenido de Clorofila",
+            text: "¿Estás seguro de que deseas eliminar el contenido de clorofila: " + contenidoDeClorofila.cultivo + "?",
             icon: "warning",
             showCancelButton: true,
             confirmButtonText: "Sí",
@@ -281,19 +278,19 @@ function AdministrarContenidoDeClorofila() {
                     if (parseInt(resultado.indicador) === 1) {
                         Swal.fire({
                             icon: 'success',
-                            title: '¡Estado Actualizado! ',
-                            text: 'Actualización exitosa.',
+                            title: '¡Registro eliminado! ',
+                            text: 'Eliminación exitosa.',
                         });
                         await obtenerRegistroContenidoDeClorofila();
                     } else {
                         Swal.fire({
                             icon: 'error',
-                            title: 'Error al actualizar el estado.',
+                            title: 'Error al elimnar el registro.',
                             text: resultado.mensaje,
                         });
                     };
                 } catch (error) {
-                    Swal.fire("Error al actualizar el estado del contenido de clorofila", "", "error");
+                    Swal.fire("Error al eliminar el contenido de clorofila", "", "error");
                 }
             }
         });
