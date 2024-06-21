@@ -14,30 +14,21 @@ import { ObtenerRegistroContenidoDeClorofila, CambiarEstadoRegistroContenidoDeCl
 
 
 //import InsertarManejoFertilizante from "../../../components/manejoFertilizante/InsertarManejoFertilizante.tsx";
-import InsertarContenidoDeClorofila from "../../../components/contenidoDeClorofila/InsertarContenidoDeClorofila.tsx";
+import InsertarCantidadDePlantas from "../../../components/cantidadDePlantas/InsertarCantidadDePlantas.tsx";
 
 /////////////////////////////////
-import EditarContenidoDeClorofila from "../../../components/contenidoDeClorofila/EditarContenidoDeClorofila.tsx";
+import EditarCantidadDePlantas from "../../../components/cantidadDePlantas/EditarCantidadDePlantas.tsx";
 
 ////////////////////////////
 
 
 import '../../../css/FormSeleccionEmpresa.css'
 import { ObtenerUsuariosAsignados, ObtenerUsuariosAsignadosPorIdentificacion } from "../../../servicios/ServicioUsuario.ts";
-import DetallesContenidoDeClorofila from "../../../components/contenidoDeClorofila/DetallesContenidoDeClorofila.tsx";
+import DetallesCantidadDePlantas from "../../../components/cantidadDePlantas/DetallesCantidadDePlantas.tsx";
+import { CambiarEstadoRegistroCantidadDePlantas, ObtenerRegistroCantidadDePlantas } from "../../../servicios/ServicioCantidadDePlantas.ts";
 
 
-
-// interface Option {
-//     identificacion: string;
-//     idEmpresa: number;
-//     nombre: string;
-//     idParcela: number;
-//     idFinca: number;
-// }
-
-
-function AdministrarContenidoDeClorofila() {
+function CantidadDePlantas() {
     const [filtroNombre, setFiltroNombre] = useState('');
     const [modalEditar, setModalEditar] = useState(false);
     const [modalDetalles, setmodalDetalles] = useState(false);
@@ -45,23 +36,20 @@ function AdministrarContenidoDeClorofila() {
     const [modalInsertar, setModalInsertar] = useState(false);
     //datos a editar
     const [selectedDatos, setSelectedDatos] = useState({
+        idCantidadDePlantas: '',
         idFinca: '',
         idParcela: '',
-        idContenidoDeClorofila: '',
-        cultivo: '',
-        fecha: '',
-        valorDeClorofila: '',
         idPuntoMedicion: '',
-        temperatura: '',
-        humedad: '',
-        observaciones: ''
+        PuntoMedicion: '',
+        cultivo: '',
+        cantidadPromedioMetroCuadrado: ''
     });
 
     const [parcelas, setParcelas] = useState<any[]>([]);
     const [selectedParcela, setSelectedParcela] = useState<number | null>(null);
     const [parcelasFiltradas, setParcelasFiltradas] = useState<any[]>([]);
     /////////////////////////////////////////////////////
-    const [contenidoDeClorofilaFiltrados, setContenidoDeClorofilaFiltrados] = useState<any[]>([]);
+    const [cantidadDePlantasFiltrados, setCantidadDePlantasFiltrados] = useState<any[]>([]);
 
     ///////////////////////////////////////////////
 
@@ -69,7 +57,7 @@ function AdministrarContenidoDeClorofila() {
     const [fincas, setFincas] = useState<any[]>([]);
 
     /////////////////////////////////////
-    const [contenidoDeClorofila, setContenidoDeClorofila] = useState<any[]>([]);
+    const [cantidadDePlantas, setCantidadDePlantas] = useState<any[]>([]);
     ////////////////////////////////////////////
 
 
@@ -126,7 +114,7 @@ function AdministrarContenidoDeClorofila() {
 
     // Obtener parcelas cuando cambie la finca seleccionada
     useEffect(() => {
-        obtenerRegistroContenidoDeClorofila();
+        obtenerRegistroCantidadDePlantas();
     }, [selectedParcela]);
 
 
@@ -134,7 +122,7 @@ function AdministrarContenidoDeClorofila() {
     // Filtrar parcelas cuando cambien la finca seleccionada, las parcelas o el filtro por nombre
     useEffect(() => {
         filtrarParcelas();
-    }, [selectedFinca, contenidoDeClorofila, filtroNombre]);
+    }, [selectedFinca, cantidadDePlantas, filtroNombre]);
 
 
 
@@ -142,18 +130,18 @@ function AdministrarContenidoDeClorofila() {
     // Función para filtrar las parcelas
     const filtrarParcelas = () => {
 
-        const ContenidoClorofilaFiltrado = filtroNombre
+        const CantidadDePlantasFiltrado = filtroNombre
 
 
 
 
-            ? contenidoDeClorofila.filter((contenidoDeClorofila: any) =>
-                contenidoDeClorofila.cultivo.toLowerCase().includes(filtroNombre.toLowerCase()) ||
-                contenidoDeClorofila.codigo.toLowerCase().includes(filtroNombre.toLowerCase())
+            ? cantidadDePlantas.filter((cantidadDePlantas: any) =>
+                cantidadDePlantas.cultivo.toLowerCase().includes(filtroNombre.toLowerCase()) ||
+                cantidadDePlantas.codigo.toLowerCase().includes(filtroNombre.toLowerCase())
             )
-            : contenidoDeClorofila;
+            : cantidadDePlantas;
 
-        setContenidoDeClorofilaFiltrados(ContenidoClorofilaFiltrado);
+        setCantidadDePlantasFiltrados(CantidadDePlantasFiltrado);
     };
 
 
@@ -175,7 +163,7 @@ function AdministrarContenidoDeClorofila() {
     }, [selectedFinca]);
 
 
-    const obtenerRegistroContenidoDeClorofila = async () => {
+    const obtenerRegistroCantidadDePlantas = async () => {
         try {
             const idEmpresa = localStorage.getItem('empresaUsuario');
             const idUsuario = localStorage.getItem('identificacionUsuario');
@@ -184,7 +172,7 @@ function AdministrarContenidoDeClorofila() {
 
                 const datosUsuarios = await ObtenerUsuariosAsignados({ idEmpresa: idEmpresa });
 
-                const contenidoDeClorofilaResponse = await ObtenerRegistroContenidoDeClorofila();
+                const cantidadDePlantasResponse = await ObtenerRegistroCantidadDePlantas();
 
                 const usuarioActual = datosUsuarios.find((usuario: any) => usuario.identificacion === idUsuario);
 
@@ -196,20 +184,22 @@ function AdministrarContenidoDeClorofila() {
                 // devuelve las parcelas del usuario
                 // const parcelasUsuarioActual = datosUsuarios.filter((usuario: any) => usuario.identificacion === idUsuario).map((usuario: any) => usuario.idParcela);
 
-                const contenidoDeClorofilaConEstado = contenidoDeClorofilaResponse.map((datoContenidoDeClorofila: any) => ({
-                    ...datoContenidoDeClorofila,
-                    sEstado: datoContenidoDeClorofila.estado === 1 ? 'Activo' : 'Inactivo'
+                const cantidadDePlantasConEstado = cantidadDePlantasResponse.map((datoCantidadDePlantas: any) => ({
+                    ...datoCantidadDePlantas,
+                    sEstado: datoCantidadDePlantas.estado === 1 ? 'Activo' : 'Inactivo'
                 }));
 
-                const contenidoDeClorofilaFiltrados = contenidoDeClorofilaConEstado.filter((contenidoDeClorofila: any) => {
+                const cantidadDePlantasFiltrados = cantidadDePlantasConEstado.filter((cantidadDePlantas: any) => {
 
 
-                    return contenidoDeClorofila.idFinca === selectedFinca && contenidoDeClorofila.idParcela === selectedParcela;
+                    return cantidadDePlantas.idFinca === selectedFinca && cantidadDePlantas.idParcela === selectedParcela;
 
                 });
 
-                setContenidoDeClorofila(contenidoDeClorofilaFiltrados);
-                setContenidoDeClorofilaFiltrados(contenidoDeClorofilaFiltrados);
+                setCantidadDePlantas(cantidadDePlantasFiltrados);
+                setCantidadDePlantasFiltrados(cantidadDePlantasFiltrados);
+
+               
             }
         } catch (error) {
             console.error('Error al obtener los contenidos de clorofila:', error);
@@ -227,13 +217,13 @@ function AdministrarContenidoDeClorofila() {
     };
 
     // Abrir modal de edición
-    const openModal = (contenidoDeClorofila: any) => {
-        setSelectedDatos(contenidoDeClorofila);
+    const openModal = (cantidadDePlantas: any) => {
+        setSelectedDatos(cantidadDePlantas);
         abrirCerrarModalEditar();
     };
 
-    const openModalDetalles = (contenidoDeClorofila: any) => {
-        setSelectedDatos(contenidoDeClorofila);
+    const openModalDetalles = (cantidadDePlantas: any) => {
+        setSelectedDatos(cantidadDePlantas);
         abrirCerrarModalDetalles();
     };
 
@@ -243,22 +233,22 @@ function AdministrarContenidoDeClorofila() {
         setmodalDetalles(!modalDetalles);
     };
 
-    const handleAgregarContenidoDeClorofila = async () => {
-        await obtenerRegistroContenidoDeClorofila();
+    const handleAgregarCantidadDePlantas = async () => {
+        await obtenerRegistroCantidadDePlantas();
         abrirCerrarModalInsertar();
     };
 
-    const handleEditarContenidoDeClorofila = async () => {
-        await obtenerRegistroContenidoDeClorofila();
+    const handleEditarCantidadDePlantas = async () => {
+        await obtenerRegistroCantidadDePlantas();
         abrirCerrarModalEditar();
     };
 
 
     // Cambiar estado de la parcela
-    const toggleStatus = async (contenidoDeClorofila: any) => {
+    const toggleStatus = async (cantidadDePlantas: any) => {
         Swal.fire({
-            title: "Eliminar Contenido de Clorofila",
-            text: "¿Estás seguro de que deseas eliminar el contenido de clorofila: " + contenidoDeClorofila.cultivo + "?",
+            title: "Eliminar Cantidad de Plantas",
+            text: "¿Estás seguro de que deseas eliminar el contenido de cantidad de plantas: " + cantidadDePlantas.cultivo + "?",
             icon: "warning",
             showCancelButton: true,
             confirmButtonText: "Sí",
@@ -267,17 +257,17 @@ function AdministrarContenidoDeClorofila() {
             if (result.isConfirmed) {
                 try {
                     const datos = {
-                        IdContenidoDeClorofila: contenidoDeClorofila.idContenidoDeClorofila,
+                        IdCantidadDePlantas: cantidadDePlantas.idCantidadDePlantas,
                     };
 
-                    const resultado = await CambiarEstadoRegistroContenidoDeClorofila(datos);
+                    const resultado = await CambiarEstadoRegistroCantidadDePlantas(datos);
                     if (parseInt(resultado.indicador) === 1) {
                         Swal.fire({
                             icon: 'success',
                             title: '¡Registro eliminado! ',
                             text: 'Eliminación exitosa.',
                         });
-                        await obtenerRegistroContenidoDeClorofila();
+                        await obtenerRegistroCantidadDePlantas();
                     } else {
                         Swal.fire({
                             icon: 'error',
@@ -286,7 +276,7 @@ function AdministrarContenidoDeClorofila() {
                         });
                     };
                 } catch (error) {
-                    Swal.fire("Error al eliminar el contenido de clorofila", "", "error");
+                    Swal.fire("Error al eliminar el contenido de cantidad de plantas", "", "error");
                 }
             }
         });
@@ -294,21 +284,20 @@ function AdministrarContenidoDeClorofila() {
 
 
     const columns2 = [
+        { key: 'nombreFinca', header: 'Finca' },
+        { key: 'nombreParcela', header: 'Parcela' },
+        // { key: 'idPuntoMedicion', header: 'idPuntoMedicion' },
+        { key: 'puntoMedicion', header: 'Punto de Medicion' },
         { key: 'cultivo', header: 'Cultivo' },
-        { key: 'fecha', header: 'Fecha' },
-        { key: 'valorDeClorofila', header: 'Valor de Clorofila' },
-        { key: 'codigo', header: 'Punto de medición' },
-        // { key: 'temperatura', header: 'Temperatura' },
-        // { key: 'humedad', header: 'Humedad' },
-        // { key: 'observaciones', header: 'Observaciones' },
+        { key: 'cantidadPromedioMetroCuadrado', header: 'CantidadPromedioMetroCuadrado' },
         // { key: 'sEstado', header: 'Estado' },
         { key: 'acciones', header: 'Acciones', actions: true } // Columna para acciones
     ];
 
     //apartado para insertar codigo html en el header
     const renderHeader = (header: any) => {
-        if (header === 'Valor de Clorofila') {
-            return <span>Valor de Clorofila (μmol m<sup>2</sup>)</span>;
+        if (header === 'CantidadPromedioMetroCuadrado') {
+            return <span>Cantidad Promedio (m<sup>2</sup>)</span>;
         }
         return header;
     };
@@ -317,9 +306,9 @@ function AdministrarContenidoDeClorofila() {
         <Sidebar>
             <div className="main-container">
                 <Topbar />
-                <BordeSuperior text="Contenido de Clorofila" />
+                <BordeSuperior text="Cantidad de Plantas" />
                 <div className="content" col-md-12>
-                    <button onClick={() => abrirCerrarModalInsertar()} className="btn-crear">Ingresar contenido de clorofila</button>
+                    <button onClick={() => abrirCerrarModalInsertar()} className="btn-crear">Ingresar cantidad de plantas</button>
                     <div className="filtro-container" style={{ width: '300px' }}>
                         <select value={selectedFinca || ''} onChange={handleFincaChange} className="custom-select">
                             <option value={0}>Seleccione una finca</option>
@@ -343,7 +332,7 @@ function AdministrarContenidoDeClorofila() {
                             id="filtroNombre"
                             value={filtroNombre}
                             onChange={handleChangeFiltro}
-                            placeholder="Ingrese un cultivo o punto de medición"
+                            placeholder="Ingrese un cultivo"
                             className="form-control"
                         />
                     </div>
@@ -353,25 +342,25 @@ function AdministrarContenidoDeClorofila() {
                     <TableResponsiveDetalles
                         //mapeo de las columnas para poder mostar texto con formato html de ser necesario
                         columns={columns2.map(col => ({ ...col, header: renderHeader(col.header) }))}
-                        data={contenidoDeClorofilaFiltrados}
+                        data={cantidadDePlantasFiltrados}
                         openModalDetalles={openModalDetalles}
                         btnActionNameDetails={"Detalles"}
                         openModal={openModal}
                         btnActionName={"Editar"}
-                        toggleStatus={toggleStatus} />
+                        toggleStatus={toggleStatus}/>
                 </div>
             </div>
 
             <Modal
                 isOpen={modalInsertar}
                 toggle={abrirCerrarModalInsertar}
-                title="Insertar contenido de clorofila"
+                title="Insertar cantidad de plantas"
                 onCancel={abrirCerrarModalInsertar}
             >
                 <div className='form-container'>
                     <div className='form-group'>
-                        <InsertarContenidoDeClorofila
-                            onAdd={handleAgregarContenidoDeClorofila}
+                        <InsertarCantidadDePlantas
+                            onAdd={handleAgregarCantidadDePlantas}
                         />
                     </div>
                 </div>
@@ -380,26 +369,24 @@ function AdministrarContenidoDeClorofila() {
             {<Modal
                 isOpen={modalEditar}
                 toggle={abrirCerrarModalEditar}
-                title="Editar Contenido de Clorofila"
+                title="Editar Cantidad De Plantas"
                 onCancel={abrirCerrarModalEditar}
             >
                 <div className='form-container'>
                     <div className='form-group'>
-                        <EditarContenidoDeClorofila
+                        <EditarCantidadDePlantas
                             idFinca={selectedDatos.idFinca}
                             idParcela={selectedDatos.idParcela}
-                            idContenidoDeClorofila={selectedDatos.idContenidoDeClorofila}
-                            cultivo={selectedDatos.cultivo}
-                            fecha={selectedDatos.fecha}
-                            valorDeClorofila={selectedDatos.valorDeClorofila}
+                            idCantidadDePlantas={selectedDatos.idCantidadDePlantas}
                             idPuntoMedicion={selectedDatos.idPuntoMedicion}
-                            observaciones={selectedDatos.observaciones}
-                            onEdit={handleEditarContenidoDeClorofila}
+                            cultivo={selectedDatos.cultivo}
+                            cantidadPromedioMetroCuadrado={selectedDatos.cantidadPromedioMetroCuadrado}
+                            onEdit={handleEditarCantidadDePlantas}
                         />
                     </div>
                 </div>
             </Modal>}
-            {<Modal
+            {/* {<Modal
                 isOpen={modalDetalles}
                 toggle={abrirCerrarModalDetalles}
                 title="Detalles Contenido de Clorofila"
@@ -407,10 +394,10 @@ function AdministrarContenidoDeClorofila() {
             >
                 <div className='form-container'>
                     <div className='form-group'>
-                        <DetallesContenidoDeClorofila
+                        <DetallesCantidadDePlantas
                             idFinca={selectedDatos.idFinca}
                             idParcela={selectedDatos.idParcela}
-                            idContenidoDeClorofila={selectedDatos.idContenidoDeClorofila}
+                            idCantidadDePlantas={selectedDatos.idCantidadDePlantas}
                             cultivo={selectedDatos.cultivo}
                             fecha={selectedDatos.fecha}
                             valorDeClorofila={selectedDatos.valorDeClorofila}
@@ -421,9 +408,9 @@ function AdministrarContenidoDeClorofila() {
                         />
                     </div>
                 </div>
-            </Modal>}
+            </Modal>} */}
         </Sidebar>
     );
 }
 
-export default AdministrarContenidoDeClorofila;
+export default CantidadDePlantas;

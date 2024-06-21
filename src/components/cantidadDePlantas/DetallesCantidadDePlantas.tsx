@@ -1,10 +1,9 @@
 import React, { useEffect, useState } from 'react';
 import { FormGroup, Label, Input, Col, FormFeedback, Button } from 'reactstrap';
-import Swal from 'sweetalert2';
 import { ObtenerFincas } from '../../servicios/ServicioFincas.ts';
 import { ObtenerParcelas } from '../../servicios/ServicioParcelas.ts';
 import { ObtenerUsuariosAsignadosPorIdentificacion } from '../../servicios/ServicioUsuario.ts';
-import { ModificarRegistroContenidoDeClorofila, ObtenerPuntoMedicionFincaParcela } from "../../servicios/ServicioContenidoDeClorofila.ts";
+import { ObtenerPuntoMedicionFincaParcela } from "../../servicios/ServicioContenidoDeClorofila.ts";
 import '../../css/CrearCuenta.css';
 
 // Interfaz para las propiedades del componente
@@ -15,6 +14,8 @@ interface ContenidoDeClorofilaSeleccionado {
     cultivo: string;
     fecha: string,
     valorDeClorofila: string;
+    temperatura: string;
+    humedad: string;
     idPuntoMedicion: string;
     observaciones: string;
     onEdit?: () => void;
@@ -30,13 +31,15 @@ interface Option {
     codigo: String;
 }
 
-const ModificacionContenidoDeClorofila: React.FC<ContenidoDeClorofilaSeleccionado> = ({
+const DetallesCantidadDePlantas: React.FC<ContenidoDeClorofilaSeleccionado> = ({
     idFinca,
     idParcela,
     idContenidoDeClorofila,
     cultivo,
     fecha,
     valorDeClorofila,
+    temperatura,
+    humedad,
     idPuntoMedicion,
     observaciones,
     onEdit
@@ -72,8 +75,8 @@ const ModificacionContenidoDeClorofila: React.FC<ContenidoDeClorofilaSeleccionad
         fecha: '',
         valorDeClorofila: 0,
         idPuntoMedicion: 0,
-        temperatura: 0,
-        humedad: 0,
+        temperatura: '',
+        humedad: '',
         observaciones: '',
         usuarioCreacionModificacion: ''
     });
@@ -101,6 +104,8 @@ const ModificacionContenidoDeClorofila: React.FC<ContenidoDeClorofilaSeleccionad
             idContenidoDeClorofila: idContenidoDeClorofila,
             cultivo: cultivo,
             fecha: Fecha,
+            temperatura: temperatura,
+            humedad: humedad,
             valorDeClorofila: valorDeClorofila,
             observaciones: observaciones,
         });
@@ -136,10 +141,9 @@ const ModificacionContenidoDeClorofila: React.FC<ContenidoDeClorofilaSeleccionad
                     }
 
                     const puntosMedicion = await ObtenerPuntoMedicionFincaParcela(fincaParcelaCargar);
-
                     setpuntosMedicion(puntosMedicion)
                     setSelectedPuntoMedicion(idPuntoMedicion);
-                    
+
                 } else {
                     console.error('La identificación y/o el ID de la empresa no están disponibles en el localStorage.');
                 }
@@ -183,14 +187,14 @@ const ModificacionContenidoDeClorofila: React.FC<ContenidoDeClorofilaSeleccionad
             idFinca: selectedFinca,
             idParcela: value
         }
-        
+
         setpuntosMedicion([]);
         setSelectedPuntoMedicion('');
-        if (value.length > 0 ) {
+        if (value.length > 0) {
             const puntosMedicion = await ObtenerPuntoMedicionFincaParcela(fincaParcela);
             setpuntosMedicion(puntosMedicion)
         }
-        
+
     };
 
     const handlePuntoMedicionChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
@@ -198,133 +202,6 @@ const ModificacionContenidoDeClorofila: React.FC<ContenidoDeClorofilaSeleccionad
         setSelectedPuntoMedicion(value);
     };
 
-    // Función para manejar el envío del formulario con validación
-    const handleSubmitConValidacion = () => {
-        // Validar campos antes de avanzar al siguiente paso
-        const newErrors: Record<string, string> = {};
-
-        // Validar selección de finca
-        if (!selectedFinca) {
-            newErrors.finca = 'Debe seleccionar una finca';
-        } else {
-            newErrors.finca = '';
-        }
-
-        // Validar selección de parcela
-        if (!selectedParcela) {
-            newErrors.parcela = 'Debe seleccionar una parcela';
-        } else {
-            newErrors.parcela = '';
-        }
-
-        if (!formData.cultivo.trim()) {
-            newErrors.cultivo = 'El cultivo es requerido';
-        } else if (formData.cultivo.length > 50) {
-            newErrors.cultivo = 'El cultivo no puede tener más de 50 caracteres';
-        } else {
-            newErrors.cultivo = '';
-        }
-
-        if (!formData.fecha.trim()) {
-            newErrors.fecha = 'La fecha es obligatoria';
-        }
-
-        if (!formData.valorDeClorofila) {
-            newErrors.valorDeClorofila = 'El valor de clorofila es requerido';
-        }else if (parseInt(formData.valorDeClorofila) <= 0) {
-            newErrors.valorDeClorofila = 'El valor de clorofila debe ser mayor a 0';
-        } else {
-            newErrors.valorDeClorofila = '';
-        }
-
-        if (!formData.observaciones.trim()) {
-            newErrors.observaciones = 'Las Observaciones son obligatorias';
-        } else if (formData.observaciones.length > 2000) {
-            newErrors.observaciones = 'Las Observaciones no puede ser mayor a 2000 caracteres';
-        } else {
-            newErrors.observaciones = '';
-        }
-
-        const fechaParts = formData.fecha.split("/");
-        const fechaFormatted = `${fechaParts[2]}-${fechaParts[1]}-${fechaParts[0]}`;
-
-        // Crear el objeto Date con la fecha formateada
-        const fechaDate = new Date(fechaFormatted);
-
-        // Obtener la fecha actual
-        const today = new Date();
-
-        // Verificar si fechaDate es mayor que hoy
-        if (fechaDate > today) {
-            newErrors.fecha = 'Fecha no puede ser mayor a hoy';
-        }
-
-
-        // Actualizar los errores
-        setErrors(newErrors);
-
-        // Avanzar al siguiente paso si no hay errores
-        if (Object.values(newErrors).every(error => error === '')) {
-            handleSubmit();
-        }
-    };
-
-    // Función para formatear la fecha en el formato yyyy-MM-dd
-    function formatDate(inputDate: any) {
-        const parts = inputDate.split('/');
-        const day = parts[0];
-        const month = parts[1];
-        const year = parts[2];
-        return year + '-' + month + '-' + day;
-    }
-
-    // Suponiendo que formData.fechaCreacion contiene la fecha recibida (08/03/2024)
-    const formattedDate = formatDate(formData.fecha);
-
-    // Función para manejar el envío del formulario
-    const handleSubmit = async () => {
-        const idUsuario = localStorage.getItem('identificacionUsuario');
-        const datos = {
-            idFinca: selectedFinca,
-            idParcela: selectedParcela,
-            idContenidoDeClorofila: formData.idContenidoDeClorofila,
-            cultivo: formData.cultivo,
-            fecha: formData.fecha,
-            valorDeClorofila: formData.valorDeClorofila,
-            idPuntoMedicion: selectedPuntoMedicion,
-            temperatura: formData.temperatura,
-            humedad: formData.humedad,
-            observaciones: formData.observaciones,
-            usuarioCreacionModificacion: idUsuario
-
-        };
-
-        try {
-            const resultado = await ModificarRegistroContenidoDeClorofila(datos);
-            if (resultado.indicador === 1) {
-                Swal.fire({
-                    icon: 'success',
-                    title: '¡Contenido de clorofila Actualizado! ',
-                    text: 'Contenido de clorofila actualizado con éxito.',
-                });
-            } else {
-                Swal.fire({
-                    icon: 'error',
-                    title: 'Error al actualizar el contenido de clorofila.',
-                    text: resultado.mensaje,
-                });
-            };
-
-            // vuelve a cargar la tabla
-
-            if (onEdit) {
-                onEdit();
-            }
-
-        } catch (error) {
-            console.log(error);
-        }
-    };
 
     return (
         <div id='general' style={{ display: 'flex', flexDirection: 'column', paddingBottom: '0rem', width: '100%', margin: '0 auto' }}>
@@ -333,29 +210,25 @@ const ModificacionContenidoDeClorofila: React.FC<ContenidoDeClorofilaSeleccionad
                 <div style={{ flex: 1, marginRight: '0.5rem', marginLeft: '0.5rem' }}>
                     <FormGroup>
                         <label htmlFor="fincas">Finca:</label>
-                        <select className="custom-select" id="fincas" value={selectedFinca} onChange={handleFincaChange}>
-                            <option key="default-finca" value="">Seleccione...</option>
+                        <select className="custom-select" id="fincas" value={selectedFinca} onChange={handleFincaChange} disabled>
                             {filteredFincas.map((finca) => (
                                 <option key={`${finca.idFinca}-${finca.nombre || 'undefined'}`} value={finca.idFinca}>{finca.nombre || 'Undefined'}</option>
                             ))}
                         </select>
-                        {errors.finca && <FormFeedback>{errors.finca}</FormFeedback>}
                     </FormGroup>
                 </div>
                 <div style={{ flex: 1, marginRight: '0.5rem', marginLeft: '0.5rem' }}>
                     <FormGroup>
                         <label htmlFor="parcelas">Parcela:</label>
-                        <select className="custom-select" id="parcelas" value={selectedParcela} onChange={handleParcelaChange}>
-                            <option key="default-parcela" value="">Seleccione...</option>
+                        <select className="custom-select" id="parcelas" value={selectedParcela} onChange={handleParcelaChange} disabled>
                             {filteredParcelas.map((parcela) => (
                                 <option key={`${parcela.idParcela}-${parcela.nombre || 'undefined'}`} value={parcela.idParcela}>{parcela.nombre || 'Undefined'}</option>
                             ))}
                         </select>
-                        {errors.parcela && <FormFeedback>{errors.parcela}</FormFeedback>}
                     </FormGroup>
                 </div>
             </div>
-            <div style={{ display: 'flex', flexDirection: 'row', marginBottom: '0rem' }}>
+            <div style={{ display: 'flex', flexDirection: 'row', marginBottom: '1.5rem' }}>
                 <div style={{ flex: 1, marginRight: '0.5rem', marginLeft: '0.5rem' }}>
                     <FormGroup row>
                         <Label for="cultivo" sm={4} className="input-label">Cultivo</Label>
@@ -366,9 +239,7 @@ const ModificacionContenidoDeClorofila: React.FC<ContenidoDeClorofilaSeleccionad
                                 name="cultivo"
                                 value={formData.cultivo}
                                 onChange={handleInputChange}
-                                className={errors.codigo ? 'input-styled input-error' : 'input-styled'}
-                                placeholder="cultivo"
-                                maxLength={50}
+                                readOnly
                             />
                             <FormFeedback>{errors.cultivo}</FormFeedback>
                         </Col>
@@ -383,9 +254,7 @@ const ModificacionContenidoDeClorofila: React.FC<ContenidoDeClorofilaSeleccionad
                                 id="fecha"
                                 name="fecha"
                                 value={formData.fecha}
-                                onChange={handleInputChange}
-                                className={errors.FechaEntrega ? 'input-styled input-error' : 'input-styled'}
-                                placeholder="Selecciona una fecha"
+                                readOnly
                             />
                             <FormFeedback>{errors.fecha}</FormFeedback>
                         </Col>
@@ -403,10 +272,7 @@ const ModificacionContenidoDeClorofila: React.FC<ContenidoDeClorofilaSeleccionad
                                 id="valorDeClorofila"
                                 name="valorDeClorofila"
                                 value={formData.valorDeClorofila.toString()}
-                                onChange={handleInputChange}
-                                className={errors.valorDeClorofila ? 'input-styled input-error' : 'input-styled'}
-                                placeholder="0.0"
-                                maxLength={50}
+                                readOnly
                             />
                             <FormFeedback>{errors.valorDeClorofila}</FormFeedback>
                         </Col>
@@ -415,16 +281,45 @@ const ModificacionContenidoDeClorofila: React.FC<ContenidoDeClorofilaSeleccionad
                 <div style={{ flex: 2, marginRight: '0.5rem', marginLeft: '0.5rem' }}>
                     <FormGroup>
                         <label htmlFor="puntosMedicion">Punto de medición:</label>
-                        <select className="custom-select" id="puntosMedicion" value={selectedPuntoMedicion} onChange={handlePuntoMedicionChange}>
-                            <option key="default-puntoMedicion" value="">Seleccione...</option>
+                        <select className="custom-select" id="puntosMedicion" value={selectedPuntoMedicion} onChange={handlePuntoMedicionChange} disabled>
                             {puntosMedicion.map((puntoMedicion) => (
                                 <option key={`${puntoMedicion.idPuntoMedicion}-${puntoMedicion.codigo || 'undefined'}`} value={puntoMedicion.idPuntoMedicion}>{puntoMedicion.codigo || 'Undefined'}</option>
                             ))}
                         </select>
-                        {errors.puntoMedicion && <FormFeedback>{errors.puntoMedicion}</FormFeedback>}
                     </FormGroup>
                 </div>
             </div>
+            <div style={{ display: 'flex', flexDirection: 'row', marginBottom: '0rem', width: '100%' }}>
+                <div style={{ flex: 2, marginRight: '0.5rem', marginLeft: '0.5rem' }}>
+                    <FormGroup row>
+                        <Label for="temperatura" sm={4} className="input-label">Temperatura</Label>
+                        <Col sm={8}>
+                            <Input
+                                type="text"
+                                id="temperatura"
+                                name="temperatura"
+                                value={formData.temperatura}
+                                readOnly
+                            />
+                        </Col>
+                    </FormGroup>
+                </div>
+                <div style={{ flex: 2, marginRight: '0.5rem', marginLeft: '0.5rem' }}>
+                <FormGroup row>
+                        <Label for="humedad" sm={4} className="input-label">Humedad</Label>
+                        <Col sm={8}>
+                            <Input
+                                type="text"
+                                id="humedad"
+                                name="humedad"
+                                value={formData.humedad}
+                                readOnly
+                            />
+                        </Col>
+                    </FormGroup>
+                </div>
+            </div> 
+
             <div style={{ display: 'flex', flexDirection: 'row', marginBottom: '0rem' }}>
 
                 <div style={{ flex: 1, marginRight: '0.5rem', marginLeft: '0.5rem' }}>
@@ -436,24 +331,16 @@ const ModificacionContenidoDeClorofila: React.FC<ContenidoDeClorofilaSeleccionad
                                 id="observaciones"
                                 name="observaciones"
                                 value={formData.observaciones}
-                                onChange={handleInputChange}
-                                className={errors.observaciones ? 'input-styled input-error' : 'input-styled'}
                                 style={{ minWidth: '350px' }}
-                                placeholder="Observaciones"
-                                maxLength={2000}
+                                readOnly
                             />
                             <FormFeedback>{errors.observaciones}</FormFeedback>
                         </Col>
                     </FormGroup>
                 </div>
             </div>
-            <FormGroup row>
-                <Col sm={{ size: 10, offset: 2 }}>
-                    <Button onClick={handleSubmitConValidacion} className="btn-styled">Guardar</Button>
-                </Col>
-            </FormGroup>
         </div >
     );
 };
 
-export default ModificacionContenidoDeClorofila;
+export default DetallesCantidadDePlantas;

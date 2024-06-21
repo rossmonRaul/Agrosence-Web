@@ -6,8 +6,9 @@ import Swal from 'sweetalert2';
 import { ObtenerFincas } from '../../servicios/ServicioFincas.ts';
 import { ObtenerParcelas } from '../../servicios/ServicioParcelas.ts';
 import { ObtenerUsuariosAsignadosPorIdentificacion } from '../../servicios/ServicioUsuario.ts';
+import { InsertarRegistroCantidadDePlantas } from '../../servicios/ServicioCantidadDePlantas.ts';
 
-interface InsertarContenidoDeClorofilaProps {
+interface InsertarCantidadDePlantasProps {
     onAdd: () => void;
 }
 
@@ -26,15 +27,13 @@ interface Option {
     codigo: String;
 }
 
-const InsertarContenidoDeClorofila: React.FC<InsertarContenidoDeClorofilaProps> = ({ onAdd }) => {
+const InsertarCantidadDePlantas: React.FC<InsertarCantidadDePlantasProps> = ({ onAdd }) => {
     const [formData, setFormData] = useState({
         idFinca: '',
         idParcela: '',
-        cultivo: '',
-        fecha: '',
-        valorDeClorofila: '',
         idPuntoMedicion: '',
-        observaciones: '',
+        cultivo: '',
+        cantidadPromedioMetroCuadrado: '',
         usuarioCreacionModificacion: ''
     });
     const [errors, setErrors] = useState<Record<string, string>>({});
@@ -152,6 +151,13 @@ const InsertarContenidoDeClorofila: React.FC<InsertarContenidoDeClorofilaProps> 
             newErrors.parcela = '';
         }
 
+
+        if (!selectedPuntoMedicion) {
+            newErrors.puntoMedicion = 'Debe seleccionar un punto de medición';
+        } else {
+            newErrors.puntoMedicion = '';
+        }
+
         if (!formData.cultivo.trim()) {
             newErrors.cultivo = 'El cultivo es requerido';
         } else if (formData.cultivo.length > 50) {
@@ -160,44 +166,12 @@ const InsertarContenidoDeClorofila: React.FC<InsertarContenidoDeClorofilaProps> 
             newErrors.cultivo = '';
         }
 
-        if (!formData.fecha.trim()) {
-            newErrors.fecha = 'La fecha es obligatoria';
-        }
-
-        if (!formData.valorDeClorofila) {
-            newErrors.valorDeClorofila   = 'El valor de clorofila es requerido';
-        } else if (parseInt(formData.valorDeClorofila) < 0) {
-            newErrors.valorDeClorofila = 'El valor de clorofila no puede ser menor a 0';
+        if (!formData.cantidadPromedioMetroCuadrado) {
+            newErrors.cantidadPromedioMetroCuadrado = 'El valor de cantidad promedio es requerido';
+        } else if (parseInt(formData.cantidadPromedioMetroCuadrado) <= 0) {
+            newErrors.cantidadPromedioMetroCuadrado = 'El valor de cantidad promedio debe ser mayor a 0';
         } else {
-            newErrors.valorDeClorofila = '';
-        }
-
-        if (!selectedPuntoMedicion) {
-            newErrors.puntoMedicion = 'Debe seleccionar un punto de medición';
-        } else {
-            newErrors.puntoMedicion = '';
-        }
-
-        if (!formData.observaciones.trim()) {
-            newErrors.observaciones = 'Las Observaciones son obligatorias';
-        } else if (formData.observaciones.length > 2000) {
-            newErrors.observaciones = 'Las Observaciones no puede ser mayor a 2000 caracteres';
-        } else {
-            newErrors.observaciones = '';
-        }
-
-        const fechaParts = formData.fecha.split("/");
-        const fechaFormatted = `${fechaParts[2]}-${fechaParts[1]}-${fechaParts[0]}`;
-
-        // Crear el objeto Date con la fecha formateada
-        const fechaDate = new Date(fechaFormatted);
-
-        // Obtener la fecha actual
-        const today = new Date();
-
-        // Verificar si fechaDate es mayor que hoy
-        if (fechaDate > today) {
-            newErrors.fecha = 'Fecha no puede ser mayor a hoy';
+            newErrors.cantidadPromedioMetroCuadrado = '';
         }
 
         formData.idPuntoMedicion = selectedPuntoMedicion;
@@ -206,9 +180,9 @@ const InsertarContenidoDeClorofila: React.FC<InsertarContenidoDeClorofilaProps> 
 
         if (Object.values(newErrors).every(error => error === '')) {
             try {
+
                 formData.idFinca = selectedFinca;
                 formData.idParcela = selectedParcela;
-                formData.idPuntoMedicion = selectedPuntoMedicion;
 
                 const idUsuario = localStorage.getItem('identificacionUsuario');
 
@@ -218,12 +192,12 @@ const InsertarContenidoDeClorofila: React.FC<InsertarContenidoDeClorofilaProps> 
                     console.error('El valor de identificacionUsuario en localStorage es nulo.');
                 }
 
-                const resultado = await InsertarRegistroContenidoDeClorofila(formData);
+                const resultado = await InsertarRegistroCantidadDePlantas(formData);
                 if (resultado.indicador === 1) {
                     Swal.fire({
                         icon: 'success',
-                        title: '¡Registro de contenido de clorofila insertado!',
-                        text: 'Se ha insertado el contenido de clorofila con éxito.'
+                        title: '¡Registro de cantidad de plantas insertado!',
+                        text: 'Se ha insertado la cantidad de plantas con éxito.'
                     });
                     if (onAdd) {
                         onAdd();
@@ -231,16 +205,16 @@ const InsertarContenidoDeClorofila: React.FC<InsertarContenidoDeClorofilaProps> 
                 } else {
                     Swal.fire({
                         icon: 'error',
-                        title: 'Error al insertar el contenido de clorofila',
+                        title: 'Error al insertar la cantidad de plantas',
                         text: resultado.message
                     });
                 }
             } catch (error) {
-                console.error('Error al insertar el contenido de clorofila:', error);
+                console.error('Error al insertar la cantidad de plantas:', error);
                 Swal.fire({
                     icon: 'error',
-                    title: 'Error al insertar el contenido de clorofila',
-                    text: 'Ocurrió un error al intentar insertar el contenido de clorofila. Por favor, inténtelo de nuevo más tarde.'
+                    title: 'Error al insertar la cantidad de plantas',
+                    text: 'Ocurrió un error al intentar insertar la cantidad de plantas. Por favor, inténtelo de nuevo más tarde.'
                 });
             }
         }
@@ -248,7 +222,7 @@ const InsertarContenidoDeClorofila: React.FC<InsertarContenidoDeClorofilaProps> 
 
     return (
         <div id='general' style={{ display: 'flex', flexDirection: 'column', paddingBottom: '0rem', width: '100%', margin: '0 auto' }}>
-            <h2>Contenido de Clorofila</h2>
+            <h2>Cantidad de Plantas</h2>
             <div style={{ display: 'flex', flexDirection: 'row', marginBottom: '0rem' }}>
                 <div style={{ flex: 1, marginRight: '0.5rem', marginLeft: '0.5rem' }}>
                     <FormGroup>
@@ -261,7 +235,7 @@ const InsertarContenidoDeClorofila: React.FC<InsertarContenidoDeClorofilaProps> 
                         </select>
                         {errors.finca && <FormFeedback>{errors.finca}</FormFeedback>}
                     </FormGroup>
-                </div> 
+                </div>
                 <div style={{ flex: 1, marginRight: '0.5rem', marginLeft: '0.5rem' }}>
                     <FormGroup>
                         <label htmlFor="parcelas">Parcela:</label>
@@ -275,8 +249,20 @@ const InsertarContenidoDeClorofila: React.FC<InsertarContenidoDeClorofilaProps> 
                     </FormGroup>
                 </div>
             </div>
-            <div style={{ display: 'flex', flexDirection: 'row', marginBottom: '0rem' }}>
-                <div style={{ flex: 1, marginRight: '0.5rem', marginLeft: '0.5rem' }}>
+            <div style={{ display: 'flex', flexDirection: 'row', marginBottom: '0rem',  width: '100%' }}>
+                <div style={{ flex: 2, marginRight: '0.5rem', marginLeft: '0.5rem' }}>
+                    <FormGroup>
+                        <label htmlFor="puntosMedicion">Punto de medición:</label>
+                        <select className="custom-select" id="puntosMedicion" value={selectedPuntoMedicion} onChange={handlePuntoMedicionChange}>
+                            <option key="default-puntoMedicion" value="">Seleccione...</option>
+                            {puntosMedicion.map((puntoMedicion) => (
+                                <option key={`${puntoMedicion.idPuntoMedicion}-${puntoMedicion.codigo || 'undefined'}`} value={puntoMedicion.idPuntoMedicion}>{puntoMedicion.codigo || 'Undefined'}</option>
+                            ))}
+                        </select>
+                        {errors.puntoMedicion && <FormFeedback>{errors.puntoMedicion}</FormFeedback>}
+                    </FormGroup>
+                </div>
+                <div style={{ flex: 2, marginRight: '0.5rem', marginLeft: '0.5rem' }}>
                     <FormGroup row>
                         <Label for="cultivo" sm={4} className="input-label">Cultivo</Label>
                         <Col sm={8}>
@@ -294,75 +280,24 @@ const InsertarContenidoDeClorofila: React.FC<InsertarContenidoDeClorofilaProps> 
                         </Col>
                     </FormGroup>
                 </div>
-                <div style={{ flex: 1, marginRight: '0.5rem', marginLeft: '0.5rem' }}>
-                    <FormGroup row>
-                        <Label for="fecha" sm={4} className="input-label">Fecha</Label>
-                        <Col sm={8}>
-                            <Input
-                                type="date"
-                                id="fecha"
-                                name="fecha"
-                                value={formData.fecha}
-                                onChange={handleInputChange}
-                                className={errors.FechaEntrega ? 'input-styled input-error' : 'input-styled'}
-                                placeholder="Selecciona una fecha"
-                            />
-                            <FormFeedback>{errors.fecha}</FormFeedback>
-                        </Col>
-                    </FormGroup>
-                </div>
 
             </div>
-            <div style={{ display: 'flex', flexDirection: 'row', marginBottom: '0rem', width: '100%' }}>
-                <div style={{ flex: 2, marginRight: '0.5rem', marginLeft: '0.5rem' }}>
+            <div style={{ display: 'flex', flexDirection: 'row', marginBottom: '0rem', width: '50%' }}>
+                <div style={{ flex: 1, marginRight: '0.5rem', marginLeft: '0.5rem' }}>
                     <FormGroup row>
-                        <Label for="valorDeClorofila" sm={4} className="input-label">Valor de Clorofila (μmol m<sup>2</sup>)</Label>
+                        <Label for="cantidadPromedioMetroCuadrado" sm={4} className="input-label">Cantidad promedio (m<sup>2</sup>)</Label>
                         <Col sm={8}>
                             <Input
                                 type="number"
-                                id="valorDeClorofila"
-                                name="valorDeClorofila"
-                                value={formData.valorDeClorofila.toString()}
+                                id="cantidadPromedioMetroCuadrado"
+                                name="cantidadPromedioMetroCuadrado"
+                                value={formData.cantidadPromedioMetroCuadrado}
                                 onChange={handleInputChange}
-                                className={errors.valorDeClorofila ? 'input-styled input-error' : 'input-styled'}
+                                className={errors.codigo ? 'input-styled input-error' : 'input-styled'}
                                 placeholder="0.0"
                                 maxLength={50}
                             />
-                            <FormFeedback>{errors.valorDeClorofila}</FormFeedback>
-                        </Col>
-                    </FormGroup>
-                </div>
-                <div style={{ flex: 2, marginRight: '0.5rem', marginLeft: '0.5rem' }}>
-                    <FormGroup>
-                        <label htmlFor="puntosMedicion">Punto de medición:</label>
-                        <select className="custom-select" id="puntosMedicion" value={selectedPuntoMedicion} onChange={handlePuntoMedicionChange}>
-                            <option key="default-puntoMedicion" value="">Seleccione...</option>
-                            {puntosMedicion.map((puntoMedicion) => (
-                                <option key={`${puntoMedicion.idPuntoMedicion}-${puntoMedicion.codigo || 'undefined'}`} value={puntoMedicion.idPuntoMedicion}>{puntoMedicion.codigo || 'Undefined'}</option>
-                            ))}
-                        </select>
-                        {errors.puntoMedicion && <FormFeedback>{errors.puntoMedicion}</FormFeedback>}
-                    </FormGroup>
-                </div>
-            </div>
-            <div style={{ display: 'flex', flexDirection: 'row', marginBottom: '0rem' }}>
-
-                <div style={{ flex: 1, marginRight: '0.5rem', marginLeft: '0.5rem' }}>
-                    <FormGroup row>
-                        <Label for="observaciones" sm={4} className="input-label">Observaciones</Label>
-                        <Col sm={8}>
-                            <Input
-                                type="text"
-                                id="observaciones"
-                                name="observaciones"
-                                value={formData.observaciones}
-                                onChange={handleInputChange}
-                                className={errors.observaciones ? 'input-styled input-error' : 'input-styled'}
-                                style={{ minWidth: '350px' }}
-                                placeholder="Observaciones"
-                                maxLength={2000}
-                            />
-                            <FormFeedback>{errors.observaciones}</FormFeedback>
+                            <FormFeedback>{errors.cantidadPromedioMetroCuadrado}</FormFeedback>
                         </Col>
                     </FormGroup>
                 </div>
@@ -377,4 +312,4 @@ const InsertarContenidoDeClorofila: React.FC<InsertarContenidoDeClorofilaProps> 
 
 };
 
-export default InsertarContenidoDeClorofila;
+export default InsertarCantidadDePlantas;

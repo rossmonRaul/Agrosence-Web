@@ -44,4 +44,5 @@ export const PrivateRoutes = {
     REPORTEORDENCOMPRA: 'reporteordendecompra',
     CONTENIDODECLOROFILA: "contenidodeclorofila",
     SALUDPLANTA: "saludplanta",
+    CANTIDADDEPLANTAS: "cantidaddeplantas"
 };

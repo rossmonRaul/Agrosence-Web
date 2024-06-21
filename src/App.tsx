@@ -47,6 +47,8 @@ const ReporteOrdenDeCompra = lazy(() => import('./pages/private/ReporteOrdenDeCo
 const ManoObra = lazy(() => import('./pages/private/ManoObra/ManoObra'));
 const ContenidoDeClorofila = lazy(() => import('./pages/private/ContenidoDeClorofila/ContenidoDeClorofila'))
 const SaludPlanta = lazy(() => import('./pages/private/SaludPlanta/SaludPlanta'))
+const CantidadDePlantas = lazy(() => import('./pages/private/CantidadDePlantas/CantidadDePlantas'))
+
 function App() {
   return (
     // Suspense para manejar la carga de componentes lazy
@@ -114,6 +116,7 @@ function App() {
               <Route path={PrivateRoutes.CONDICIONESMETEOROLOGICASCLIMATICAS} element={<CondicionesMeteorologicasClimaticas />} />
               <Route path={PrivateRoutes.CONTENIDODECLOROFILA} element={<ContenidoDeClorofila/>} />
               <Route path={PrivateRoutes.SALUDPLANTA} element={<SaludPlanta/>} />
+              <Route path={PrivateRoutes.CANTIDADDEPLANTAS} element={<CantidadDePlantas/>} />
               
             </Route>
           </RoutesWithNotFound>

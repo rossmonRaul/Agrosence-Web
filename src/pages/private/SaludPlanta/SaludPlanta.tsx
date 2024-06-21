@@ -20,7 +20,7 @@ import DetallesSaludDeLaPlanta from "../../../components/saludPlanta/DetallesSal
 /**
  * Componente funcional que representa la página de riesgo natural.
  */
-function RiesgoNatural() {
+function SaludPlanta() {
     // Estado para controlar la apertura y cierre del modal de edición
     const [modalEditar, setModalEditar] = useState(false);
     const [modalDetalles, setModalDetalles] = useState(false);
@@ -279,4 +279,4 @@ function RiesgoNatural() {
         </Sidebar>
     )
 }
-export default RiesgoNatural
+export default SaludPlanta
