@@ -1,14 +1,10 @@
-import React, { useCallback, useEffect, useState } from 'react';
-import { FormGroup, Label, Input, Col, FormFeedback, Button } from 'reactstrap';
-import Swal from 'sweetalert2';
+import React, { useEffect, useState } from 'react';
+import { FormGroup, Label, Input, Col, FormFeedback } from 'reactstrap';
 import { ObtenerFincas } from '../../servicios/ServicioFincas.ts';
 import { ObtenerParcelas } from '../../servicios/ServicioParcelas.ts';
 import { ObtenerUsuariosAsignadosPorIdentificacion } from '../../servicios/ServicioUsuario.ts';
-import TableResponsive from "../../components/table/table.tsx";
 import '../../css/CrearCuenta.css';
-import { useDropzone } from 'react-dropzone';
-import { ActualizarRiesgoNatural, DesactivarDocumentoRiesgoNatural, InsertarDocumentacionRiesgoNatural, ObtenerDocumentacionRiesgoNatural } from '../../servicios/ServicioRiesgoNatural.ts';
-import { ActualizarSaludDeLaPlanta, DesactivarDocumentoSaludDeLaPlanta, InsertarDocumentacionSaludDeLaPlanta, ObtenerDocumentacionSaludDeLaPlanta } from '../../servicios/ServicioSaludPlanta.ts';
+import { ObtenerDocumentacionSaludDeLaPlanta } from '../../servicios/ServicioSaludPlanta.ts';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faEye } from '@fortawesome/free-solid-svg-icons';
 
@@ -117,7 +113,7 @@ const DetallesSaludDeLaPlanta: React.FC<SaludDeLaPlantaSeleccionado> = ({
     const MostrarImagen = (item: any) => {
 
         const url = URL.createObjectURL(item.file);
-
+        setImageURL(url);
     }
     // Función para manejar cambios en los inputs del formulario
     const handleInputChange = (event: React.ChangeEvent<HTMLInputElement>) => {
@@ -353,7 +349,7 @@ const DetallesSaludDeLaPlanta: React.FC<SaludDeLaPlantaSeleccionado> = ({
                 <div>
                     <h2>Listado de imágenes</h2>
                     <div style={{ display: "flex", height: "100%", width: "900px", paddingBottom: '10px' }}>
-                        <table style={{ width: "65%", marginRight: "20px", textAlign: 'center', borderCollapse: "collapse", border: "1px solid #ddd", maxHeight: '200px', minHeight: '200px' }}>
+                        <table style={{ width: "50%", marginRight: "10px", textAlign: 'center', borderCollapse: "collapse", border: "1px solid #ddd", maxHeight: '330px', minHeight: '330px' }}>
                             <thead style={{ backgroundColor: "#f2f2f2", border: "1px solid #ddd" }}>
                                 <tr style={{ backgroundColor: "#f2f2f2", border: "1px solid #ddd" }}>
                                     <th style={{ border: "1px solid #ddd" }}>Nombre archivo</th>
@@ -373,9 +369,9 @@ const DetallesSaludDeLaPlanta: React.FC<SaludDeLaPlantaSeleccionado> = ({
                             
                         </table>
                         {imageURL && (
-                            <div style={{ width: "200px", textAlign: 'center' }}>
+                            <div style={{ width: "400px", textAlign: 'center' }}>
                                 <h4>Imagen seleccionada</h4>
-                                <img src={imageURL} alt="img" style={{ width: '175px', height: '175px' }} />
+                                <img src={imageURL} alt="img" style={{ width: '300px', height: '300px' }} />
                             </div>)}
                     </div>
                     <button onClick={handlePreviousStep} className='btn-styled-danger'>Anterior</button>

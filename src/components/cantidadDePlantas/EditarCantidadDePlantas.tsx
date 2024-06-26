@@ -309,7 +309,7 @@ return (
                                 <option key={`${puntoMedicion.idPuntoMedicion}-${puntoMedicion.codigo || 'undefined'}`} value={puntoMedicion.idPuntoMedicion}>{puntoMedicion.codigo || 'Undefined'}</option>
                             ))}
                         </select>
-                        {errors.puntoMedicion && <FormFeedback>{errors.puntoMedicion}</FormFeedback>}
+                        {errors.PuntoMedicion && <FormFeedback>{errors.PuntoMedicion}</FormFeedback>}
                     </FormGroup>
                 </div>
                 <div style={{ flex: 2, marginRight: '0.5rem', marginLeft: '0.5rem' }}>

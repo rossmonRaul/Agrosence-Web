@@ -6,11 +6,9 @@ import Topbar from "../../../components/topbar/Topbar.tsx";
 import { ObtenerParcelas } from "../../../servicios/ServicioParcelas.ts";
 import Swal from "sweetalert2";
 import { ObtenerFincas } from "../../../servicios/ServicioFincas.ts";
-import TableResponsiveDetalles from "../../../components/table/tableDetails.tsx";
+// import TableResponsiveDetalles from "../../../components/table/tableDetails.tsx";
+import TableResponsive from "../../../components/table/tableDelete.tsx";
 //import { ObtenerManejoFertilizantes, CambiarEstadoManejoFertilizantes } from "../../../servicios/ServicioFertilizantes.ts";
-
-
-import { ObtenerRegistroContenidoDeClorofila, CambiarEstadoRegistroContenidoDeClorofila } from "../../../servicios/ServicioContenidoDeClorofila.ts";
 
 
 //import InsertarManejoFertilizante from "../../../components/manejoFertilizante/InsertarManejoFertilizante.tsx";
@@ -24,14 +22,14 @@ import EditarCantidadDePlantas from "../../../components/cantidadDePlantas/Edita
 
 import '../../../css/FormSeleccionEmpresa.css'
 import { ObtenerUsuariosAsignados, ObtenerUsuariosAsignadosPorIdentificacion } from "../../../servicios/ServicioUsuario.ts";
-import DetallesCantidadDePlantas from "../../../components/cantidadDePlantas/DetallesCantidadDePlantas.tsx";
+// import DetallesCantidadDePlantas from "../../../components/cantidadDePlantas/DetallesCantidadDePlantas.tsx";
 import { CambiarEstadoRegistroCantidadDePlantas, ObtenerRegistroCantidadDePlantas } from "../../../servicios/ServicioCantidadDePlantas.ts";
 
 
 function CantidadDePlantas() {
     const [filtroNombre, setFiltroNombre] = useState('');
     const [modalEditar, setModalEditar] = useState(false);
-    const [modalDetalles, setmodalDetalles] = useState(false);
+    // const [modalDetalles, setmodalDetalles] = useState(false);
 
     const [modalInsertar, setModalInsertar] = useState(false);
     //datos a editar
@@ -131,22 +129,15 @@ function CantidadDePlantas() {
     const filtrarParcelas = () => {
 
         const CantidadDePlantasFiltrado = filtroNombre
-
-
-
-
+        
             ? cantidadDePlantas.filter((cantidadDePlantas: any) =>
-                cantidadDePlantas.cultivo.toLowerCase().includes(filtroNombre.toLowerCase()) ||
-                cantidadDePlantas.codigo.toLowerCase().includes(filtroNombre.toLowerCase())
+                cantidadDePlantas.cultivo.toLowerCase().includes(filtroNombre.toLowerCase()) || 
+                cantidadDePlantas.puntoMedicion.toLowerCase().includes(filtroNombre.toLowerCase())
             )
             : cantidadDePlantas;
 
         setCantidadDePlantasFiltrados(CantidadDePlantasFiltrado);
     };
-
-
-
-
 
     useEffect(() => {
         const obtenerParcelasDeFinca = async () => {
@@ -222,16 +213,16 @@ function CantidadDePlantas() {
         abrirCerrarModalEditar();
     };
 
-    const openModalDetalles = (cantidadDePlantas: any) => {
-        setSelectedDatos(cantidadDePlantas);
-        abrirCerrarModalDetalles();
-    };
+    // const openModalDetalles = (cantidadDePlantas: any) => {
+    //     setSelectedDatos(cantidadDePlantas);
+    //     abrirCerrarModalDetalles();
+    // };
 
 
-    // Abrir/cerrar modal de edición
-    const abrirCerrarModalDetalles = () => {
-        setmodalDetalles(!modalDetalles);
-    };
+    // // Abrir/cerrar modal de edición
+    // const abrirCerrarModalDetalles = () => {
+    //     setmodalDetalles(!modalDetalles);
+    // };
 
     const handleAgregarCantidadDePlantas = async () => {
         await obtenerRegistroCantidadDePlantas();
@@ -286,12 +277,10 @@ function CantidadDePlantas() {
     const columns2 = [
         { key: 'nombreFinca', header: 'Finca' },
         { key: 'nombreParcela', header: 'Parcela' },
-        // { key: 'idPuntoMedicion', header: 'idPuntoMedicion' },
         { key: 'puntoMedicion', header: 'Punto de Medicion' },
         { key: 'cultivo', header: 'Cultivo' },
         { key: 'cantidadPromedioMetroCuadrado', header: 'CantidadPromedioMetroCuadrado' },
-        // { key: 'sEstado', header: 'Estado' },
-        { key: 'acciones', header: 'Acciones', actions: true } // Columna para acciones
+        { key: 'acciones', header: 'Acciones', actions: true }
     ];
 
     //apartado para insertar codigo html en el header
@@ -332,19 +321,19 @@ function CantidadDePlantas() {
                             id="filtroNombre"
                             value={filtroNombre}
                             onChange={handleChangeFiltro}
-                            placeholder="Ingrese un cultivo"
+                            placeholder="Ingrese un cultivo o punto de medición"    
                             className="form-control"
                         />
                     </div>
 
                     {/* openModalDetalles */}
 
-                    <TableResponsiveDetalles
+                    <TableResponsive
                         //mapeo de las columnas para poder mostar texto con formato html de ser necesario
                         columns={columns2.map(col => ({ ...col, header: renderHeader(col.header) }))}
                         data={cantidadDePlantasFiltrados}
-                        openModalDetalles={openModalDetalles}
-                        btnActionNameDetails={"Detalles"}
+                        // openModalDetalles={openModalDetalles}
+                        // btnActionNameDetails={"Detalles"}
                         openModal={openModal}
                         btnActionName={"Editar"}
                         toggleStatus={toggleStatus}/>
