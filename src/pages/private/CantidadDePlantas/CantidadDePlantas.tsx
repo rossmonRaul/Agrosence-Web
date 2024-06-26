@@ -326,17 +326,14 @@ function CantidadDePlantas() {
                         />
                     </div>
 
-                    {/* openModalDetalles */}
-
-                    <TableResponsive
+                    <TableResponsive 
                         //mapeo de las columnas para poder mostar texto con formato html de ser necesario
                         columns={columns2.map(col => ({ ...col, header: renderHeader(col.header) }))}
                         data={cantidadDePlantasFiltrados}
-                        // openModalDetalles={openModalDetalles}
-                        // btnActionNameDetails={"Detalles"}
                         openModal={openModal}
                         btnActionName={"Editar"}
-                        toggleStatus={toggleStatus}/>
+                        toggleStatus={toggleStatus}
+                        useTrashIcon={true}/>
                 </div>
             </div>
 
@@ -375,29 +372,6 @@ function CantidadDePlantas() {
                     </div>
                 </div>
             </Modal>}
-            {/* {<Modal
-                isOpen={modalDetalles}
-                toggle={abrirCerrarModalDetalles}
-                title="Detalles Contenido de Clorofila"
-                onCancel={abrirCerrarModalDetalles}
-            >
-                <div className='form-container'>
-                    <div className='form-group'>
-                        <DetallesCantidadDePlantas
-                            idFinca={selectedDatos.idFinca}
-                            idParcela={selectedDatos.idParcela}
-                            idCantidadDePlantas={selectedDatos.idCantidadDePlantas}
-                            cultivo={selectedDatos.cultivo}
-                            fecha={selectedDatos.fecha}
-                            valorDeClorofila={selectedDatos.valorDeClorofila}
-                            temperatura={selectedDatos.temperatura}
-                            humedad={selectedDatos.humedad}
-                            idPuntoMedicion={selectedDatos.idPuntoMedicion}
-                            observaciones={selectedDatos.observaciones}
-                        />
-                    </div>
-                </div>
-            </Modal>} */}
         </Sidebar>
     );
 }

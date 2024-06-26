@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react';
 import '../../css/Table.css'
 import { Table } from 'reactstrap'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faTimes, faCheck, faPenToSquare } from '@fortawesome/free-solid-svg-icons';
+import { faTimes, faCheck, faPenToSquare, faTrash } from '@fortawesome/free-solid-svg-icons';
 
 // Interface que define la estructura de una columna de la tabla.
 interface Column {
@@ -27,9 +27,10 @@ interface TableProps {
   btnToggleOptionalStatus?: string; // Nombre del botón de acción opcional en cada fila (opcional)
   toggleOptionalStatus?: (user: any) => void; // Función para realizar una acción opcional en cada fila (opcional)
   propClassNameOpcional?: string; // Prop opcional para cambiar el estilo del boton
+  useTrashIcon?: boolean; // Nueva prop para usar el ícono faTrash
 }
 
-const TableResponsive: React.FC<TableProps> = ({ propClassNameOpcional, columns, data, openModal, toggleStatus, itemsPerPage: defaultItemsPerPage = 5, btnActionName, toggleOptionalStatus, btnToggleOptionalStatus }) => {
+const TableResponsive: React.FC<TableProps> = ({ propClassNameOpcional, columns, data, openModal, toggleStatus, itemsPerPage: defaultItemsPerPage = 5, btnActionName, toggleOptionalStatus, btnToggleOptionalStatus, useTrashIcon }) => {
   const [currentPage, setCurrentPage] = useState<number>(1);
   const [itemsPerPage, setItemsPerPage] = useState<number>(defaultItemsPerPage);
 
@@ -106,13 +107,14 @@ const TableResponsive: React.FC<TableProps> = ({ propClassNameOpcional, columns,
 
                           {toggleStatus && (
                             <div className="status-toggle">
+                              
                               {item.estado === 1 ? (
                                 <>
                                   <button className="btn-inactivate" onClick={() => toggleStatus(item)}>
-                                    <FontAwesomeIcon icon={faTimes} /> Eliminar
+                                    <FontAwesomeIcon icon={useTrashIcon ? faTrash : faTimes} /> Eliminar
                                   </button>
                                 </>
-                              ) : (
+                              ) : ( 
                                 <>
                                   <button className="btn-activate" onClick={() => toggleStatus(item)}>
                                     <FontAwesomeIcon icon={faCheck} /> Activar

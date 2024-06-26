@@ -200,7 +200,7 @@ function RiesgoNatural() {
                     <TableResponsiveDelete columns={columns} data={RiesgosFiltrados} openModal={openModal} toggleStatus={toggleStatus} btnActionName={"Editar"} />
                 </div>
             </div>
-
+ 
             <Modal
                 isOpen={modalEditar}
                 toggle={abrirCerrarModalEditar}
