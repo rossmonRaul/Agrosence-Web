@@ -45,6 +45,7 @@ export const PrivateRoutes = {
     CONTENIDODECLOROFILA: "contenidodeclorofila",
     SALUDPLANTA: "saludplanta",
     CANTIDADDEPLANTAS: "cantidaddeplantas",
-   CONTENIDODEAGUA: 'contenidodeagua'
+   CONTENIDODEAGUA: 'contenidodeagua',
+   COBERTURAVEGETAL: "CoberturaVegetal",
 
 };

@@ -10,6 +10,7 @@ import { Roles } from './models';
 import { Dashboard } from './pages/private';
 import { Spinner } from 'reactstrap';
 
+
 // Importar componentes con lazy loading
 const Login = lazy(() => import('./pages/LoginPage'));
 const Private = lazy(() => import('./pages/private/Private'));
@@ -49,6 +50,7 @@ const ContenidoDeClorofila = lazy(() => import('./pages/private/ContenidoDeCloro
 const SaludPlanta = lazy(() => import('./pages/private/SaludPlanta/SaludPlanta'))
 const CantidadDePlantas = lazy(() => import('./pages/private/CantidadDePlantas/CantidadDePlantas'))
 const ContenidoDeAgua = lazy(() => import('./pages/private/ContenidoDeAgua/ContenidoDeAgua'))
+const CoberturaVegetal = lazy(() => import('./pages/private/CoberturaVegetal/CoberturaVegetal'))
 
 function App() {
   return (
@@ -119,6 +121,7 @@ function App() {
               <Route path={PrivateRoutes.SALUDPLANTA} element={<SaludPlanta/>} />
               <Route path={PrivateRoutes.CANTIDADDEPLANTAS} element={<CantidadDePlantas/>} />
               <Route path={PrivateRoutes.CONTENIDODEAGUA} element={<ContenidoDeAgua/>} />
+              <Route path={PrivateRoutes.COBERTURAVEGETAL} element={<CoberturaVegetal/>} />
             </Route>
           </RoutesWithNotFound>
         </BrowserRouter>
