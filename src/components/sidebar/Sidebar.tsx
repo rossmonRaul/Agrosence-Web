@@ -330,6 +330,12 @@ const Sidebar = ({ children }: { children: React.ReactNode }) => {
                     roles: [3]
                 },
                 {
+                    path: "/contenidodenitrogeno",
+                    name: "Contenido de Nitrógeno",
+                    icon: <img src='/nitrogen.png' style={{ width: '22px' }} />,
+                    roles: [3]
+                },
+                {
                     path: "/saludplanta",
                     name: "Salud de la Planta",
                     icon: <img src='/salud-planta.png' style={{ width: '22px' }} />,

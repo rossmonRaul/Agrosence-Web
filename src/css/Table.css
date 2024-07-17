@@ -51,6 +51,11 @@
   background-color: rgb(255, 8, 0);
   color: #ddd;
 }
+.btn-details {
+  background-color: #4CAF50;
+  color: #ddd;
+  margin-right: 10px;
+}
 
 .pagination {
   text-align: center;
@@ -89,6 +94,7 @@
   color: #ddd;
   border: grey;
 }
+
 
 .table th,
 .table td {

@@ -51,6 +51,7 @@ const SaludPlanta = lazy(() => import('./pages/private/SaludPlanta/SaludPlanta')
 const CantidadDePlantas = lazy(() => import('./pages/private/CantidadDePlantas/CantidadDePlantas'))
 const ContenidoDeAgua = lazy(() => import('./pages/private/ContenidoDeAgua/ContenidoDeAgua'))
 const CoberturaVegetal = lazy(() => import('./pages/private/CoberturaVegetal/CoberturaVegetal'))
+const ContenidoDeNitrogeno = lazy(() => import('./pages/private/ContenidoDeNitrogeno/ContenidoDeNitrogeno'))
 
 function App() {
   return (
@@ -122,6 +123,7 @@ function App() {
               <Route path={PrivateRoutes.CANTIDADDEPLANTAS} element={<CantidadDePlantas/>} />
               <Route path={PrivateRoutes.CONTENIDODEAGUA} element={<ContenidoDeAgua/>} />
               <Route path={PrivateRoutes.COBERTURAVEGETAL} element={<CoberturaVegetal/>} />
+              <Route path={PrivateRoutes.CONTENIDODENITROGENO} element={<ContenidoDeNitrogeno/>}/>
             </Route>
           </RoutesWithNotFound>
         </BrowserRouter>
