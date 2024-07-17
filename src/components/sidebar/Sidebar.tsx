@@ -340,7 +340,14 @@ const Sidebar = ({ children }: { children: React.ReactNode }) => {
                     name: "Cantidad de Plantas",
                     icon: <img src='/cantidad-plantas.png' style={{ width: '22px' }} />,
                     roles: [3]
+                },
+                {
+                    path: "/contenidodeagua",
+                    name: "Contenido de Agua",
+                    icon: <img src='/contenidodeagua.png' style={{ width: '22px' }} />,
+                    roles: [3]
                 }
+               
             ]
         },
 

@@ -48,6 +48,7 @@ const ManoObra = lazy(() => import('./pages/private/ManoObra/ManoObra'));
 const ContenidoDeClorofila = lazy(() => import('./pages/private/ContenidoDeClorofila/ContenidoDeClorofila'))
 const SaludPlanta = lazy(() => import('./pages/private/SaludPlanta/SaludPlanta'))
 const CantidadDePlantas = lazy(() => import('./pages/private/CantidadDePlantas/CantidadDePlantas'))
+const ContenidoDeAgua = lazy(() => import('./pages/private/ContenidoDeAgua/ContenidoDeAgua'))
 
 function App() {
   return (
@@ -117,7 +118,7 @@ function App() {
               <Route path={PrivateRoutes.CONTENIDODECLOROFILA} element={<ContenidoDeClorofila/>} />
               <Route path={PrivateRoutes.SALUDPLANTA} element={<SaludPlanta/>} />
               <Route path={PrivateRoutes.CANTIDADDEPLANTAS} element={<CantidadDePlantas/>} />
-              
+              <Route path={PrivateRoutes.CONTENIDODEAGUA} element={<ContenidoDeAgua/>} />
             </Route>
           </RoutesWithNotFound>
         </BrowserRouter>
