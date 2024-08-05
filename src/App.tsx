@@ -56,6 +56,7 @@ const ContenidoDeAgua = lazy(() => import('./pages/private/ContenidoDeAgua/Conte
 const CoberturaVegetal = lazy(() => import('./pages/private/CoberturaVegetal/CoberturaVegetal'))
 const ContenidoDeNitrogeno = lazy(() => import('./pages/private/ContenidoDeNitrogeno/ContenidoDeNitrogeno'))
 const CatalogoActividadesPT = lazy(() => import('./pages/private/CatalogoActividadesPT/CatalogoActividadesPT'))
+const MedidasCultivos = lazy(() => import('./pages/private/MedidasCultivos/MedidasCultivos'))
 
 function App() {
   return (
@@ -85,6 +86,7 @@ function App() {
               <Route path={PrivateRoutes.CREARUSUARIOSA} element={<AdministacionAdministradores />} />
               <Route path={PrivateRoutes.ADMINISTRAREMPRESAS} element={<AdministrarEmpresas />} />
               <Route path={PrivateRoutes.MEDICIONESSENSOR} element={<MedicionesSensor />} />
+              <Route path={PrivateRoutes.MEDIDASCULTIVOS} element={<MedidasCultivos />} />
             </Route>
 
             {/* Rutas accesibles solo para el rol de Admin */}

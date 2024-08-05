@@ -43,7 +43,7 @@ interface MedidaArea {
     medidaArea: string;
 }
 
-const ModificarCalidadCultivo: React.FC<Props> = ({
+const DetallesCalidadCultivo: React.FC<Props> = ({
     idFinca,
     idParcela,
     idManejoProductividadCultivo,
@@ -196,7 +196,6 @@ const ModificarCalidadCultivo: React.FC<Props> = ({
     };
 
     const handleTemporadaChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
-        console.log("AAAAAAA",formData);
         const value = e.target.value;
         setSelectedTemporada(value);
     };
@@ -338,7 +337,7 @@ const ModificarCalidadCultivo: React.FC<Props> = ({
             <div style={{ flex: 1, marginRight: '0.5rem', marginLeft: '0.5rem' }}>
             <FormGroup>
                     <label htmlFor="fincas">Finca:</label>
-                    <select className="custom-select" id="fincas" value={selectedFinca} onChange={handleFincaChange}>
+                    <select className="custom-select" id="fincas" value={selectedFinca} onChange={handleFincaChange} disabled>
                         <option key="default-finca" value="">Seleccione...</option>
                         {filteredFincas.map((finca) => (
                             <option key={`${finca.idFinca}-${finca.nombre || 'undefined'}`} value={finca.idFinca}>{finca.nombre || 'Undefined'}</option>
@@ -350,7 +349,7 @@ const ModificarCalidadCultivo: React.FC<Props> = ({
                 <div style={{ flex: 1, marginRight: '0.5rem', marginLeft: '0.5rem' }}>
                 <FormGroup>
                     <label htmlFor="parcelas">Parcela:</label>
-                    <select className="custom-select" id="parcelas" value={selectedParcela} onChange={handleParcelaChange}>
+                    <select className="custom-select" id="parcelas" value={selectedParcela} onChange={handleParcelaChange} disabled>
                         <option key="default-parcela" value="">Seleccione...</option>
                         {filteredParcelas.map((parcela) => (
                             <option key={`${parcela.idParcela}-${parcela.nombre || 'undefined'}`} value={parcela.idParcela}>{parcela.nombre || 'Undefined'}</option>
@@ -364,7 +363,7 @@ const ModificarCalidadCultivo: React.FC<Props> = ({
             <div style={{ flex: 1, marginRight: '0.5rem', marginLeft: '0.5rem' }}>
             <FormGroup>
                     <label htmlFor="temporadas">Temporada:</label>
-                    <select className="custom-select" id="temporadas" value={selectedTemporada} onChange={handleTemporadaChange}>
+                    <select className="custom-select" id="temporadas" value={selectedTemporada} onChange={handleTemporadaChange} disabled>
                         <option key="default-temporada" value="">Seleccione...</option>
                         {temporadas.map((temporada) => (
                             <option key={`${temporada.nombre}}-${temporada.nombre || 'undefined'}`} value={temporada.nombre}>{temporada.nombre || 'Undefined'}</option>
@@ -387,6 +386,7 @@ const ModificarCalidadCultivo: React.FC<Props> = ({
                                 onBlur={() => handleInputBlur('cultivo')}
                                 placeholder="Nombre del Cultivo"
                                 maxLength={50}
+                                readOnly
                             />
                             <FormFeedback>{errors.cultivo}</FormFeedback>
                         </Col>
@@ -407,7 +407,8 @@ const ModificarCalidadCultivo: React.FC<Props> = ({
                                 onChange={handleInputChange}
                                 onBlur={() => handleInputBlur('area')}
                                 className={errors.area ? 'input-styled input-error' : 'input-styled'}
-                                placeholder="Área"
+                                placeholder="Número de lote"
+                                readOnly
                             />
                             <FormFeedback>{errors.area}</FormFeedback>
                         </Col>
@@ -416,7 +417,7 @@ const ModificarCalidadCultivo: React.FC<Props> = ({
                 <div style={{ flex: 1, marginRight: '0.5rem', marginLeft: '0.5rem' }}>
                 <FormGroup>
                     <label htmlFor="unidadArea">Unidad de Área:</label>
-                    <select className="custom-select" id="unidadArea" value={selectedMedidaArea} onChange={handleMedidaAreaChange}>
+                    <select className="custom-select" id="unidadArea" value={selectedMedidaArea} onChange={handleMedidaAreaChange} disabled>
                         <option key="default-objArea" value="">Seleccione...</option>
                         {medidaArea.map((objArea) => (
                             <option key={`${objArea.idMedidaArea}}-${objArea.medidaArea || 'undefined'}`} value={objArea.idMedidaArea}>{objArea.medidaArea || 'Undefined'}</option>
@@ -440,6 +441,7 @@ const ModificarCalidadCultivo: React.FC<Props> = ({
                                 onBlur={() => handleInputBlur('produccion')}
                                 className={errors.produccion ? 'input-styled input-error' : 'input-styled'}
                                 placeholder="Produccion"
+                                readOnly
                             />
                             <FormFeedback>{errors.produccion}</FormFeedback>
                         </Col>
@@ -448,7 +450,7 @@ const ModificarCalidadCultivo: React.FC<Props> = ({
                     <div style={{ flex: 1, marginRight: '0.5rem', marginLeft: '0.5rem' }}>
                     <FormGroup>
                     <label htmlFor="medidaProduccion">Medida Producción:</label>
-                    <select className="custom-select" id="medidaProduccion" value={selectedMedidasCultivos} onChange={handleMedidasCultivosChange}>
+                    <select className="custom-select" id="medidaProduccion" value={selectedMedidasCultivos} onChange={handleMedidasCultivosChange} disabled>
                         <option key="default-medidaCultivo" value="">Seleccione...</option>
                         {medidasCultivos.map((medidaCultivo) => (
                             <option key={`${medidaCultivo.idMedidasCultivos}-${medidaCultivo.medida || 'undefined'}`} value={medidaCultivo.idMedidasCultivos}>{medidaCultivo.medida || 'Undefined'}</option>
@@ -472,6 +474,7 @@ const ModificarCalidadCultivo: React.FC<Props> = ({
                                 onBlur={() => handleInputBlur('productividad')}
                                 className={errors.productividad ? 'input-styled input-error' : 'input-styled'}
                                 placeholder="Productividad"
+                                readOnly
                             />
                             <FormFeedback>{errors.productividad}</FormFeedback>
                         </Col>
@@ -479,16 +482,9 @@ const ModificarCalidadCultivo: React.FC<Props> = ({
                 </div>
 
             </div>
-
-            <FormGroup row>
-                <Col sm={{ size: 10, offset: 2 }}>
-                    {/* Agregar aquí el botón de cancelar proporcionado por el modal */}
-                    <Button onClick={handleSubmitConValidacion} className="btn-styled">Guardar</Button>
-                </Col>
-            </FormGroup>
         </div>
     );
 
 };
 
-export default ModificarCalidadCultivo;
+export default DetallesCalidadCultivo;

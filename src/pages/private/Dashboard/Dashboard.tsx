@@ -10,9 +10,13 @@ import { ObtenerFincas } from '../../../servicios/ServicioFincas';
 import { ObtenerParcelas } from '../../../servicios/ServicioParcelas';
 import { ObtenerUsuariosAsignadosPorIdentificacion } from '../../../servicios/ServicioUsuario';
 import { ObtenerPuntoMedicionFincaParcela } from "../../../servicios/ServicioContenidoDeNitrogeno";
-import { ObtenerFincasParcelasDeEmpresaPorUsuario, ObtenerMedicionesSensores } from "../../../servicios/ServiciosDashboard";
+import { ObtenerFincasParcelasDeEmpresaPorUsuario, ObtenerMedicionesSensores, ObtenerMedicionesSensoresPorUbicacionPM, ObtenerPuntosMedicionPorIdEmpresa } from "../../../servicios/ServiciosDashboard";
 import { AppStore } from "../../../redux/Store";
-import ReactEcharts from 'echarts-for-react';
+import ReactEcharts from 'echarts-for-react'; 
+import MapComponent from '../../../components/MapComponent/MapComponent';
+import 'leaflet/dist/leaflet.css';
+import { MapContainer, TileLayer, Marker, Popup } from 'react-leaflet';
+import L, { LatLngTuple } from 'leaflet';
 
 interface Option {
   identificacion: string;
@@ -38,7 +42,12 @@ interface Mediciones {
   unidadMedida: string;
   fechaMedicion: string;
 }
-
+interface PuntoMedicion {
+  idPuntoMedicion:number;
+  codigo: string;
+  latitud: number;
+  longitud:number;
+}
 const Dashboard: React.FC = () => {
   const opcionInicial = {
     title: {
@@ -81,7 +90,7 @@ const Dashboard: React.FC = () => {
     ],
     series: []
   };
-
+  const [puntosMedicionMaps, setPuntosMedicionMaps] = useState<PuntoMedicion[]>([]);
   //Graficos
   const [graficoPH, setGraficoPH] = useState<any>(opcionInicial);
   const [graficoVWC, setGraficoVWC] = useState<any>(opcionInicial);
@@ -153,10 +162,15 @@ const Dashboard: React.FC = () => {
           const datos = {
             usuario: identificacion
           };
+          const datosPuntoMedicion = {
+            idEmpresa: idEmpresaString
+          };
           console.log(identificacion);
           const usuariosAsignados = await ObtenerFincasParcelasDeEmpresaPorUsuario(datos);
           console.log('Usuarios Asignados:', usuariosAsignados);
 
+          const puntosMedicionEmpresa = await ObtenerPuntosMedicionPorIdEmpresa(datosPuntoMedicion);
+          setPuntosMedicionMaps(puntosMedicionEmpresa);
           const idFincasUsuario = usuariosAsignados.map((usuario: any) => usuario.idFinca);
           const fincasResponse = await ObtenerFincas();
           console.log('Fincas Response:', fincasResponse);
@@ -259,6 +273,13 @@ const Dashboard: React.FC = () => {
   const filteredParcelas = parcelas.filter(parcela => parcela.idFinca === parseInt(selectedFinca));
 
   const handleObtenerMedicionesSensores = async () => {
+    setGraficoPH(JSON.parse(JSON.stringify(opcionInicial)));
+    setGraficoVWC(JSON.parse(JSON.stringify(opcionInicial)));
+    setGraficoConductividad(JSON.parse(JSON.stringify(opcionInicial)));
+    setGraficoHr(JSON.parse(JSON.stringify(opcionInicial)));
+    setGraficoTs(JSON.parse(JSON.stringify(opcionInicial)));
+    setGraficoTa(JSON.parse(JSON.stringify(opcionInicial)));
+    setKeyRender(prevKey => prevKey + 10);
     setLoading(true);
     try {
       const data = {
@@ -523,6 +544,291 @@ const Dashboard: React.FC = () => {
       setLoading(false);
     }
   };
+  const handleMarkerClick = async (idPuntoMedicion: number) => {
+
+    setGraficoPH(JSON.parse(JSON.stringify(opcionInicial)));
+    setGraficoVWC(JSON.parse(JSON.stringify(opcionInicial)));
+    setGraficoConductividad(JSON.parse(JSON.stringify(opcionInicial)));
+    setGraficoHr(JSON.parse(JSON.stringify(opcionInicial)));
+    setGraficoTs(JSON.parse(JSON.stringify(opcionInicial)));
+    setGraficoTa(JSON.parse(JSON.stringify(opcionInicial)));
+    setKeyRender(prevKey => prevKey + 10);
+    try {
+      const data = {
+        FechaInicio: formData.fechaInicio,
+        FechaFin: formData.fechaFin,
+        IdPuntoMedicion: idPuntoMedicion
+      };
+      const mediciones: Mediciones[] = await ObtenerMedicionesSensoresPorUbicacionPM(data);
+
+      const puntosMedicionUnicosph = Array.from(new Set(mediciones.filter(obj => obj.idMedicion === 17).map(obj => obj.codigo)));
+      const fechasMedicionUnicasph = Array.from(new Set(mediciones.filter(obj => obj.idMedicion === 17).map(obj => new Date(obj.fechaMedicion).toLocaleDateString())));
+
+      const puntosMedicionUnicosVWC = Array.from(new Set(mediciones.filter(obj => obj.idMedicion === 18).map(obj => obj.codigo)));
+      const fechasMedicionUnicasVWC = Array.from(new Set(mediciones.filter(obj => obj.idMedicion === 18).map(obj => new Date(obj.fechaMedicion).toLocaleDateString())));
+
+      const puntosMedicionUnicosConductividad = Array.from(new Set(mediciones.filter(obj => obj.idMedicion === 9).map(obj => obj.codigo)));
+      const fechasMedicionUnicasConductividad = Array.from(new Set(mediciones.filter(obj => obj.idMedicion === 9).map(obj => new Date(obj.fechaMedicion).toLocaleDateString())));
+
+      //Nuevas
+      const puntosMedicionUnicosHr = Array.from(new Set(mediciones.filter(obj => obj.idMedicion === 21).map(obj => obj.codigo)));
+      const fechasMedicionUnicasHr = Array.from(new Set(mediciones.filter(obj => obj.idMedicion === 21).map(obj => new Date(obj.fechaMedicion).toLocaleDateString())));
+
+      const puntosMedicionUnicosTs = Array.from(new Set(mediciones.filter(obj => obj.idMedicion === 10).map(obj => obj.codigo)));
+      const fechasMedicionUnicasTs = Array.from(new Set(mediciones.filter(obj => obj.idMedicion === 10).map(obj => new Date(obj.fechaMedicion).toLocaleDateString())));
+
+      const puntosMedicionUnicosTa = Array.from(new Set(mediciones.filter(obj => obj.idMedicion === 20).map(obj => obj.codigo)));
+      const fechasMedicionUnicasTa = Array.from(new Set(mediciones.filter(obj => obj.idMedicion === 10).map(obj => new Date(obj.fechaMedicion).toLocaleDateString())));
+
+      const phData: { name: string, type: string, stack: string, areaStyle: {}, emphasis: { focus: string }, data: number[] }[] = [];
+      const vwcData: { name: string, type: string, stack: string, emphasis: { focus: string }, data: number[] }[] = [];
+      const conductividadElectricaData: { name: string, type: string, stack: string, emphasis: { focus: string }, data: number[] }[] = [];
+
+      const HrData: { name: string, type: string, data: number[] }[] = [];
+      const TsData: { name: string, type: string, stack: string, label: { show: boolean }, emphasis: { focus: string }, data: number[] }[] = [];
+      const TaData: { name: string, type: string, showSymbol: string, data: number[] }[] = [];
+
+      ///console.log('mediciones',)
+      console.log(fechasMedicionUnicasConductividad)
+      console.log(fechasMedicionUnicasVWC)
+      console.log(fechasMedicionUnicasph)
+
+      mediciones.forEach((item: Mediciones) => {
+        const puntoMedicion = item.codigo;
+        const idMedicion = item.idMedicion;
+        const valorMedicion = item.valor;
+
+        let ArrayArea: { name: string, type: string, stack: string, areaStyle: {}, emphasis: { focus: string }, data: number[] }[];
+        let ArrayLineal: { name: string, type: string, stack: string, data: number[] }[];
+
+        let ArrayLinealHr: { name: string, type: string, data: number[] }[];
+        let ArrayLinealTs: { name: string, type: string, stack: string, label: { show: boolean }, emphasis: { focus: string }, data: number[] }[]
+        let ArrayLinealTa: { name: string, type: string, showSymbol: string, data: number[] }[]
+
+        let ArrayBarras: { name: string, type: string, stack: string, emphasis: { focus: string }, data: number[] }[];
+        let existingItem;
+
+        if (idMedicion === 17) {
+          ArrayArea = phData;
+          existingItem = ArrayArea.find(obj => obj.name === puntoMedicion);
+          if (!existingItem) {
+            existingItem = {
+              name: puntoMedicion,
+              type: 'line',
+              stack: 'Total',
+              areaStyle: {},
+              emphasis: { focus: 'series' },
+              data: []
+            };
+            ArrayArea.push(existingItem);
+          }
+        } else if (idMedicion === 9) {
+          ArrayBarras = conductividadElectricaData;
+          existingItem = ArrayBarras.find(obj => obj.name === puntoMedicion);
+          if (!existingItem) {
+            existingItem = {
+              name: puntoMedicion,
+              type: 'bar',
+              stack: 'Search Engine',
+              emphasis: {
+                focus: 'series'
+              },
+              data: []
+            };
+            ArrayBarras.push(existingItem);
+          }
+        } else if (idMedicion === 18) {
+          ArrayLineal = vwcData;
+          existingItem = ArrayLineal.find(obj => obj.name === puntoMedicion);
+          if (!existingItem) {
+            existingItem = {
+              name: puntoMedicion,
+              type: 'line',
+              stack: 'Total',
+              data: []
+            };
+            ArrayLineal.push(existingItem);
+          } 
+        } else if (idMedicion === 20) {
+          ArrayLinealTa = TaData;
+          existingItem = ArrayLinealTa.find(obj => obj.name === puntoMedicion);
+          if (!existingItem) {
+            existingItem = {
+              name: puntoMedicion,
+              type: 'line',
+              showSymbol: 'false',
+              data: []
+            };
+            ArrayLinealTa.push(existingItem);
+          }
+          } 
+          else if (idMedicion === 10) {
+            ArrayLinealTs = TsData;
+            existingItem = ArrayLinealTs.find(obj => obj.name === puntoMedicion);
+            if (!existingItem) {
+              existingItem = {
+                name: puntoMedicion,
+                type: 'bar',
+                stack: 'total',
+                label: {show: true},
+                emphasis: { focus: 'series'},
+                data: []
+              };
+              ArrayLinealTs.push(existingItem);
+            }
+          }
+          else if (idMedicion === 21) {
+            ArrayLinealHr = HrData;
+            existingItem = ArrayLinealHr.find(obj => obj.name === puntoMedicion);
+            if (!existingItem) {
+              existingItem = {
+                name: puntoMedicion,
+                type: 'line',
+                data: []
+              };
+              ArrayLinealHr.push(existingItem);
+            }
+          }
+        else {
+          return;
+        }
+        existingItem.data.push(valorMedicion);
+      });
+
+     
+
+      setGraficoPH({
+        ...graficoPH,
+        title: {
+          text: 'pH',
+          left: 'center',
+          top: 10,
+        },
+        legend: {
+          data: puntosMedicionUnicosph,
+          top: 35,
+        },
+        grid: {
+          top: 100,
+        },
+        xAxis: [{
+          ...graficoPH.xAxis[0],
+          data: fechasMedicionUnicasph
+        }],
+        series: phData
+      });
+
+      setGraficoVWC({
+        ...graficoVWC,
+        title: {
+          text: 'VWC',
+          left: 'center',
+          top: 10,
+        },
+        legend: {
+          data: puntosMedicionUnicosVWC,
+          top: 35,
+        },
+        grid: {
+          top: 100,
+        },
+        xAxis: [{
+          ...graficoVWC.xAxis[0],
+          data: fechasMedicionUnicasVWC
+        }],
+        series: vwcData
+      });
+
+      setGraficoConductividad({
+        ...graficoConductividad,
+        title: {
+          text: 'Ce',
+          left: 'center',
+          top: 10,
+        },
+        legend: {
+          top: 35,
+        },
+        grid: {
+          top: 100,
+        },
+        xAxis: [{
+          ...graficoConductividad.xAxis[0],
+          data: fechasMedicionUnicasConductividad
+        }],
+        series: conductividadElectricaData
+      });
+
+      // Nuevos 
+      setGraficoTa({
+        ...graficoTa,
+        title: {
+          text: 'Ta',
+          left: 'center',
+          top: 10,
+        },
+        legend: {
+          data: puntosMedicionUnicosTa,
+          top: 35,
+        },
+        grid: {
+          top: 100,
+        },
+        xAxis: [{
+          ...graficoTa.xAxis[0],
+          data: fechasMedicionUnicasTa
+        }],
+        series: TaData
+      });
+
+      setGraficoTs({
+        ...graficoTs,
+        title: {
+          text: 'Ts',
+          left: 'center',
+          top: 10,
+        },
+        legend: {
+          data: puntosMedicionUnicosTs,
+          top: 35,
+        },
+        grid: {
+          top: 100,
+        },
+        xAxis: [{
+          ...graficoTs.xAxis[0],
+          data: fechasMedicionUnicasTs
+        }],
+        series: TsData
+      });
+
+      setGraficoHr({
+        ...graficoHr,
+        title: {
+          text: 'Hr',
+          left: 'center',
+          top: 10,
+        },
+        legend: {
+          top: 35,
+          data: puntosMedicionUnicosHr,
+        },
+        grid: {
+          top: 100,
+        },
+        xAxis: [{
+          ...graficoHr.xAxis[0],
+          data: fechasMedicionUnicasHr
+        }],
+        series: HrData
+      });
+
+      setKeyRender(prevKey => prevKey + 1);
+    } catch (error) {
+      console.error('Error al obtener las mediciones de sensores:', error);
+    }
+  };
+
 
   useEffect(() => {
     if (!loading) {
@@ -623,7 +929,22 @@ const Dashboard: React.FC = () => {
         cursor: 'pointer',
         transition: 'background-color 0.3s ease'
       }} onClick={handleObtenerMedicionesSensores}>Obtener Mediciones</Button>
-
+      <div style={{ display:'flex', flexDirection:'column', justifyContent:'center', alignItems:'center',marginTop:'50px', marginBottom:'50px', width: '100%'}}>
+                <h2>Mapa con Puntos de Medición</h2>
+                {/* <MapComponent /> */}
+                <MapContainer center={[9.936681, -84.103964]} zoom={8} style={{ height: '600px', width: '100%', position: 'relative' }}>
+                  <TileLayer
+                      url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png" attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
+                    />
+                    {puntosMedicionMaps.map((position, index) => (
+                      <Marker key={index} position={[position.latitud,position.longitud]} eventHandlers={{ click: () => handleMarkerClick(position.idPuntoMedicion) }}>
+                        <Popup>
+                          Punto de medición: {position.codigo}.
+                        </Popup>
+                      </Marker>
+                    ))}
+                  </MapContainer>
+                 </div>
       <div className="checkbox-container" style={{ marginTop: '20px', display: 'flex', flexDirection: 'row', justifyContent: 'center' }}>
         <div style={{ marginRight: '20px' }}>
           <Input type="checkbox" name="ph" checked={visibleCharts.ph} onChange={handleCheckboxChange} /> pH

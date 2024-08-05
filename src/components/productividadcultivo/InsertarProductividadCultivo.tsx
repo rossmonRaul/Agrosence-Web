@@ -6,7 +6,7 @@ import { ObtenerParcelas } from '../../servicios/ServicioParcelas.ts';
 import { ObtenerUsuariosAsignadosPorIdentificacion } from '../../servicios/ServicioUsuario.ts';
 import { useSelector } from 'react-redux';
 import { AppStore } from '../../redux/Store.ts';
-import { AgregarProductividadCultivo } from '../../servicios/ServicioCultivo.ts';
+import { AgregarProductividadCultivo, ObtenerMedidasCultivos } from '../../servicios/ServicioCultivo.ts';
 
 
 interface InsertarManejoFertilizanteProps {
@@ -19,10 +19,17 @@ interface Option {
     nombre: string;
     idParcela: number;
     idFinca: number;
+    idMedidasCultivos:number;
+    medida:string;
 }
 
 interface Temporada {
     nombre: string;
+}
+
+interface MedidaArea {
+    idMedidaArea:number;
+    medidaArea: string;
 }
 
 const InsertarCalidadCultivo: React.FC<InsertarManejoFertilizanteProps> = ({ onAdd }) => {
@@ -32,7 +39,9 @@ const InsertarCalidadCultivo: React.FC<InsertarManejoFertilizanteProps> = ({ onA
         cultivo: '',
         temporada: '',
         area: '',
+        idMedidaArea:'',
         produccion: '',
+        idMedidasCultivos:'',
         productividad: ''
     });
 
@@ -43,7 +52,9 @@ const InsertarCalidadCultivo: React.FC<InsertarManejoFertilizanteProps> = ({ onA
         cultivo: '',
         temporada: '',
         area: '',
+        idMedidaArea:'',
         produccion: '',
+        idMedidasCultivos:'',
         productividad: ''
     });
 
@@ -51,12 +62,21 @@ const InsertarCalidadCultivo: React.FC<InsertarManejoFertilizanteProps> = ({ onA
     // Estados para almacenar los datos obtenidos de la API
     const [fincas, setFincas] = useState<Option[]>([]);
     const [parcelas, setParcelas] = useState<Option[]>([]);
+    const [medidasCultivos, setMedidasCultivos] = useState<Option[]>([]);
+    const [selectedMedidasCultivos, setSelectedMedidasCultivos] = useState<string>('');
     const [temporadas, setTemporadas] = useState<Temporada[]>([]);
+    const [medidaArea, setMedidaArea] = useState<MedidaArea[]>([]);
+    const [selectedMedidaArea, setSelectedMedidaArea] = useState<string>('');
     // Se agregan las temporadas deseadas al cargar el componente
     useEffect(() => {
         setTemporadas([
             { nombre: 'Lluviosa' },
             { nombre: 'Seca' }
+        ]);
+        setMedidaArea([
+            { idMedidaArea:1, medidaArea: 'Hectárea' },
+            { idMedidaArea:2, medidaArea: 'Manzana' },
+            { idMedidaArea:3, medidaArea: 'M2' }
         ]);
     }, []);
     const [selectedFinca, setSelectedFinca] = useState<string>('');
@@ -90,8 +110,9 @@ const InsertarCalidadCultivo: React.FC<InsertarManejoFertilizanteProps> = ({ onA
                     setFincas(fincasUsuario);
                     const parcelasResponse = await ObtenerParcelas();
                     const parcelasUsuario = parcelasResponse.filter((parcela: any) => idParcelasUsuario.includes(parcela.idParcela));
-                    setParcelas(parcelasUsuario)
-                    
+                    setParcelas(parcelasUsuario);
+                    const medidasCultivosResponse = await ObtenerMedidasCultivos();
+                    setMedidasCultivos(medidasCultivosResponse);
                 } else {
                     console.error('La identificación y/o el ID de la empresa no están disponibles en el localStorage.');
                 }
@@ -138,6 +159,14 @@ const InsertarCalidadCultivo: React.FC<InsertarManejoFertilizanteProps> = ({ onA
         const value = e.target.value;
         setSelectedTemporada(value);
     };
+    const handleMedidasCultivosChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
+        const value = e.target.value;
+        setSelectedMedidasCultivos(value);
+    };
+    const handleMedidaAreaChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
+        const value = e.target.value;
+        setSelectedMedidaArea(value);
+    };
     // Función para manejar el envío del formulario con validación
     const handleSubmitConValidacion = () => {
         // Validar campos antes de avanzar al siguiente paso
@@ -157,6 +186,17 @@ const InsertarCalidadCultivo: React.FC<InsertarManejoFertilizanteProps> = ({ onA
             newErrors.parcela = '';
         }
 
+        if (!selectedMedidasCultivos) {
+            newErrors.medidaProduccion = 'Debe seleccionar una medida de producción';
+        } else {
+            newErrors.medidaProduccion = '';
+        }
+        
+        if (!selectedMedidaArea) {
+            newErrors.unidadArea = 'Debe seleccionar una unidad del área';
+        } else {
+            newErrors.unidadArea = '';
+        }
         // Validar selección de temporada
         if (!selectedTemporada) {
             newErrors.temporada = 'Debe seleccionar una temporada';
@@ -211,7 +251,9 @@ const InsertarCalidadCultivo: React.FC<InsertarManejoFertilizanteProps> = ({ onA
             Cultivo: formData.cultivo,
             Temporada: selectedTemporada,
             Area: formData.area,
+            IdMedidaArea:selectedMedidaArea,
             Produccion: formData.produccion,
+            IdMedidasCultivos:selectedMedidasCultivos,
             Productividad: formData.productividad,
             Usuario: userState.identificacion
         };
@@ -255,9 +297,9 @@ const InsertarCalidadCultivo: React.FC<InsertarManejoFertilizanteProps> = ({ onA
     return (
         <div id='general' style={{ display: 'flex', flexDirection: 'column', paddingBottom: '0rem', width: '100%', margin: '0 auto' }}>
             <h2>Productividad de Cultivos</h2>
-            <div className="form-container-fse" style={{ display: 'flex', flexDirection: 'column', width: '60%', marginLeft: '0.5rem'}}>
-                
-                <FormGroup>
+            <div style={{ display: 'flex', flexDirection: 'row', marginBottom: '0rem' }}>
+            <div style={{ flex: 1, marginRight: '0.5rem', marginLeft: '0.5rem' }}>
+            <FormGroup>
                     <label htmlFor="fincas">Finca:</label>
                     <select className="custom-select" id="fincas" value={selectedFinca} onChange={handleFincaChange}>
                         <option key="default-finca" value="">Seleccione...</option>
@@ -267,7 +309,8 @@ const InsertarCalidadCultivo: React.FC<InsertarManejoFertilizanteProps> = ({ onA
                     </select>
                     {errors.finca && <FormFeedback>{errors.finca}</FormFeedback>}
                 </FormGroup>
-
+                </div>
+                <div style={{ flex: 1, marginRight: '0.5rem', marginLeft: '0.5rem' }}>
                 <FormGroup>
                     <label htmlFor="parcelas">Parcela:</label>
                     <select className="custom-select" id="parcelas" value={selectedParcela} onChange={handleParcelaChange}>
@@ -278,8 +321,11 @@ const InsertarCalidadCultivo: React.FC<InsertarManejoFertilizanteProps> = ({ onA
                     </select>
                     {errors.parcela && <FormFeedback>{errors.parcela}</FormFeedback>}
                 </FormGroup>
-
-                <FormGroup>
+                </div>
+            </div>
+            <div style={{ display: 'flex', flexDirection: 'row', marginBottom: '0rem' }}>
+            <div style={{ flex: 1, marginRight: '0.5rem', marginLeft: '0.5rem' }}>
+            <FormGroup>
                     <label htmlFor="temporadas">Temporada:</label>
                     <select className="custom-select" id="temporadas" value={selectedTemporada} onChange={handleTemporadaChange}>
                         <option key="default-temporada" value="">Seleccione...</option>
@@ -289,9 +335,8 @@ const InsertarCalidadCultivo: React.FC<InsertarManejoFertilizanteProps> = ({ onA
                     </select>
                     {errors.temporada && <FormFeedback>{errors.temporada}</FormFeedback>}
                 </FormGroup>
-            </div>
-
-            <div style={{ display: 'flex', flexDirection: 'row', marginBottom: '0rem' }}>
+                </div> 
+               
 
                 <div style={{ flex: 1, marginRight: '0.5rem', marginLeft: '0.5rem' }}>
                     <FormGroup row>
@@ -312,10 +357,12 @@ const InsertarCalidadCultivo: React.FC<InsertarManejoFertilizanteProps> = ({ onA
                         </Col>
                     </FormGroup>
                 </div>
-
-                <div style={{ flex: 1, marginRight: '0.5rem', marginLeft: '0.5rem' }}>
+            </div> 
+                
+            <div style={{ display: 'flex', flexDirection: 'row', marginBottom: '0rem' }}>
+            <div style={{ flex: 1, marginRight: '0.5rem', marginLeft: '0.5rem' }}>
                     <FormGroup row>
-                        <Label for="area" sm={4} className="input-label">Área (ha):</Label>
+                        <Label for="area" sm={4} className="input-label">Área:</Label>
                         <Col sm={8}>
                             <Input
                                 type="number"
@@ -325,18 +372,30 @@ const InsertarCalidadCultivo: React.FC<InsertarManejoFertilizanteProps> = ({ onA
                                 onChange={handleInputChange}
                                 onBlur={() => handleInputBlur('area')}
                                 className={errors.area ? 'input-styled input-error' : 'input-styled'}
-                                placeholder="Número de lote"
+                                placeholder="Área"
                             />
                             <FormFeedback>{errors.area}</FormFeedback>
                         </Col>
                     </FormGroup>
                 </div>
-            </div>
-
-            <div style={{ display: 'flex', flexDirection: 'row', marginBottom: '0rem' }}>
+                
                 <div style={{ flex: 1, marginRight: '0.5rem', marginLeft: '0.5rem' }}>
+                <FormGroup>
+                    <label htmlFor="unidadArea">Unidad de Área:</label>
+                    <select className="custom-select" id="unidadArea" value={selectedMedidaArea} onChange={handleMedidaAreaChange}>
+                        <option key="default-objArea" value="">Seleccione...</option>
+                        {medidaArea.map((objArea) => (
+                            <option key={`${objArea.idMedidaArea}}-${objArea.medidaArea || 'undefined'}`} value={objArea.idMedidaArea}>{objArea.medidaArea || 'Undefined'}</option>
+                        ))}
+                    </select>
+                    {errors.unidadArea && <FormFeedback>{errors.unidadArea}</FormFeedback>}
+                </FormGroup>
+                </div> 
+            </div>
+            <div style={{ display: 'flex', flexDirection: 'row', marginBottom: '0rem' }}>
+            <div style={{ flex: 1, marginRight: '0.5rem', marginLeft: '0.5rem' }}>
                     <FormGroup row>
-                        <Label for="produccion" sm={4} className="input-label">Produccion (ton):</Label>
+                        <Label for="produccion" sm={4} className="input-label">Producción:</Label>
                         <Col sm={8}>
                             <Input
                                 type="number"
@@ -350,10 +409,32 @@ const InsertarCalidadCultivo: React.FC<InsertarManejoFertilizanteProps> = ({ onA
                             />
                             <FormFeedback>{errors.produccion}</FormFeedback>
                         </Col>
-                    </FormGroup>
+                      </FormGroup>
+                    </div>
+                    <div style={{ flex: 1, marginRight: '0.5rem', marginLeft: '0.5rem' }}>
+                    <FormGroup>
+                    <label htmlFor="medidaProduccion">Medida Producción:</label>
+                    <select className="custom-select" id="medidaProduccion" value={selectedMedidasCultivos} onChange={handleMedidasCultivosChange}>
+                        <option key="default-medidaCultivo" value="">Seleccione...</option>
+                        {medidasCultivos.map((medidaCultivo) => (
+                            <option key={`${medidaCultivo.idMedidasCultivos}-${medidaCultivo.medida || 'undefined'}`} value={medidaCultivo.idMedidasCultivos}>{medidaCultivo.medida || 'Undefined'}</option>
+                        ))}
+                    </select>
+                    {errors.medidaProduccion && <FormFeedback>{errors.medidaProduccion}</FormFeedback>}
+                </FormGroup>
                 </div>
+            </div>
 
+       
 
+            
+
+                
+
+                
+
+            <div style={{ display: 'flex', flexDirection: 'row', marginBottom: '0rem' }}>
+                
                 <div style={{ flex: 1, marginRight: '0.5rem', marginLeft: '0.5rem' }}>
                     <FormGroup row>
                         <Label for="productividad" sm={4} className="input-label">Productividad:</Label>

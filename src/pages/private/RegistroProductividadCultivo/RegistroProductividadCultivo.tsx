@@ -17,7 +17,8 @@ import ModificarProductividadCultivo from "../../../components/productividadcult
 import { CambiarEstadoProductividadCultivo, ObtenerProductividadCultivos } from "../../../servicios/ServicioCultivo.ts";
 import { useSelector } from "react-redux";
 import { AppStore } from "../../../redux/Store.ts";
-
+import TableResponsiveDetalles from "../../../components/table/tableDetails.tsx";
+import DetallesCalidadCultivo from "../../../components/productividadcultivo/DetallesProductividadCultivo.tsx";
 interface Option {
     identificacion: string;
     idEmpresa: number;
@@ -39,7 +40,9 @@ function RegistroProductividadCultivo() {
         cultivo: '',
         temporada: '',
         area: '',
+        idMedidaArea: '',
         produccion: '',
+        idMedidasCultivos: '',
         productividad: ''
     });
     const [parcelas, setParcelas] = useState<any[]>([]);
@@ -48,6 +51,7 @@ function RegistroProductividadCultivo() {
     const [fincas, setFincas] = useState<any[]>([]);
     const userState = useSelector((store: AppStore) => store.user);
     const [parcelasFiltradas, setParcelasFiltradas] = useState<Option[]>([]);
+    const [modalDetalles, setmodalDetalles] = useState(false);
     //Eventos que se activan al percibir cambios en la finca y parcela seleccionadas
     const handleFincaChange = async (e: React.ChangeEvent<HTMLSelectElement>) => {
         const value = parseInt(e.target.value);
@@ -176,7 +180,16 @@ function RegistroProductividadCultivo() {
         setSelectedDatos(datos);
         abrirCerrarModalEditar();
     };
+    const openModalDetalles = (contenidoDeClorofila: any) => {
+        setSelectedDatos(contenidoDeClorofila);
+        abrirCerrarModalDetalles();
+    };
 
+
+    // Abrir/cerrar modal de edición
+    const abrirCerrarModalDetalles = () => {
+        setmodalDetalles(!modalDetalles);
+    };
     // metodo para cambiar el estado del registro seleccionado
     const toggleStatus = async (datosTabla: any) => {
         Swal.fire({
@@ -227,13 +240,13 @@ function RegistroProductividadCultivo() {
     const columns = [
         { key: 'nombreUsuario', header: 'Usuario' },
         { key: 'cultivo', header: 'Cultivo' },
-        { key: 'finca', header: 'Finca' },
-        { key: 'parcela', header: 'Parcela' },
+        //{ key: 'finca', header: 'Finca' },
+        //{ key: 'parcela', header: 'Parcela' },
         { key: 'temporada', header: 'Temporada' },
-        { key: 'area', header: 'Área (ha)' },
-        { key: 'produccion', header: 'Producción (ton)' },
+        { key: 'area', header: 'Área' },
+        { key: 'produccion', header: 'Producción' },
         { key: 'productividad', header: 'Productividad' },
-        { key: 'sEstado', header: 'Estado' },
+        //{ key: 'sEstado', header: 'Estado' },
         { key: 'acciones', header: 'Acciones', actions: true }
     ];
 
@@ -272,8 +285,16 @@ function RegistroProductividadCultivo() {
                         />
                     </div>
                    
-                        <TableResponsive columns={columns} data={datosProduccionFiltrados} openModal={openModal} btnActionName={"Editar"} toggleStatus={toggleStatus} />
-                  
+                        {/* <TableResponsive columns={columns} data={datosProduccionFiltrados} openModal={openModal} btnActionName={"Editar"} toggleStatus={toggleStatus} /> */}
+                        <TableResponsiveDetalles
+                        //mapeo de las columnas para poder mostar texto con formato html de ser necesario
+                        columns={columns}
+                        data={datosProduccionFiltrados}
+                        openModalDetalles={openModalDetalles}
+                        btnActionNameDetails={"Detalles"}
+                        openModal={openModal}
+                        btnActionName={"Editar"}
+                        toggleStatus={toggleStatus} />
                 </div>
             </div>
 
@@ -308,7 +329,34 @@ function RegistroProductividadCultivo() {
                             cultivo={selectedDatos.cultivo}
                             temporada={selectedDatos.temporada}
                             area={parseFloat(selectedDatos.area)}
+                            idMedidaArea={parseInt(selectedDatos.idMedidaArea)}
                             produccion={parseFloat(selectedDatos.produccion)}
+                            idMedidasCultivos={parseInt(selectedDatos.idMedidasCultivos)}
+                            productividad={parseFloat(selectedDatos.productividad)}
+                            onEdit={handleEditarProduccionCultivo}
+                        />
+                    </div>
+                </div>
+            </Modal>
+
+            <Modal
+                isOpen={modalDetalles}
+                toggle={abrirCerrarModalDetalles}
+                title="Detalles Productividad"
+                onCancel={abrirCerrarModalDetalles}
+            >
+                <div className='form-container'>
+                    <div className='form-group'>
+                        <DetallesCalidadCultivo
+                            idFinca={parseInt(selectedDatos.idFinca)}
+                            idParcela={parseInt(selectedDatos.idParcela)}
+                            idManejoProductividadCultivo={parseInt(selectedDatos.idManejoProductividadCultivo)}
+                            cultivo={selectedDatos.cultivo}
+                            temporada={selectedDatos.temporada}
+                            area={parseFloat(selectedDatos.area)}
+                            idMedidaArea={parseInt(selectedDatos.idMedidaArea)}
+                            produccion={parseFloat(selectedDatos.produccion)}
+                            idMedidasCultivos={parseInt(selectedDatos.idMedidasCultivos)}
                             productividad={parseFloat(selectedDatos.productividad)}
                             onEdit={handleEditarProduccionCultivo}
                         />

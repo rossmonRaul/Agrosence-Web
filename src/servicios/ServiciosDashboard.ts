@@ -11,3 +11,13 @@ export const ObtenerMedicionesSensores = async (data: any) => {
     const url = `${baseURL}/api/v1.0/${controlador}/ObtenerMedicionesSensores`;
     return await ProcesarDatosApi('POST', url, data);
 }
+
+export const ObtenerPuntosMedicionPorIdEmpresa = async (data: any) => {
+    const url = `${baseURL}/api/v1.0/${controlador}/ObtenerPuntosMedicionPorIdEmpresa`;
+    return await ProcesarDatosApi('POST', url, data);
+}
+
+export const ObtenerMedicionesSensoresPorUbicacionPM = async (data: any) => {
+    const url = `${baseURL}/api/v1.0/${controlador}/ObtenerMedicionesSensoresPorUbicacionPM`;
+    return await ProcesarDatosApi('POST', url, data);
+}
