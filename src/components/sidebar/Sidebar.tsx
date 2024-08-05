@@ -190,6 +190,11 @@ const Sidebar = ({ children }: { children: React.ReactNode }) => {
                     icon: <img src='/fertilizer.png' style={{ width: '30px' }} />,
                 },
                 {
+                    path: "/tipoaplicacion",
+                    name: "Tipo de aplicacion",
+                    icon: <img src='/fertilizer.png' style={{ width: '30px' }} />,
+                },
+                {
                     path: "/medicionesdesuelos",
                     name: "Mediciones de Suelos",
                     icon: <img src='/calidadsuelo.png' style={{ width: '30px' }} />,

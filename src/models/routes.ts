@@ -27,6 +27,7 @@ export const PrivateRoutes = {
     PRODUCCIONCULTIVOS: 'productividadcultivos',
     RESIDUOS: 'manejoresiduos',
     RIEGOS: 'eficienciariego',
+    TIPOAPLICACION: 'tipoaplicacion',
     CONDUCTIVIDADELECTRICA: 'conductividadelectrica',
     PRONOSTICOMETEOROLOGICO: 'pronosticometereologico',
     RIESGOSNATURALES: 'riesgonatural',

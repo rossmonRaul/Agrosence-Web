@@ -33,6 +33,9 @@ const PronosticoMeteorologico = lazy(() => import('./pages/private/PronosticoMet
 //import CondicionesMeteorologicasClimaticas from './pages/private/RegistroCondicionesMetereologicas/RegistroCondicionesMetereologicas';
 const CondicionesMeteorologicasClimaticas = lazy(() => import('./pages/private/RegistroCondicionesMetereologicas/RegistroCondicionesMetereologicas'))
 
+//TipoAplicacion
+const TipoAplicacion = lazy(() => import('./pages/private/TipoAplicacion/TipoAplicacion'))
+
 const RiesgosNaturales = lazy(() => import('./pages/private/RiesgoNatural/RiesgoNatural'))
 const ProblemasPlagas = lazy(() => import('./pages/private/ProblemasPlagas/ProblemasPlagas'))
 const MedicionesSensor = lazy(() => import('./pages/private/MedicionesSensor/MedicionesSensor'))
@@ -115,7 +118,7 @@ function App() {
               <Route path={PrivateRoutes.REGISTROSEGUIMIENTOUSOAGUA} element={<RegistroSeguimientoUsoAgua />} />
               <Route path={PrivateRoutes.RIESGOSNATURALES} element={<RiesgosNaturales />} />
               <Route path={PrivateRoutes.PROBLEMASPLAGAS} element={<ProblemasPlagas />} />
-              
+              <Route path={PrivateRoutes.TIPOAPLICACION} element={<TipoAplicacion />} />
               <Route path={PrivateRoutes.PRONOSTICOMETEOROLOGICO} element={<PronosticoMeteorologico />} />
               <Route path={PrivateRoutes.CONDICIONESMETEOROLOGICASCLIMATICAS} element={<CondicionesMeteorologicasClimaticas />} />
               <Route path={PrivateRoutes.CONTENIDODECLOROFILA} element={<ContenidoDeClorofila/>} />
