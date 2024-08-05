@@ -21,3 +21,17 @@ export const CambiarEstadoRegistroSeguimientoPlagasyEnfermedades = async (data: 
     const url = `${baseURL}/api/v1.0/${controlador}/CambiarEstadoRegistroSeguimientoPlagasYEnfermedades`;
     return await ProcesarDatosApi('PUT', url, data);
 }
+
+export const InsertarDocumentacionProblemasDePlagas= async (data: any) => {
+    const url = `${baseURL}/api/v1.0/${controlador}/InsertarDocumentacionProblemasDePlagas`;
+    return await ProcesarDatosApi('POST', url, data);
+}
+export const ObtenerDocumentacionProblemasDePlagas = async (data: any) => {
+    const url = `${baseURL}/api/v1.0/${controlador}/ObtenerDocumentacionProblemasDePlagas`;
+    return await ProcesarDatosApi('POST', url, data);
+}
+
+export const DesactivarDocumentoProblemasDePlagas = async (data: any) => {
+    const url = `${baseURL}/api/v1.0/${controlador}/DesactivarDocumentoProblemasDePlagas`;
+    return await ProcesarDatosApi('PUT', url, data);
+}
