@@ -49,4 +49,5 @@ export const PrivateRoutes = {
    CONTENIDODEAGUA: 'contenidodeagua',
    COBERTURAVEGETAL: "CoberturaVegetal",
    CONTENIDODENITROGENO: 'contenidodenitrogeno',
+   CATALOGOACTIVIDADESPT: 'catalogoactividadespt',
 };

@@ -1,22 +1,19 @@
 import React, { useEffect, useState } from "react";
 import Sidebar from "../../../components/sidebar/Sidebar";
-import TableResponsive from "../../../components/table/table.tsx";
-import BordeSuperior from "../../../components/bordesuperior/BordeSuperior.tsx";
-import Modal from "../../../components/modal/Modal.tsx";
-import Topbar from "../../../components/topbar/Topbar.tsx";
-import { ObtenerParcelas } from "../../../servicios/ServicioParcelas.ts";
+import TableResponsive from "../../../components/table/table";
+import BordeSuperior from "../../../components/bordesuperior/BordeSuperior";
+import Modal from "../../../components/modal/Modal";
+import Topbar from "../../../components/topbar/Topbar";
+import { ObtenerParcelas } from "../../../servicios/ServicioParcelas";
 import Swal from "sweetalert2";
-import { ObtenerFincas } from "../../../servicios/ServicioFincas.ts";
-//import { ObtenerManejoFertilizantes, CambiarEstadoManejoFertilizantes } from "../../../servicios/ServicioFertilizantes.ts";
-import { ObtenerDatosPreparacionTerreno , CambiarEstadoPreparacionTerreno  } from "../../../servicios/ServicioPreparacionTerreno.ts";
-//import InsertarManejoFertilizante from "../../../components/manejoFertilizante/InsertarManejoFertilizante.tsx";
-import InsertarPreparacionTerreno from "../../../components/preparacionTerreno/InsertarPreparacionTerreno.tsx";
-import ModificacionPreparacionTerreno from "../../../components/preparacionTerreno/EditarPreparacionTerreno.tsx";
-import { ObtenerUsuariosAsignadosPorIdentificacion } from '../../../servicios/ServicioUsuario.ts';
-import '../../../css/FormSeleccionEmpresa.css'
+import { ObtenerFincas } from "../../../servicios/ServicioFincas";
+import { ObtenerDatosPreparacionTerreno, CambiarEstadoPreparacionTerreno, ObtenerDatosPreparacionTerrenoActividad, ObtenerDatosPreparacionTerrenoMaquinaria } from "../../../servicios/ServicioPreparacionTerreno";
+import InsertarPreparacionTerreno from "../../../components/preparacionTerreno/InsertarPreparacionTerreno";
+import ModificacionPreparacionTerreno from "../../../components/preparacionTerreno/EditarPreparacionTerreno";
+import { ObtenerUsuariosAsignadosPorIdentificacion } from '../../../servicios/ServicioUsuario';
+import '../../../css/FormSeleccionEmpresa.css';
 import { useSelector } from "react-redux";
-import { AppStore } from "../../../redux/Store.ts";
-
+import { AppStore } from "../../../redux/Store";
 
 interface Option {
     identificacion: string;
@@ -25,20 +22,26 @@ interface Option {
     idParcela: number;
     idFinca: number;
 }
+
 function AdministrarPreparacionTerreno() {
     const [filtroNombreActividad, setFiltroNombreActividad] = useState('');
     const [datosPreparacionTerrenoOriginales, setDatosPreparacionTerrenoOriginales] = useState<any[]>([]);
     const [modalEditar, setModalEditar] = useState(false);
     const [modalInsertar, setModalInsertar] = useState(false);
+    const [modalDetalles, setModalDetalles] = useState(false);
     const [selectedParcela, setSelectedParcela] = useState<number | null>(null);
     const [selectedDatos, setSelectedDatos] = useState({
         idFinca: '',
         idParcela: '',
-        idPreparacionTerreno : '',
+        idPreparacionTerreno: '',
         fecha: '',
-        actividad : '',
-        maquinaria : '',
-        observaciones: ''
+        idActividad: '', 
+        idMaquinaria: '', 
+        observaciones: '',
+        identificacion: '',
+        horasTrabajadas: '',
+        pagoPorHora: '',
+        totalPago: ''
     });
     const [parcelas, setParcelas] = useState<any[]>([]);
     const [parcelasFiltradas, setParcelasFiltradas] = useState<any[]>([]);
@@ -46,11 +49,28 @@ function AdministrarPreparacionTerreno() {
     const [datosPreparacionTerrenoFiltrados, setdatosPreparacionTerrenoFiltrados] = useState<any[]>([]);
     const [selectedFinca, setSelectedFinca] = useState<number | null>(null);
     const [fincas, setFincas] = useState<any[]>([]);
+    const [actividades, setActividades] = useState<any[]>([]);
+    const [maquinarias, setMaquinarias] = useState<any[]>([]);
     const userState = useSelector((store: AppStore) => store.user);
+
+    useEffect(() => {
+        const obtenerActividadesYMaquinarias = async () => {
+            try {
+                const actividadesResponse = await ObtenerDatosPreparacionTerrenoActividad();
+                const maquinariasResponse = await ObtenerDatosPreparacionTerrenoMaquinaria();
+                setActividades(actividadesResponse);
+                setMaquinarias(maquinariasResponse);
+            } catch (error) {
+                console.error('Error al obtener actividades y maquinarias:', error);
+            }
+        };
+
+        obtenerActividadesYMaquinarias();
+    }, []);
 
     const handleFincaChange = async (e: React.ChangeEvent<HTMLSelectElement>) => {
         const value = parseInt(e.target.value);
-        setDatosPreparacionTerreno([])
+        setDatosPreparacionTerreno([]);
         setSelectedFinca(value);
         setSelectedParcela(null);
     };
@@ -60,25 +80,22 @@ function AdministrarPreparacionTerreno() {
         setSelectedParcela(parseInt(value));
     };
 
-    // Obtener las fincas al cargar la página
-    useEffect(() => { 
+    useEffect(() => {
         const obtenerFincas = async () => {
             try {
                 const idEmpresaString = localStorage.getItem('empresaUsuario');
                 const identificacionString = localStorage.getItem('identificacionUsuario');
                 if (identificacionString && idEmpresaString) {
                     const identificacion = identificacionString;
-                    
                     const usuariosAsignados = await ObtenerUsuariosAsignadosPorIdentificacion({ identificacion: identificacion });
                     const idFincasUsuario = usuariosAsignados.map((usuario: any) => usuario.idFinca);
                     const idParcelasUsuario = usuariosAsignados.map((usuario: any) => usuario.idParcela);
-                    
                     const fincasResponse = await ObtenerFincas();
                     const fincasUsuario = fincasResponse.filter((finca: any) => idFincasUsuario.includes(finca.idFinca));
                     setFincas(fincasUsuario);
                     const parcelasResponse = await ObtenerParcelas();
                     const parcelasUsuario = parcelasResponse.filter((parcela: any) => idParcelasUsuario.includes(parcela.idParcela));
-                    setParcelas(parcelasUsuario)
+                    setParcelas(parcelasUsuario);
                 } else {
                     console.error('La identificación y/o el ID de la empresa no están disponibles en el localStorage.');
                 }
@@ -89,14 +106,11 @@ function AdministrarPreparacionTerreno() {
         obtenerFincas();
     }, []);
 
-
     useEffect(() => {
         const obtenerParcelasDeFinca = async () => {
             try {
-                
-                    const parcelasFinca = parcelas.filter((parcela: any) => parcela.idFinca === selectedFinca);
-                    setParcelasFiltradas(parcelasFinca);
-
+                const parcelasFinca = parcelas.filter((parcela: any) => parcela.idFinca === selectedFinca);
+                setParcelasFiltradas(parcelasFinca);
             } catch (error) {
                 console.error('Error al obtener las parcelas de la finca:', error);
             }
@@ -109,79 +123,37 @@ function AdministrarPreparacionTerreno() {
     filteredFincas = fincas.filter(finca => finca.idEmpresa === userState.idEmpresa);
 
     const handleChangeFiltro = (e: React.ChangeEvent<HTMLInputElement>) => {
-        setFiltroNombreActividad(e.target.value); // Convertir a minúsculas
+        setFiltroNombreActividad(e.target.value);
     };
 
-    
-    //este componente refrezca la tabla al momento
     useEffect(() => {
         filtrarActividad();
     }, [selectedFinca, parcelas, selectedParcela, filtroNombreActividad]);
 
-    //  useEffect(() => {
-    //     obtenerInfo();
-    // }, []);
-
-   
     const filtrarActividad = () => {
         const PreparacionTerrenofiltrados = filtroNombreActividad
             ? datosPreparacionTerreno.filter((preparacionTerreno: any) =>
                 preparacionTerreno.actividad.toLowerCase().includes(filtroNombreActividad.toLowerCase())
             )
             : datosPreparacionTerreno;
-            setdatosPreparacionTerrenoFiltrados(PreparacionTerrenofiltrados);
-
-    };
-
-    // hay que hacer el filtro de obtener usuarios asignados por identificacion
-
-    const obtenerParcelas = async () => {
-        try {
-            const idEmpresaUsuario = localStorage.getItem('empresaUsuario');
-            if (idEmpresaUsuario) {
-
-                const fincas = await ObtenerFincas();
-
-                const fincasEmpresaUsuario = fincas.filter((finca: any) => finca.idEmpresa === parseInt(idEmpresaUsuario));
-
-                const parcelasResponse = await ObtenerParcelas();
-
-                const parcelasFincasEmpresaUsuario: any[] = [];
-
-                fincasEmpresaUsuario.forEach((finca: any) => {
-                    const parcelasFinca = parcelasResponse.filter((parcela: any) => parcela.idFinca === finca.idFinca);
-                    parcelasFincasEmpresaUsuario.push(...parcelasFinca);
-                });
-
-                const parcelasConEstado = parcelasFincasEmpresaUsuario.map((parcela: any) => ({
-                    ...parcela,
-                    sEstado: parcela.estado === 1 ? 'Activo' : 'Inactivo'
-
-                }));
-
-                setParcelas(parcelasConEstado);
-            }
-        } catch (error) {
-            console.error('Error al obtener las parcelas:', error);
-        }
+        setdatosPreparacionTerrenoFiltrados(PreparacionTerrenofiltrados);
     };
 
     const obtenerInfo = async () => {
         try {
             const datosPreparacionTerreno = await ObtenerDatosPreparacionTerreno();
 
-            // Convertir el estado de 0 o 1 a palabras "Activo" o "Inactivo"
-            const datosPreparacionTerrenoConSEstado = datosPreparacionTerreno.map((dato: any) => ({
-                ...dato,
-                sEstado: dato.estado === 1 ? 'Activo' : 'Inactivo'
-            }));
+            const datosPreparacionTerrenoConSEstado = datosPreparacionTerreno
+                .filter((dato: any) => dato.estado === 1) // Filtrar registros con estado igual a 1
+                .map((dato: any) => ({
+                    ...dato,
+                    sEstado: dato.estado === 1 ? 'Activo' : 'Inactivo'
+                }));
 
-            // Filtrar los datos para mostrar solo los correspondientes a la finca y parcela seleccionadas
             const datosFiltrados = datosPreparacionTerrenoConSEstado.filter((dato: any) => {
-                //aca se hace el filtro y hasta que elija la parcela funciona
                 return dato.idFinca === selectedFinca && dato.idParcela === selectedParcela;
-            });
-            // Actualizar el estado con los datos filtrados
+            }).sort((a: any, b: any) => new Date(b.fecha).getTime() - new Date(a.fecha).getTime()); // Ordenar por fecha
+
             setDatosPreparacionTerreno(datosFiltrados);
             setdatosPreparacionTerrenoFiltrados(datosFiltrados);
         } catch (error) {
@@ -189,12 +161,9 @@ function AdministrarPreparacionTerreno() {
         }
     };
 
-    //esto carga la tabla al momento de hacer cambios en el filtro
-    //carga los datos de la tabla al momento de cambiar los datos de selected parcela
-    //cada vez que selected parcela cambie de datos este use effect obtiene datos
-    useEffect(()=> {
+    useEffect(() => {
         obtenerInfo();
-    },[selectedParcela]);
+    }, [selectedParcela]);
 
     const abrirCerrarModalInsertar = () => {
         setModalInsertar(!modalInsertar);
@@ -204,15 +173,38 @@ function AdministrarPreparacionTerreno() {
         setModalEditar(!modalEditar);
     };
 
+    const abrirCerrarModalDetalles = () => {
+        setModalDetalles(!modalDetalles);
+    };
+
     const openModal = (datos: any) => {
-        setSelectedDatos(datos);
+        const actividad = actividades.find((act: any) => act.nombre === datos.actividad);
+        const maquinaria = maquinarias.find((maq: any) => maq.nombre === datos.maquinaria);
+
+        setSelectedDatos({
+            ...datos,
+            idActividad: actividad ? actividad.idActividad : '',
+            idMaquinaria: maquinaria ? maquinaria.idMaquinaria : ''
+        });
         abrirCerrarModalEditar();
+    };
+
+    const openDetallesModal = (datos: any) => {
+        const actividad = actividades.find((act: any) => act.nombre === datos.actividad);
+        const maquinaria = maquinarias.find((maq: any) => maq.nombre === datos.maquinaria);
+
+        setSelectedDatos({
+            ...datos,
+            idActividad: actividad ? actividad.idActividad : '',
+            idMaquinaria: maquinaria ? maquinaria.idMaquinaria : ''
+        });
+        abrirCerrarModalDetalles();
     };
 
     const toggleStatus = async (parcela: any) => {
         Swal.fire({
-            title: "Cambiar Estado",
-            text: "¿Estás seguro de que deseas actualizar el estado?",
+            title: "Eliminar Registro",
+            text: "¿Estás seguro de que deseas eliminar el registro?",
             icon: "warning",
             showCancelButton: true,
             confirmButtonText: "Sí",
@@ -221,25 +213,25 @@ function AdministrarPreparacionTerreno() {
             if (result.isConfirmed) {
                 try {
                     const datos = {
-                        idPreparacionTerreno : parcela.idPreparacionTerreno 
+                        idPreparacionTerreno: parcela.idPreparacionTerreno
                     };
-                    const resultado = await CambiarEstadoPreparacionTerreno (datos);
+                    const resultado = await CambiarEstadoPreparacionTerreno(datos);
                     if (parseInt(resultado.indicador) === 1) {
                         Swal.fire({
                             icon: 'success',
-                            title: '¡Estado Actualizado! ',
-                            text: 'Actualización exitosa.',
+                            title: '¡Registro Eliminado! ',
+                            text: 'El registro ha sido eliminado exitosamente.',
                         });
                         await obtenerInfo();
                     } else {
                         Swal.fire({
                             icon: 'error',
-                            title: 'Error al actualizar el estado.',
+                            title: 'Error al eliminar el registro.',
                             text: resultado.mensaje,
                         });
-                    };
+                    }
                 } catch (error) {
-                    Swal.fire("Error al actualizar el estado", "", "error");
+                    Swal.fire("Hubo un problema al intentar eliminar el registro.", "", "error");
                 }
             }
         });
@@ -259,8 +251,7 @@ function AdministrarPreparacionTerreno() {
         { key: 'fecha', header: 'Fecha' },
         { key: 'actividad', header: 'Actividad' },
         { key: 'maquinaria', header: 'Maquinaria' },
-        { key: 'observaciones', header: 'Observaciones' },
-        { key: 'sEstado', header: 'Estado' },
+        { key: 'horasTrabajadas', header: 'Horas Trabajadas' },
         { key: 'acciones', header: 'Acciones', actions: true }
     ];
 
@@ -269,7 +260,7 @@ function AdministrarPreparacionTerreno() {
             <div className="main-container">
                 <Topbar />
                 <BordeSuperior text="Preparación de Terreno" />
-                <div className="content" col-md-12>
+                <div className="content col-md-12">
                     <button onClick={() => abrirCerrarModalInsertar()} className="btn-crear">Ingresar preparación de terreno</button>
                     <div className="filtro-container" style={{ width: '300px' }}>
                         <select value={selectedFinca || ''} onChange={handleFincaChange} className="custom-select">
@@ -298,22 +289,19 @@ function AdministrarPreparacionTerreno() {
                             className="form-control"
                         />
                     </div>
-                    <TableResponsive columns={columns2} data={datosPreparacionTerrenoFiltrados} openModal={openModal} btnActionName={"Editar"} toggleStatus={toggleStatus} />
+                    <TableResponsive columns={columns2} data={datosPreparacionTerrenoFiltrados} openModal={openModal} btnActionName={"Editar"} toggleStatus={toggleStatus} openDetallesModal={openDetallesModal} />
                 </div>
             </div>
 
             <Modal
                 isOpen={modalInsertar}
                 toggle={abrirCerrarModalInsertar}
-                title="Preparacion Terreno"
+                title=""
                 onCancel={abrirCerrarModalInsertar}
             >
-                <div className='form-container'>
+                <div className='form-container' style={{ width: '600px' }}>
                     <div className='form-group'>
-                        {/* este es el componente para crear el manejo fertilizante */}
-                        <InsertarPreparacionTerreno
-                            onAdd={handleAgregarPreparacionTerreno}
-                        />
+                        <InsertarPreparacionTerreno onAdd={handleAgregarPreparacionTerreno} />
                     </div>
                 </div>
             </Modal>
@@ -324,22 +312,51 @@ function AdministrarPreparacionTerreno() {
                 title="Editar Preparacion de Terreno"
                 onCancel={abrirCerrarModalEditar}
             >
-                <div className='form-container'>
+                <div className='form-container' style={{ width: '600px' }}>
                     <div className='form-group'>
                         <ModificacionPreparacionTerreno
                             idFinca={parseInt(selectedDatos.idFinca)}
                             idParcela={parseInt(selectedDatos.idParcela)}
                             idPreparacionTerreno={parseInt(selectedDatos.idPreparacionTerreno)}
                             fecha={selectedDatos.fecha.toString()}
-                            actividad={selectedDatos.actividad}
-                            maquinaria ={selectedDatos.maquinaria }
+                            idActividad={parseInt(selectedDatos.idActividad)}
+                            idMaquinaria={parseInt(selectedDatos.idMaquinaria)}
                             observaciones={selectedDatos.observaciones}
+                            identificacion={selectedDatos.identificacion}
+                            horasTrabajadas={selectedDatos.horasTrabajadas}
+                            pagoPorHora={selectedDatos.pagoPorHora}
+                            totalPago={parseFloat(selectedDatos.totalPago)}
                             onEdit={handleEditarPreparacionTerreno}
                         />
                     </div>
                 </div>
-            </Modal> 
-            
+            </Modal>
+
+            <Modal
+                isOpen={modalDetalles}
+                toggle={abrirCerrarModalDetalles}
+                title="Detalles de la Preparación de Terreno"
+                onCancel={abrirCerrarModalDetalles}
+            >
+                <div className='form-container' style={{ width: '600px' }}>
+                    <div className='form-group'>
+                        <ModificacionPreparacionTerreno
+                            idFinca={parseInt(selectedDatos.idFinca)}
+                            idParcela={parseInt(selectedDatos.idParcela)}
+                            idPreparacionTerreno={parseInt(selectedDatos.idPreparacionTerreno)}
+                            fecha={selectedDatos.fecha.toString()}
+                            idActividad={parseInt(selectedDatos.idActividad)}
+                            idMaquinaria={parseInt(selectedDatos.idMaquinaria)}
+                            observaciones={selectedDatos.observaciones}
+                            identificacion={selectedDatos.identificacion}
+                            horasTrabajadas={selectedDatos.horasTrabajadas}
+                            pagoPorHora={selectedDatos.pagoPorHora}
+                            totalPago={parseFloat(selectedDatos.totalPago)}
+                            readOnly
+                        />
+                    </div>
+                </div>
+            </Modal>
         </Sidebar>
     );
 }

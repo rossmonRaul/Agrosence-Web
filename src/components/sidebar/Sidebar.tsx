@@ -100,7 +100,12 @@ const Sidebar = ({ children }: { children: React.ReactNode }) => {
             icon: <img src='/tractor.png' style={{ width: '30px' }} />,
             roles: [2]
         },
-        
+        {
+            path: "/catalogoactividadespt",
+            name: "Catálogo de Actividades",
+            icon: <img src='/inventario.png' style={{ width: '22px' }} />, // Asegúrate de tener un ícono adecuado
+            roles: [2]
+        },
         {
             path: "/menusensores",
             name: "Sensores",
@@ -337,7 +342,7 @@ const Sidebar = ({ children }: { children: React.ReactNode }) => {
                 {
                     path: "/contenidodenitrogeno",
                     name: "Contenido de Nitrógeno",
-                    icon: <img src='/nitrogen.png' style={{ width: '22px' }} />,
+                    icon: <img src='/nitrogeno.png' style={{ width: '22px' }} />,
                     roles: [3]
                 },
                 {

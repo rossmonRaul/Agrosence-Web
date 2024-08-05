@@ -1,24 +1,26 @@
 import React, { useEffect, useState } from 'react';
 import { FormGroup, Label, Input, Col, FormFeedback, Button } from 'reactstrap';
 import Swal from 'sweetalert2';
-import { ObtenerFincas } from '../../servicios/ServicioFincas.ts';
-import { ObtenerParcelas } from '../../servicios/ServicioParcelas.ts';
-import { ObtenerUsuariosAsignadosPorIdentificacion } from '../../servicios/ServicioUsuario.ts';
-//import { EditarManejoFertilizantes } from "../../servicios/ServicioFertilizantes.ts";
-import { ModificarPreparacionTerreno } from "../../servicios/ServicioPreparacionTerreno.ts";
+import { ObtenerFincas } from '../../servicios/ServicioFincas';
+import { ObtenerParcelas } from '../../servicios/ServicioParcelas';
+import { ObtenerUsuariosAsignadosPorIdentificacion } from '../../servicios/ServicioUsuario';
+import { ModificarPreparacionTerreno, ObtenerDatosPreparacionTerrenoActividad, ObtenerDatosPreparacionTerrenoMaquinaria } from "../../servicios/ServicioPreparacionTerreno";
 import '../../css/CrearCuenta.css';
 
-// Interfaz para las propiedades del componente
 interface PreparacionTerrenoSeleccionado {
     idFinca: number;
     idParcela: number;
     idPreparacionTerreno: number;
     fecha: string;
-    actividad   : string;
-    maquinaria  : string;
+    idActividad: number; // Cambio aquí
+    idMaquinaria: number; // Cambio aquí
     observaciones: string;
-   // usuarioCreacionModificacion: string;
-    onEdit?: () => void; // Hacer onEdit opcional agregando "?"
+    identificacion: string;
+    horasTrabajadas: string;
+    pagoPorHora: string;
+    totalPago: number;
+    onEdit?: () => void;
+    readOnly?: boolean;
 }
 
 interface Option {
@@ -29,82 +31,91 @@ interface Option {
     idFinca: number;
 }
 
+interface Actividad {
+    idActividad: number;
+    nombre: string;
+}
+
+interface Maquinaria {
+    idMaquinaria: number;
+    nombre: string;
+}
+
 const ModificacionPreparacionTerreno: React.FC<PreparacionTerrenoSeleccionado> = ({
     idFinca,
     idParcela,
     idPreparacionTerreno,
     fecha,
-    actividad,
-    maquinaria,
+    idActividad,
+    idMaquinaria,
     observaciones,
-    //usuarioCreacionModificacion,
-    onEdit
+    identificacion,
+    horasTrabajadas,
+    pagoPorHora,
+    totalPago,
+    onEdit,
+    readOnly = false
 }) => {
-
     const [fincas, setFincas] = useState<Option[]>([]);
     const [parcelas, setParcelas] = useState<Option[]>([]);
+    const [actividades, setActividades] = useState<Actividad[]>([]);
+    const [maquinarias, setMaquinarias] = useState<Maquinaria[]>([]);
 
-    //esto rellena los select de finca y parcela cuando se carga el modal
     const [selectedFinca, setSelectedFinca] = useState<string>(() => idFinca ? idFinca.toString() : '');
     const [selectedParcela, setSelectedParcela] = useState<string>(() => idParcela ? idParcela.toString() : '');
 
-    // Estado para almacenar los errores de validación del formulario
     const [errors, setErrors] = useState<Record<string, string>>({
         idFinca: '',
         idParcela: '',
         idPreparacionTerreno: '',
         fecha: '',
-        actividad: '',
-        maquinaria: '',
-        observaciones: ''
+        idActividad: '',
+        idMaquinaria: '',
+        observaciones: '',
+        identificacion: '',
+        horasTrabajadas: '',
+        pagoPorHora: ''
     });
 
     const [formData, setFormData] = useState<any>({
-        idFinca: '',
-        idParcela: '',
-        idPreparacionTerreno: '',
+        idFinca: idFinca,
+        idParcela: idParcela,
+        idPreparacionTerreno: idPreparacionTerreno,
         fecha: '',
-        actividad: '',
-        maquinaria: '',
-        observaciones: '',
-        usuarioCreacionModificacion:''
+        idActividad: idActividad.toString(),
+        idMaquinaria: idMaquinaria.toString(),
+        observaciones: observaciones,
+        identificacion: identificacion,
+        horasTrabajadas: horasTrabajadas,
+        pagoPorHora: pagoPorHora,
+        usuarioCreacionModificacion: ''
     });
 
-    // Función para manejar cambios en los inputs del formulario
-    const handleInputChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    const handleInputChange = (event: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
         const { name, value } = event.target;
         setFormData((prevState: any) => ({
-            ...prevState, 
+            ...prevState,
             [name]: value
         }));
     };
 
     useEffect(() => {
-        // Actualizar el formData cuando las props cambien
         const parts = fecha.split('/');
         const day = parts[0];
         const month = parts[1];
         const year = parts[2];
-        const fechaformateada= year + '-' + month + '-' + day;
-        setFormData({
-            idFinca: idFinca,
-            idParcela: idParcela,
-            idPreparacionTerreno: idPreparacionTerreno,
-            fecha: fechaformateada,
-            actividad: actividad,
-            maquinaria: maquinaria,
-            observaciones: observaciones
-        });
-    }, [idPreparacionTerreno]);
+        const fechaformateada = `${year}-${month}-${day}`;
+        setFormData((prevState: any) => ({
+            ...prevState,
+            fecha: fechaformateada
+        }));
+    }, [fecha]);
 
-
-    // Obtener las fincas al cargar la página
     useEffect(() => {
         const obtenerFincas = async () => {
             try {
                 const idEmpresaString = localStorage.getItem('empresaUsuario');
                 const identificacionString = localStorage.getItem('identificacionUsuario');
-                console.log("AAA "+ identificacionString);
                 if (identificacionString && idEmpresaString) {
                     const identificacion = identificacionString;
                     const usuariosAsignados = await ObtenerUsuariosAsignadosPorIdentificacion({ identificacion: identificacion });
@@ -116,9 +127,7 @@ const ModificacionPreparacionTerreno: React.FC<PreparacionTerrenoSeleccionado> =
                     setFincas(fincasUsuario);
                     const parcelasResponse = await ObtenerParcelas();
                     const parcelasUsuario = parcelasResponse.filter((parcela: any) => idParcelasUsuario.includes(parcela.idParcela));
-                    setParcelas(parcelasUsuario)
-
-                    setFincas(fincasUsuario);
+                    setParcelas(parcelasUsuario);
                 } else {
                     console.error('La identificación y/o el ID de la empresa no están disponibles en el localStorage.');
                 }
@@ -126,17 +135,41 @@ const ModificacionPreparacionTerreno: React.FC<PreparacionTerrenoSeleccionado> =
                 console.error('Error al obtener las fincas del usuario:', error);
             }
         };
+
+        const obtenerDatosActividad = async () => {
+            try {
+                const actividadesResponse = await ObtenerDatosPreparacionTerrenoActividad();
+                setActividades(actividadesResponse);
+            } catch (error) {
+                console.error('Error al obtener actividades:', error);
+            }
+        };
+
+        const obtenerDatosMaquinaria = async () => {
+            try {
+                const maquinariasResponse = await ObtenerDatosPreparacionTerrenoMaquinaria();
+                setMaquinarias(maquinariasResponse);
+            } catch (error) {
+                console.error('Error al obtener maquinarias:', error);
+            }
+        };
+
         obtenerFincas();
+        obtenerDatosActividad();
+        obtenerDatosMaquinaria();
     }, []);
 
     const filteredParcelas = parcelas.filter(parcela => parcela.idFinca === parseInt(selectedFinca));
 
     const handleFincaChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
         const value = e.target.value;
-        formData.idFinca = value;
-        formData.idParcela = "";
         setSelectedFinca(value);
         setSelectedParcela('');
+        setFormData((prevState: any) => ({
+            ...prevState,
+            idFinca: value,
+            idParcela: ''
+        }));
     };
 
     const empresaUsuarioString = localStorage.getItem('empresaUsuario');
@@ -149,26 +182,24 @@ const ModificacionPreparacionTerreno: React.FC<PreparacionTerrenoSeleccionado> =
         console.error('El valor de empresaUsuario en localStorage es nulo.');
     }
 
-
     const handleParcelaChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
         const value = e.target.value;
-        formData.idParcela = value
         setSelectedParcela(value);
-    }; 
+        setFormData((prevState: any) => ({
+            ...prevState,
+            idParcela: value
+        }));
+    };
 
-    // Función para manejar el envío del formulario con validación
     const handleSubmitConValidacion = () => {
-        // Validar campos antes de avanzar al siguiente paso
         const newErrors: Record<string, string> = {};
 
-        // Validar selección de finca
         if (!selectedFinca) {
             newErrors.finca = 'Debe seleccionar una finca';
         } else {
             newErrors.finca = '';
         }
 
-        // Validar selección de parcela
         if (!selectedParcela) {
             newErrors.parcela = 'Debe seleccionar una parcela';
         } else {
@@ -178,7 +209,6 @@ const ModificacionPreparacionTerreno: React.FC<PreparacionTerrenoSeleccionado> =
         if (!formData.fecha.trim()) {
             newErrors.fecha = 'La fecha es requerida';
         } else {
-            // Validar que la fecha esté en el rango desde el 2015 hasta la fecha actual
             const minDate = new Date('2015-01-01');
             const selectedDate = new Date(formData.fecha);
             if (selectedDate < minDate || selectedDate > new Date()) {
@@ -188,22 +218,17 @@ const ModificacionPreparacionTerreno: React.FC<PreparacionTerrenoSeleccionado> =
             }
         }
 
-        if (!formData.actividad.trim()) {
+        if (!formData.idActividad.trim()) {
             newErrors.actividad = 'El tipo de actividad es requerido';
-        } else if (formData.actividad.length > 200) {
-            newErrors.actividad = 'El tipo de actividad no puede tener más de 200 caracteres';
         } else {
             newErrors.actividad = '';
         }
 
-        if (!formData.maquinaria.trim()) {
+        if (!formData.idMaquinaria.trim()) {
             newErrors.maquinaria = 'La maquinaria es requerida';
-        } else if (formData.maquinaria.length > 50) {
-            newErrors.maquinaria = 'La maquinaria no puede tener más de 50 caracteres';
         } else {
             newErrors.maquinaria = '';
         }
-
 
         if (!formData.observaciones.trim()) {
             newErrors.observaciones = 'Las observaciones son requeridas';
@@ -213,48 +238,59 @@ const ModificacionPreparacionTerreno: React.FC<PreparacionTerrenoSeleccionado> =
             newErrors.observaciones = '';
         }
 
-        // Actualizar los errores
+        if (!formData.identificacion.trim()) {
+            newErrors.identificacion = 'La identificación es requerida';
+        } else if (formData.identificacion.length > 50) {
+            newErrors.identificacion = 'La identificación no puede tener más de 50 caracteres';
+        } else {
+            newErrors.identificacion = '';
+        }
+
+        if (formData.horasTrabajadas === '') {
+            newErrors.horasTrabajadas = 'Las horas trabajadas son requeridas';
+        } else if (isNaN(Number(formData.horasTrabajadas))) {
+            newErrors.horasTrabajadas = 'Las horas trabajadas deben ser un número';
+        } else {
+            newErrors.horasTrabajadas = '';
+        }
+
+        if (formData.pagoPorHora === '') {
+            newErrors.pagoPorHora = 'El pago por hora es requerido';
+        } else if (isNaN(Number(formData.pagoPorHora))) {
+            newErrors.pagoPorHora = 'El pago por hora debe ser un número';
+        } else {
+            newErrors.pagoPorHora = '';
+        }
+
         setErrors(newErrors);
 
-        // Avanzar al siguiente paso si no hay errores
         if (Object.values(newErrors).every(error => error === '')) {
             handleSubmit();
         }
     };
 
-    // Función para formatear la fecha en el formato yyyy-MM-dd
-    function formatDate(inputDate: any) {
-        const parts = inputDate.split('/');
-        const day = parts[0];
-        const month = parts[1];
-        const year = parts[2];
-        return year + '-' + month + '-' + day;
-    }
-
-    // Suponiendo que formData.fechaCreacion contiene la fecha recibida (08/03/2024)
-    const formattedDate = formatDate(formData.fecha);
-
-    // Función para manejar el envío del formulario
     const handleSubmit = async () => {
+        const totalPago = parseFloat(formData.horasTrabajadas) * parseFloat(formData.pagoPorHora);
         const datos = {
             idFinca: selectedFinca,
             idParcela: selectedParcela,
             idPreparacionTerreno: formData.idPreparacionTerreno,
             fecha: formData.fecha,
-            actividad: formData.actividad,
-            maquinaria: formData.maquinaria,
+            idActividad: formData.idActividad,
+            idMaquinaria: formData.idMaquinaria,
             observaciones: formData.observaciones,
-            usuarioCreacionModificacion:localStorage.getItem('identificacionUsuario')  
+            identificacion: formData.identificacion,
+            horasTrabajadas: formData.horasTrabajadas,
+            pagoPorHora: formData.pagoPorHora,
+            totalPago: totalPago,
+            usuarioCreacionModificacion: localStorage.getItem('identificacionUsuario')
         };
-            console.log("data");
-            console.log(datos);
-            console.log("data");
         try {
             const resultado = await ModificarPreparacionTerreno(datos);
             if (resultado.indicador === 1) {
                 Swal.fire({
                     icon: 'success',
-                    title: 'Preparacion Terreno Actualizado! ',
+                    title: 'Preparacion Terreno Actualizado!',
                     text: 'Preparacion Terreno actualizado con éxito.',
                 });
             } else {
@@ -263,10 +299,8 @@ const ModificacionPreparacionTerreno: React.FC<PreparacionTerrenoSeleccionado> =
                     title: 'Error al actualizar la Preparacion Terreno.',
                     text: resultado.mensaje,
                 });
-            };
+            }
 
-            // vuelve a cargar la tabla
-            
             if (onEdit) {
                 onEdit();
             }
@@ -282,7 +316,7 @@ const ModificacionPreparacionTerreno: React.FC<PreparacionTerrenoSeleccionado> =
                 <h2>Preparacion de Terreno</h2>
                 <FormGroup>
                     <label htmlFor="fincas">Finca:</label>
-                    <select className="custom-select" id="fincas" value={selectedFinca} onChange={handleFincaChange}>
+                    <select className="custom-select" id="fincas" value={selectedFinca} onChange={handleFincaChange} disabled={readOnly}>
                         <option key="default-finca" value="">Seleccione...</option>
                         {filteredFincas.map((finca) => (
                             <option key={`${finca.idFinca}-${finca.nombre || 'undefined'}`} value={finca.idFinca}>{finca.nombre || 'Undefined'}</option>
@@ -293,7 +327,7 @@ const ModificacionPreparacionTerreno: React.FC<PreparacionTerrenoSeleccionado> =
 
                 <FormGroup>
                     <label htmlFor="parcelas">Parcela:</label>
-                    <select className="custom-select" id="parcelas" value={selectedParcela} onChange={handleParcelaChange}>
+                    <select className="custom-select" id="parcelas" value={selectedParcela} onChange={handleParcelaChange} disabled={readOnly}>
                         <option key="default-parcela" value="">Seleccione...</option>
                         {filteredParcelas.map((parcela) => (
                             <option key={`${parcela.idParcela}-${parcela.nombre || 'undefined'}`} value={parcela.idParcela}>{parcela.nombre || 'Undefined'}</option>
@@ -315,6 +349,7 @@ const ModificacionPreparacionTerreno: React.FC<PreparacionTerrenoSeleccionado> =
                                 onChange={handleInputChange}
                                 className={errors.fecha ? 'input-styled input-error' : 'input-styled'}
                                 placeholder="Selecciona una fecha"
+                                disabled={readOnly}
                             />
                             <FormFeedback>{errors.fecha}</FormFeedback>
                         </Col>
@@ -324,17 +359,20 @@ const ModificacionPreparacionTerreno: React.FC<PreparacionTerrenoSeleccionado> =
                     <FormGroup row>
                         <Label for="actividad" sm={4} className="input-label">Actividad</Label>
                         <Col sm={8}>
-                            <Input
-                                type="text"
-                                id="actividad"
-                                name="actividad"
-                                value={formData.actividad}
+                            <select
+                                className="custom-select"
+                                id="idActividad"
+                                name="idActividad"
+                                value={formData.idActividad}
                                 onChange={handleInputChange}
-                                className={errors.actividad ? 'input-styled input-error' : 'input-styled'}
-                                placeholder="actividad"
-                                maxLength={200}
-                            />
-                            <FormFeedback>{errors.actividad}</FormFeedback>
+                                disabled={readOnly}
+                            >
+                                <option value="">Seleccione...</option>
+                                {actividades.map((actividad) => (
+                                    <option key={actividad.idActividad} value={actividad.idActividad}>{actividad.nombre}</option>
+                                ))}
+                            </select>
+                            {errors.actividad && <FormFeedback>{errors.actividad}</FormFeedback>}
                         </Col>
                     </FormGroup>
                 </div>
@@ -342,20 +380,99 @@ const ModificacionPreparacionTerreno: React.FC<PreparacionTerrenoSeleccionado> =
                     <FormGroup row>
                         <Label for="maquinaria" sm={4} className="input-label">Maquinaria</Label>
                         <Col sm={8}>
+                            <select
+                                className="custom-select"
+                                id="idMaquinaria"
+                                name="idMaquinaria"
+                                value={formData.idMaquinaria}
+                                onChange={handleInputChange}
+                                disabled={readOnly}
+                            >
+                                <option value="">Seleccione...</option>
+                                {maquinarias.map((maquinaria) => (
+                                    <option key={maquinaria.idMaquinaria} value={maquinaria.idMaquinaria}>{maquinaria.nombre}</option>
+                                ))}
+                            </select>
+                            {errors.maquinaria && <FormFeedback>{errors.maquinaria}</FormFeedback>}
+                        </Col>
+                    </FormGroup>
+                </div>
+            </div>
+
+            <div style={{ display: 'flex', flexDirection: 'row', marginBottom: '0rem' }}>
+                <div style={{ flex: 1, marginRight: '0.5rem', marginLeft: '0.5rem' }}>
+                    <FormGroup row>
+                        <Label for="identificacion" sm={4} className="input-label">Identificación</Label>
+                        <Col sm={8}>
                             <Input
                                 type="text"
-                                id="maquinaria"
-                                name="maquinaria"
-                                value={formData.maquinaria}
+                                id="identificacion"
+                                name="identificacion"
+                                value={formData.identificacion}
                                 onChange={handleInputChange}
                                 className="input-styled"
-                                placeholder="maquinaria"
+                                placeholder="Identificación"
                                 maxLength={50}
+                                disabled={readOnly}
+                            />
+                            <FormFeedback>{errors.identificacion}</FormFeedback>
+                        </Col>
+                    </FormGroup>
+                </div>
+                <div style={{ flex: 1, marginRight: '0.5rem', marginLeft: '0.5rem' }}>
+                    <FormGroup row>
+                        <Label for="horasTrabajadas" sm={4} className="input-label">Horas Trabajadas</Label>
+                        <Col sm={8}>
+                            <Input
+                                type="number"
+                                id="horasTrabajadas"
+                                name="horasTrabajadas"
+                                value={formData.horasTrabajadas}
+                                onChange={handleInputChange}
+                                className="input-styled"
+                                placeholder="Horas Trabajadas"
+                                disabled={readOnly}
+                            />
+                            <FormFeedback>{errors.horasTrabajadas}</FormFeedback>
+                        </Col>
+                    </FormGroup>
+                </div>
+                <div style={{ flex: 1, marginRight: '0.5rem', marginLeft: '0.5rem' }}>
+                    <FormGroup row>
+                        <Label for="pagoPorHora" sm={4} className="input-label">Pago por Hora</Label>
+                        <Col sm={8}>
+                            <Input
+                                type="number"
+                                id="pagoPorHora"
+                                name="pagoPorHora"
+                                value={formData.pagoPorHora}
+                                onChange={handleInputChange}
+                                className="input-styled"
+                                placeholder="Pago por Hora"
+                                disabled={readOnly}
+                            />
+                            <FormFeedback>{errors.pagoPorHora}</FormFeedback>
+                        </Col>
+                    </FormGroup>
+                </div>
+
+                <div style={{ flex: 1, marginRight: '0.5rem', marginLeft: '0.5rem' }}>
+                    <FormGroup row>
+                        <Label for="totalPago" sm={2} className="input-label">Total Pago</Label>
+                        <Col sm={10}>
+                            <Input
+                                type="number"
+                                id="totalPago"
+                                name="totalPago"
+                                value={totalPago}
+                                className="input-styled"
+                                disabled
                             />
                         </Col>
                     </FormGroup>
                 </div>
             </div>
+
             <FormGroup row>
                 <Label for="observaciones" sm={2} className="input-label">Observaciones</Label>
                 <Col sm={10}>
@@ -369,20 +486,21 @@ const ModificacionPreparacionTerreno: React.FC<PreparacionTerrenoSeleccionado> =
                         style={{ height: '75px', resize: "none" }}
                         placeholder="Observaciones"
                         maxLength={200}
-
+                        disabled={readOnly}
                     />
                     <FormFeedback>{errors.observaciones}</FormFeedback>
                 </Col>
             </FormGroup>
-            <FormGroup row>
-                <Col sm={{ size: 10, offset: 2 }}>
-                    {/* Agregar aquí el botón de cancelar proporcionado por el modal */}
-                    <Button onClick={handleSubmitConValidacion} className="btn-styled">Guardar</Button>
-                </Col>
-            </FormGroup>
+
+            {!readOnly && (
+                <FormGroup row>
+                    <Col sm={{ size: 10, offset: 2 }}>
+                        <Button onClick={handleSubmitConValidacion} className="btn-styled">Guardar</Button>
+                    </Col>
+                </FormGroup>
+            )}
         </div>
     );
-
 };
 
 export default ModificacionPreparacionTerreno;

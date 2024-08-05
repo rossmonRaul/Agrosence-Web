@@ -7,6 +7,16 @@ export const ObtenerDatosPreparacionTerreno = async () => {
     return await ProcesarDatosApi('GET', url, '');
 }
 
+export const ObtenerDatosPreparacionTerrenoActividad = async () => {
+    const url = `${baseURL}/api/v1.0/${controlador}/ObtenerDatosPreparacionTerrenoActividad`;
+    return await ProcesarDatosApi('GET', url, '');
+}
+
+export const ObtenerDatosPreparacionTerrenoMaquinaria = async () => {
+    const url = `${baseURL}/api/v1.0/${controlador}/ObtenerDatosPreparacionTerrenoMaquinaria`;
+    return await ProcesarDatosApi('GET', url, '');
+}
+
 export const CambiarEstadoPreparacionTerreno = async (data: any) => {
     const url = `${baseURL}/api/v1.0/${controlador}/CambiarEstadoPreparacionTerreno`;
     return await ProcesarDatosApi('PUT', url, data);

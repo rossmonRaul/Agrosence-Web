@@ -1,5 +1,5 @@
-import React, { useEffect, useState } from 'react';
-import { FormGroup, Label, Input, Col, FormFeedback, Button} from 'reactstrap';
+import React, { useEffect, useState, useRef } from 'react';
+import { FormGroup, Label, Input, Col, FormFeedback, Button } from 'reactstrap';
 import { useSelector } from "react-redux";
 import BordeSuperior from "../../../components/bordesuperior/BordeSuperior";
 import Sidebar from "../../../components/sidebar/Sidebar";
@@ -10,12 +10,9 @@ import { ObtenerFincas } from '../../../servicios/ServicioFincas';
 import { ObtenerParcelas } from '../../../servicios/ServicioParcelas';
 import { ObtenerUsuariosAsignadosPorIdentificacion } from '../../../servicios/ServicioUsuario';
 import { ObtenerPuntoMedicionFincaParcela } from "../../../servicios/ServicioContenidoDeNitrogeno";
-import { ObtenerFincasParcelasDeEmpresaPorUsuario, ObtenerMedicionesSensores } from "../../../servicios/ServiciosDashboard"; 
+import { ObtenerFincasParcelasDeEmpresaPorUsuario, ObtenerMedicionesSensores } from "../../../servicios/ServiciosDashboard";
 import { AppStore } from "../../../redux/Store";
 import ReactEcharts from 'echarts-for-react';
-import { text } from '@fortawesome/fontawesome-svg-core';
-import { grid, margin, padding } from '@mui/system';
-import { color } from 'echarts';
 
 interface Option {
   identificacion: string;
@@ -106,12 +103,32 @@ const Dashboard: React.FC = () => {
     fechaFin: '',
   });
   const [errors, setErrors] = useState<Record<string, string>>({});
+  const [loading, setLoading] = useState(false);
+
+  const chartRefs = useRef<any[]>([]);
+
+  const [visibleCharts, setVisibleCharts] = useState({
+    ph: true,
+    vwc: true,
+    conductividad: true,
+    hr: true,
+    ts: true,
+    ta: true,
+  });
 
   const handleInputChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = event.target;
     setFormData((prevState) => ({
       ...prevState,
       [name]: value
+    }));
+  };
+
+  const handleCheckboxChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    const { name, checked } = event.target;
+    setVisibleCharts((prevState) => ({
+      ...prevState,
+      [name]: checked
     }));
   };
 
@@ -242,6 +259,7 @@ const Dashboard: React.FC = () => {
   const filteredParcelas = parcelas.filter(parcela => parcela.idFinca === parseInt(selectedFinca));
 
   const handleObtenerMedicionesSensores = async () => {
+    setLoading(true);
     try {
       const data = {
         Usuario: userState.identificacion,
@@ -255,35 +273,23 @@ const Dashboard: React.FC = () => {
 
       const puntosMedicionUnicosph = Array.from(new Set(mediciones.filter(obj => obj.idMedicion === 17).map(obj => obj.codigo)));
       const fechasMedicionUnicasph = Array.from(new Set(mediciones.filter(obj => obj.idMedicion === 17).map(obj => new Date(obj.fechaMedicion).toLocaleDateString())));
-
       const puntosMedicionUnicosVWC = Array.from(new Set(mediciones.filter(obj => obj.idMedicion === 18).map(obj => obj.codigo)));
       const fechasMedicionUnicasVWC = Array.from(new Set(mediciones.filter(obj => obj.idMedicion === 18).map(obj => new Date(obj.fechaMedicion).toLocaleDateString())));
-
       const puntosMedicionUnicosConductividad = Array.from(new Set(mediciones.filter(obj => obj.idMedicion === 9).map(obj => obj.codigo)));
       const fechasMedicionUnicasConductividad = Array.from(new Set(mediciones.filter(obj => obj.idMedicion === 9).map(obj => new Date(obj.fechaMedicion).toLocaleDateString())));
-
-      //Nuevas
       const puntosMedicionUnicosHr = Array.from(new Set(mediciones.filter(obj => obj.idMedicion === 21).map(obj => obj.codigo)));
       const fechasMedicionUnicasHr = Array.from(new Set(mediciones.filter(obj => obj.idMedicion === 21).map(obj => new Date(obj.fechaMedicion).toLocaleDateString())));
-
       const puntosMedicionUnicosTs = Array.from(new Set(mediciones.filter(obj => obj.idMedicion === 10).map(obj => obj.codigo)));
       const fechasMedicionUnicasTs = Array.from(new Set(mediciones.filter(obj => obj.idMedicion === 10).map(obj => new Date(obj.fechaMedicion).toLocaleDateString())));
-
       const puntosMedicionUnicosTa = Array.from(new Set(mediciones.filter(obj => obj.idMedicion === 20).map(obj => obj.codigo)));
       const fechasMedicionUnicasTa = Array.from(new Set(mediciones.filter(obj => obj.idMedicion === 10).map(obj => new Date(obj.fechaMedicion).toLocaleDateString())));
 
       const phData: { name: string, type: string, stack: string, areaStyle: {}, emphasis: { focus: string }, data: number[] }[] = [];
       const vwcData: { name: string, type: string, stack: string, emphasis: { focus: string }, data: number[] }[] = [];
       const conductividadElectricaData: { name: string, type: string, stack: string, emphasis: { focus: string }, data: number[] }[] = [];
-
       const HrData: { name: string, type: string, data: number[] }[] = [];
       const TsData: { name: string, type: string, stack: string, label: { show: boolean }, emphasis: { focus: string }, data: number[] }[] = [];
       const TaData: { name: string, type: string, showSymbol: string, data: number[] }[] = [];
-
-      ///console.log('mediciones',)
-      console.log(fechasMedicionUnicasConductividad)
-      console.log(fechasMedicionUnicasVWC)
-      console.log(fechasMedicionUnicasph)
 
       mediciones.forEach((item: Mediciones) => {
         const puntoMedicion = item.codigo;
@@ -292,11 +298,9 @@ const Dashboard: React.FC = () => {
 
         let ArrayArea: { name: string, type: string, stack: string, areaStyle: {}, emphasis: { focus: string }, data: number[] }[];
         let ArrayLineal: { name: string, type: string, stack: string, data: number[] }[];
-
         let ArrayLinealHr: { name: string, type: string, data: number[] }[];
         let ArrayLinealTs: { name: string, type: string, stack: string, label: { show: boolean }, emphasis: { focus: string }, data: number[] }[]
         let ArrayLinealTa: { name: string, type: string, showSymbol: string, data: number[] }[]
-
         let ArrayBarras: { name: string, type: string, stack: string, emphasis: { focus: string }, data: number[] }[];
         let existingItem;
 
@@ -340,7 +344,7 @@ const Dashboard: React.FC = () => {
               data: []
             };
             ArrayLineal.push(existingItem);
-          } 
+          }
         } else if (idMedicion === 20) {
           ArrayLinealTa = TaData;
           existingItem = ArrayLinealTa.find(obj => obj.name === puntoMedicion);
@@ -353,34 +357,34 @@ const Dashboard: React.FC = () => {
             };
             ArrayLinealTa.push(existingItem);
           }
-          } 
-          else if (idMedicion === 10) {
-            ArrayLinealTs = TsData;
-            existingItem = ArrayLinealTs.find(obj => obj.name === puntoMedicion);
-            if (!existingItem) {
-              existingItem = {
-                name: puntoMedicion,
-                type: 'bar',
-                stack: 'total',
-                label: {show: true},
-                emphasis: { focus: 'series'},
-                data: []
-              };
-              ArrayLinealTs.push(existingItem);
-            }
+        }
+        else if (idMedicion === 10) {
+          ArrayLinealTs = TsData;
+          existingItem = ArrayLinealTs.find(obj => obj.name === puntoMedicion);
+          if (!existingItem) {
+            existingItem = {
+              name: puntoMedicion,
+              type: 'bar',
+              stack: 'total',
+              label: { show: true },
+              emphasis: { focus: 'series' },
+              data: []
+            };
+            ArrayLinealTs.push(existingItem);
           }
-          else if (idMedicion === 21) {
-            ArrayLinealHr = HrData;
-            existingItem = ArrayLinealHr.find(obj => obj.name === puntoMedicion);
-            if (!existingItem) {
-              existingItem = {
-                name: puntoMedicion,
-                type: 'line',
-                data: []
-              };
-              ArrayLinealHr.push(existingItem);
-            }
+        }
+        else if (idMedicion === 21) {
+          ArrayLinealHr = HrData;
+          existingItem = ArrayLinealHr.find(obj => obj.name === puntoMedicion);
+          if (!existingItem) {
+            existingItem = {
+              name: puntoMedicion,
+              type: 'line',
+              data: []
+            };
+            ArrayLinealHr.push(existingItem);
           }
+        }
         else {
           return;
         }
@@ -390,7 +394,7 @@ const Dashboard: React.FC = () => {
       setGraficoPH({
         ...graficoPH,
         title: {
-          text: 'pH',
+          text: 'pH del suelo',
           left: 'center',
           top: 10,
         },
@@ -449,7 +453,6 @@ const Dashboard: React.FC = () => {
         series: conductividadElectricaData
       });
 
-      // Nuevos 
       setGraficoTa({
         ...graficoTa,
         title: {
@@ -516,11 +519,25 @@ const Dashboard: React.FC = () => {
       setKeyRender(prevKey => prevKey + 1);
     } catch (error) {
       console.error('Error al obtener las mediciones de sensores:', error);
+    } finally {
+      setLoading(false);
     }
   };
 
+  useEffect(() => {
+    if (!loading) {
+      setTimeout(() => {
+        chartRefs.current.forEach((chartRef) => {
+          if (chartRef) {
+            chartRef.getEchartsInstance().resize();
+          }
+        });
+      }, 1000); // Retrasar la redimensión para asegurar que los gráficos están completamente montados
+    }
+  }, [loading, keyRender]);
+
   const renderComboboxes = () => (
-    <div className="form-container">
+    <div className="form-container" style={{ alignItems: 'center' }}>
       <div className="form-row">
         <div className="form-group">
           <FormGroup>
@@ -562,6 +579,7 @@ const Dashboard: React.FC = () => {
             <Label for="fechaInicio" sm={4} className="input-label">Fecha Inicio</Label>
             <Col sm={8}>
               <Input
+                style={{ width: '150px' }}
                 type="date"
                 id="fechaInicio"
                 name="fechaInicio"
@@ -579,6 +597,7 @@ const Dashboard: React.FC = () => {
             <Label for="fechaFin" sm={4} className="input-label">Fecha Fin</Label>
             <Col sm={8}>
               <Input
+                style={{ width: '150px' }}
                 type="date"
                 id="fechaFin"
                 name="fechaFin"
@@ -605,163 +624,135 @@ const Dashboard: React.FC = () => {
         transition: 'background-color 0.3s ease'
       }} onClick={handleObtenerMedicionesSensores}>Obtener Mediciones</Button>
 
-      <div style={{ display: 'table', flexDirection: 'row', flexWrap: 'nowrap', justifyContent: 'space-around', marginTop:'30px' }}>
-        <div style={{ display:'flex'}}>
-          
-          <ReactEcharts
-            option={graficoPH} key={keyRender}
-            style={{ height: '400px', width: '40%', marginBottom: '20px' }}
-            className="react_for_echarts"
-          />
-          <ReactEcharts
-            option={graficoVWC} key={keyRender + 1}
-            style={{ height: '400px', width: '40%', marginBottom: '20px' }}
-            className="react_for_echarts"
-          />
-          <ReactEcharts
-            option={graficoConductividad} key={keyRender + 2}
-            style={{ height: '400px', width: '40%', marginBottom: '20px' }}
-            className="react_for_echarts"
-          />
+      <div className="checkbox-container" style={{ marginTop: '20px', display: 'flex', flexDirection: 'row', justifyContent: 'center' }}>
+        <div style={{ marginRight: '20px' }}>
+          <Input type="checkbox" name="ph" checked={visibleCharts.ph} onChange={handleCheckboxChange} /> pH
         </div>
-        
-        <div style={{ display:'flex'}}>
-          <ReactEcharts
-            option={graficoTa} key={keyRender + 3}
-            style={{ height: '400px', width: '40%', marginBottom: '20px' }}
-            className="react_for_echarts"
-          />
-          <ReactEcharts
-            option={graficoHr} key={keyRender + 4}
-            style={{ height: '400px', width: '40%', marginBottom: '20px' }}
-            className="react_for_echarts"
-          />
-          <ReactEcharts
-            option={graficoTs} key={keyRender + 5}
-            style={{ height: '400px', width: '40%', marginBottom: '20px' }}
-            className="react_for_echarts"
-          />
+        <div style={{ marginRight: '20px' }}>
+          <Input type="checkbox" name="vwc" checked={visibleCharts.vwc} onChange={handleCheckboxChange} /> VWC
         </div>
-
-        {/* <div style={{ display: 'table', flexDirection: 'row', flexWrap: 'nowrap', justifyContent: 'space-around', marginTop:'30px' }}>
-
-          <div style={{display: 'flex', flexDirection: 'row', justifyContent: 'space-around', alignItems: 'flex-start', marginBottom: '20px'}}>
-            <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center'}}>
-              <h3>pH</h3>
-              <ReactEcharts
-              option={graficoPH} key={keyRender}
-              style={{ height: '400px', width: '30%', marginBottom: '20px' }}
-              className="react_for_echarts"
-              />
-            </div>
-
-            <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center'}}>
-              <h3>VWC</h3>
-              <ReactEcharts
-              option={graficoVWC} key={keyRender + 1}
-              style={{ height: '400px', width: '30%', marginBottom: '20px' }}
-              className="react_for_echarts"
-              />
-            </div>
-
-            <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center'}}>
-              <h3>CE</h3>
-              <ReactEcharts
-              option={graficoConductividad} key={keyRender + 2}
-              style={{ height: '400px', width: '30%', marginBottom: '20px' }}
-              className="react_for_echarts"
-              />
-            </div>
-          </div>
-          
-
-          <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center'}}>
-            <h3>TA</h3>
-            <ReactEcharts
-            option={graficoTa} key={keyRender + 3}
-            style={{ height: '400px', width: '30%', marginBottom: '20px' }}
-            className="react_for_echarts"
-            />
-          </div>
-
-          <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center'}}>
-            <h3>HR</h3>
-            <ReactEcharts
-            option={graficoHr} key={keyRender + 4}
-            style={{ height: '400px', width: '30%', marginBottom: '20px' }}
-            className="react_for_echarts"
-            />
-          </div>
-
-          <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center'}}>
-            <h3>TS</h3>
-            <ReactEcharts
-            option={graficoTs} key={keyRender + 5}
-            style={{ height: '400px', width: '30%', marginBottom: '20px' }}
-            className="react_for_echarts"
-            />
-          </div>
-      </div> */}
+        <div style={{ marginRight: '20px' }}>
+          <Input type="checkbox" name="conductividad" checked={visibleCharts.conductividad} onChange={handleCheckboxChange} /> Conductividad
+        </div>
+        <div style={{ marginRight: '20px' }}>
+          <Input type="checkbox" name="hr" checked={visibleCharts.hr} onChange={handleCheckboxChange} /> Hr
+        </div>
+        <div style={{ marginRight: '20px' }}>
+          <Input type="checkbox" name="ts" checked={visibleCharts.ts} onChange={handleCheckboxChange} /> Ts
+        </div>
+        <div style={{ marginRight: '20px' }}>
+          <Input type="checkbox" name="ta" checked={visibleCharts.ta} onChange={handleCheckboxChange} /> Ta
+        </div>
       </div>
-     </div>
+
+      <div style={{ display: 'flex', flexDirection: 'row', flexWrap: 'wrap', justifyContent: 'space-around', marginTop: '30px' }}>
+        {visibleCharts.ph && (
+          <ReactEcharts
+            ref={ref => chartRefs.current[0] = ref}
+            option={graficoPH} key={keyRender}
+            style={{ height: '500px', width: '500px', marginBottom: '20px' }}
+            className="react_for_echarts"
+          />
+        )}
+        {visibleCharts.vwc && (
+          <ReactEcharts
+            ref={ref => chartRefs.current[1] = ref}
+            option={graficoVWC} key={keyRender + 1}
+            style={{ height: '500px', width: '500px', marginBottom: '20px' }}
+            className="react_for_echarts"
+          />
+        )}
+        {visibleCharts.conductividad && (
+          <ReactEcharts
+            ref={ref => chartRefs.current[2] = ref}
+            option={graficoConductividad} key={keyRender + 2}
+            style={{ height: '500px', width: '500px', marginBottom: '20px' }}
+            className="react_for_echarts"
+          />
+        )}
+        {visibleCharts.ta && (
+          <ReactEcharts
+            ref={ref => chartRefs.current[3] = ref}
+            option={graficoTa} key={keyRender + 3}
+            style={{ height: '500px', width: '500px', marginBottom: '20px' }}
+            className="react_for_echarts"
+          />
+        )}
+        {visibleCharts.hr && (
+          <ReactEcharts
+            ref={ref => chartRefs.current[4] = ref}
+            option={graficoHr} key={keyRender + 4}
+            style={{ height: '500px', width: '500px', marginBottom: '20px' }}
+            className="react_for_echarts"
+          />
+        )}
+        {visibleCharts.ts && (
+          <ReactEcharts
+            ref={ref => chartRefs.current[5] = ref}
+            option={graficoTs} key={keyRender + 5}
+            style={{ height: '500px', width: '500px', marginBottom: '20px' }}
+            className="react_for_echarts"
+          />
+        )}
+      </div>
+    </div>
   );
 
   let dashboardContent: JSX.Element;
 
   switch (userState.idRol) {
     case 1:
-      dashboardContent = 
-      <Sidebar>
-        <div className="main-container">
-          <Topbar />
-          <BordeSuperior text="Dashboard Super Usuario" />
-          <div className="content">
-            {renderComboboxes()}
+      dashboardContent =
+        <Sidebar>
+          <div className="main-container">
+            <Topbar />
+            <BordeSuperior text="Dashboard Super Usuario" />
+            <div className="content">
+              {renderComboboxes()}
+            </div>
           </div>
-        </div>
-      </Sidebar>;
+        </Sidebar>;
       break;
     case 2:
-      dashboardContent = 
-      <Sidebar>
-        <div className="main-container">
-          <Topbar />
-          <BordeSuperior text="Dashboard Administrador" />
-          <div className="content">
-            {renderComboboxes()}
+      dashboardContent =
+        <Sidebar>
+          <div className="main-container">
+            <Topbar />
+            <BordeSuperior text="Dashboard Administrador" />
+            <div className="content">
+              {renderComboboxes()}
+            </div>
           </div>
-        </div>
-      </Sidebar>;
+        </Sidebar>;
       break;
     case 3:
-      dashboardContent = 
-      <Sidebar>
-        <div className="main-container">
-          <Topbar />
-          <BordeSuperior text="Comunidad" />
-          <div className="content">
-            {renderComboboxes()}
+      dashboardContent =
+        <Sidebar>
+          <div className="main-container">
+            <Topbar />
+            <BordeSuperior text="Comunidad" />
+            <div className="content">
+              {renderComboboxes()}
+            </div>
           </div>
-        </div>
-      </Sidebar>;
+        </Sidebar>;
       break;
     case 4:
-      dashboardContent = 
-      <Sidebar>
-        <div className="main-container">
-          <Topbar />
-          <BordeSuperior text="Comunidad" />
-          <div className="content">
-            {renderComboboxes()}
+      dashboardContent =
+        <Sidebar>
+          <div className="main-container">
+            <Topbar />
+            <BordeSuperior text="Comunidad" />
+            <div className="content">
+              {renderComboboxes()}
+            </div>
           </div>
-        </div>
-      </Sidebar>;
+        </Sidebar>;
       break;
     default:
       dashboardContent = <div>No se encontró un dashboard para este rol de usuario.</div>;
       break;
   }
-
   return (
     <div>
       {dashboardContent}

@@ -55,6 +55,7 @@ const CantidadDePlantas = lazy(() => import('./pages/private/CantidadDePlantas/C
 const ContenidoDeAgua = lazy(() => import('./pages/private/ContenidoDeAgua/ContenidoDeAgua'))
 const CoberturaVegetal = lazy(() => import('./pages/private/CoberturaVegetal/CoberturaVegetal'))
 const ContenidoDeNitrogeno = lazy(() => import('./pages/private/ContenidoDeNitrogeno/ContenidoDeNitrogeno'))
+const CatalogoActividadesPT = lazy(() => import('./pages/private/CatalogoActividadesPT/CatalogoActividadesPT'))
 
 function App() {
   return (
@@ -103,6 +104,7 @@ function App() {
               <Route path={PrivateRoutes.REPORTESALIDAS} element={<ReporteSalidas />} />
               <Route path={PrivateRoutes.REPORTEPLANILLA} element={<ReportePlanilla/>} />
               <Route path={PrivateRoutes.REPORTEORDENCOMPRA} element={<ReporteOrdenDeCompra/>} />
+              <Route path={PrivateRoutes.CATALOGOACTIVIDADESPT} element={<CatalogoActividadesPT/>}/>
             </Route>
             {/* Rutas accesibles solo para el rol de usuario asignado */}
             <Route element={<RolGuard rol={Roles.UsuarioAsignado} />}>
@@ -127,6 +129,7 @@ function App() {
               <Route path={PrivateRoutes.CONTENIDODEAGUA} element={<ContenidoDeAgua/>} />
               <Route path={PrivateRoutes.COBERTURAVEGETAL} element={<CoberturaVegetal/>} />
               <Route path={PrivateRoutes.CONTENIDODENITROGENO} element={<ContenidoDeNitrogeno/>}/>
+              <Route path={PrivateRoutes.CATALOGOACTIVIDADESPT} element={<CatalogoActividadesPT/>}/>
             </Route>
           </RoutesWithNotFound>
         </BrowserRouter>

@@ -1,20 +1,24 @@
 import React, { useEffect, useState } from 'react';
 import { FormGroup, Label, Input, Col, FormFeedback, Button } from 'reactstrap';
-//import { InsertarManejoFertilizantes } from '../../servicios/ServicioFertilizantes.ts';
-import {InsertarPreparacionTerrenos} from '../../servicios/ServicioPreparacionTerreno.ts';
+import { InsertarPreparacionTerrenos, ObtenerDatosPreparacionTerrenoActividad, ObtenerDatosPreparacionTerrenoMaquinaria } from '../../servicios/ServicioPreparacionTerreno';
 import Swal from 'sweetalert2';
-import { ObtenerFincas } from '../../servicios/ServicioFincas.ts';
-import { ObtenerParcelas } from '../../servicios/ServicioParcelas.ts';
-import { ObtenerUsuariosAsignadosPorIdentificacion } from '../../servicios/ServicioUsuario.ts';
+import { ObtenerFincas } from '../../servicios/ServicioFincas';
+import { ObtenerParcelas } from '../../servicios/ServicioParcelas';
+import { ObtenerUsuariosAsignadosPorIdentificacion } from '../../servicios/ServicioUsuario';
 
 interface InsertarPreparacionTerrenoProps {
     onAdd: () => void;
 }
 
-interface Props {
-    identificacion: string;
-    idEmpresa: number;
-};
+interface Actividad {
+    idActividad: number;
+    nombre: string;
+}
+
+interface Maquinaria {
+    idMaquinaria: number;
+    nombre: string;
+}
 
 interface Option {
     identificacion: string;
@@ -29,22 +33,25 @@ const InsertarPreparacionTerreno: React.FC<InsertarPreparacionTerrenoProps> = ({
         idFinca: '',
         idParcela: '',
         fecha: '',
-        actividad: '',
-        maquinaria: '',
+        idActividad: '',
+        idMaquinaria: '',
         observaciones: '',
-        usuarioCreacionModificacion:''
+        identificacion: '',
+        horasTrabajadas: '',
+        pagoPorHora: '',
+        usuarioCreacionModificacion: ''
     });
     const [errors, setErrors] = useState<Record<string, string>>({});
 
-    // Estados para almacenar los datos obtenidos de la API
     const [fincas, setFincas] = useState<Option[]>([]);
     const [parcelas, setParcelas] = useState<Option[]>([]);
+    const [actividades, setActividades] = useState<Actividad[]>([]);
+    const [maquinarias, setMaquinarias] = useState<Maquinaria[]>([]);
     const [selectedFinca, setSelectedFinca] = useState<string>('');
     const [selectedParcela, setSelectedParcela] = useState<string>('');
     const [parcelasFiltradas, setParcelasFiltradas] = useState<Option[]>([]);
 
-
-    const handleInputChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    const handleInputChange = (event: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
         const { name, value } = event.target;
         setFormData((prevState: any) => ({
             ...prevState,
@@ -59,17 +66,15 @@ const InsertarPreparacionTerreno: React.FC<InsertarPreparacionTerrenoProps> = ({
                 const identificacionString = localStorage.getItem('identificacionUsuario');
                 if (identificacionString && idEmpresaString) {
                     const identificacion = identificacionString;
-                    
                     const usuariosAsignados = await ObtenerUsuariosAsignadosPorIdentificacion({ identificacion: identificacion });
                     const idFincasUsuario = usuariosAsignados.map((usuario: any) => usuario.idFinca);
                     const idParcelasUsuario = usuariosAsignados.map((usuario: any) => usuario.idParcela);
-                    
                     const fincasResponse = await ObtenerFincas();
                     const fincasUsuario = fincasResponse.filter((finca: any) => idFincasUsuario.includes(finca.idFinca));
                     setFincas(fincasUsuario);
                     const parcelasResponse = await ObtenerParcelas();
                     const parcelasUsuario = parcelasResponse.filter((parcela: any) => idParcelasUsuario.includes(parcela.idParcela));
-                    setParcelas(parcelasUsuario)
+                    setParcelas(parcelasUsuario);
                 } else {
                     console.error('La identificación y/o el ID de la empresa no están disponibles en el localStorage.');
                 }
@@ -78,13 +83,32 @@ const InsertarPreparacionTerreno: React.FC<InsertarPreparacionTerrenoProps> = ({
             }
         };
         obtenerDatosUsuario();
+
+        const obtenerDatosActividad = async () => {
+            try {
+                const actividadesResponse = await ObtenerDatosPreparacionTerrenoActividad();
+                setActividades(actividadesResponse);
+            } catch (error) {
+                console.error('Error al obtener actividades:', error);
+            }
+        };
+
+        const obtenerDatosMaquinaria = async () => {
+            try {
+                const maquinariasResponse = await ObtenerDatosPreparacionTerrenoMaquinaria();
+                setMaquinarias(maquinariasResponse);
+            } catch (error) {
+                console.error('Error al obtener maquinarias:', error);
+            }
+        };
+
+        obtenerDatosActividad();
+        obtenerDatosMaquinaria();
     }, []);
 
     const obtenerParcelasDeFinca = async (idFinca: string) => {
         try {
-            
             const parcelasFinca = parcelas.filter(parcela => parcela.idFinca === parseInt(idFinca));
-            
             setParcelasFiltradas(parcelasFinca);
         } catch (error) {
             console.error('Error al obtener las parcelas de la finca:', error);
@@ -107,7 +131,7 @@ const InsertarPreparacionTerreno: React.FC<InsertarPreparacionTerrenoProps> = ({
         const value = e.target.value;
         setSelectedFinca(value);
         setSelectedParcela('');
-        obtenerParcelasDeFinca(value)
+        obtenerParcelasDeFinca(value);
     };
 
     const handleParcelaChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
@@ -116,17 +140,15 @@ const InsertarPreparacionTerreno: React.FC<InsertarPreparacionTerrenoProps> = ({
     };
 
     const handleSubmit = async () => {
-        // Realizar validación de campos antes de enviar el formulario
         const newErrors: Record<string, string> = {};
-
-        // Validar selección de finca
+        console.log(formData.idActividad)
+        console.log(formData.idMaquinaria)
         if (!selectedFinca) {
             newErrors.finca = 'Debe seleccionar una finca';
         } else {
             newErrors.finca = '';
         }
 
-        // Validar selección de parcela
         if (!selectedParcela) {
             newErrors.parcela = 'Debe seleccionar una parcela';
         } else {
@@ -136,7 +158,6 @@ const InsertarPreparacionTerreno: React.FC<InsertarPreparacionTerrenoProps> = ({
         if (!formData.fecha.trim()) {
             newErrors.fecha = 'La fecha es requerida';
         } else {
-            // Validar que la fecha esté en el rango desde el 2015 hasta la fecha actual
             const minDate = new Date('2015-01-01');
             const selectedDate = new Date(formData.fecha);
             if (selectedDate < minDate || selectedDate > new Date()) {
@@ -146,22 +167,17 @@ const InsertarPreparacionTerreno: React.FC<InsertarPreparacionTerrenoProps> = ({
             }
         }
 
-        if (!formData.actividad.trim()) {
+        if (!formData.idActividad.trim()) {
             newErrors.actividad = 'El tipo de actividad es requerido';
-        } else if (formData.actividad.length > 200) {
-            newErrors.actividad = 'El tipo de actividad no puede tener más de 200 caracteres';
         } else {
             newErrors.actividad = '';
         }
 
-        if (!formData.maquinaria.trim()) {
+        if (!formData.idMaquinaria.trim()) {
             newErrors.maquinaria = 'La maquinaria es requerida';
-        } else if (formData.maquinaria.length > 50) {
-            newErrors.maquinaria = 'La maquinaria no puede tener más de 50 caracteres';
         } else {
             newErrors.maquinaria = '';
         }
-
 
         if (!formData.observaciones.trim()) {
             newErrors.observaciones = 'Las observaciones son requeridas';
@@ -170,20 +186,49 @@ const InsertarPreparacionTerreno: React.FC<InsertarPreparacionTerrenoProps> = ({
         } else {
             newErrors.observaciones = '';
         }
-  
+
+        if (!formData.identificacion.trim()) {
+            newErrors.identificacion = 'La identificación es requerida';
+        } else if (formData.identificacion.length > 50) {
+            newErrors.identificacion = 'La identificación no puede tener más de 50 caracteres';
+        } else {
+            newErrors.identificacion = '';
+        }
+
+        if (!formData.horasTrabajadas.trim()) {
+            newErrors.horasTrabajadas = 'Las horas trabajadas son requeridas';
+        } else if (isNaN(Number(formData.horasTrabajadas))) {
+            newErrors.horasTrabajadas = 'Las horas trabajadas deben ser un número';
+        } else {
+            newErrors.horasTrabajadas = '';
+        }
+
+        if (!formData.pagoPorHora.trim()) {
+            newErrors.pagoPorHora = 'El pago por hora es requerido';
+        } else if (isNaN(Number(formData.pagoPorHora))) {
+            newErrors.pagoPorHora = 'El pago por hora debe ser un número';
+        } else {
+            newErrors.pagoPorHora = '';
+        }
+
         setErrors(newErrors);
 
         if (Object.values(newErrors).every(error => error === '')) {
             try {
                 formData.idFinca = selectedFinca;
                 formData.idParcela = selectedParcela;
+                const totalPago = parseFloat(formData.horasTrabajadas) * parseFloat(formData.pagoPorHora);
 
-                const resultado = await InsertarPreparacionTerrenos(formData);
+                const resultado = await InsertarPreparacionTerrenos({
+                    ...formData,
+                    totalPago
+                });
+
                 if (resultado.indicador === 1) {
                     Swal.fire({
                         icon: 'success',
-                        title: '¡Manejo de preparacion de terreno insertado!',
-                        text: 'Se ha insertado la preparacion de terreno con éxito.'
+                        title: '¡Manejo de preparación de terreno insertado!',
+                        text: 'Se ha insertado la preparación de terreno con éxito.'
                     });
                     if (onAdd) {
                         onAdd();
@@ -191,16 +236,16 @@ const InsertarPreparacionTerreno: React.FC<InsertarPreparacionTerrenoProps> = ({
                 } else {
                     Swal.fire({
                         icon: 'error',
-                        title: 'Error al insertar la preparacion de terreno',
+                        title: 'Error al insertar la preparación de terreno',
                         text: resultado.message
                     });
                 }
             } catch (error) {
-                console.error('Error al insertar la preparacion de terreno:', error);
+                console.error('Error al insertar la preparación de terreno:', error);
                 Swal.fire({
                     icon: 'error',
-                    title: 'Error al insertar la preparacion de terreno',
-                    text: 'Ocurrió un error al intentar insertar la preparacion de terreno. Por favor, inténtelo de nuevo más tarde.'
+                    title: 'Error al insertar la preparación de terreno',
+                    text: 'Ocurrió un error al intentar insertar la preparación de terreno. Por favor, inténtelo de nuevo más tarde.'
                 });
             }
         }
@@ -208,9 +253,9 @@ const InsertarPreparacionTerreno: React.FC<InsertarPreparacionTerrenoProps> = ({
 
     return (
         <div id='general' style={{ display: 'flex', flexDirection: 'column', paddingBottom: '0rem', width: '100%', margin: '0 auto' }}>
-            <div className="form-container-fse" style={{ display: 'flex', flexDirection: 'column', width: '50%'}}>
+            <div className="form-container-fse" style={{ display: 'flex', flexDirection: 'column', width: '50%' }}>
                 <h2>Preparación de Terreno</h2>
-                <FormGroup> 
+                <FormGroup>
                     <label htmlFor="fincas">Finca:</label>
                     <select className="custom-select" id="fincas" value={selectedFinca} onChange={handleFincaChange}>
                         <option key="default-finca" value="">Seleccione...</option>
@@ -220,7 +265,7 @@ const InsertarPreparacionTerreno: React.FC<InsertarPreparacionTerrenoProps> = ({
                     </select>
                     {errors.finca && <FormFeedback>{errors.finca}</FormFeedback>}
                 </FormGroup>
-    
+
                 <FormGroup>
                     <label htmlFor="parcelas">Parcela:</label>
                     <select className="custom-select" id="parcelas" value={selectedParcela} onChange={handleParcelaChange}>
@@ -255,15 +300,18 @@ const InsertarPreparacionTerreno: React.FC<InsertarPreparacionTerrenoProps> = ({
                         <Label for="actividad" sm={4} className="input-label">Actividad</Label>
                         <Col sm={8}>
                             <Input
-                                type="text"
-                                id="actividad"
-                                name="actividad"
-                                value={formData.actividad}
+                                type="select"
+                                id="idActividad"
+                                name="idActividad"
+                                value={formData.idActividad}
                                 onChange={handleInputChange}
                                 className={errors.actividad ? 'input-styled input-error' : 'input-styled'}
-                                placeholder="Actividad"
-                                maxLength={200}
-                            />
+                            >
+                                <option value="">Seleccione...</option>
+                                {actividades.map((actividad) => (
+                                    <option key={actividad.idActividad} value={actividad.idActividad}>{actividad.nombre}</option>
+                                ))}
+                            </Input>
                             <FormFeedback>{errors.actividad}</FormFeedback>
                         </Col>
                     </FormGroup>
@@ -273,18 +321,80 @@ const InsertarPreparacionTerreno: React.FC<InsertarPreparacionTerrenoProps> = ({
                         <Label for="maquinaria" sm={4} className="input-label">Maquinaria</Label>
                         <Col sm={8}>
                             <Input
-                                type="text"
-                                id="maquinaria"
-                                name="maquinaria"
-                                value={formData.maquinaria}
+                                type="select"
+                                id="idMaquinaria"
+                                name="idMaquinaria"
+                                value={formData.idMaquinaria}
                                 onChange={handleInputChange}
-                                className="input-styled"
-                                placeholder="Maquinaria"
-                                maxLength={50}
-                            />
+                                className={errors.maquinaria ? 'input-styled input-error' : 'input-styled'}
+                            >
+                                <option value="">Seleccione...</option>
+                                {maquinarias.map((maquinaria) => (
+                                    <option key={maquinaria.idMaquinaria} value={maquinaria.idMaquinaria}>{maquinaria.nombre}</option>
+                                ))}
+                            </Input>
+                            <FormFeedback>{errors.maquinaria}</FormFeedback>
                         </Col>
                     </FormGroup>
                 </div>
+            </div>
+
+            <div style={{ display: 'flex', flexDirection: 'row', marginBottom: '0rem' }}>
+                <div style={{ flex: 1, marginRight: '0.5rem', marginLeft: '0.5rem' }}>
+                    <FormGroup row>
+                        <Label for="identificacion" sm={2} className="input-label">Identificación</Label>
+                        <Col sm={10}>
+                            <Input
+                                type="text"
+                                id="identificacion"
+                                name="identificacion"
+                                value={formData.identificacion}
+                                onChange={handleInputChange}
+                                className="input-styled"
+                                placeholder="Identificación"
+                                maxLength={50}
+                            />
+                            <FormFeedback>{errors.identificacion}</FormFeedback>
+                        </Col>
+                    </FormGroup>
+                </div>
+
+                <div style={{ flex: 1, marginRight: '0.5rem', marginLeft: '0.5rem' }}>
+                    <FormGroup row>
+                        <Label for="horasTrabajadas" sm={2} className="input-label">Horas Trabajadas</Label>
+                        <Col sm={10}>
+                            <Input
+                                type="number"
+                                id="horasTrabajadas"
+                                name="horasTrabajadas"
+                                value={formData.horasTrabajadas}
+                                onChange={handleInputChange}
+                                className="input-styled"
+                                placeholder="Horas Trabajadas"
+                            />
+                            <FormFeedback>{errors.horasTrabajadas}</FormFeedback>
+                        </Col>
+                    </FormGroup>
+                </div>
+
+                <div style={{ flex: 1, marginRight: '0.5rem', marginLeft: '0.5rem' }}>
+                    <FormGroup row>
+                        <Label for="pagoPorHora" sm={2} className="input-label">Pago por Hora</Label>
+                        <Col sm={10}>
+                            <Input
+                                type="number"
+                                id="pagoPorHora"
+                                name="pagoPorHora"
+                                value={formData.pagoPorHora}
+                                onChange={handleInputChange}
+                                className="input-styled"
+                                placeholder="Pago por Hora"
+                            />
+                            <FormFeedback>{errors.pagoPorHora}</FormFeedback>
+                        </Col>
+                    </FormGroup>
+                </div>
+
             </div>
 
             <FormGroup row>
@@ -300,20 +410,18 @@ const InsertarPreparacionTerreno: React.FC<InsertarPreparacionTerrenoProps> = ({
                         style={{ height: '75px', resize: "none" }}
                         placeholder="Observaciones"
                         maxLength={200}
-                        
                     />
                     <FormFeedback>{errors.observaciones}</FormFeedback>
                 </Col>
             </FormGroup>
+
             <FormGroup row>
                 <Col sm={{ size: 10, offset: 2 }}>
-                    {/* Agregar aquí el botón de cancelar proporcionado por el modal */}
                     <Button onClick={handleSubmit} className="btn-styled">Guardar</Button>
                 </Col>
             </FormGroup>
         </div>
     );
-    
 };
 
 export default InsertarPreparacionTerreno;
