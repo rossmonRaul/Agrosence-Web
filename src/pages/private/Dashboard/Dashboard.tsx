@@ -13,7 +13,6 @@ import { ObtenerPuntoMedicionFincaParcela } from "../../../servicios/ServicioCon
 import { ObtenerFincasParcelasDeEmpresaPorUsuario, ObtenerMedicionesSensores, ObtenerMedicionesSensoresPorUbicacionPM, ObtenerPuntosMedicionPorIdEmpresa } from "../../../servicios/ServiciosDashboard";
 import { AppStore } from "../../../redux/Store";
 import ReactEcharts from 'echarts-for-react'; 
-import MapComponent from '../../../components/MapComponent/MapComponent';
 import 'leaflet/dist/leaflet.css';
 import { MapContainer, TileLayer, Marker, Popup } from 'react-leaflet';
 import L, { LatLngTuple } from 'leaflet';

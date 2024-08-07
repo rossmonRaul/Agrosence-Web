@@ -57,6 +57,7 @@ const CoberturaVegetal = lazy(() => import('./pages/private/CoberturaVegetal/Cob
 const ContenidoDeNitrogeno = lazy(() => import('./pages/private/ContenidoDeNitrogeno/ContenidoDeNitrogeno'))
 const CatalogoActividadesPT = lazy(() => import('./pages/private/CatalogoActividadesPT/CatalogoActividadesPT'))
 const MedidasCultivos = lazy(() => import('./pages/private/MedidasCultivos/MedidasCultivos'))
+const Cultivos = lazy(() => import('./pages/private/Cultivos/Cultivos'))
 
 function App() {
   return (
@@ -107,6 +108,7 @@ function App() {
               <Route path={PrivateRoutes.REPORTEPLANILLA} element={<ReportePlanilla/>} />
               <Route path={PrivateRoutes.REPORTEORDENCOMPRA} element={<ReporteOrdenDeCompra/>} />
               <Route path={PrivateRoutes.CATALOGOACTIVIDADESPT} element={<CatalogoActividadesPT/>}/>
+              <Route path={PrivateRoutes.CULTIVOS} element={<Cultivos/>} />
             </Route>
             {/* Rutas accesibles solo para el rol de usuario asignado */}
             <Route element={<RolGuard rol={Roles.UsuarioAsignado} />}>

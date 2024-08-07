@@ -16,6 +16,12 @@ export const ObtenerMedidasCultivos = async () => {
     const url = `${baseURL}/api/v1.0/${controlador}/ObtenerMedidasCultivos`;
     return await ProcesarDatosApi('GET', url, '');
 }
+
+export const ObtenerCultivos = async () => {
+    const url = `${baseURL}/api/v1.0/${controlador}/ObtenerCultivos`;
+    return await ProcesarDatosApi('GET', url, '');
+}
+
 /*Metodos POST */
 export const InsertarRotacionCultivoSegunEstacionalidad = async (data: any) => {
     const url = `${baseURL}/api/v1.0/${controlador}/InsertarRotacionCultivoSegunEstacionalidad`;
@@ -31,6 +37,12 @@ export const InsertarMedidasCultivos = async (data: any) => {
     const url = `${baseURL}/api/v1.0/${controlador}/InsertarMedidasCultivos`;
     return await ProcesarDatosApi('POST', url, data);
 }
+
+export const InsertarCultivo = async (data: any) => {
+    const url = `${baseURL}/api/v1.0/${controlador}/InsertarCultivo`;
+    return await ProcesarDatosApi('POST', url, data);
+}
+
 
 /*Metodos PUT */
 export const EditarProductividadCultivo = async (data: any) => {
@@ -61,5 +73,15 @@ export const CambiarEstadoRotacionCultivo = async (data: any) => {
 
 export const CambiarEstadoMedidasCultivos = async (data: any) => {
     const url = `${baseURL}/api/v1.0/${controlador}/CambiarEstadoMedidasCultivos`;
+    return await ProcesarDatosApi('PUT', url, data);
+}
+
+export const EditarCultivo = async (data: any) => {
+    const url = `${baseURL}/api/v1.0/${controlador}/ModificarCultivo`;
+    return await ProcesarDatosApi('PUT', url, data);
+}
+
+export const CambiarEstadoCultivo = async (data: any) => {
+    const url = `${baseURL}/api/v1.0/${controlador}/CambiarEstadoCultivo`;
     return await ProcesarDatosApi('PUT', url, data);
 }

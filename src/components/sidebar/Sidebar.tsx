@@ -107,6 +107,12 @@ const Sidebar = ({ children }: { children: React.ReactNode }) => {
             roles: [2]
         },
         {
+            path: "/cultivos",
+            name: "Cultivos",
+            icon: <img src='/field.png' style={{ width: '22px' }} />,
+            roles: [2]
+        },
+        {
             path: "/catalogoactividadespt",
             name: "Catálogo de Actividades",
             icon: <img src='/inventario.png' style={{ width: '22px' }} />, // Asegúrate de tener un ícono adecuado
