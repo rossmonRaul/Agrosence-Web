@@ -109,7 +109,7 @@ const Sidebar = ({ children }: { children: React.ReactNode }) => {
         {
             path: "/cultivos",
             name: "Cultivos",
-            icon: <img src='/field.png' style={{ width: '22px' }} />,
+            icon: <img src='/cultivo.png' style={{ width: '22px' }} />,
             roles: [2]
         },
         {
