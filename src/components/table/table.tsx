@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react';
 import '../../css/Table.css';
 import { Table } from 'reactstrap';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faTimes, faCheck, faPenToSquare, faEye, faTrash} from '@fortawesome/free-solid-svg-icons';
+import { faCheck, faPenToSquare, faEye, faTrash} from '@fortawesome/free-solid-svg-icons';
 
 interface Column {
   key: string;
@@ -18,8 +18,8 @@ interface TableProps {
   columns: Column[]; // Columnas de la tabla
   data: TableRow[]; // Datos a mostrar en la tabla
   itemsPerPage?: number; // Número de elementos por página (opcional, por defecto es 5)
-  btnActionName: string; // Nombre del botón de acción en cada fila
-  openModal: (user: any) => void; // Función para abrir un modal con los detalles de un elemento
+  btnActionName?: string; // Nombre del botón de acción en cada fila
+  openModal?: (user: any) => void; // Función para abrir un modal con los detalles de un elemento
   toggleStatus?: (user: any) => void; // Función para cambiar el estado de un elemento (opcional)
   btnToggleOptionalStatus?: string; // Nombre del botón de acción opcional en cada fila (opcional)
   toggleOptionalStatus?: (user: any) => void; // Función para realizar una acción opcional en cada fila (opcional)
@@ -83,9 +83,11 @@ const TableResponsive: React.FC<TableProps> = ({ propClassNameOpcional, columns,
                     <td key={colIndex}>
                       {column.actions ? (
                         <div className='table-btn-container'>
-                          <button className='btn-edit' onClick={() => openModal(item)}>
-                            <FontAwesomeIcon icon={faPenToSquare} /> {btnActionName}
-                          </button>
+                          {openModal && (
+                            <button className='btn-edit' onClick={() => openModal(item)}>
+                              <FontAwesomeIcon icon={faPenToSquare} /> {btnActionName}
+                            </button>
+                          )}
                           {toggleStatus && (
                             <div className="status-toggle">
                               {item.estado === 1 ? (

@@ -27,3 +27,8 @@ export const ObtenerReportePlanilla = async (data: any) => {
     const url = `${baseURL}/api/v1.0/${controlador}/ObtenerReportePlanilla`;
     return await ProcesarDatosApi('POST', url, data);
 }
+
+export const ObtieneReporteMedicionesSensor = async () => {
+    const url = `${baseURL}/api/v1.0/${controlador}/ObtieneReporteMedicionesSensor`;
+    return await ProcesarDatosApi('POST', url, null);
+}
