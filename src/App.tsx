@@ -49,6 +49,7 @@ const ReporteSalidas = lazy(() => import('./pages/private/ReporteSalidas/Reporte
 const ReportePlanilla = lazy(() => import('./pages/private/ReportePlanilla/ReportePlanilla'));
 const ReporteOrdenDeCompra = lazy(() => import('./pages/private/ReporteOrdenDeCompra/ReporteOrdenDeCompra'));
 const ReporteMedicionesSensor = lazy(() => import('./pages/private/ReporteMedicionesSensor/ReporteMedicionesSensor'));
+const ReporteSensores = lazy(() => import('./pages/private/ReporteSensores/ReporteSensores'));
 const ManoObra = lazy(() => import('./pages/private/ManoObra/ManoObra'));
 const ContenidoDeClorofila = lazy(() => import('./pages/private/ContenidoDeClorofila/ContenidoDeClorofila'))
 const SaludPlanta = lazy(() => import('./pages/private/SaludPlanta/SaludPlanta'))
@@ -109,6 +110,7 @@ function App() {
               <Route path={PrivateRoutes.REPORTEPLANILLA} element={<ReportePlanilla/>} />
               <Route path={PrivateRoutes.REPORTEORDENCOMPRA} element={<ReporteOrdenDeCompra/>} />
               <Route path={PrivateRoutes.REPORTEMEDICIONESSENSOR} element={<ReporteMedicionesSensor/>} />
+              <Route path={PrivateRoutes.REPORTESENSORES} element={<ReporteSensores />} />
               <Route path={PrivateRoutes.CATALOGOACTIVIDADESPT} element={<CatalogoActividadesPT/>}/>
               <Route path={PrivateRoutes.CULTIVOS} element={<Cultivos/>} />
             </Route>

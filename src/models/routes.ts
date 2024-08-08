@@ -43,6 +43,7 @@ export const PrivateRoutes = {
     REPORTEENTRADAS: 'reporteentradas',
     REPORTEPLANILLA: 'reporteplanilla',
     REPORTEORDENCOMPRA: 'reporteordendecompra',
+    REPORTESENSORES: 'reportesensores',
     REPORTEMEDICIONESSENSOR: 'reportemedicionessensor',
     CONTENIDODECLOROFILA: "contenidodeclorofila",
     SALUDPLANTA: "saludplanta",
