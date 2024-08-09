@@ -288,6 +288,7 @@ const Dashboard: React.FC = () => {
   
   }; 
 
+  
   const handleObtenerMedicionesSensores = async () => {
     setGraficoPH(JSON.parse(JSON.stringify(opcionInicial)));
     setGraficoVWC(JSON.parse(JSON.stringify(opcionInicial)));
