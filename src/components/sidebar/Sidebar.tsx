@@ -405,8 +405,9 @@ const Sidebar = ({ children }: { children: React.ReactNode }) => {
 
             <div style={{ width: isOpen ? "200px" : "83px", overflowY: "auto", overflowX: "hidden"}} className="sidebar">
                 <div className="top-section">
-                    <h1 style={{ display: isOpen ? "block" : "none" }} className="logo">Logo</h1>
-                    <div style={{ marginLeft: isOpen ? "50px" : "0px" }} className="bars">
+                    {/* <h1 style={{ display: isOpen ? "block" : "none" }} className="logo">Logo</h1> */}
+                    <img src='/public/AGROSENSER.png' style={{display: isOpen ? "block" : "none", width:'100px', height:'100px'}}></img>
+                    <div style={{ marginLeft: isOpen ? "40px" : "0px" }} className="bars">
                         <FaBars onClick={toggle} />
                     </div>
                 </div>
