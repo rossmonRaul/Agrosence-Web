@@ -11,11 +11,11 @@
 }
 
 @keyframes changeBackground {
-    0% { background-image: url('../img/BordeSuperior.jpg'); }
-    25% { background-image: url('../img/BordeSuperior.jpg'); } 
-    50% { background-image: url('../img/BordeSuperior2.jpg'); }
-    75% { background-image: url('../img/BordeSuperior3.jpg'); }
-    100% { background-image: url('../img/BordeSuperior.jpg'); }
+    0% { background-image: url('../img/BordeSuperior3.jpg'); }
+    25% { background-image: url('../img/BordeSuperior5.jpg'); } 
+    50% { background-image: url('../img/BordeSuperior7.jpg'); }
+    75% { background-image: url('../img/BordeSuperior6.jpg'); }
+    100% { background-image: url('../img/BordeSuperior3.jpg'); }
 }
 
 
