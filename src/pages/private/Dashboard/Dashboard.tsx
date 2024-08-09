@@ -13,7 +13,6 @@ import { ObtenerPuntoMedicionFincaParcela } from "../../../servicios/ServicioCon
 import { ObtenerFincasParcelasDeEmpresaPorUsuario, ObtenerMedicionesSensores, ObtenerMedicionesSensoresPorUbicacionPM, ObtenerPuntosMedicionPorIdEmpresa } from "../../../servicios/ServiciosDashboard";
 import { AppStore } from "../../../redux/Store";
 import ReactEcharts from 'echarts-for-react'; 
-import MapComponent from '../../../components/MapComponent/MapComponent';
 import 'leaflet/dist/leaflet.css';
 import { MapContainer, TileLayer, Marker, Popup } from 'react-leaflet';
 import L, { LatLngTuple } from 'leaflet';
@@ -88,6 +87,7 @@ const Dashboard: React.FC = () => {
         type: 'value'
       }
     ],
+
     series: []
   };
   const [puntosMedicionMaps, setPuntosMedicionMaps] = useState<PuntoMedicion[]>([]);
@@ -272,6 +272,23 @@ const Dashboard: React.FC = () => {
 
   const filteredParcelas = parcelas.filter(parcela => parcela.idFinca === parseInt(selectedFinca));
 
+
+  //Formato a las fechas
+  const formatDateToLocalString = (date: Date) => { 
+
+    const d = new Date(date); 
+    const year = d.getFullYear(); 
+    const month = String(d.getMonth() + 1).padStart(2, '0'); 
+    const day = String(d.getDate()).padStart(2, '0'); 
+    const hours = String(d.getHours()).padStart(2, '0'); 
+    const minutes = String(d.getMinutes()).padStart(2, '0'); 
+    const seconds = String(d.getSeconds()).padStart(2, '0'); 
+  
+    return `${day}-${month}-${year}  ${hours}:${minutes}:${seconds}`; 
+  
+  }; 
+
+  
   const handleObtenerMedicionesSensores = async () => {
     setGraficoPH(JSON.parse(JSON.stringify(opcionInicial)));
     setGraficoVWC(JSON.parse(JSON.stringify(opcionInicial)));
@@ -293,17 +310,61 @@ const Dashboard: React.FC = () => {
       const mediciones: Mediciones[] = await ObtenerMedicionesSensores(data);
 
       const puntosMedicionUnicosph = Array.from(new Set(mediciones.filter(obj => obj.idMedicion === 17).map(obj => obj.codigo)));
-      const fechasMedicionUnicasph = Array.from(new Set(mediciones.filter(obj => obj.idMedicion === 17).map(obj => new Date(obj.fechaMedicion).toLocaleDateString())));
+
+      const fechasMedicionUnicasph = Array.from(
+        new Set(
+          mediciones
+            .filter(obj => obj.idMedicion === 17)
+            .map(obj => new Date(obj.fechaMedicion))
+        )
+      ).map(date => formatDateToLocalString(date));
+
       const puntosMedicionUnicosVWC = Array.from(new Set(mediciones.filter(obj => obj.idMedicion === 18).map(obj => obj.codigo)));
-      const fechasMedicionUnicasVWC = Array.from(new Set(mediciones.filter(obj => obj.idMedicion === 18).map(obj => new Date(obj.fechaMedicion).toLocaleDateString())));
+
+      const fechasMedicionUnicasVWC = Array.from(new Set(mediciones.filter(obj => obj.idMedicion === 18).map(obj => new Date(
+        obj.fechaMedicion)))).map(date => formatDateToLocalString(date));
+
       const puntosMedicionUnicosConductividad = Array.from(new Set(mediciones.filter(obj => obj.idMedicion === 9).map(obj => obj.codigo)));
-      const fechasMedicionUnicasConductividad = Array.from(new Set(mediciones.filter(obj => obj.idMedicion === 9).map(obj => new Date(obj.fechaMedicion).toLocaleDateString())));
+
+      // const fechasMedicionUnicasConductividad = Array.from(new Set(mediciones.filter(obj => obj.idMedicion === 9).map(obj => new Date(obj.fechaMedicion).toLocaleDateString())));
+
+      const fechasMedicionUnicasConductividad = Array.from( new Set(mediciones.filter(obj => obj.idMedicion === 9).map(
+        obj => new Date(obj.fechaMedicion)))).map(date => formatDateToLocalString(date));
+
+
+      console.log(fechasMedicionUnicasConductividad);
+      console.log(fechasMedicionUnicasConductividad.length);
+      console.log(fechasMedicionUnicasVWC);
+      console.log(fechasMedicionUnicasVWC.length);
+
+
       const puntosMedicionUnicosHr = Array.from(new Set(mediciones.filter(obj => obj.idMedicion === 21).map(obj => obj.codigo)));
-      const fechasMedicionUnicasHr = Array.from(new Set(mediciones.filter(obj => obj.idMedicion === 21).map(obj => new Date(obj.fechaMedicion).toLocaleDateString())));
+      const fechasMedicionUnicasHr = Array.from(
+        new Set(
+          mediciones
+            .filter(obj => obj.idMedicion === 21)
+            .map(obj => new Date(obj.fechaMedicion))
+        )
+      ).map(date => formatDateToLocalString(date));
+
+      
       const puntosMedicionUnicosTs = Array.from(new Set(mediciones.filter(obj => obj.idMedicion === 10).map(obj => obj.codigo)));
-      const fechasMedicionUnicasTs = Array.from(new Set(mediciones.filter(obj => obj.idMedicion === 10).map(obj => new Date(obj.fechaMedicion).toLocaleDateString())));
+      const fechasMedicionUnicasTs = Array.from(
+        new Set(
+          mediciones
+            .filter(obj => obj.idMedicion === 10)
+            .map(obj => new Date(obj.fechaMedicion))
+        )
+      ).map(date => formatDateToLocalString(date));
+
       const puntosMedicionUnicosTa = Array.from(new Set(mediciones.filter(obj => obj.idMedicion === 20).map(obj => obj.codigo)));
-      const fechasMedicionUnicasTa = Array.from(new Set(mediciones.filter(obj => obj.idMedicion === 10).map(obj => new Date(obj.fechaMedicion).toLocaleDateString())));
+      const fechasMedicionUnicasTa = Array.from(
+        new Set(
+          mediciones
+            .filter(obj => obj.idMedicion === 10)
+            .map(obj => new Date(obj.fechaMedicion))
+        )
+      ).map(date => formatDateToLocalString(date));
 
       const phData: { name: string, type: string, stack: string, areaStyle: {}, emphasis: { focus: string }, data: number[] }[] = [];
       const vwcData: { name: string, type: string, stack: string, emphasis: { focus: string }, data: number[] }[] = [];
@@ -428,8 +489,20 @@ const Dashboard: React.FC = () => {
         },
         xAxis: [{
           ...graficoPH.xAxis[0],
-          data: fechasMedicionUnicasph
+          data: fechasMedicionUnicasph,
+          boundaryGap: true
         }],
+        dataZoom: [ 
+          { 
+            type: 'inside',
+            start: 0, 
+            end: 25 
+          }, 
+          { 
+            start: 0, 
+            end: 25 
+          } 
+        ],
         series: phData
       });
 
@@ -449,8 +522,21 @@ const Dashboard: React.FC = () => {
         },
         xAxis: [{
           ...graficoVWC.xAxis[0],
-          data: fechasMedicionUnicasVWC
+          data: fechasMedicionUnicasVWC,
+          boundaryGap: true
+
         }],
+        dataZoom: [ 
+          { 
+            type: 'inside',
+            start: 0, 
+            end: 20 
+          }, 
+          { 
+            start: 0, 
+            end: 25 
+          } 
+        ], 
         series: vwcData
       });
 
@@ -467,10 +553,22 @@ const Dashboard: React.FC = () => {
         grid: {
           top: 100,
         },
-        xAxis: [{
-          ...graficoConductividad.xAxis[0],
-          data: fechasMedicionUnicasConductividad
-        }],
+        xAxis: [{ 
+          ...graficoConductividad.xAxis[0], 
+          data: fechasMedicionUnicasConductividad, 
+          boundaryGap: true 
+        }], 
+        dataZoom: [ 
+          { 
+            type: 'inside', 
+            start: 0, 
+            end: 25 
+          }, 
+          { 
+            start: 0, 
+            end: 25 
+          } 
+        ], 
         series: conductividadElectricaData
       });
 
@@ -490,8 +588,20 @@ const Dashboard: React.FC = () => {
         },
         xAxis: [{
           ...graficoTa.xAxis[0],
-          data: fechasMedicionUnicasTa
+          data: fechasMedicionUnicasTa,
+          boundaryGap: true 
         }],
+        dataZoom: [ 
+          { 
+            type: 'inside', 
+            start: 0, 
+            end: 25 
+          }, 
+          { 
+            start: 0, 
+            end: 25 
+          } 
+        ],
         series: TaData
       });
 
@@ -511,8 +621,20 @@ const Dashboard: React.FC = () => {
         },
         xAxis: [{
           ...graficoTs.xAxis[0],
-          data: fechasMedicionUnicasTs
+          data: fechasMedicionUnicasTs,
+          boundaryGap: true 
         }],
+        dataZoom: [ 
+          { 
+            type: 'inside', 
+            start: 0, 
+            end: 25 
+          }, 
+          { 
+            start: 0, 
+            end: 25 
+          } 
+        ],
         series: TsData
       });
 
@@ -532,8 +654,20 @@ const Dashboard: React.FC = () => {
         },
         xAxis: [{
           ...graficoHr.xAxis[0],
-          data: fechasMedicionUnicasHr
+          data: fechasMedicionUnicasHr,
+          boundaryGap: true 
         }],
+        dataZoom: [ 
+          { 
+            type: 'inside', 
+            start: 0, 
+            end: 25 
+          }, 
+          { 
+            start: 0, 
+            end: 25 
+          } 
+        ],
         series: HrData
       });
 
@@ -562,24 +696,61 @@ const Dashboard: React.FC = () => {
       const mediciones: Mediciones[] = await ObtenerMedicionesSensoresPorUbicacionPM(data);
 
       const puntosMedicionUnicosph = Array.from(new Set(mediciones.filter(obj => obj.idMedicion === 17).map(obj => obj.codigo)));
-      const fechasMedicionUnicasph = Array.from(new Set(mediciones.filter(obj => obj.idMedicion === 17).map(obj => new Date(obj.fechaMedicion).toLocaleDateString())));
+
+      const fechasMedicionUnicasph = Array.from(
+        new Set(
+          mediciones
+            .filter(obj => obj.idMedicion === 17)
+            .map(obj => new Date(obj.fechaMedicion))
+        )
+      ).map(date => formatDateToLocalString(date));
 
       const puntosMedicionUnicosVWC = Array.from(new Set(mediciones.filter(obj => obj.idMedicion === 18).map(obj => obj.codigo)));
-      const fechasMedicionUnicasVWC = Array.from(new Set(mediciones.filter(obj => obj.idMedicion === 18).map(obj => new Date(obj.fechaMedicion).toLocaleDateString())));
+
+      const fechasMedicionUnicasVWC = Array.from(new Set(mediciones.filter(obj => obj.idMedicion === 18).map(obj => new Date(
+        obj.fechaMedicion)))).map(date => formatDateToLocalString(date));
 
       const puntosMedicionUnicosConductividad = Array.from(new Set(mediciones.filter(obj => obj.idMedicion === 9).map(obj => obj.codigo)));
-      const fechasMedicionUnicasConductividad = Array.from(new Set(mediciones.filter(obj => obj.idMedicion === 9).map(obj => new Date(obj.fechaMedicion).toLocaleDateString())));
 
-      //Nuevas
+      // const fechasMedicionUnicasConductividad = Array.from(new Set(mediciones.filter(obj => obj.idMedicion === 9).map(obj => new Date(obj.fechaMedicion).toLocaleDateString())));
+
+      const fechasMedicionUnicasConductividad = Array.from( new Set(mediciones.filter(obj => obj.idMedicion === 9).map(
+        obj => new Date(obj.fechaMedicion)))).map(date => formatDateToLocalString(date));
+
+
+      console.log(fechasMedicionUnicasConductividad);
+      console.log(fechasMedicionUnicasConductividad.length);
+      console.log(fechasMedicionUnicasVWC);
+      console.log(fechasMedicionUnicasVWC.length);
+
+
       const puntosMedicionUnicosHr = Array.from(new Set(mediciones.filter(obj => obj.idMedicion === 21).map(obj => obj.codigo)));
-      const fechasMedicionUnicasHr = Array.from(new Set(mediciones.filter(obj => obj.idMedicion === 21).map(obj => new Date(obj.fechaMedicion).toLocaleDateString())));
+      const fechasMedicionUnicasHr = Array.from(
+        new Set(
+          mediciones
+            .filter(obj => obj.idMedicion === 21)
+            .map(obj => new Date(obj.fechaMedicion))
+        )
+      ).map(date => formatDateToLocalString(date));
 
+      
       const puntosMedicionUnicosTs = Array.from(new Set(mediciones.filter(obj => obj.idMedicion === 10).map(obj => obj.codigo)));
-      const fechasMedicionUnicasTs = Array.from(new Set(mediciones.filter(obj => obj.idMedicion === 10).map(obj => new Date(obj.fechaMedicion).toLocaleDateString())));
+      const fechasMedicionUnicasTs = Array.from(
+        new Set(
+          mediciones
+            .filter(obj => obj.idMedicion === 10)
+            .map(obj => new Date(obj.fechaMedicion))
+        )
+      ).map(date => formatDateToLocalString(date));
 
       const puntosMedicionUnicosTa = Array.from(new Set(mediciones.filter(obj => obj.idMedicion === 20).map(obj => obj.codigo)));
-      const fechasMedicionUnicasTa = Array.from(new Set(mediciones.filter(obj => obj.idMedicion === 10).map(obj => new Date(obj.fechaMedicion).toLocaleDateString())));
-
+      const fechasMedicionUnicasTa = Array.from(
+        new Set(
+          mediciones
+            .filter(obj => obj.idMedicion === 10)
+            .map(obj => new Date(obj.fechaMedicion))
+        )
+      ).map(date => formatDateToLocalString(date));
       const phData: { name: string, type: string, stack: string, areaStyle: {}, emphasis: { focus: string }, data: number[] }[] = [];
       const vwcData: { name: string, type: string, stack: string, emphasis: { focus: string }, data: number[] }[] = [];
       const conductividadElectricaData: { name: string, type: string, stack: string, emphasis: { focus: string }, data: number[] }[] = [];
@@ -713,8 +884,20 @@ const Dashboard: React.FC = () => {
         },
         xAxis: [{
           ...graficoPH.xAxis[0],
-          data: fechasMedicionUnicasph
+          data: fechasMedicionUnicasph,
+          boundaryGap: true 
         }],
+        dataZoom: [ 
+          { 
+            type: 'inside', 
+            start: 0, 
+            end: 25 
+          }, 
+          { 
+            start: 0, 
+            end: 25 
+          } 
+        ],
         series: phData
       });
 
@@ -734,8 +917,20 @@ const Dashboard: React.FC = () => {
         },
         xAxis: [{
           ...graficoVWC.xAxis[0],
-          data: fechasMedicionUnicasVWC
+          data: fechasMedicionUnicasVWC,
+          boundaryGap: true 
         }],
+        dataZoom: [ 
+          { 
+            type: 'inside', 
+            start: 0, 
+            end: 25 
+          }, 
+          { 
+            start: 0, 
+            end: 25 
+          } 
+        ],
         series: vwcData
       });
 
@@ -754,8 +949,20 @@ const Dashboard: React.FC = () => {
         },
         xAxis: [{
           ...graficoConductividad.xAxis[0],
-          data: fechasMedicionUnicasConductividad
+          data: fechasMedicionUnicasConductividad,
+          boundaryGap: true 
         }],
+        dataZoom: [ 
+          { 
+            type: 'inside', 
+            start: 0, 
+            end: 25 
+          }, 
+          { 
+            start: 0, 
+            end: 25 
+          } 
+        ],
         series: conductividadElectricaData
       });
 
@@ -776,8 +983,20 @@ const Dashboard: React.FC = () => {
         },
         xAxis: [{
           ...graficoTa.xAxis[0],
-          data: fechasMedicionUnicasTa
+          data: fechasMedicionUnicasTa,
+          boundaryGap: true 
         }],
+        dataZoom: [ 
+          { 
+            type: 'inside', 
+            start: 0, 
+            end: 25 
+          }, 
+          { 
+            start: 0, 
+            end: 25 
+          } 
+        ],
         series: TaData
       });
 
@@ -797,8 +1016,20 @@ const Dashboard: React.FC = () => {
         },
         xAxis: [{
           ...graficoTs.xAxis[0],
-          data: fechasMedicionUnicasTs
+          data: fechasMedicionUnicasTs,
+          boundaryGap: true 
         }],
+        dataZoom: [ 
+          { 
+            type: 'inside', 
+            start: 0, 
+            end: 25 
+          }, 
+          { 
+            start: 0, 
+            end: 25 
+          } 
+        ],
         series: TsData
       });
 
@@ -818,8 +1049,20 @@ const Dashboard: React.FC = () => {
         },
         xAxis: [{
           ...graficoHr.xAxis[0],
-          data: fechasMedicionUnicasHr
+          data: fechasMedicionUnicasHr,
+          boundaryGap: true 
         }],
+        dataZoom: [ 
+          { 
+            type: 'inside', 
+            start: 0, 
+            end: 25 
+          }, 
+          { 
+            start: 0, 
+            end: 25 
+          } 
+        ],
         series: HrData
       });
 

@@ -107,6 +107,12 @@ const Sidebar = ({ children }: { children: React.ReactNode }) => {
             roles: [2]
         },
         {
+            path: "/cultivos",
+            name: "Cultivos",
+            icon: <img src='/cultivo.png' style={{ width: '22px' }} />,
+            roles: [2]
+        },
+        {
             path: "/catalogoactividadespt",
             name: "Catálogo de Actividades",
             icon: <img src='/inventario.png' style={{ width: '22px' }} />, // Asegúrate de tener un ícono adecuado
@@ -185,6 +191,15 @@ const Sidebar = ({ children }: { children: React.ReactNode }) => {
                     path: "/reporteplanilla",
                     name: "Reporte de planilla",
                     icon: <img src='/mano-obra.png' style={{ width: '30px' }} />,
+                },
+                {
+                    path: "/reportemedicionessensor",
+                    name: "Reporte de Medidas de Sensor",
+                    icon: <img src='/medidas.png' style={{ width: '22px' }} />,
+                },
+                {                    path: "/reportesensores",
+                    name: "Reporte de Sensores",
+                    icon: <img src='/sensor.png' style={{ width: '30px' }} />,
                 },
 
             ]

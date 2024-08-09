@@ -43,6 +43,8 @@ export const PrivateRoutes = {
     REPORTEENTRADAS: 'reporteentradas',
     REPORTEPLANILLA: 'reporteplanilla',
     REPORTEORDENCOMPRA: 'reporteordendecompra',
+    REPORTESENSORES: 'reportesensores',
+    REPORTEMEDICIONESSENSOR: 'reportemedicionessensor',
     CONTENIDODECLOROFILA: "contenidodeclorofila",
     SALUDPLANTA: "saludplanta",
     CANTIDADDEPLANTAS: "cantidaddeplantas",
@@ -51,4 +53,5 @@ export const PrivateRoutes = {
    CONTENIDODENITROGENO: 'contenidodenitrogeno',
    CATALOGOACTIVIDADESPT: 'catalogoactividadespt',
    MEDIDASCULTIVOS: "medidascultivos",
+   CULTIVOS: 'cultivos',
 };

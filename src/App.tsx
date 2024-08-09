@@ -48,6 +48,8 @@ const ReporteEntradas = lazy(() => import('./pages/private/ReporteEntradas/Repor
 const ReporteSalidas = lazy(() => import('./pages/private/ReporteSalidas/ReporteSalidas'));
 const ReportePlanilla = lazy(() => import('./pages/private/ReportePlanilla/ReportePlanilla'));
 const ReporteOrdenDeCompra = lazy(() => import('./pages/private/ReporteOrdenDeCompra/ReporteOrdenDeCompra'));
+const ReporteMedicionesSensor = lazy(() => import('./pages/private/ReporteMedicionesSensor/ReporteMedicionesSensor'));
+const ReporteSensores = lazy(() => import('./pages/private/ReporteSensores/ReporteSensores'));
 const ManoObra = lazy(() => import('./pages/private/ManoObra/ManoObra'));
 const ContenidoDeClorofila = lazy(() => import('./pages/private/ContenidoDeClorofila/ContenidoDeClorofila'))
 const SaludPlanta = lazy(() => import('./pages/private/SaludPlanta/SaludPlanta'))
@@ -57,6 +59,7 @@ const CoberturaVegetal = lazy(() => import('./pages/private/CoberturaVegetal/Cob
 const ContenidoDeNitrogeno = lazy(() => import('./pages/private/ContenidoDeNitrogeno/ContenidoDeNitrogeno'))
 const CatalogoActividadesPT = lazy(() => import('./pages/private/CatalogoActividadesPT/CatalogoActividadesPT'))
 const MedidasCultivos = lazy(() => import('./pages/private/MedidasCultivos/MedidasCultivos'))
+const Cultivos = lazy(() => import('./pages/private/Cultivos/Cultivos'))
 
 function App() {
   return (
@@ -106,7 +109,10 @@ function App() {
               <Route path={PrivateRoutes.REPORTESALIDAS} element={<ReporteSalidas />} />
               <Route path={PrivateRoutes.REPORTEPLANILLA} element={<ReportePlanilla/>} />
               <Route path={PrivateRoutes.REPORTEORDENCOMPRA} element={<ReporteOrdenDeCompra/>} />
+              <Route path={PrivateRoutes.REPORTEMEDICIONESSENSOR} element={<ReporteMedicionesSensor/>} />
+              <Route path={PrivateRoutes.REPORTESENSORES} element={<ReporteSensores />} />
               <Route path={PrivateRoutes.CATALOGOACTIVIDADESPT} element={<CatalogoActividadesPT/>}/>
+              <Route path={PrivateRoutes.CULTIVOS} element={<Cultivos/>} />
             </Route>
             {/* Rutas accesibles solo para el rol de usuario asignado */}
             <Route element={<RolGuard rol={Roles.UsuarioAsignado} />}>
