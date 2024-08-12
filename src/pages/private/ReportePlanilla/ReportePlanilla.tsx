@@ -4,13 +4,12 @@ import Sidebar from "../../../components/sidebar/Sidebar"
 import '../../../css/Reportes.css'
 import TableResponsive from "../../../components/table/tableReport.tsx";
 import BordeSuperior from "../../../components/bordesuperior/BordeSuperior.tsx";
-import { saveAs } from 'file-saver';
-import * as XLSX from 'xlsx';
 import Topbar from "../../../components/topbar/Topbar.tsx";
 import { ObtenerFincas } from "../../../servicios/ServicioFincas.ts";
 import { ObtenerReportePlanilla } from "../../../servicios/ServicioReporte.ts";
 import { IoDocumentTextSharp, IoFilter } from "react-icons/io5";
 import Swal from 'sweetalert2';
+import { exportToExcel } from '../../../utilities/exportReportToExcel.ts';
 
 function ReportePlanilla() {
 
@@ -27,24 +26,8 @@ function ReportePlanilla() {
     const [selectedFinca, setSelectedFinca] = useState<string>('');
     const [fincas, setFincas] = useState<any[]>([]);
 
-
-
-
-    // Función para obtener la fecha y hora formateadas
-    const getFormattedDateTime = () => {
-        const now = new Date();
-        const year = now.getFullYear();
-        const month = String(now.getMonth() + 1).padStart(2, '0');
-        const day = String(now.getDate()).padStart(2, '0');
-        const hours = String(now.getHours()).padStart(2, '0');
-        const minutes = String(now.getMinutes()).padStart(2, '0');
-        const seconds = String(now.getSeconds()).padStart(2, '0');
-
-        return `${year}-${month}-${day}_${hours}-${minutes}-${seconds}`;
-    };
-
     // Función para exportar datos a Excel
-    const exportToExcel = () => {
+    /*const exportToExcel = () => {
         try {
             // Crear una hoja de cálculo vacía
             const ws = XLSX.utils.aoa_to_sheet([]);
@@ -86,7 +69,7 @@ function ReportePlanilla() {
         } catch (error) {
             console.error('Error al exportar a Excel:', error);
         }
-    };
+    };*/
     // Función para manejar cambios en la selección de finca
     const handleFincaChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
         const value = e.target.value;
@@ -226,6 +209,18 @@ function ReportePlanilla() {
         { key: 'pagoPorHora', header: 'Pago por Hora' },
         { key: 'totalPagoFormateado', header: 'Total Pago' },
     ];
+    
+    const handleExport = () => {
+        const nombreUsuario  = localStorage.getItem('nombreUsuario') || 'Usuario';
+        const reportName = "Reporte de Planilla";
+        exportToExcel({
+            reportName,
+            data: apiData,
+            columns,
+            userName: nombreUsuario,
+            totales: ['Totales', '', '', '', '', '', montoTotal,]
+        });
+    };
 
     return (
         <Sidebar>
@@ -269,7 +264,7 @@ function ReportePlanilla() {
                             <span style={{ marginLeft: '5px' }}>Filtrar</span>
                         </button>
                         {apiData.length > 0 &&
-                            <button onClick={exportToExcel} className="btn-exportar" style={{ display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
+                            <button onClick={handleExport} className="btn-exportar" style={{ display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
 
                                 <IoDocumentTextSharp size={27} />
                                 <span style={{ marginLeft: '5px' }}>Exportar</span>
