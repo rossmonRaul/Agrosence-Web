@@ -162,6 +162,9 @@ export const exportToExcel = ({ reportName, data, columns, userName,totales }: E
                     case "activo":
                         color = "009933";
                         break;
+                    case "inactivo":
+                        color = "009933";
+                        break;
                     case "en mantenimiento":
                         color = "e6ac00";
                         break;

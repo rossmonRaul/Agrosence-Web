@@ -1,10 +1,8 @@
-
 import { useState, useEffect } from "react";
 import Sidebar from "../../../components/sidebar/Sidebar"
 import '../../../css/Reportes.css'
 import TableResponsive from "../../../components/table/table.tsx";
 import BordeSuperior from "../../../components/bordesuperior/BordeSuperior.tsx";
-
 import Topbar from "../../../components/topbar/Topbar.tsx";
 import { ObtieneReporteMedicionesSensor } from "../../../servicios/ServicioReporte.ts";
 import { IoDocumentTextSharp } from "react-icons/io5";

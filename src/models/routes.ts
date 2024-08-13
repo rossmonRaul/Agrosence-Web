@@ -39,6 +39,7 @@ export const PrivateRoutes = {
     ENTRADAYSALIDA: 'entradasysalidas',
     MANOOBRA: 'manoobra',
     REPORTEENTRADASYSALIDAS: 'reporteentradasysalidas',
+    REPORTEMEDIDASAUTORIZADAS: 'reportemedicionesautorizadassensor',
     REPORTESALIDAS: 'reportesalidas',
     REPORTEENTRADAS: 'reporteentradas',
     REPORTEPLANILLA: 'reporteplanilla',

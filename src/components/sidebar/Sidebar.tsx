@@ -192,16 +192,21 @@ const Sidebar = ({ children }: { children: React.ReactNode }) => {
                     name: "Reporte de planilla",
                     icon: <img src='/mano-obra.png' style={{ width: '30px' }} />,
                 },
+                {                    
+                    path: "/reportesensores",
+                    name: "Reporte de Sensores",
+                    icon: <img src='/sensor.png' style={{ width: '30px' }} />,
+                },
                 {
                     path: "/reportemedicionessensor",
                     name: "Reporte de Medidas de Sensor",
                     icon: <img src='/medidas.png' style={{ width: '22px' }} />,
+                },                
+                {
+                    path: "/reportemedicionesautorizadassensor",
+                    name: "Reporte Medidas Autorizadas de Sensor",
+                    icon: <img src='/medidasAutorizadas.png' style={{ width: '22px' }} />,
                 },
-                {                    path: "/reportesensores",
-                    name: "Reporte de Sensores",
-                    icon: <img src='/sensor.png' style={{ width: '30px' }} />,
-                },
-
             ]
         },
         {
