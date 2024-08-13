@@ -5,6 +5,7 @@ import BordeSuperior from "../../../components/bordesuperior/BordeSuperior";
 import Sidebar from "../../../components/sidebar/Sidebar";
 import Topbar from "../../../components/topbar/Topbar";
 import '../../../css/AdministacionAdministradores.css';
+import Select, { MultiValue } from 'react-select';
 import '../../../css/Dashboard.css';
 import { ObtenerFincas } from '../../../servicios/ServicioFincas';
 import { ObtenerParcelas } from '../../../servicios/ServicioParcelas';
@@ -104,15 +105,14 @@ const Dashboard: React.FC = () => {
   const [fincas, setFincas] = useState<Option[]>([]);
   const [parcelas, setParcelas] = useState<Option[]>([]);
   const [puntosMedicion, setPuntosMedicion] = useState<Option[]>([]);
-  const [selectedFinca, setSelectedFinca] = useState<string>('');
-  const [selectedParcela, setSelectedParcela] = useState<string>('');
-  const [selectedPuntoMedicion, setSelectedPuntoMedicion] = useState<string>('');
-  const [formData, setFormData] = useState({
-    fechaInicio: '',
-    fechaFin: '',
-  });
+  const [selectedParcelas, setSelectedParcelas] = useState<MultiValue<any>>([]);
+  const [selectedPuntosMedicion, setSelectedPuntosMedicion] = useState<MultiValue<any>>([]);
+  const [selectedFincas, setSelectedFincas] = useState<MultiValue<any>>([]);
+  const [filteredParcelas, setFilteredParcelas] = useState([]);
+
   const [errors, setErrors] = useState<Record<string, string>>({});
   const [loading, setLoading] = useState(false);
+  const [loadingPuntos, setLoadingPuntos] = useState('');
 
   const chartRefs = useRef<any[]>([]);
 
@@ -123,6 +123,28 @@ const Dashboard: React.FC = () => {
     hr: true,
     ts: true,
     ta: true,
+  });
+
+  const obtenerFechaHaceUnMes = () => {
+    const hoy = new Date();
+    const haceUnMes = new Date();
+    haceUnMes.setMonth(hoy.getMonth() - 1);
+
+    const formatoISO = (fecha: Date) => fecha.toISOString().split('T')[0];
+
+    return formatoISO(haceUnMes)
+  }
+  const obtenerFechaHoy = () => {
+    const hoy = new Date();
+
+    const formatoISO = (fecha: Date) => fecha.toISOString().split('T')[0];
+
+    return formatoISO(hoy)
+  }
+
+  const [formData, setFormData] = useState({
+    fechaInicio: obtenerFechaHaceUnMes(),
+    fechaFin: obtenerFechaHoy(),
   });
 
   const handleInputChange = (event: React.ChangeEvent<HTMLInputElement>) => {
@@ -165,15 +187,13 @@ const Dashboard: React.FC = () => {
           const datosPuntoMedicion = {
             idEmpresa: idEmpresaString
           };
-          console.log(identificacion);
+
           const usuariosAsignados = await ObtenerFincasParcelasDeEmpresaPorUsuario(datos);
-          console.log('Usuarios Asignados:', usuariosAsignados);
 
           const puntosMedicionEmpresa = await ObtenerPuntosMedicionPorIdEmpresa(datosPuntoMedicion);
           setPuntosMedicionMaps(puntosMedicionEmpresa);
           const idFincasUsuario = usuariosAsignados.map((usuario: any) => usuario.idFinca);
           const fincasResponse = await ObtenerFincas();
-          console.log('Fincas Response:', fincasResponse);
 
           const fincasUsuario = fincasResponse.filter((finca: any) => idFincasUsuario.includes(finca.idFinca));
           setFincas(fincasUsuario);
@@ -181,17 +201,16 @@ const Dashboard: React.FC = () => {
           // Seleccionar automáticamente la primera finca
           if (fincasUsuario.length > 0) {
             const primeraFinca = fincasUsuario[0];
-            setSelectedFinca(primeraFinca.idFinca.toString());
+            setSelectedFincas([{value:primeraFinca.idFinca.toString(), label: primeraFinca.nombre}]);
 
             const parcelasResponse = await ObtenerParcelas();
-            console.log('Parcelas Response:', parcelasResponse);
 
             const parcelasUsuario = parcelasResponse.filter((parcela: any) => parcela.idFinca === primeraFinca.idFinca);
             setParcelas(parcelasUsuario);
 
             if (parcelasUsuario.length > 0) {
               const primeraParcela = parcelasUsuario[0];
-              setSelectedParcela(primeraParcela.idParcela.toString());
+              setSelectedParcelas([{value:primeraParcela.idParcela.toString(), label: primeraParcela.nombre}]);
 
               const fincaParcela = {
                 idFinca: primeraFinca.idFinca,
@@ -199,12 +218,12 @@ const Dashboard: React.FC = () => {
               };
 
               const puntosMedicion = await ObtenerPuntoMedicionFincaParcela(fincaParcela);
-              console.log('Puntos de Medición:', puntosMedicion);
+
               setPuntosMedicion(puntosMedicion);
 
               if (puntosMedicion.length > 0) {
                 const primerPuntoMedicion = puntosMedicion[0];
-                setSelectedPuntoMedicion(primerPuntoMedicion.idPuntoMedicion.toString());
+               setSelectedPuntosMedicion([{value:primerPuntoMedicion.idPuntoMedicion.toString(), label: primerPuntoMedicion.codigo}]);
               }
             }
           }
@@ -220,57 +239,68 @@ const Dashboard: React.FC = () => {
 
   useEffect(() => {
     const cargarParcelas = async () => {
-      if (selectedFinca) {
+      if (selectedFincas) {
         const parcelasResponse = await ObtenerParcelas();
-        console.log('Parcelas Response:', parcelasResponse);
+        const codigosFincas = selectedFincas.map(f=>parseInt(f.value))
 
-        const parcelasUsuario = parcelasResponse.filter((parcela: any) => parcela.idFinca === parseInt(selectedFinca));
+        const parcelasUsuario = parcelasResponse.filter((parcela: any) => codigosFincas.includes(parcela.idFinca));
         setParcelas(parcelasUsuario);
+        setFilteredParcelas(parcelasUsuario);
 
         if (parcelasUsuario.length > 0) {
           const primeraParcela = parcelasUsuario[0];
-          setSelectedParcela(primeraParcela.idParcela.toString());
-
+          setSelectedParcelas([{value:primeraParcela.idParcela.toString(), label: primeraParcela.nombre}]);
           const fincaParcela = {
-            idFinca: parseInt(selectedFinca),
+            idFinca: parseInt(selectedFincas[0].value),
             idParcela: primeraParcela.idParcela
           };
 
           const puntosMedicion = await ObtenerPuntoMedicionFincaParcela(fincaParcela);
-          console.log('Puntos de Medición:', puntosMedicion);
+
           setPuntosMedicion(puntosMedicion);
 
           if (puntosMedicion.length > 0) {
             const primerPuntoMedicion = puntosMedicion[0];
-            setSelectedPuntoMedicion(primerPuntoMedicion.idPuntoMedicion.toString());
+            setSelectedPuntosMedicion([{value:primerPuntoMedicion.idPuntoMedicion.toString(), label: primerPuntoMedicion.codigo}]);
           }
         } else {
           setParcelas([]);
           setPuntosMedicion([]);
-          setSelectedParcela('');
-          setSelectedPuntoMedicion('');
+          setSelectedParcelas([]);
+          setSelectedPuntosMedicion([]);
         }
       }
     };
     cargarParcelas();
-  }, [selectedFinca]);
+  }, [selectedFincas]);
 
   useEffect(() => {
     const cargarPuntoMedicion = async () => {
-      if (selectedFinca && selectedParcela) {
+      if (selectedFincas.length>0 && selectedParcelas.length>0) {
         const fincaParcela = {
-          idFinca: parseInt(selectedFinca),
-          idParcela: parseInt(selectedParcela)
+          idFinca: parseInt(selectedFincas[0].value),
+          idParcela: parseInt(selectedParcelas[0].value)
         };
         const puntosMedicion = await ObtenerPuntoMedicionFincaParcela(fincaParcela);
-        console.log('Puntos de Medición (Cambio de selección):', puntosMedicion);
         setPuntosMedicion(puntosMedicion);
+      }else{
+        setSelectedPuntosMedicion([])
+        setPuntosMedicion([])
       }
     };
     cargarPuntoMedicion();
-  }, [selectedParcela]);
+  }, [selectedParcelas]);
 
-  const filteredParcelas = parcelas.filter(parcela => parcela.idFinca === parseInt(selectedFinca));
+  useEffect(() => {
+    if (loading) {
+      const intervalo = setInterval(() => {
+        setLoadingPuntos(prev => (prev.length < 3 ? prev + '.' : ''));
+      }, 500);
+      return () => clearInterval(intervalo);
+    }
+  }, [loading]);
+
+
 
 
   //Formato a las fechas
@@ -288,6 +318,19 @@ const Dashboard: React.FC = () => {
   
   }; 
 
+  const onChangeParcelasSeleccionados = (seleccionados: MultiValue<any>) => {
+    setSelectedParcelas(seleccionados);
+  };
+
+  const onChangePuntosMedicionSeleccionados = (seleccionados: MultiValue<any>) => {
+    setSelectedPuntosMedicion(seleccionados);
+  };
+
+  
+  const onChangeFincasSeleccionados = (seleccionados: MultiValue<any>) => {
+    setSelectedFincas(seleccionados);
+  };
+
   
   const handleObtenerMedicionesSensores = async () => {
     setGraficoPH(JSON.parse(JSON.stringify(opcionInicial)));
@@ -303,9 +346,9 @@ const Dashboard: React.FC = () => {
         Usuario: userState.identificacion,
         FechaInicio: formData.fechaInicio,
         FechaFin: formData.fechaFin,
-        IdFinca: selectedFinca ? parseInt(selectedFinca) : null,
-        IdParcela: selectedParcela ? parseInt(selectedParcela) : null,
-        IdPuntoMedicion: selectedPuntoMedicion ? parseInt(selectedPuntoMedicion) : null
+        IdFincas: selectedFincas ? selectedFincas.map(f=>f.value).toString() : null,
+        IdParcelas: selectedParcelas ? selectedParcelas.map(p=>p.value).toString() : null,
+        IdPuntosMedicion: selectedPuntosMedicion ? selectedPuntosMedicion.map(p=>p.value).toString() : null
       };
       const mediciones: Mediciones[] = await ObtenerMedicionesSensores(data);
 
@@ -330,12 +373,6 @@ const Dashboard: React.FC = () => {
 
       const fechasMedicionUnicasConductividad = Array.from( new Set(mediciones.filter(obj => obj.idMedicion === 9).map(
         obj => new Date(obj.fechaMedicion)))).map(date => formatDateToLocalString(date));
-
-
-      console.log(fechasMedicionUnicasConductividad);
-      console.log(fechasMedicionUnicasConductividad.length);
-      console.log(fechasMedicionUnicasVWC);
-      console.log(fechasMedicionUnicasVWC.length);
 
 
       const puntosMedicionUnicosHr = Array.from(new Set(mediciones.filter(obj => obj.idMedicion === 21).map(obj => obj.codigo)));
@@ -675,9 +712,10 @@ const Dashboard: React.FC = () => {
     } catch (error) {
       console.error('Error al obtener las mediciones de sensores:', error);
     } finally {
-      setLoading(false);
+     setLoading(false);
     }
   };
+
   const handleMarkerClick = async (idPuntoMedicion: number) => {
 
     setGraficoPH(JSON.parse(JSON.stringify(opcionInicial)));
@@ -718,12 +756,6 @@ const Dashboard: React.FC = () => {
         obj => new Date(obj.fechaMedicion)))).map(date => formatDateToLocalString(date));
 
 
-      console.log(fechasMedicionUnicasConductividad);
-      console.log(fechasMedicionUnicasConductividad.length);
-      console.log(fechasMedicionUnicasVWC);
-      console.log(fechasMedicionUnicasVWC.length);
-
-
       const puntosMedicionUnicosHr = Array.from(new Set(mediciones.filter(obj => obj.idMedicion === 21).map(obj => obj.codigo)));
       const fechasMedicionUnicasHr = Array.from(
         new Set(
@@ -758,11 +790,6 @@ const Dashboard: React.FC = () => {
       const HrData: { name: string, type: string, data: number[] }[] = [];
       const TsData: { name: string, type: string, stack: string, label: { show: boolean }, emphasis: { focus: string }, data: number[] }[] = [];
       const TaData: { name: string, type: string, showSymbol: string, data: number[] }[] = [];
-
-      ///console.log('mediciones',)
-      console.log(fechasMedicionUnicasConductividad)
-      console.log(fechasMedicionUnicasVWC)
-      console.log(fechasMedicionUnicasph)
 
       mediciones.forEach((item: Mediciones) => {
         const puntoMedicion = item.codigo;
@@ -1086,51 +1113,61 @@ const Dashboard: React.FC = () => {
   }, [loading, keyRender]);
 
   const renderComboboxes = () => (
-    <div className="form-container" style={{ alignItems: 'center' }}>
+    <div className="form-container" style={{ alignItems: 'center', marginTop: "20px" }}>
       <div className="form-row">
         <div className="form-group">
           <FormGroup>
             <Label for="fincas">Finca:</Label>
-            <select id="fincas" value={selectedFinca} onChange={(e) => setSelectedFinca(e.target.value)} className="custom-select">
-              <option value="">Seleccione una finca</option>
-              {fincas.map((option) => (
-                <option key={option.idFinca} value={option.idFinca}>{option.nombre}</option>
-              ))}
-            </select>
+            <Select
+              isMulti
+              name="opciones"
+              options={fincas.map(p=>({value: p.idFinca,label: p.nombre}))}
+              className="basic-multi-select"
+              onChange={onChangeFincasSeleccionados}
+              value={selectedFincas}
+              classNamePrefix="select"
+              placeholder="Seleccione"
+            />
           </FormGroup>
         </div>
         <div className="form-group">
           <FormGroup>
             <Label for="parcelas">Parcela:</Label>
-            <select id="parcelas" value={selectedParcela} onChange={(e) => setSelectedParcela(e.target.value)} className="custom-select">
-              <option value="">Seleccione una parcela</option>
-              {filteredParcelas.map((option) => (
-                <option key={option.idParcela} value={option.idParcela}>{option.nombre}</option>
-              ))}
-            </select>
+            <Select
+              isMulti
+              name="opciones"
+              options={parcelas.map(p=>({label: p.nombre, value: p.idParcela}))}
+              className="basic-multi-select"
+              onChange={onChangeParcelasSeleccionados}
+              value={selectedParcelas}
+              classNamePrefix="select"
+              placeholder="Seleccione"
+            />
           </FormGroup>
         </div>
         <div className="form-group">
           <FormGroup>
-            <Label for="puntosMedicion">Punto de medición:</Label>
-            <select id="puntosMedicion" value={selectedPuntoMedicion} onChange={(e) => setSelectedPuntoMedicion(e.target.value)} className="custom-select">
-              <option value="">Seleccione un punto de medición</option>
-              {puntosMedicion.map((option) => (
-                <option key={option.idPuntoMedicion} value={option.idPuntoMedicion}>{option.codigo}</option>
-              ))}
-            </select>
+            <Label for="puntosMedicion">Puntos de medición:</Label>
+            <Select
+              isMulti
+              name="opciones"
+              options={puntosMedicion.map(p=>({value: p.idPuntoMedicion,label: p.codigo}))}
+              className="basic-multi-select"
+              onChange={onChangePuntosMedicionSeleccionados}
+              value={selectedPuntosMedicion}
+              classNamePrefix="select"
+              placeholder="Seleccione"
+            />
           </FormGroup>
         </div>
       </div>
       <div className="form-row">
-        <div className="form-group">
-          <FormGroup row>
-            <Label for="fechaInicio" sm={4} className="input-label">Fecha Inicio</Label>
-            <Col sm={8}>
-              <Input
-                style={{ width: '150px' }}
+          <FormGroup>
+            <Label for="fechaInicio"  className="input-label">Fecha Inicio</Label>
+              <Input 
                 type="date"
                 id="fechaInicio"
+                style={{width:"86%"}}
                 name="fechaInicio"
                 value={formData.fechaInicio}
                 onChange={handleInputChange}
@@ -1138,18 +1175,14 @@ const Dashboard: React.FC = () => {
                 placeholder="Selecciona una fecha"
               />
               <FormFeedback>{errors.fechaInicio}</FormFeedback>
-            </Col>
           </FormGroup>
-        </div>
-        <div className="form-group">
-          <FormGroup row>
-            <Label for="fechaFin" sm={4} className="input-label">Fecha Fin</Label>
-            <Col sm={8}>
+          <FormGroup>
+            <Label for="fechaFin" className="input-label">Fecha Fin</Label>
               <Input
-                style={{ width: '150px' }}
                 type="date"
                 id="fechaFin"
                 name="fechaFin"
+                style={{width:"93%"}}
                 value={formData.fechaFin}
                 onChange={handleInputChange}
                 className={errors.fechaFin ? 'input-styled input-error' : 'input-styled'}
@@ -1158,20 +1191,23 @@ const Dashboard: React.FC = () => {
                 // max={getTodayDate()}
               />
               <FormFeedback>{errors.fechaFin}</FormFeedback>
-            </Col>
           </FormGroup>
-        </div>
-      </div>
-      <Button style={{
+          <FormGroup>
+          <Button style={{
         backgroundColor: '#a5cf60',
         color: 'white',
+        marginTop: "22px",
+        marginLeft: "60px",
         padding: '10px 20px',
         border: 'none',
         borderRadius: '4px',
         fontSize: '16px',
         cursor: 'pointer',
         transition: 'background-color 0.3s ease'
-      }} onClick={handleObtenerMedicionesSensores}>Obtener Mediciones</Button>
+      }} onClick={handleObtenerMedicionesSensores}>{loading ? `Cargando${loadingPuntos}` : 'Obtener Mediciones'}</Button>
+          </FormGroup>
+      </div>
+     
       <div style={{ display:'flex', flexDirection:'column', justifyContent:'center', alignItems:'center',marginTop:'50px', marginBottom:'50px', width: '100%'}}>
                 <h2>Mapa con Puntos de Medición</h2>
                 {/* <MapComponent /> */}
@@ -1294,7 +1330,7 @@ const Dashboard: React.FC = () => {
         <Sidebar>
           <div className="main-container">
             <Topbar />
-            <BordeSuperior text="Comunidad" />
+            <BordeSuperior text="Dashboard" />
             <div className="content">
               {renderComboboxes()}
             </div>
