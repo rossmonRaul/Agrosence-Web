@@ -1,6 +1,7 @@
 import React from 'react';
 import { Modal, ModalHeader, ModalBody, ModalFooter } from 'reactstrap';
 import '../../css/Modal.css'
+import { IoCloseOutline } from 'react-icons/io5';
 
 /**
  * Props para el componente CustomModal.
@@ -27,7 +28,20 @@ const CustomModal: React.FC<CustomModalProps> = ({ isOpen, toggle, title, onSubm
         {btnSubmit && onSubmit && (
           <button className='btn btn-primary' onClick={onSubmit}>{btnSubmit}</button>
         )}
-        <button className='btn btn-danger' onClick={onCancel}>Cancelar</button>
+        <button 
+          className='btn btn-danger' 
+          onClick={onCancel} 
+          style={{ 
+            display: 'flex', 
+            alignItems: 'center', 
+            justifyContent: 'center', 
+            marginRight: 'auto', 
+            marginLeft: 'auto', 
+            width: '95%' 
+          }}>
+          <IoCloseOutline size={20} style={{ marginRight: '8px' }} />
+          Cancelar
+        </button>
       </ModalFooter>
     </Modal>
   );

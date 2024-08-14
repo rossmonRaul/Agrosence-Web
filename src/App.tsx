@@ -61,6 +61,7 @@ const ContenidoDeNitrogeno = lazy(() => import('./pages/private/ContenidoDeNitro
 const CatalogoActividadesPT = lazy(() => import('./pages/private/CatalogoActividadesPT/CatalogoActividadesPT'))
 const MedidasCultivos = lazy(() => import('./pages/private/MedidasCultivos/MedidasCultivos'))
 const Cultivos = lazy(() => import('./pages/private/Cultivos/Cultivos'))
+const AlertasCatalogo = lazy(() => import('./pages/private/AlertasCatalogo/AlertasCatalogo'))
 
 function App() {
   return (
@@ -140,6 +141,7 @@ function App() {
               <Route path={PrivateRoutes.COBERTURAVEGETAL} element={<CoberturaVegetal/>} />
               <Route path={PrivateRoutes.CONTENIDODENITROGENO} element={<ContenidoDeNitrogeno/>}/>
               <Route path={PrivateRoutes.CATALOGOACTIVIDADESPT} element={<CatalogoActividadesPT/>}/>
+              <Route path={PrivateRoutes.ALERTASCATALOGO} element={<AlertasCatalogo/>}/>
             </Route>
           </RoutesWithNotFound>
         </BrowserRouter>
