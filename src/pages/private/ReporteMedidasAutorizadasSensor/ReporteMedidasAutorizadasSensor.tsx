@@ -128,8 +128,7 @@ function ReporteMedidasAutorizadasSensor() {
 
             if(datos.length < 1){
                 Swal.fire({
-                    icon: 'error',
-                    title: 'Error',
+                    icon: 'warning',
                     text: 'No se encontraron registros con los parámetros ingresados'
                 });
                 return;
@@ -137,7 +136,7 @@ function ReporteMedidasAutorizadasSensor() {
 
             let datosN: any = [];
 
-            datos.forEach(element => {   
+            datos.forEach((element: { fecha: string; }) => {   
 
                 element.fecha = formatFecha(element.fecha);
 
@@ -178,7 +177,7 @@ function ReporteMedidasAutorizadasSensor() {
             const parcelasResponse = await ObtenerParcelas();
 
             if(idFinca)
-                setParcelas(parcelasResponse.filter(x => x.idFinca === idFinca));
+                setParcelas(parcelasResponse.filter((x: { idFinca: number; }) => x.idFinca === idFinca));
             else
                 setParcelas(parcelasResponse);
         } catch (error) {
@@ -223,7 +222,7 @@ function ReporteMedidasAutorizadasSensor() {
                         </div>
                         <div >
                             <label htmlFor="filtroParcela" >Filtrar por Parcela:</label>
-                            <select id="filtroParcela" value={selectedParcela || ''} onChange={handleParcelaChange} className="form-select" >
+                            <select id="filtroParcela" value={selectedParcela || ''} onChange={handleParcelaChange} className="form-select">
                                 <option value={''}>Todas las parcelas</option>
                                 {parcelas.map(p => (
                                     <option key={p.idParcela} value={p.idParcela}>{p.nombre}</option>
