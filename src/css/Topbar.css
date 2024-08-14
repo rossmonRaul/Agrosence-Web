@@ -53,7 +53,61 @@
 
 .notifications {
     position: relative;
+    cursor: pointer;
 }
+
+.notification-count {
+    position: absolute;
+    top: -5px;
+    right: -13px;
+    background-color: red;
+    color: white;
+    padding: 2px 6px;
+    border-radius: 50%;
+    font-size: 12px;
+    font-weight: bold;
+}
+
+.close-button {
+    background-color: #ff0000; /* Fondo rojo */
+    color: #ffffff; /* Texto blanco */
+    border: none;
+    font-size: 1.2em;
+    cursor: pointer;
+    width: 40px; /* Ajusta según el espacio disponible */
+    height: 100%; /* Ocupa toda la altura del contenedor */
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: background-color 0.3s ease; /* Suave transición de color */
+    position: absolute; /* Posicionamiento absoluto para ajustar en la notificación */
+    right: 0; /* Alínea a la derecha */
+    top: 0; /* Inicia desde la parte superior */
+    bottom: 0; /* Ocupa todo el espacio vertical */
+}
+
+.close-button:hover {
+    background-color: #cc0000; /* Fondo rojo más oscuro al hacer hover */
+}
+
+.notification-item {
+    position: relative; /* Contenedor relativo para que el botón se posicione correctamente */
+    padding-right: 50px; /* Espacio para el botón de cerrar */
+}
+
+
+
+.notification-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.notification-small-text {
+    font-size: 12px; /* Tamaño de fuente más pequeño */
+    color: #666; /* Color más sutil */
+}
+
 
 .notification-list {
     position: absolute;
@@ -61,18 +115,25 @@
     right: 0;
     background: #fff;
     border: 1px solid #ccc;
-    border-radius: 5px;
+    border-radius: 8px;
     padding: 10px;
-    z-index: 1;
+    z-index: 9999; /* Asegura que esté por encima de todo */
+    box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1);
+    width: 320px;
 }
+
 
 .notification-list ul {
     list-style: none;
     padding: 0;
+    margin: 0;
 }
 
 .notification-list ul li {
-    margin-bottom: 5px;
+    margin-bottom: 10px; /* Más espacio entre notificaciones */
+    padding-bottom: 10px;
+    border-bottom: 1px solid #eee; /* Línea sutil entre notificaciones */
+    font-size: 14px; /* Tamaño de fuente más pequeño */
 }
 
 /* Estilos para pantallas más pequeñas */
