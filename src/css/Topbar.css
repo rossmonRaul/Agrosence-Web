@@ -69,7 +69,7 @@
 }
 
 .close-button {
-    background-color: #ff0000; /* Fondo rojo */
+    background-color: #cc0000; /* Fondo rojo */
     color: #ffffff; /* Texto blanco */
     border: none;
     font-size: 1.2em;
@@ -87,7 +87,7 @@
 }
 
 .close-button:hover {
-    background-color: #cc0000; /* Fondo rojo más oscuro al hacer hover */
+    background-color: #970202; /* Fondo rojo más oscuro al hacer hover */
 }
 
 .notification-item {
