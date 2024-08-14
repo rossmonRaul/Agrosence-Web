@@ -90,7 +90,8 @@ function ReporteEntradas() {
             const formData = {
                 fechaInicio: filtroInputInicio,
                 fechaFin: filtroInputFin,
-                idFinca: selectedFinca
+                idFinca: selectedFinca || '0',
+                idEmpresa:  idEmpresa
             }
 
             if (!validarFechas()) {
@@ -145,12 +146,8 @@ function ReporteEntradas() {
             const idEmpresa = localStorage.getItem('empresaUsuario');
 
             if (idEmpresa) {
-                const fincasResponse = await ObtenerFincas();
-
-                const fincasFiltradas = fincasResponse.filter((finca: any) => finca.idEmpresa === parseInt(idEmpresa));
-
-
-                setFincas(fincasFiltradas);
+                const fincasResponse = await ObtenerFincas(parseInt(idEmpresa));
+                setFincas(fincasResponse);
             }
 
         } catch (error) {
@@ -162,6 +159,7 @@ function ReporteEntradas() {
     // Columnas de la tabla
     const columns = [
         { key: 'fecha', header: 'Fecha', width: 10},
+        { key: 'finca', header: 'Finca' , width: 20 },
         { key: 'detallesCompraVenta', header: 'Detalles' , width: 60},
         { key: 'tipo', header: 'Tipo', width: 10 },
         { key: 'montoGastoFormateado', header: 'Monto Gasto' , width: 15},
@@ -175,7 +173,7 @@ function ReporteEntradas() {
             data: apiData,
             columns,
             userName: nombreUsuario,
-            totales: ['Totales', '', '', montoGasto]
+            totales: ['Totales', '','', '', montoGasto]
         });
     };
 

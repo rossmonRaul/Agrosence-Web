@@ -160,11 +160,8 @@ function ReporteMedidasAutorizadasSensor() {
             const idEmpresa = localStorage.getItem('empresaUsuario');
 
             if (idEmpresa) {
-                const fincasResponse = await ObtenerFincas();
-
-                const fincasFiltradas = fincasResponse.filter((finca: any) => finca.idEmpresa === parseInt(idEmpresa));
-
-                setFincas(fincasFiltradas);
+                const fincasResponse = await ObtenerFincas(parseInt(idEmpresa));
+                setFincas(fincasResponse);
             }
 
         } catch (error) {
@@ -174,7 +171,8 @@ function ReporteMedidasAutorizadasSensor() {
 
     const obtenerParcelas = async (idFinca?: number) => {
         try {
-            const parcelasResponse = await ObtenerParcelas();
+            const idEmpresa = localStorage.getItem('empresaUsuario');
+            const parcelasResponse = await ObtenerParcelas(parseInt(idEmpresa?idEmpresa:"0"));
 
             if(idFinca)
                 setParcelas(parcelasResponse.filter((x: { idFinca: number; }) => x.idFinca === idFinca));

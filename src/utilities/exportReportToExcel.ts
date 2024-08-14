@@ -104,7 +104,7 @@ export const exportToExcel = ({ reportName, data, columns, userName,totales }: E
             }
             
         // Aplicar estilo a encabezados
-            const headerRange = XLSX.utils.decode_range("A4:G4");
+            const headerRange = XLSX.utils.decode_range(`A4:${lastColumnLetter}4`);
             for (let C = headerRange.s.c; C <= headerRange.e.c; ++C) {
                 const cellAddress = XLSX.utils.encode_cell({ r: 3, c: C });
                 if (!ws[cellAddress]) continue;

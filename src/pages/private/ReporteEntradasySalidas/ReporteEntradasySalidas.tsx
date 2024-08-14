@@ -89,7 +89,8 @@ function ReporteEntradasYSalidas() {
             const formData = {
                 fechaInicio: filtroInputInicio,
                 fechaFin: filtroInputFin,
-                idFinca: selectedFinca
+                idFinca: selectedFinca || '0',
+                idEmpresa:  idEmpresa
             }
 
             if (!validarFechas()) {
@@ -152,12 +153,8 @@ function ReporteEntradasYSalidas() {
             const idEmpresa = localStorage.getItem('empresaUsuario');
 
             if (idEmpresa) {
-                const fincasResponse = await ObtenerFincas();
-
-                const fincasFiltradas = fincasResponse.filter((finca: any) => finca.idEmpresa === parseInt(idEmpresa));
-
-
-                setFincas(fincasFiltradas);
+                const fincasResponse = await ObtenerFincas(parseInt(idEmpresa));
+                setFincas(fincasResponse);
             }
 
         } catch (error) {
@@ -169,6 +166,7 @@ function ReporteEntradasYSalidas() {
     // Columnas de la tabla
     const columns = [
         { key: 'fecha', header: 'Fecha' , width: 15 },
+        { key: 'finca', header: 'Finca' , width: 20 },
         { key: 'detallesCompraVenta', header: 'Detalles' , width: 30 },
         { key: 'tipo', header: 'Tipo' , width: 15 },
         { key: 'montoIngresoFormateado', header: 'Monto Ingreso', width: 15  },
@@ -184,7 +182,7 @@ function ReporteEntradasYSalidas() {
             data: apiData,
             columns,
             userName: nombreUsuario,
-            totales: ['Totales', '', '', montoIngreso, montoGasto, montoBalance]
+            totales: ['Totales', '', '', '', montoIngreso, montoGasto, montoBalance]
         });
     };
 

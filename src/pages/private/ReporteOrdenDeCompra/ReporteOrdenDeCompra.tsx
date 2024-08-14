@@ -89,7 +89,8 @@ function ReporteOrdenDeCompra() {
             const formData = {
                 fechaInicio: filtroInputInicio,
                 fechaFin: filtroInputFin,
-                idFinca: selectedFinca
+                idFinca: selectedFinca || '0',
+                idEmpresa:  idEmpresa
             }
 
             if (!validarFechas()) {
@@ -144,12 +145,8 @@ function ReporteOrdenDeCompra() {
             const idEmpresa = localStorage.getItem('empresaUsuario');
 
             if (idEmpresa) {
-                const fincasResponse = await ObtenerFincas();
-
-                const fincasFiltradas = fincasResponse.filter((finca: any) => finca.idEmpresa === parseInt(idEmpresa));
-
-
-                setFincas(fincasFiltradas);
+                const fincasResponse = await ObtenerFincas(parseInt(idEmpresa));
+                setFincas(fincasResponse);
             }
 
         } catch (error) {
@@ -160,7 +157,8 @@ function ReporteOrdenDeCompra() {
 
     // Columnas de la tabla
     const columns = [
-        { key: 'numeroOrden', header: 'Número Orden', width: 20},
+        { key: 'numeroDeOrden', header: 'Número Orden', width: 20},
+        { key: 'finca', header: 'Finca' , width: 20 },
         { key: 'fechaOrden', header: 'Fecha Orden', width: 15},
         { key: 'fechaEntrega', header: 'Fecha Entrega' , width: 20},
         { key: 'observaciones', header: 'Observaciones' , width: 70},
@@ -176,7 +174,7 @@ function ReporteOrdenDeCompra() {
             data: apiData,
             columns,
             userName: nombreUsuario,
-            totales: ['Totales', '', '','','', montoGasto]
+            totales: ['Totales', '', '','','','', montoGasto]
         });
     };
 
