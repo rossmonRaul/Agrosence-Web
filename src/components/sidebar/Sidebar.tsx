@@ -192,7 +192,21 @@ const Sidebar = ({ children }: { children: React.ReactNode }) => {
                     name: "Reporte de planilla",
                     icon: <img src='/mano-obra.png' style={{ width: '30px' }} />,
                 },
-
+                {                    
+                    path: "/reportesensores",
+                    name: "Reporte de Sensores",
+                    icon: <img src='/sensor.png' style={{ width: '30px' }} />,
+                },
+                {
+                    path: "/reportemedicionessensor",
+                    name: "Reporte de Medidas de Sensor",
+                    icon: <img src='/medidas.png' style={{ width: '22px' }} />,
+                },                
+                {
+                    path: "/reportemedicionesautorizadassensor",
+                    name: "Reporte Medidas Autorizadas de Sensor",
+                    icon: <img src='/medidasAutorizadas.png' style={{ width: '22px' }} />,
+                },
             ]
         },
         {
@@ -380,6 +394,12 @@ const Sidebar = ({ children }: { children: React.ReactNode }) => {
                     name: "Cobertura Vegetal",
                     icon: <img src='/clorofila.png' style={{ width: '22px' }} />,
                     roles: [3]
+                },
+                {
+                    path: "/ALERTASCATALOGO",
+                    name: "Catalogo de Alertas",
+                    icon: <img src='/inventario.png' style={{ width: '22px' }} />,
+                    roles: [3]
                 }
                
             ]
@@ -396,8 +416,9 @@ const Sidebar = ({ children }: { children: React.ReactNode }) => {
 
             <div style={{ width: isOpen ? "200px" : "83px", overflowY: "auto", overflowX: "hidden"}} className="sidebar">
                 <div className="top-section">
-                    <h1 style={{ display: isOpen ? "block" : "none" }} className="logo">Logo</h1>
-                    <div style={{ marginLeft: isOpen ? "50px" : "0px" }} className="bars">
+                    {/* <h1 style={{ display: isOpen ? "block" : "none" }} className="logo">Logo</h1> */}
+                    <img src='/public/AGROSENSER.png' style={{display: isOpen ? "block" : "none", width:'100px', height:'100px'}}></img>
+                    <div style={{ marginLeft: isOpen ? "40px" : "0px" }} className="bars">
                         <FaBars onClick={toggle} />
                     </div>
                 </div>

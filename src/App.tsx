@@ -48,6 +48,9 @@ const ReporteEntradas = lazy(() => import('./pages/private/ReporteEntradas/Repor
 const ReporteSalidas = lazy(() => import('./pages/private/ReporteSalidas/ReporteSalidas'));
 const ReportePlanilla = lazy(() => import('./pages/private/ReportePlanilla/ReportePlanilla'));
 const ReporteOrdenDeCompra = lazy(() => import('./pages/private/ReporteOrdenDeCompra/ReporteOrdenDeCompra'));
+const ReporteMedicionesSensor = lazy(() => import('./pages/private/ReporteMedicionesSensor/ReporteMedicionesSensor'));
+const ReporteMedidasAutorizadasSensor = lazy(() => import('./pages/private/ReporteMedidasAutorizadasSensor/ReporteMedidasAutorizadasSensor'));
+const ReporteSensores = lazy(() => import('./pages/private/ReporteSensores/ReporteSensores'));
 const ManoObra = lazy(() => import('./pages/private/ManoObra/ManoObra'));
 const ContenidoDeClorofila = lazy(() => import('./pages/private/ContenidoDeClorofila/ContenidoDeClorofila'))
 const SaludPlanta = lazy(() => import('./pages/private/SaludPlanta/SaludPlanta'))
@@ -58,6 +61,7 @@ const ContenidoDeNitrogeno = lazy(() => import('./pages/private/ContenidoDeNitro
 const CatalogoActividadesPT = lazy(() => import('./pages/private/CatalogoActividadesPT/CatalogoActividadesPT'))
 const MedidasCultivos = lazy(() => import('./pages/private/MedidasCultivos/MedidasCultivos'))
 const Cultivos = lazy(() => import('./pages/private/Cultivos/Cultivos'))
+const AlertasCatalogo = lazy(() => import('./pages/private/AlertasCatalogo/AlertasCatalogo'))
 
 function App() {
   return (
@@ -107,6 +111,9 @@ function App() {
               <Route path={PrivateRoutes.REPORTESALIDAS} element={<ReporteSalidas />} />
               <Route path={PrivateRoutes.REPORTEPLANILLA} element={<ReportePlanilla/>} />
               <Route path={PrivateRoutes.REPORTEORDENCOMPRA} element={<ReporteOrdenDeCompra/>} />
+              <Route path={PrivateRoutes.REPORTEMEDICIONESSENSOR} element={<ReporteMedicionesSensor/>} />
+              <Route path={PrivateRoutes.REPORTEMEDIDASAUTORIZADAS} element={<ReporteMedidasAutorizadasSensor/>} />
+              <Route path={PrivateRoutes.REPORTESENSORES} element={<ReporteSensores />} />
               <Route path={PrivateRoutes.CATALOGOACTIVIDADESPT} element={<CatalogoActividadesPT/>}/>
               <Route path={PrivateRoutes.CULTIVOS} element={<Cultivos/>} />
             </Route>
@@ -134,6 +141,7 @@ function App() {
               <Route path={PrivateRoutes.COBERTURAVEGETAL} element={<CoberturaVegetal/>} />
               <Route path={PrivateRoutes.CONTENIDODENITROGENO} element={<ContenidoDeNitrogeno/>}/>
               <Route path={PrivateRoutes.CATALOGOACTIVIDADESPT} element={<CatalogoActividadesPT/>}/>
+              <Route path={PrivateRoutes.ALERTASCATALOGO} element={<AlertasCatalogo/>}/>
             </Route>
           </RoutesWithNotFound>
         </BrowserRouter>

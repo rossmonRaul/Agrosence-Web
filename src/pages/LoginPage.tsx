@@ -224,6 +224,7 @@ const Login: React.FC = () => {
         //localstorage datos guardados
         localStorage.setItem('empresaUsuario', usuarioEncontrado.usuario.idEmpresa);
         localStorage.setItem('identificacionUsuario', usuarioEncontrado.usuario.identificacion);
+        localStorage.setItem('nombreUsuario', usuarioEncontrado.usuario.nombre);
         localStorage.setItem('token', usuarioEncontrado.token);
         navigate(`/${PrivateRoutes.PRIVATE}`, { replace: true });
         setIsLoggedIn(true);

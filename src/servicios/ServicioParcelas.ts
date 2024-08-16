@@ -2,8 +2,8 @@ import { baseURL } from "../constants";
 import { ProcesarDatosApi } from "./ApiFetch";
 const controlador = "Parcela";
 
-export const ObtenerParcelas = async () => {
-    const url = `${baseURL}/api/v1.0/${controlador}/ObtenerParcelas`;
+export const ObtenerParcelas = async (idEmpresa: number) => {
+    const url = `${baseURL}/api/v1.0/${controlador}/ObtenerParcelas?idEmpresa=${idEmpresa}`;
     return await ProcesarDatosApi('GET', url, '');
 }
 
