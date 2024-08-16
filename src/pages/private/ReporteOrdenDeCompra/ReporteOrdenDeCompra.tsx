@@ -7,7 +7,9 @@ import BordeSuperior from "../../../components/bordesuperior/BordeSuperior.tsx";
 import Topbar from "../../../components/topbar/Topbar.tsx";
 import { ObtenerFincas } from "../../../servicios/ServicioFincas.ts";
 import { ObtenerReporteOrdenDeCompra } from "../../../servicios/ServicioReporte.ts";
-import { IoDocumentTextSharp, IoFilter } from "react-icons/io5";
+import { IoFilter } from "react-icons/io5";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faFileExcel } from "@fortawesome/free-solid-svg-icons";
 import Swal from 'sweetalert2';
 import { exportToExcel } from '../../../utilities/exportReportToExcel.ts';
 
@@ -230,8 +232,8 @@ function ReporteOrdenDeCompra() {
                         {apiData.length > 0 &&
                             <button onClick={handleExport} className="btn-exportar" style={{ display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
 
-                                <IoDocumentTextSharp size={27} />
-                                <span style={{ marginLeft: '5px' }}>Exportar</span>
+                            <FontAwesomeIcon icon={faFileExcel} style={{ color: "#0CF25D", fontSize: '27px' }} />                                
+                            <span style={{ marginLeft: '5px' }}>Exportar</span>
 
                             </button>
                         }

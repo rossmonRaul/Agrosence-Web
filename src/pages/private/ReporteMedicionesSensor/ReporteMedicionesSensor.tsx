@@ -5,8 +5,9 @@ import TableResponsive from "../../../components/table/table.tsx";
 import BordeSuperior from "../../../components/bordesuperior/BordeSuperior.tsx";
 import Topbar from "../../../components/topbar/Topbar.tsx";
 import { ObtieneReporteMedicionesSensor } from "../../../servicios/ServicioReporte.ts";
-import { IoDocumentTextSharp } from "react-icons/io5";
 import { exportToExcel } from '../../../utilities/exportReportToExcel.ts';
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faFileExcel } from "@fortawesome/free-solid-svg-icons";
 
 
 function ReporteMedicionesSensor() {    
@@ -52,8 +53,7 @@ function ReporteMedicionesSensor() {
                     <div className="filtro-container">
                         {apiData.length > 0 &&
                             <button onClick={() => exportToExcel({ reportName, data: apiData, columns, userName })}  className="btn-exportar" style={{ display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
-
-                                <IoDocumentTextSharp size={27} />
+                            <FontAwesomeIcon icon={faFileExcel} style={{ color: "#0CF25D", fontSize: '27px' }} />                                
                                 <span style={{ marginLeft: '5px' }}>Exportar</span>
 
                             </button>
