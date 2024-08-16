@@ -15,21 +15,22 @@ import Swal from "sweetalert2";
 import CrearMedidasCultivos from "../../../components/medidasCultivos/CrearMedidasCultivos.tsx";
 import EditarMedidasCultivos from "../../../components/medidasCultivos/EditarMedidasCultivos.tsx";
 import TableDelete from "../../../components/table/tableDelete.tsx";
+import { IoAddCircleOutline } from "react-icons/io5";
 
 // Componente funcional que representa la página de administración de empresas.
 function MedidasCultivos() {
     // Estado para el filtro por nombre de empresa
     const [filtroNombre, setFiltroNombre] = useState('')
-     // Estado para controlar la apertura y cierre del modal de edición
+    // Estado para controlar la apertura y cierre del modal de edición
     const [modalEditar, setModalEditar] = useState(false);
     // Estado para controlar la apertura y cierre del modal de inserción
     const [modalInsertar, setModalInsertar] = useState(false);
     // Estado para controlar la apertura y cierre del modal de inserción
     const [selectedMedidasCultivo, setSelectedMedidasCultivo] = useState({
-        idMedidasCultivos : '',
-        medida : ''
+        idMedidasCultivos: '',
+        medida: ''
     });
-     // Estado para almacenar todas las empresas
+    // Estado para almacenar todas las empresas
     const [medidasCultivo, setMedidasCultivo] = useState<any[]>([]);
     // Estado para almacenar las empresas filtradas
     const [medidasCultivoFiltrados, setMedidasCultivoFiltrados] = useState<any[]>([]);
@@ -40,7 +41,7 @@ function MedidasCultivos() {
     }, []); // Ejecutar solo una vez al montar el componente
 
     // Función para obtener todas las empresas
-    const obtenerMedidasCultivo = async () => {  
+    const obtenerMedidasCultivo = async () => {
         try {
             const medidasCultivo = await ObtenerMedidasCultivos();
 
@@ -80,7 +81,7 @@ function MedidasCultivos() {
         setModalInsertar(!modalInsertar);
     }
 
-    
+
     const abrirCerrarModalEditar = () => {
         setModalEditar(!modalEditar);
     }
@@ -91,7 +92,7 @@ function MedidasCultivos() {
         abrirCerrarModalEditar();
     };
 
-     // Función para cambiar el estado de una empresa
+    // Función para cambiar el estado de una empresa
     const toggleStatus = (medidasCultivo: any) => {
         Swal.fire({
             title: "Cambiar Estado",
@@ -153,20 +154,26 @@ function MedidasCultivos() {
                 <Topbar />
                 <BordeSuperior text="Medidas de Cultivos" />
                 <div className="content">
-                    <button onClick={() => abrirCerrarModalInsertar()} className="btn-crear">Crear Medida</button>
-                    <div className="filtro-container">
-                        <label htmlFor="filtroNombre">Filtrar por medida:</label>
-                        <input
-                            type="text"
-                            id="filtroNombre"
-                            value={filtroNombre}
-                            onChange={handleChangeFiltro}
-                            placeholder="Ingrese la medida"
-                            className="form-control"
-                        />
+                    <div className="filtro-container" style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+                        <div className="filtro-item" style={{ width: '300px', marginTop: '5px' }}>
+                            <label htmlFor="filtroNombre">Medida:</label>
+                            <input
+                                type="text"
+                                id="filtroNombre"
+                                value={filtroNombre}
+                                onChange={handleChangeFiltro}
+                                placeholder="Ingrese la medida"
+                                style={{ fontSize: '16px', padding: '10px', minWidth: '200px', marginTop: '0px' }}
+                                className="form-control"
+                            />
+                        </div>
+                        <button onClick={() => abrirCerrarModalInsertar()} className="btn-crear-style" style={{ marginLeft: 'auto', display: 'flex', justifyContent: 'center', alignItems: 'center', marginTop: '10px' }}>
+                            <IoAddCircleOutline size={27} />
+                            <span style={{ marginLeft: '5px' }}>Crear Medida</span>
+                        </button>
                     </div>
-                    <TableDelete columns={columns} data={medidasCultivoFiltrados} openModal={openModal}  btnActionName={"Editar"} toggleStatus={toggleStatus} useTrashIcon={true}/>
-   
+                    <TableDelete columns={columns} data={medidasCultivoFiltrados} openModal={openModal} btnActionName={"Editar"} toggleStatus={toggleStatus} useTrashIcon={true} />
+
                 </div>
             </div>
 
@@ -200,7 +207,7 @@ function MedidasCultivos() {
                         />
                     </div>
                 </div>
-            </Modal> 
+            </Modal>
 
         </Sidebar>
 

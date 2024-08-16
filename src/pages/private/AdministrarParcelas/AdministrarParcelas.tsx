@@ -9,6 +9,7 @@ import EditarParcela from "../../../components/parcela/EditarParcela.tsx";
 import CrearParcela from "../../../components/parcela/CrearParcela.tsx";
 import Swal from "sweetalert2";
 import { ObtenerFincas } from "../../../servicios/ServicioFincas.ts";
+import { IoAddCircleOutline } from "react-icons/io5";
 
 function AdministrarParcelas() {
     const [filtroNombre, setFiltroNombre] = useState('');
@@ -187,26 +188,38 @@ function AdministrarParcelas() {
             <div className="main-container">
                 <Topbar />
                 <BordeSuperior text="Administrar Parcelas" />
-                <div className="content col-md-12" >
-                    <button onClick={() => abrirCerrarModalInsertar()} className="btn-crear">Crear Parcela</button>
-                    <div className="filtro-container" style={{ width: '300px' }}>
-                        <select value={selectedFinca || ''} onChange={handleFincaChange} className="custom-select">
-                            <option value={''}>Todas las fincas</option>
-                            {fincas.map(finca => (
-                                <option key={finca.idFinca} value={finca.idFinca}>{finca.nombre}</option>
-                            ))}
-                        </select>
-                    </div>
-                    <div className="filtro-container">
-                        <label htmlFor="filtroNombre">Filtrar por nombre:</label>
-                        <input
-                            type="text"
-                            id="filtroNombre"
-                            value={filtroNombre}
-                            onChange={handleChangeFiltro}
-                            placeholder="Ingrese el nombre"
-                            className="form-control"
-                        />
+                <div className="content" >
+                    <div className="filtro-container" style={{ display: 'flex', flexWrap: 'wrap', alignItems: 'center' }}>
+                        <div className="filtro-item" style={{ width: '300px', marginTop: '5px' }}>
+                            <label htmlFor="filtroNombre">Finca:</label>
+                            <select
+                                value={selectedFinca || ''}
+                                onChange={handleFincaChange}
+                                style={{ height: '45px', fontSize: '16px', padding: '10px', minWidth: '200px', marginTop: '0px' }}
+                                className="custom-select">
+                                <option value={''}>Todas las fincas</option>
+                                {fincas.map(finca => (
+                                    <option key={finca.idFinca}
+                                        value={finca.idFinca}>{finca.nombre}</option>
+                                ))}
+                            </select>
+                        </div>
+                        <div className="filtro-item" style={{ marginBottom: '15px' }}>
+                            <label htmlFor="filtroNombre">Parcela:</label>
+                            <input
+                                type="text"
+                                id="filtroNombre"
+                                value={filtroNombre}
+                                onChange={handleChangeFiltro}
+                                placeholder="Ingrese la parcela"
+                                className="form-control"
+                                style={{ fontSize: '16px', padding: '10px', minWidth: '200px', marginTop: '0px' }}
+                            />
+                        </div>
+                        <button onClick={() => abrirCerrarModalInsertar()} className="btn-crear-style" style={{ marginLeft: 'auto', display: 'flex', justifyContent: 'center', alignItems: 'center', marginTop: '10px' }}>
+                        <IoAddCircleOutline size={27} />
+                        <span style={{ marginLeft: '5px' }}>Crear Parcela</span>
+                        </button>
                     </div>
                     <TableResponsive columns={columns} data={parcelasFiltradas} openModal={openModal} btnActionName={"Editar"} toggleStatus={toggleStatus} />
                 </div>

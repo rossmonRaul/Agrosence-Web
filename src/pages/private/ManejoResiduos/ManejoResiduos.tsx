@@ -14,8 +14,10 @@ import Swal from "sweetalert2";
 import Topbar from "../../../components/topbar/Topbar.tsx";
 import EditarManejoResiduo from "../../../components/manejoResiduo/EditarManejoResiduo.tsx";
 import CrearManejoResiduos from "../../../components/manejoResiduo/InsertarManejoResiduo.tsx";
-import { ObtenerManejoResiduos, CambiarEstadoManejoResiduos} from "../../../servicios/ServicioResiduo.ts"
+import { ObtenerManejoResiduos, CambiarEstadoManejoResiduos } from "../../../servicios/ServicioResiduo.ts"
 import { ObtenerUsuariosAsignados } from "../../../servicios/ServicioUsuario.ts"
+import '../../../css/OrdenCompra.css'
+import { IoAddCircleOutline } from "react-icons/io5";
 
 
 /**
@@ -104,7 +106,7 @@ function ManejoResiduos() {
         obtenerDatosResiduos();
     }, []); // Ejecutar solo una vez al montar el componente
 
-    const obtenerDatosResiduos= async () => {
+    const obtenerDatosResiduos = async () => {
         try {
             const idEmpresa = localStorage.getItem('empresaUsuario');
             const idUsuario = localStorage.getItem('identificacionUsuario');
@@ -119,7 +121,7 @@ function ManejoResiduos() {
             }
 
             const parcelasUsuarioActual = datosUsuarios.filter((usuario: any) => usuario.identificacion === idUsuario).map((usuario: any) => usuario.idParcela);
-            
+
             // Filtrar las manejo de residuo de  de las parcelas del usuario actual
             const residuosFiltradas = datosResiduos.filter((residuo: any) => {
                 return parcelasUsuarioActual.includes(residuo.idParcela);
@@ -130,7 +132,7 @@ function ManejoResiduos() {
 
             //debo de poner 2 arreglos aca para poder cargar la tabla siempre que se cambia
             // la palabra del input de filtro
-            
+
             setResiduos(residuosFiltradas);
             setResiduosFiltrados(residuosFiltradas);
         } catch (error) {
@@ -143,7 +145,7 @@ function ManejoResiduos() {
     const toggleStatus = async (residuo: any) => {
         Swal.fire({
             title: "Actualizar",
-            text: "¿Estás seguro de que deseas actualizar el estado del residuo: "+ residuo.residuo +"  ?",
+            text: "¿Estás seguro de que deseas actualizar el estado del residuo: " + residuo.residuo + "  ?",
             icon: "warning",
             showCancelButton: true,
             confirmButtonText: "Sí",
@@ -199,17 +201,23 @@ function ManejoResiduos() {
                 <Topbar />
                 <BordeSuperior text="Manejo de Residuos" />
                 <div className="content">
-                    <button onClick={() => abrirCerrarModalCrearManejoResiduo()} className="btn-crear">Crear Residuo</button>
-                    <div className="filtro-container">
-                        <label htmlFor="filtroIdentificacion">Filtrar:</label>
-                        <input
-                            type="text"
-                            id="filtroIdentificacion"
-                            value={filtroInput}
-                            onChange={handleChangeFiltro}
-                            placeholder="Buscar por Finca, Parcela o Usuario"
-                            className="form-control"
-                        />
+                    <div className="filtro-container" style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+                        <div className="filtro-item" style={{ width: '300px', marginTop: '5px' }}>
+                            <label htmlFor="filtroIdentificacion">Finca, Parcela o Usuario:</label>
+                            <input
+                                type="text"
+                                id="filtroIdentificacion"
+                                value={filtroInput}
+                                onChange={handleChangeFiltro}
+                                placeholder="Buscar por Finca, Parcela o Usuario"
+                                className="form-control"
+                                style={{ fontSize: '16px', padding: '10px', minWidth: '275px', marginTop: '0px' }}
+                            />
+                        </div>
+                        <button onClick={() => abrirCerrarModalCrearManejoResiduo()} className="btn-crear-style" style={{ marginLeft: 'auto', display: 'flex', justifyContent: 'center', alignItems: 'center', marginTop: '10px' }}>
+                            <IoAddCircleOutline size={27} />
+                            <span style={{ marginLeft: '5px' }}>Crear Residuo</span>
+                        </button>
                     </div>
                     <TableResponsive columns={columns} data={ResiduosFiltrados} openModal={openModal} toggleStatus={toggleStatus} btnActionName={"Editar"} />
                 </div>

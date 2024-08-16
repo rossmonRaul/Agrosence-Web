@@ -13,6 +13,8 @@ import InsertarUsoAgua from "../../../components/usoAgua/InsertarUsoAgua.tsx";
 import ModificacionUsoAgua from "../../../components/usoAgua/EditarUsoAgua.tsx";
 import { ObtenerUsuariosAsignadosPorIdentificacion } from '../../../servicios/ServicioUsuario.ts';
 import '../../../css/FormSeleccionEmpresa.css'
+import '../../../css/OrdenCompra.css'
+import { IoAddCircleOutline } from "react-icons/io5";
 
 function AdministrarRegistroSeguimientoUsoAgua() {
     const [filtroActividad, setFiltroActividad] = useState('');
@@ -25,11 +27,11 @@ function AdministrarRegistroSeguimientoUsoAgua() {
         idParcela: '',
         idRegistroSeguimientoUsoAgua: '',
         fecha: '',
-        actividad: '', 
+        actividad: '',
         caudal: '',
         consumoAgua: '',
         observaciones: '',
-        estado:''
+        estado: ''
     });
     const [parcelas, setParcelas] = useState<any[]>([]);
     const [parcelasFiltradas, setParcelasFiltradas] = useState<any[]>([]);
@@ -51,7 +53,7 @@ function AdministrarRegistroSeguimientoUsoAgua() {
     };
 
     // Obtener las fincas al cargar la página
-    useEffect(() => { 
+    useEffect(() => {
         const obtenerFincas = async () => {
             try {
                 const idEmpresaString = localStorage.getItem('empresaUsuario');
@@ -59,7 +61,7 @@ function AdministrarRegistroSeguimientoUsoAgua() {
                 if (identificacionString && idEmpresaString) {
 
                     const identificacion = identificacionString;
-                    
+
                     const usuariosAsignados = await ObtenerUsuariosAsignadosPorIdentificacion({ identificacion: identificacion });
                     const idFincasUsuario = usuariosAsignados.map((usuario: any) => usuario.idFinca);
                     const idParcelasUsuario = usuariosAsignados.map((usuario: any) => usuario.idParcela);
@@ -87,8 +89,8 @@ function AdministrarRegistroSeguimientoUsoAgua() {
         const obtenerParcelasDeFinca = async () => {
             try {
                 const parcelasFinca = parcelas.filter(parcela => parcela.idFinca === selectedFinca);
-            //se asigna las parcelas de la IdFinca que se selecciona y se pone en parcelasfiltradas
-            setParcelasFiltradas(parcelasFinca);
+                //se asigna las parcelas de la IdFinca que se selecciona y se pone en parcelasfiltradas
+                setParcelasFiltradas(parcelasFinca);
 
             } catch (error) {
                 console.error('Error al obtener las parcelas de la finca:', error);
@@ -103,7 +105,7 @@ function AdministrarRegistroSeguimientoUsoAgua() {
 
     };
 
-    
+
     //este componente refrezca la tabla al momento
     useEffect(() => {
         filtrarUsoAgua();
@@ -113,14 +115,14 @@ function AdministrarRegistroSeguimientoUsoAgua() {
     //     obtenerInfo();
     // }, []);
 
-   
+
     const filtrarUsoAgua = () => {
         const UsoAguaFiltrados = filtroActividad
             ? datosUsoAgua.filter((usoAgua: any) =>
-            usoAgua.actividad.toLowerCase().includes(filtroActividad.toLowerCase())
+                usoAgua.actividad.toLowerCase().includes(filtroActividad.toLowerCase())
             )
             : datosUsoAgua;
-            setDatosUsoAguaFiltrados(UsoAguaFiltrados);
+        setDatosUsoAguaFiltrados(UsoAguaFiltrados);
 
     };
 
@@ -133,7 +135,7 @@ function AdministrarRegistroSeguimientoUsoAgua() {
                 ...dato,
                 sEstado: dato.estado === 1 ? 'Activo' : 'Inactivo'
             }));
-   
+
             // Filtrar los datos para mostrar solo los correspondientes a la finca y parcela seleccionadas
             const datosFiltrados = datosUsoAguaConSEstado.filter((dato: any) => {
                 //aca se hace el filtro y hasta que elija la parcela funciona
@@ -151,9 +153,9 @@ function AdministrarRegistroSeguimientoUsoAgua() {
     //esto carga la tabla al momento de hacer cambios en el filtro
     //carga los datos de la tabla al momento de cambiar los datos de selected parcela
     //cada vez que selected parcela cambie de datos este use effect obtiene datos
-    useEffect(()=> {
+    useEffect(() => {
         obtenerInfo();
-    },[selectedParcela]);
+    }, [selectedParcela]);
 
     const abrirCerrarModalInsertar = () => {
         setModalInsertar(!modalInsertar);
@@ -229,34 +231,50 @@ function AdministrarRegistroSeguimientoUsoAgua() {
             <div className="main-container">
                 <Topbar />
                 <BordeSuperior text="Registros y seguimientos del uso del agua" />
-                <div className="content" col-md-12>
-                    <button onClick={() => abrirCerrarModalInsertar()} className="btn-crear">Ingresar registro de seguimiento del uso del agua</button>
-                    <div className="filtro-container" style={{ width: '300px' }}>
-                        <select value={selectedFinca || ''} onChange={handleFincaChange} className="custom-select">
-                            <option value="">Seleccione la finca...</option>
-                            {fincas.map(finca => (
-                                <option key={finca.idFinca} value={finca.idFinca}>{finca.nombre}</option>
-                            ))}
-                        </select>
-                    </div>
-                    <div className="filtro-container" style={{ width: '300px' }}>
-                        <select value={selectedParcela ? selectedParcela : ''} onChange={handleParcelaChange} className="custom-select">
-                            <option value="">Seleccione la parcela...</option>
-                            {parcelasFiltradas.map(parcela => (
-                                <option key={parcela.idParcela} value={parcela.idParcela}>{parcela.nombre}</option>
-                            ))}
-                        </select>
-                    </div>
-                    <div className="filtro-container">
-                        <label htmlFor="filtroActividad">Filtrar por actividad:</label>
-                        <input
-                            type="text"
-                            id="filtroActividad"
-                            value={filtroActividad}
-                            onChange={handleChangeFiltro}
-                            placeholder="Ingrese la actividad"
-                            className="form-control"
-                        />
+                <div className="content" >
+                    <div className="filtro-container" style={{ display: 'flex', flexWrap: 'wrap', alignItems: 'center' }}>
+                        <div className="filtro-item" style={{ width: '300px', marginTop: '5px' }}>
+                            <label >Finca:</label>
+                            <select
+                                value={selectedFinca || ''}
+                                onChange={handleFincaChange}
+                                style={{ height: '45px', fontSize: '16px', padding: '10px', minWidth: '200px', marginTop: '0px' }}
+                                className="custom-select">
+                                <option value="">Seleccione la finca...</option>
+                                {fincas.map(finca => (
+                                    <option key={finca.idFinca} value={finca.idFinca}>{finca.nombre}</option>
+                                ))}
+                            </select>
+                        </div>
+                        <div className="filtro-item" style={{ width: '300px', marginTop: '5px' }}>
+                            <label >Parcela:</label>
+                            <select
+                                value={selectedParcela ? selectedParcela : ''}
+                                onChange={handleParcelaChange}
+                                style={{ height: '45px', fontSize: '16px', padding: '10px', minWidth: '200px', marginTop: '0px' }}
+                                className="custom-select">
+                                <option value="">Seleccione la parcela...</option>
+                                {parcelasFiltradas.map(parcela => (
+                                    <option key={parcela.idParcela} value={parcela.idParcela}>{parcela.nombre}</option>
+                                ))}
+                            </select>
+                        </div>
+                        <div className="filtro-item" style={{ marginBottom: '15px' }}>
+                            <label htmlFor="filtroActividad">Actividad:</label>
+                            <input
+                                type="text"
+                                id="filtroActividad"
+                                value={filtroActividad}
+                                onChange={handleChangeFiltro}
+                                placeholder="Ingrese la actividad"
+                                style={{ fontSize: '16px', padding: '10px', minWidth: '200px', marginTop: '0px' }}
+                                className="form-control"
+                            />
+                        </div>
+                        <button onClick={() => abrirCerrarModalInsertar()} className="btn-crear-style" style={{ marginLeft: 'auto', display: 'flex', justifyContent: 'center', alignItems: 'center', marginTop: '10px' }}>
+                            <IoAddCircleOutline size={27} />
+                            <span style={{ marginLeft: '5px' }}>Ingresar registro de seguimiento del uso del agua</span>
+                        </button>
                     </div>
                     <TableResponsive columns={columns} data={datosUsoAguaFiltrados} openModal={openModal} btnActionName={"Editar"} toggleStatus={toggleStatus} />
                 </div>

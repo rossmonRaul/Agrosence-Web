@@ -7,14 +7,15 @@ import Modal from "../../../components/modal/Modal.tsx";
 import Topbar from "../../../components/topbar/Topbar.tsx";
 import Swal from "sweetalert2";
 import { ObtenerFincas } from "../../../servicios/ServicioFincas.ts";
-import { ObtenerUsuariosAsignadosPorIdentificacion,ObtenerUsuariosAsignados } from '../../../servicios/ServicioUsuario.ts';
+import { ObtenerUsuariosAsignadosPorIdentificacion, ObtenerUsuariosAsignados } from '../../../servicios/ServicioUsuario.ts';
 import '../../../css/FormSeleccionEmpresa.css'
 import { ObtenerParcelas } from "../../../servicios/ServicioParcelas.ts";
 import EditarProblemaPlagas from "../../../components/problemasPlagas/EditarProblemaPlagas.tsx";
 import { CambiarEstadoRegistroSeguimientoPlagasyEnfermedades, ObtenerRegistroSeguimientoPlagasyEnfermedades } from "../../../servicios/ServicioProblemas.ts";
 import CrearProblemaPlagas from "../../../components/problemasPlagas/InsertarProblemasPlagas.tsx";
 import DetallesProblemasPlagas from "../../../components/problemasPlagas/DetallesProblemasPlagas.tsx";
-
+import '../../../css/OrdenCompra.css'
+import { IoAddCircleOutline } from "react-icons/io5";
 
 function ProblemasPlagas() {
     const [filtroNombre, setFiltroNombre] = useState('');
@@ -115,7 +116,7 @@ function ProblemasPlagas() {
     // Filtrar parcelas cuando cambien la finca seleccionada, las parcelas o el filtro por nombre
     useEffect(() => {
         filtrarParcelas();
-    }, [selectedFinca,problemasPlagas, filtroNombre]);
+    }, [selectedFinca, problemasPlagas, filtroNombre]);
 
 
 
@@ -134,9 +135,9 @@ function ProblemasPlagas() {
             )
             : problemasPlagas;
 
-            setProblemasPlagasFiltrados(problemasPlagasFiltrados);
+        setProblemasPlagasFiltrados(problemasPlagasFiltrados);
     };
-   
+
 
 
 
@@ -157,7 +158,7 @@ function ProblemasPlagas() {
 
 
     const ObtenerInfo = async () => {
-      
+
         try {
             const idEmpresa = localStorage.getItem('empresaUsuario');
             const idUsuario = localStorage.getItem('identificacionUsuario');
@@ -167,7 +168,7 @@ function ProblemasPlagas() {
                 const datosUsuarios = await ObtenerUsuariosAsignados({ idEmpresa: idEmpresa });
 
                 const problemaPlagasResponse = await ObtenerRegistroSeguimientoPlagasyEnfermedades();
-                console.log("obj",problemaPlagasResponse) 
+                console.log("obj", problemaPlagasResponse)
                 const usuarioActual = datosUsuarios.find((usuario: any) => usuario.identificacion === idUsuario);
 
                 if (!usuarioActual) {
@@ -198,7 +199,7 @@ function ProblemasPlagas() {
         }
     };
 
-   
+
 
     // Abrir/cerrar modal de inserción
     const abrirCerrarModalInsertar = () => {
@@ -253,11 +254,11 @@ function ProblemasPlagas() {
     //                 const datos = {
     //                     idRegistroSeguimientoPlagasYEnfermedades: problemasPlagas.idRegistroSeguimientoPlagasYEnfermedades,
     //                 };
-    
+
     //                 const resultado = await CambiarEstadoRegistroSeguimientoPlagasyEnfermedades(datos);
-    
+
     //                 if (parseInt(resultado.indicador) === 1) {
-    
+
     //                     /*este await recarga la tabla con los nuevos datos actualizados*/
     //                     await ObtenerRegistroSeguimientoPlagasyEnfermedades();
     //                     Swal.fire({
@@ -318,7 +319,7 @@ function ProblemasPlagas() {
 
 
 
-    
+
     const columns2 = [
         { key: 'fecha', header: 'Fecha' },
         { key: 'cultivo', header: 'Cultivo' },
@@ -333,30 +334,44 @@ function ProblemasPlagas() {
             <div className="main-container">
                 <Topbar />
                 <BordeSuperior text="Problemas de Plagas o Enfermedades" />
-                <div className="content" col-md-12>
-                    <button onClick={() => abrirCerrarModalInsertar()} className="btn-crear">Crear Problema o Enfermedad</button>
-                    <div className="filtro-container" style={{ width: '300px' }}>
-                        <select value={selectedFinca || ''} onChange={handleFincaChange} className="custom-select">
-                            <option value={0}>Seleccione una finca</option>
-                            {fincas.map(finca => (
-                                <option key={finca.idFinca} value={finca.idFinca}>{finca.nombre}</option>
-                            ))}
-                        </select>
-                    </div>
-                    <div className="filtro-container" style={{ width: '300px' }}>
-                        <select value={selectedParcela ? selectedParcela : ''} onChange={handleParcelaChange} className="custom-select">
-                            <option value="">Seleccione la parcela...</option>
-                            {parcelasFiltradas.map(parcela => (
-                                <option key={parcela.idParcela} value={parcela.idParcela}>{parcela.nombre}</option>
-                            ))}
-                        </select>
-                    </div>
-                    
+                <div className="content" >
+                    <div className="filtro-container" style={{ display: 'flex', flexWrap: 'wrap', alignItems: 'center' }}>
+                        <div className="filtro-item" style={{ width: '300px', marginTop: '5px' }}>
+                            <label >Finca:</label>
+                            <select
+                                value={selectedFinca || ''}
+                                onChange={handleFincaChange}
+                                style={{ height: '45px', fontSize: '16px', padding: '10px', minWidth: '200px', marginTop: '0px' }}
+                                className="custom-select">
+                                <option value={0}>Seleccione una finca</option>
+                                {fincas.map(finca => (
+                                    <option key={finca.idFinca} value={finca.idFinca}>{finca.nombre}</option>
+                                ))}
+                            </select>
+                        </div>
+                        <div className="filtro-item" style={{ width: '300px', marginTop: '5px' }}>
+                            <label >Parcela:</label>
+                            <select
+                                value={selectedParcela ? selectedParcela : ''}
+                                onChange={handleParcelaChange}
+                                style={{ height: '45px', fontSize: '16px', padding: '10px', minWidth: '200px', marginTop: '0px' }}
+                                className="custom-select">
+                                <option value="">Seleccione la parcela...</option>
+                                {parcelasFiltradas.map(parcela => (
+                                    <option key={parcela.idParcela} value={parcela.idParcela}>{parcela.nombre}</option>
+                                ))}
+                            </select>
+                        </div>
 
+                        <button onClick={() => abrirCerrarModalInsertar()} className="btn-crear-style" style={{ marginLeft: 'auto', display: 'flex', justifyContent: 'center', alignItems: 'center', marginTop: '10px' }}>
+                            <IoAddCircleOutline size={27} />
+                            <span style={{ marginLeft: '5px' }}>Crear Problema o Enfermedad</span>
+                            </button>
+                    </div>
                     {/* openModalDetalles */}
 
                     <TableResponsiveDetalles
-                      columns={columns2}
+                        columns={columns2}
                         data={problemasPlagasFiltrados}
                         openModalDetalles={openModalDetalles}
                         btnActionNameDetails={"Detalles"}
@@ -389,20 +404,20 @@ function ProblemasPlagas() {
             >
                 <div className='form-container'>
                     <div className='form-group'>
-                    <EditarProblemaPlagas
-                    idFinca={parseInt(selectedDatos.idFinca)}
-                    idParcela={parseInt(selectedDatos.idParcela)}
-                    idRegistroSeguimientoPlagasYEnfermedades={selectedDatos.idRegistroSeguimientoPlagasYEnfermedades}
-                    fecha={selectedDatos.fecha}
-                    cultivo={selectedDatos.cultivo}
-                    plagaEnfermedad={selectedDatos.plagaEnfermedad}
-                    incidencia={selectedDatos.incidencia}
-                    metodologiaEstimacion={selectedDatos.metodologiaEstimacion}
-                    problema={selectedDatos.problema}
-                    accionTomada={selectedDatos.accionTomada}
-                    valor={selectedDatos.valor}
-                    onEdit={handleEditarProblema}
-                />
+                        <EditarProblemaPlagas
+                            idFinca={parseInt(selectedDatos.idFinca)}
+                            idParcela={parseInt(selectedDatos.idParcela)}
+                            idRegistroSeguimientoPlagasYEnfermedades={selectedDatos.idRegistroSeguimientoPlagasYEnfermedades}
+                            fecha={selectedDatos.fecha}
+                            cultivo={selectedDatos.cultivo}
+                            plagaEnfermedad={selectedDatos.plagaEnfermedad}
+                            incidencia={selectedDatos.incidencia}
+                            metodologiaEstimacion={selectedDatos.metodologiaEstimacion}
+                            problema={selectedDatos.problema}
+                            accionTomada={selectedDatos.accionTomada}
+                            valor={selectedDatos.valor}
+                            onEdit={handleEditarProblema}
+                        />
                     </div>
                 </div>
             </Modal>}
@@ -414,20 +429,20 @@ function ProblemasPlagas() {
             >
                 <div className='form-container'>
                     <div className='form-group'>
-                    <DetallesProblemasPlagas
-                        
-                    idFinca={parseInt(selectedDatos.idFinca)}
-                        idParcela={parseInt(selectedDatos.idParcela)}
-                        idRegistroSeguimientoPlagasYEnfermedades={selectedDatos.idRegistroSeguimientoPlagasYEnfermedades}
-                        fecha={selectedDatos.fecha}
-                        cultivo={selectedDatos.cultivo}
-                        plagaEnfermedad={selectedDatos.plagaEnfermedad}
-                        incidencia={selectedDatos.incidencia}
-                        metodologiaEstimacion={selectedDatos.metodologiaEstimacion}
-                        problema={selectedDatos.problema}
-                        accionTomada={selectedDatos.accionTomada}
-                        valor={selectedDatos.valor}
-                    />
+                        <DetallesProblemasPlagas
+
+                            idFinca={parseInt(selectedDatos.idFinca)}
+                            idParcela={parseInt(selectedDatos.idParcela)}
+                            idRegistroSeguimientoPlagasYEnfermedades={selectedDatos.idRegistroSeguimientoPlagasYEnfermedades}
+                            fecha={selectedDatos.fecha}
+                            cultivo={selectedDatos.cultivo}
+                            plagaEnfermedad={selectedDatos.plagaEnfermedad}
+                            incidencia={selectedDatos.incidencia}
+                            metodologiaEstimacion={selectedDatos.metodologiaEstimacion}
+                            problema={selectedDatos.problema}
+                            accionTomada={selectedDatos.accionTomada}
+                            valor={selectedDatos.valor}
+                        />
                     </div>
                 </div>
             </Modal>}

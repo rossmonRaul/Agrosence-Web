@@ -247,10 +247,10 @@ function EntradasYSalidas() {
                 <Topbar />
                 <BordeSuperior text="Entradas y Salidas de la Finca" />
                 <div className="content">
-                    <div className="filtro-container">
-                        <div className="filtro-item">
+                    <div className="filtro-container" style={{ display: 'flex', alignItems: 'center' }}>
+                        <div className="filtro-item" style={{ flexGrow: 1 }}>
 
-                            <label htmlFor="filtroIdentificacion">Filtrar:</label>
+                            <label htmlFor="filtroIdentificacion">Finca, fecha o tipo:</label>
                             <input
                                 type="text"
                                 id="filtroIdentificacion"
@@ -262,11 +262,11 @@ function EntradasYSalidas() {
                             />
 
                         </div>
-                        <button onClick={() => abrirCerrarModalCrearEntradasYSalidas()} className="btn-crear-style" style={{ display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
+                        <button onClick={() => abrirCerrarModalCrearEntradasYSalidas()} className="btn-crear-style" style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', marginLeft: '10px' }}>
                             <IoAddCircleOutline size={27} />
                             <span style={{ marginLeft: '5px' }}>Crear Registro</span>
                         </button>
-                        <button onClick={exportToExcel} className="btn-exportar" style={{ display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
+                        <button onClick={exportToExcel} className="btn-exportar" style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', marginLeft: '10px' }}>
 
                             <IoDocumentTextSharp size={27} />
                             <span style={{ marginLeft: '5px' }}>Exportar</span>

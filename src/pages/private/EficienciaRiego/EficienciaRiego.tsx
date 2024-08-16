@@ -7,15 +7,17 @@ import Modal from "../../../components/modal/Modal.tsx";
 import Topbar from "../../../components/topbar/Topbar.tsx";
 import Swal from "sweetalert2";
 import { ObtenerFincas } from "../../../servicios/ServicioFincas.ts";
-import { ObtenerUsuariosAsignadosPorIdentificacion,ObtenerUsuariosAsignados  } from '../../../servicios/ServicioUsuario.ts';
+import { ObtenerUsuariosAsignadosPorIdentificacion, ObtenerUsuariosAsignados } from '../../../servicios/ServicioUsuario.ts';
 import '../../../css/FormSeleccionEmpresa.css'
+import '../../../css/OrdenCompra.css'
 import CrearEficienciaRiegos from "../../../components/eficienciaRiego/InsertarEficienciaRiego.tsx";
 import { ObtenerParcelas } from "../../../servicios/ServicioParcelas.ts";
 import ModificacionEficienciaRiego from "../../../components/eficienciaRiego/EditarEficienciaRiego.tsx";
 import { CambiarEstadoEficienciaRiego, ObtenerEficienciaRiego } from "../../../servicios/ServicioRiego.ts";
+import { IoAddCircleOutline } from "react-icons/io5";
 
 function AdministrarEficienciaRiegos() {
-    
+
     const [modalEditar, setModalEditar] = useState(false);
     const [modalInsertar, setModalInsertar] = useState(false);
     const [selectedParcela, setSelectedParcela] = useState<number | null>(null);
@@ -26,15 +28,15 @@ function AdministrarEficienciaRiegos() {
         volumenAguaUtilizado: '',
         estadoTuberiasYAccesorios: false,
         uniformidadRiego: false,
-      //  estadoAspersores: false,
+        //  estadoAspersores: false,
         estadoCanalesRiego: false,
         nivelFreatico: '',
-        uniformidadalerta:'',
-        uniformidaddetalles:'',
-        fugasalerta:'',
-        fugasdetalles:'',
-        canalesalerta:'',
-        canalesdetalles:'',
+        uniformidadalerta: '',
+        uniformidaddetalles: '',
+        fugasalerta: '',
+        fugasdetalles: '',
+        canalesalerta: '',
+        canalesdetalles: '',
     });
     const [parcelas, setParcelas] = useState<any[]>([]);
     const [parcelasFiltradas, setParcelasFiltradas] = useState<any[]>([]);
@@ -48,14 +50,14 @@ function AdministrarEficienciaRiegos() {
         setSelectedFinca(value);
         setSelectedParcela(null);
     };
- 
+
     const handleParcelaChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
         const value = e.target.value;
         setSelectedParcela(parseInt(value));
     };
 
     // Obtener las fincas al cargar la página
-    useEffect(() => { 
+    useEffect(() => {
         const obtenerFincas = async () => {
             try {
                 const idEmpresaString = localStorage.getItem('empresaUsuario');
@@ -63,7 +65,7 @@ function AdministrarEficienciaRiegos() {
                 if (identificacionString && idEmpresaString) {
 
                     const identificacion = identificacionString;
-                    
+
                     const usuariosAsignados = await ObtenerUsuariosAsignadosPorIdentificacion({ identificacion: identificacion });
                     const idFincasUsuario = usuariosAsignados.map((usuario: any) => usuario.idFinca);
                     const idParcelasUsuario = usuariosAsignados.map((usuario: any) => usuario.idParcela);
@@ -92,8 +94,8 @@ function AdministrarEficienciaRiegos() {
         const obtenerParcelasDeFinca = async () => {
             try {
                 const parcelasFinca = parcelas.filter(parcela => parcela.idFinca === selectedFinca);
-            //se asigna las parcelas de la IdFinca que se selecciona y se pone en parcelasfiltradas
-            setParcelasFiltradas(parcelasFinca);
+                //se asigna las parcelas de la IdFinca que se selecciona y se pone en parcelasfiltradas
+                setParcelasFiltradas(parcelasFinca);
 
             } catch (error) {
                 console.error('Error al obtener las parcelas de la finca:', error);
@@ -101,7 +103,7 @@ function AdministrarEficienciaRiegos() {
         };
         obtenerParcelasDeFinca();
     }, [selectedFinca]);
-    
+
 
     // const obtenerInfo = async () => {
     //     try {
@@ -115,13 +117,13 @@ function AdministrarEficienciaRiegos() {
     //           //  sEstadoAspersores: dato.estadoAspersores === true ? 'Tiene Obstrucciones' : 'No Tiene Obstrucciones',
     //             sEstadoCanalesRiego: dato.estadoCanalesRiego === true ? 'Tiene Obstrucciones' : 'No Tiene Obstrucciones'
     //         }));
-            
+
     //         // Filtrar los datos para mostrar solo los correspondientes a la finca y parcela seleccionadas
     //         const datosFiltrados = datosRiegosConSEstado.filter((dato: any) => {
     //             //aca se hace el filtro y hasta que elija la parcela funciona
     //             return dato.idFinca === selectedFinca && dato.idParcela === selectedParcela;
     //         });
-           
+
 
     //         setdatosRiegosFiltrados(datosFiltrados);
     //     } catch (error) {
@@ -131,7 +133,7 @@ function AdministrarEficienciaRiegos() {
 
 
     const obtenerInfo = async () => {
-      
+
         try {
             const idEmpresa = localStorage.getItem('empresaUsuario');
             const idUsuario = localStorage.getItem('identificacionUsuario');
@@ -151,26 +153,26 @@ function AdministrarEficienciaRiegos() {
                 // devuelve las parcelas del usuario
                 // const parcelasUsuarioActual = datosUsuarios.filter((usuario: any) => usuario.identificacion === idUsuario).map((usuario: any) => usuario.idParcela);
 
-             const datosRiegosConSEstado = datosRiegos.map((dato: any) => ({
-                        ...dato,
-                        sEstado: dato.estado === 1 ? 'Activo' : 'Inactivo',
-                        sFugas: dato.estadoTuberiasYAccesorios === true ? 'Tiene Fugas' : 'No Tiene Fugas',
-                        sUniformidadRiego: dato.uniformidadRiego === true ? 'Tiene Uniformidad' : 'No Tiene Uniformidad',
-                      //  sEstadoAspersores: dato.estadoAspersores === true ? 'Tiene Obstrucciones' : 'No Tiene Obstrucciones',
-                        sEstadoCanalesRiego: dato.estadoCanalesRiego === true ? 'Tiene Obstrucciones' : 'No Tiene Obstrucciones'
-                    }));
-                    
-               
+                const datosRiegosConSEstado = datosRiegos.map((dato: any) => ({
+                    ...dato,
+                    sEstado: dato.estado === 1 ? 'Activo' : 'Inactivo',
+                    sFugas: dato.estadoTuberiasYAccesorios === true ? 'Tiene Fugas' : 'No Tiene Fugas',
+                    sUniformidadRiego: dato.uniformidadRiego === true ? 'Tiene Uniformidad' : 'No Tiene Uniformidad',
+                    //  sEstadoAspersores: dato.estadoAspersores === true ? 'Tiene Obstrucciones' : 'No Tiene Obstrucciones',
+                    sEstadoCanalesRiego: dato.estadoCanalesRiego === true ? 'Tiene Obstrucciones' : 'No Tiene Obstrucciones'
+                }));
 
-              
-                 // Filtrar los datos para mostrar solo los correspondientes a la finca y parcela seleccionadas
-            const datosFiltrados = datosRiegosConSEstado.filter((dato: any) => {
-                //aca se hace el filtro y hasta que elija la parcela funciona
-                return dato.idFinca === selectedFinca && dato.idParcela === selectedParcela;
-            });
-           
 
-             
+
+
+                // Filtrar los datos para mostrar solo los correspondientes a la finca y parcela seleccionadas
+                const datosFiltrados = datosRiegosConSEstado.filter((dato: any) => {
+                    //aca se hace el filtro y hasta que elija la parcela funciona
+                    return dato.idFinca === selectedFinca && dato.idParcela === selectedParcela;
+                });
+
+
+
                 setdatosRiegosFiltrados(datosFiltrados);
             }
         } catch (error) {
@@ -182,9 +184,9 @@ function AdministrarEficienciaRiegos() {
     //esto carga la tabla al momento de hacer cambios en el filtro
     //carga los datos de la tabla al momento de cambiar los datos de selected parcela
     //cada vez que selected parcela cambie de datos este use effect obtiene datos
-    useEffect(()=> {
+    useEffect(() => {
         obtenerInfo();
-    },[selectedParcela]);
+    }, [selectedParcela]);
 
     const abrirCerrarModalInsertar = () => {
         setModalInsertar(!modalInsertar);
@@ -214,7 +216,7 @@ function AdministrarEficienciaRiegos() {
                         idMonitoreoEficienciaRiego: eficienciaRiego.idMonitoreoEficienciaRiego
                     };
 
-                    const resultado = await  CambiarEstadoEficienciaRiego(datos);
+                    const resultado = await CambiarEstadoEficienciaRiego(datos);
 
                     if (parseInt(resultado.indicador) === 1) {
                         Swal.fire({
@@ -255,7 +257,7 @@ function AdministrarEficienciaRiegos() {
         { key: 'nivelFreatico', header: 'Nivel Freático' },
         { key: 'sFugas', header: 'Fugas' },
         { key: 'sUniformidadRiego', header: 'Uniformidad Riego' },
-     //   { key: 'sEstadoAspersores', header: 'Obstrucciones en Aspersores' },
+        //   { key: 'sEstadoAspersores', header: 'Obstrucciones en Aspersores' },
         { key: 'sEstadoCanalesRiego', header: 'Obstrucciones en Canales' },
         { key: 'acciones', header: 'Acciones', actions: true }
     ];
@@ -265,30 +267,45 @@ function AdministrarEficienciaRiegos() {
             <div className="main-container">
                 <Topbar />
                 <BordeSuperior text="Eficiencia de Riego" />
-                <div className="content col-md-12">
-                    <button onClick={() => abrirCerrarModalInsertar()} className="btn-crear">Crear Riego</button>
-                    <div className="filtro-container" style={{ width: '300px' }}>
-                        <select value={selectedFinca || ''} onChange={handleFincaChange} className="custom-select">
-                            <option value="">Seleccione la finca...</option>
-                            {fincas.map(finca => (
-                                <option key={finca.idFinca} value={finca.idFinca}>{finca.nombre}</option>
-                            ))}
-                        </select>
-                    </div>
-                    <div className="filtro-container" style={{ width: '300px' }}>
-                        <select value={selectedParcela ? selectedParcela : ''} onChange={handleParcelaChange} className="custom-select">
-                            <option value="">Seleccione la parcela...</option>
-                            {parcelasFiltradas.map(parcela => (
-                                <option key={parcela.idParcela} value={parcela.idParcela}>{parcela.nombre}</option>
-                            ))}
-                        </select>
+                <div className="content" >
+                    <div className="filtro-container" style={{ display: 'flex', flexWrap: 'wrap', alignItems: 'center' }}>
+                        <div className="filtro-item" style={{ width: '300px', marginTop: '5px' }}>
+                        <label >Finca:</label>
+                            <select
+                                value={selectedFinca || ''}
+                                onChange={handleFincaChange}
+                                style={{ height: '45px', fontSize: '16px', padding: '10px', minWidth: '200px', marginTop: '0px' }}
+                                className="custom-select">
+                                <option value="">Seleccione la finca...</option>
+                                {fincas.map(finca => (
+                                    <option key={finca.idFinca} value={finca.idFinca}>{finca.nombre}</option>
+                                ))}
+                            </select>
+                        </div>
+                        <div className="filtro-item" style={{ width: '300px', marginTop: '5px' }}>
+                            <label >Parcela:</label>
+                            <select
+                                value={selectedParcela ? selectedParcela : ''}
+                                onChange={handleParcelaChange}
+                                style={{ height: '45px', fontSize: '16px', padding: '10px', minWidth: '200px', marginTop: '0px' }}
+                                className="custom-select">
+                                <option value="">Seleccione la parcela...</option>
+                                {parcelasFiltradas.map(parcela => (
+                                    <option key={parcela.idParcela} value={parcela.idParcela}>{parcela.nombre}</option>
+                                ))}
+                            </select>
+                        </div>
+                        <button onClick={() => abrirCerrarModalInsertar()} className="btn-crear-style" style={{ marginLeft: 'auto', display: 'flex', justifyContent: 'center', alignItems: 'center', marginTop: '10px' }}>
+                            <IoAddCircleOutline size={27} />
+                            <span style={{ marginLeft: '5px' }}>Crear Riego</span>
+                        </button>
                     </div>
                     <TableResponsive
-                    columns={columns2} 
-                    data={datosRiegosFiltrados}
-                     openModal={openModal} 
-                     btnActionName={"Editar"} 
-                     toggleStatus={toggleStatus} />
+                        columns={columns2}
+                        data={datosRiegosFiltrados}
+                        openModal={openModal}
+                        btnActionName={"Editar"}
+                        toggleStatus={toggleStatus} />
                 </div>
             </div>
 
@@ -323,7 +340,7 @@ function AdministrarEficienciaRiegos() {
                             volumenAguaUtilizado={selectedDatos.volumenAguaUtilizado}
                             estadoTuberiasYAccesorios={selectedDatos.estadoTuberiasYAccesorios}
                             uniformidadRiego={selectedDatos.uniformidadRiego}
-                          //  estadoAspersores={selectedDatos.estadoAspersores}
+                            //  estadoAspersores={selectedDatos.estadoAspersores}
                             estadoCanalesRiego={selectedDatos.estadoCanalesRiego}
                             nivelFreatico={selectedDatos.nivelFreatico}
                             uniformidadalerta={selectedDatos.uniformidadalerta}

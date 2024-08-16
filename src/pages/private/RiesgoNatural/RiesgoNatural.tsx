@@ -7,12 +7,13 @@ import BordeSuperior from "../../../components/bordesuperior/BordeSuperior.tsx";
 import Modal from "../../../components/modal/Modal.tsx"
 import Swal from "sweetalert2";
 import Topbar from "../../../components/topbar/Topbar.tsx";
-import { CambiarEstadoRiesgoNatural, ObtenerRiesgosNaturales} from "../../../servicios/ServicioRiesgoNatural.ts"
+import { CambiarEstadoRiesgoNatural, ObtenerRiesgosNaturales } from "../../../servicios/ServicioRiesgoNatural.ts"
 import { ObtenerUsuariosAsignados } from "../../../servicios/ServicioUsuario.ts"
 import CrearRiesgosNaturales from "../../../components/riesgonatural/InsertarRiesgosNaturales.tsx";
 import EditarRiesgoNatural from "../../../components/riesgonatural/EditarRiesgosNaturales.tsx";
 import TableResponsiveDelete from "../../../components/table/tableDelete.tsx";
-
+import '../../../css/OrdenCompra.css'
+import { IoAddCircleOutline } from "react-icons/io5";
 
 /**
  * Componente funcional que representa la página de riesgo natural.
@@ -32,7 +33,7 @@ function RiesgoNatural() {
         idFinca: 0,
         idParcela: 0,
         idRiesgoNatural: '',
-        fecha:'',
+        fecha: '',
         riesgoNatural: '',
         practicaPreventiva: '',
         responsable: '',
@@ -54,7 +55,7 @@ function RiesgoNatural() {
         setModalCrearRiesgos(!modalCrearRiesgos);
     }
 
-    const handleAgregarRiesgo= async () => {
+    const handleAgregarRiesgo = async () => {
         await obtenerDatosRiesgos();
         abrirCerrarModalCrearRiesgoNatural();
     };
@@ -94,7 +95,7 @@ function RiesgoNatural() {
         obtenerDatosRiesgos();
     }, []); // Ejecutar solo una vez al montar el componente
 
-    const obtenerDatosRiesgos= async () => {
+    const obtenerDatosRiesgos = async () => {
         try {
             const idEmpresa = localStorage.getItem('empresaUsuario');
             const idUsuario = localStorage.getItem('identificacionUsuario');
@@ -109,7 +110,7 @@ function RiesgoNatural() {
             }
 
             const parcelasUsuarioActual = datosUsuarios.filter((usuario: any) => usuario.identificacion === idUsuario).map((usuario: any) => usuario.idParcela);
-            
+
             // Filtrar las manejo de riesgo de  de las parcelas del usuario actual
             const riesgosFiltradas = datosRiesgos.filter((riesgo: any) => {
                 return parcelasUsuarioActual.includes(riesgo.idParcela);
@@ -117,7 +118,7 @@ function RiesgoNatural() {
                 ...riesgo,
                 sEstado: riesgo.estado === 1 ? 'Activo' : 'Inactivo',
             }));
-            
+
             setRiesgos(riesgosFiltradas);
             setRiesgosFiltrados(riesgosFiltradas);
         } catch (error) {
@@ -130,7 +131,7 @@ function RiesgoNatural() {
     const toggleStatus = async (riesgo: any) => {
         Swal.fire({
             title: "Eliminar",
-            text: "¿Estás seguro de que deseas eliminar el riesgo: "+ riesgo.riesgoNatural +"  ?",
+            text: "¿Estás seguro de que deseas eliminar el riesgo: " + riesgo.riesgoNatural + "  ?",
             icon: "warning",
             showCancelButton: true,
             confirmButtonText: "Sí",
@@ -139,10 +140,10 @@ function RiesgoNatural() {
             if (result.isConfirmed) {
                 try {
                     const datos = {
-                        idRiesgoNatural: riesgo.idRiesgoNatural, 
+                        idRiesgoNatural: riesgo.idRiesgoNatural,
                     };
-                    
-                    const resultado = await CambiarEstadoRiesgoNatural(datos); 
+
+                    const resultado = await CambiarEstadoRiesgoNatural(datos);
 
                     if (parseInt(resultado.indicador) === 1) {
                         await obtenerDatosRiesgos();
@@ -185,22 +186,28 @@ function RiesgoNatural() {
                 <Topbar />
                 <BordeSuperior text="Riesgos Naturales" />
                 <div className="content">
-                    <button onClick={() => abrirCerrarModalCrearRiesgoNatural()} className="btn-crear">Crear Riesgo</button>
-                    <div className="filtro-container">
-                        <label htmlFor="filtroIdentificacion">Filtrar:</label>
-                        <input
-                            type="text"
-                            id="filtroIdentificacion"
-                            value={filtroInput}
-                            onChange={handleChangeFiltro}
-                            placeholder="Buscar por Finca o Parcela"
-                            className="form-control"
-                        />
+                    <div className="filtro-container" style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+                        <div className="filtro-item" style={{ width: '300px', marginTop: '5px' }}>
+                            <label htmlFor="filtroIdentificacion">Finca o Parcela:</label>
+                            <input
+                                type="text"
+                                id="filtroIdentificacion"
+                                value={filtroInput}
+                                onChange={handleChangeFiltro}
+                                placeholder="Buscar por Finca o Parcela"
+                                style={{ fontSize: '16px', padding: '10px', minWidth: '200px', marginTop: '0px' }}
+                                className="form-control"
+                            />
+                        </div>
+                        <button onClick={() => abrirCerrarModalCrearRiesgoNatural()} className="btn-crear-style" style={{ marginLeft: 'auto', display: 'flex', justifyContent: 'center', alignItems: 'center', marginTop: '10px' }}>
+                            <IoAddCircleOutline size={27} />
+                            <span style={{ marginLeft: '5px' }}>Crear Riesgo</span>
+                        </button>
                     </div>
                     <TableResponsiveDelete columns={columns} data={RiesgosFiltrados} openModal={openModal} toggleStatus={toggleStatus} btnActionName={"Editar"} />
                 </div>
             </div>
- 
+
             <Modal
                 isOpen={modalEditar}
                 toggle={abrirCerrarModalEditar}
@@ -209,7 +216,7 @@ function RiesgoNatural() {
             >
                 <div className='form-container'>
                     <div className='form-group'>
-                        
+
                         <EditarRiesgoNatural
                             idFinca={selectedDatos.idFinca}
                             idParcela={selectedDatos.idParcela}
@@ -222,7 +229,7 @@ function RiesgoNatural() {
                             accionesCorrectivas={selectedDatos.accionesCorrectivas}
                             observaciones={selectedDatos.observaciones}
 
-                            
+
                             onEdit={handleEditarRiesgoNatural}
                         />
                     </div>
@@ -237,7 +244,7 @@ function RiesgoNatural() {
                 onCancel={abrirCerrarModalCrearRiesgoNatural}
             >
                 <div className='form-container'>
-                     <div className='form-group'>
+                    <div className='form-group'>
                         <CrearRiesgosNaturales
                             onAdd={handleAgregarRiesgo}
                         />

@@ -7,7 +7,7 @@ import Topbar from "../../../components/topbar/Topbar.tsx";
 import { ObtenerParcelas } from "../../../servicios/ServicioParcelas.ts";
 import Swal from "sweetalert2";
 import { ObtenerFincas } from "../../../servicios/ServicioFincas.ts";
-
+import '../../../css/OrdenCompra.css'
 import { ObtenerRegistroContenidoDeNitrogeno, CambiarEstadoRegistroContenidoDeNitrogeno } from "../../../servicios/ServicioContenidoDeNitrogeno.ts";
 import InsertarContenidoDeNitrogeno from "../../../components/contenidoDeNitrogeno/insertartContenidoDeNitrogeno.tsx";
 import EditarContenidoDeNitrogeno from "../../../components/contenidoDeNitrogeno/EditarContenidoDeNitrogeno.tsx";
@@ -15,6 +15,7 @@ import DetallesContenidoDeNitrogeno from "../../../components/contenidoDeNitroge
 
 import '../../../css/FormSeleccionEmpresa.css';
 import { ObtenerUsuariosAsignados, ObtenerUsuariosAsignadosPorIdentificacion } from "../../../servicios/ServicioUsuario.ts";
+import { IoAddCircleOutline } from "react-icons/io5";
 
 function AdministrarContenidoDeNitrogeno() {
     const [filtroNombre, setFiltroNombre] = useState('');
@@ -198,7 +199,7 @@ function AdministrarContenidoDeNitrogeno() {
                     const datos = {
                         IdContenidoDeNitrogeno: contenidoDeNitrogeno.idContenidoDeNitrogeno,
                     };
-                    
+
                     const resultado = await CambiarEstadoRegistroContenidoDeNitrogeno(datos);
                     if (parseInt(resultado.indicador) === 1) {
                         Swal.fire({
@@ -235,34 +236,50 @@ function AdministrarContenidoDeNitrogeno() {
             <div className="main-container">
                 <Topbar />
                 <BordeSuperior text="Contenido de Nitrógeno" />
-                <div className="content col-md-12">
-                    <button onClick={() => abrirCerrarModalInsertar()} className="btn-crear">Ingresar contenido de nitrógeno</button>
-                    <div className="filtro-container" style={{ width: '300px' }}>
-                        <select value={selectedFinca || ''} onChange={handleFincaChange} className="custom-select">
-                            <option value={0}>Seleccione una finca</option>
-                            {fincas.map(finca => (
-                                <option key={finca.idFinca} value={finca.idFinca}>{finca.nombre}</option>
-                            ))}
-                        </select>
-                    </div>
-                    <div className="filtro-container" style={{ width: '300px' }}>
-                        <select value={selectedParcela ? selectedParcela : ''} onChange={handleParcelaChange} className="custom-select">
-                            <option value="">Seleccione la parcela...</option>
-                            {parcelasFiltradas.map(parcela => (
-                                <option key={parcela.idParcela} value={parcela.idParcela}>{parcela.nombre}</option>
-                            ))}
-                        </select>
-                    </div>
-                    <div className="filtro-container">
-                        <label htmlFor="filtroNombre">Filtrar:</label>
-                        <input
-                            type="text"
-                            id="filtroNombre"
-                            value={filtroNombre}
-                            onChange={handleChangeFiltro}
-                            placeholder="Ingrese un código de punto de medición"
-                            className="form-control"
-                        />
+                <div className="content" >
+                    <div className="filtro-container" style={{ display: 'flex', flexWrap: 'wrap', alignItems: 'center' }}>
+                        <div className="filtro-item" style={{ width: '300px', marginTop: '5px' }}>
+                        <label >Finca:</label>
+                            <select 
+                            value={selectedFinca || ''} 
+                            onChange={handleFincaChange} 
+                            style={{ height: '45px', fontSize: '16px', padding: '10px', minWidth: '200px', marginTop: '0px' }}
+                            className="custom-select">
+                                <option value={0}>Seleccione una finca</option>
+                                {fincas.map(finca => (
+                                    <option key={finca.idFinca} value={finca.idFinca}>{finca.nombre}</option>
+                                ))}
+                            </select>
+                        </div>
+                        <div className="filtro-item" style={{ width: '300px', marginTop: '5px' }}>
+                        <label >Parcela:</label>
+                            <select 
+                            value={selectedParcela ? selectedParcela : ''} 
+                            onChange={handleParcelaChange} 
+                            style={{ height: '45px', fontSize: '16px', padding: '10px', minWidth: '200px', marginTop: '0px' }}
+                            className="custom-select">
+                                <option value="">Seleccione la parcela...</option>
+                                {parcelasFiltradas.map(parcela => (
+                                    <option key={parcela.idParcela} value={parcela.idParcela}>{parcela.nombre}</option>
+                                ))}
+                            </select>
+                        </div>
+                        <div className="filtro-item" style={{ marginBottom: '15px' }}>
+                            <label htmlFor="filtroNombre">Código de punto de medición:</label>
+                            <input
+                                type="text"
+                                id="filtroNombre"
+                                value={filtroNombre}
+                                onChange={handleChangeFiltro}
+                                placeholder="Ingrese un código de punto de medición"
+                                style={{ fontSize: '16px', padding: '10px', minWidth: '300px', marginTop: '0px' }}
+                                className="form-control"
+                            />
+                        </div>
+                        <button onClick={() => abrirCerrarModalInsertar()} className="btn-crear-style" style={{ marginLeft: 'auto', display: 'flex', justifyContent: 'center', alignItems: 'center', marginTop: '10px' }}>
+                            <IoAddCircleOutline size={27} />
+                            <span style={{ marginLeft: '5px' }}>Ingresar contenido de nitrógeno</span>
+                            </button>
                     </div>
                     <TableResponsive columns={columns2} data={contenidoDeNitrogenoFiltrados} openModal={openModal} btnActionName={"Editar"} toggleStatus={toggleStatus} openDetallesModal={openDetallesModal} />
                 </div>

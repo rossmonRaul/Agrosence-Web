@@ -13,6 +13,7 @@ import CrearCuentaAdministrador from "../../../components/crearcuentaadministrad
 import EditarCuentaAdministrador from "../../../components/crearcuentaadministrador/EditarCuentaAdministrador.tsx";
 import Swal from "sweetalert2";
 import Topbar from "../../../components/topbar/Topbar.tsx";
+import { IoAddCircleOutline } from "react-icons/io5";
 /**
 * Componente funcional que representa la página para crear cuentas de administradores.
 */
@@ -155,18 +156,24 @@ function CrearCuentaSA() {
         <Topbar />
         <BordeSuperior text="Administradores" />
         <div className="content">
-          {/* aca esta el boton para crear usuarios */}
-          <button onClick={() => abrirCerrarModalInsertar()} className="btn-crear">Crear Administrador</button>
-          <div className="filtro-container">
-            <label htmlFor="filtroIdentificacion">Filtrar por identificación:</label>
-            <input
-              type="text"
-              id="filtroIdentificacion"
-              value={filtroIdentificacion}
-              onChange={handleChangeFiltro}
-              placeholder="Ingrese la identificación"
-              className="form-control"
-            />
+          <div className="filtro-container" style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+            <div className="filtro-item" style={{ width: '300px', marginTop: '5px' }}>
+              <label htmlFor="filtroIdentificacion">Identificación:</label>
+              <input
+                type="text"
+                id="filtroIdentificacion"
+                value={filtroIdentificacion}
+                onChange={handleChangeFiltro}
+                placeholder="Ingrese la identificación"
+                style={{ fontSize: '16px', padding: '10px', minWidth: '200px', marginTop: '0px' }}
+                className="form-control"
+              />
+            </div>
+            {/* aca esta el boton para crear usuarios */}
+            <button onClick={() => abrirCerrarModalInsertar()} className="btn-crear-style" style={{ marginLeft: 'auto', display: 'flex', justifyContent: 'center', alignItems: 'center', marginTop: '10px' }}>
+              <IoAddCircleOutline size={27} />
+              <span style={{ marginLeft: '5px' }}>Crear Administrador</span>
+            </button>
           </div>
           <TableResponsive columns={columns} data={usuariosFiltrados} openModal={openModal} toggleStatus={toggleStatus} btnActionName={"Editar"} />
 
@@ -184,7 +191,7 @@ function CrearCuentaSA() {
           <div className='form-group'>
             <CrearCuentaAdministrador
               onAdd={handleAgregarUsuario}
-            />  
+            />
           </div>
         </div>
       </Modal>

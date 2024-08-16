@@ -16,6 +16,7 @@ import ModificarCondicionesMeteorologicasClimaticas from "../../../components/co
 import { useSelector } from "react-redux";
 import { AppStore } from "../../../redux/Store.ts";
 import { ObtenerRegistroCondicionesMeteorologica, CambiarEstadoRegistroCondicionesMeteorologicas } from "../../../servicios/ServicioClima.ts";
+import { IoAddCircleOutline } from "react-icons/io5";
 
 interface Option {
     identificacion: string;
@@ -241,13 +242,16 @@ function CondicionesMeteorologicasClimaticas() {
             <div className="main-container">
                 <Topbar />
                 <BordeSuperior text="Registro y seguimiento de condiciones meteorológicas y climáticas" />
-                <div className="content" col-md-12>
-                    <button onClick={() => abrirCerrarModalInsertar()} className="btn-crear">Ingresar registro condiciones</button>
-                    <div className="content" style={{ display: 'flex', flexDirection: 'row', flexWrap: 'wrap', gap: '20px' }}>
+                <div className="content" >
+                    <div className="filtro-container" style={{ display: 'flex', flexWrap: 'wrap', alignItems: 'center' }}>
+                        <div className="filtro-item" style={{ width: '300px', marginTop: '5px' }}>
 
-                        <div className="filtro-container" style={{ width: '265px' }}>
-                            <label >Filtrar por finca:</label>
-                            <select style={{ marginTop: '10px' }} value={selectedFinca || ''} onChange={handleFincaChange} className="custom-select">
+                            <label >Finca:</label>
+                            <select
+                                style={{ height: '45px', fontSize: '16px', padding: '10px', minWidth: '200px', marginTop: '0px' }}
+                                value={selectedFinca || ''}
+                                onChange={handleFincaChange}
+                                className="custom-select">
                                 <option value="">Seleccione la finca...</option>
                                 {filteredFincas.map(finca => (
                                     <option key={finca.idFinca} value={finca.idFinca}>{finca.nombre}</option>
@@ -255,17 +259,21 @@ function CondicionesMeteorologicasClimaticas() {
                             </select>
                         </div>
 
-                        <div className="filtro-container" style={{ width: '265px' }}>
-                            <label >Filtrar por parcela:</label>
-                            <select style={{ marginTop: '10px' }} value={selectedParcela ? selectedParcela : ''} onChange={handleParcelaChange} className="custom-select">
+                        <div className="filtro-item" style={{ width: '300px', marginTop: '5px' }}>
+                            <label >Parcela:</label>
+                            <select
+                                style={{ height: '45px', fontSize: '16px', padding: '10px', minWidth: '200px', marginTop: '0px' }}
+                                value={selectedParcela ? selectedParcela : ''}
+                                onChange={handleParcelaChange}
+                                className="custom-select">
                                 <option value="">Seleccione la parcela...</option>
                                 {parcelasFiltradas.map(parcela => (
                                     <option key={parcela.idParcela} value={parcela.idParcela}>{parcela.nombre}</option>
                                 ))}
                             </select>
                         </div>
-                        <div className="filtro-container" >
-                            <label htmlFor="filtroNombreCultivo" >Filtrar por fecha:</label>
+                        <div className="filtro-item" style={{ marginBottom: '15px' }}>
+                            <label htmlFor="filtroNombreCultivo" >Fecha:</label>
                             <input
 
                                 type="text"
@@ -273,17 +281,14 @@ function CondicionesMeteorologicasClimaticas() {
                                 value={filtroNombreCultivo}
                                 onChange={handleChangeFiltro}
                                 placeholder="Ingrese la fecha"
-                                style={{ marginTop: '10px', width: '239px', height: '19px' }}
+                                style={{ fontSize: '16px', padding: '10px', minWidth: '200px', marginTop: '0px' }}
                                 className="form-control"
                             />
                         </div>
-                    </div>
-
-                    <div className="content" style={{ display: 'flex', flexDirection: 'row', alignItems: 'center', gap: '20px' }}>
-
-                        <div>
-
-                        </div>
+                        <button onClick={() => abrirCerrarModalInsertar()} className="btn-crear-style" style={{ marginLeft: 'auto', display: 'flex', justifyContent: 'center', alignItems: 'center', marginTop: '10px' }}>
+                            <IoAddCircleOutline size={27} />
+                            <span style={{ marginLeft: '5px' }}>Ingresar registro condiciones</span>
+                            </button>
                     </div>
                     <TableResponsive columns={columns} data={datosProduccionFiltrados} openModal={openModal} btnActionName={"Editar"} toggleStatus={toggleStatus} />
 

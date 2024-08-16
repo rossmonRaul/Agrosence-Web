@@ -4,16 +4,17 @@ import TableResponsive from "../../../components/table/table";
 import BordeSuperior from "../../../components/bordesuperior/BordeSuperior";
 import Modal from "../../../components/modal/Modal";
 import Topbar from "../../../components/topbar/Topbar";
-import { 
-    ObtenerDatosPreparacionTerrenoActividad, 
-    CambiarEstadoActividadPrepTerreno, 
-    InsertarActividadPreparacionTerreno, 
-    ModificarActividadPreparacionTerreno 
+import {
+    ObtenerDatosPreparacionTerrenoActividad,
+    CambiarEstadoActividadPrepTerreno,
+    InsertarActividadPreparacionTerreno,
+    ModificarActividadPreparacionTerreno
 } from "../../../servicios/ServicioCatalogoActividadPT";
 import Swal from "sweetalert2";
 import '../../../css/FormSeleccionEmpresa.css';
 import InsertarCatalogoActividades from "../../../components/catalogoActividadesPT/InsertarCatalogoActividades";
 import EditarCatalogoActividades from "../../../components/catalogoActividadesPT/EditarCatalogoActividades";
+import { IoAddCircleOutline } from "react-icons/io5";
 
 function CatalogoActividadesPT() {
     const [filtroNombreActividad, setFiltroNombreActividad] = useState('');
@@ -108,8 +109,8 @@ function CatalogoActividadesPT() {
     const toggleStatus = async (actividad: any) => {
         Swal.fire({
             title: actividad.estado === 1 ? "Eliminar Actividad" : "Activar Actividad",
-            text: actividad.estado === 1 
-                ? "¿Estás seguro de que deseas eliminar esta actividad?" 
+            text: actividad.estado === 1
+                ? "¿Estás seguro de que deseas eliminar esta actividad?"
                 : "¿Estás seguro de que deseas activar esta actividad?",
             icon: "warning",
             showCancelButton: true,
@@ -151,32 +152,38 @@ function CatalogoActividadesPT() {
     const columns2 = [
         { key: 'nombre', header: 'Nombre de actividades' },
         { key: 'acciones', header: 'Acciones', actions: true }
-    ];    
+    ];
 
     return (
         <Sidebar>
             <div className="main-container">
                 <Topbar />
                 <BordeSuperior text="Catálogo de Actividades" />
-                <div className="content col-md-12">
-                    <button onClick={() => abrirCerrarModalInsertar()} className="btn-crear">Ingresar nueva actividad</button>
-                    <div className="filtro-container">
-                        <label htmlFor="filtroNombreActividad">Filtrar por nombre de actividad:</label>
-                        <input
-                            type="text"
-                            id="filtroNombreActividad"
-                            value={filtroNombreActividad}
-                            onChange={handleChangeFiltro}
-                            placeholder="Ingrese el nombre del Actividad"
-                            className="form-control"
-                        />
+                <div className="content">
+                    <div className="filtro-container" style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+                        <div className="filtro-item" style={{ width: '300px', marginTop: '5px' }}>
+                            <label htmlFor="filtroNombreActividad">Actividad:</label>
+                            <input
+                                type="text"
+                                id="filtroNombreActividad"
+                                value={filtroNombreActividad}
+                                onChange={handleChangeFiltro}
+                                placeholder="Ingrese el nombre de la Actividad"
+                                className="form-control"
+                                style={{ fontSize: '16px', padding: '10px', minWidth: '250px', marginTop: '0px' }}
+                            />
+                        </div>
+                        <button onClick={() => abrirCerrarModalInsertar()} className="btn-crear-style" style={{ marginLeft: 'auto', display: 'flex', justifyContent: 'center', alignItems: 'center', marginTop: '10px' }}>
+                        <IoAddCircleOutline size={27} />
+                        <span style={{ marginLeft: '5px' }}>Ingresar nueva actividad</span>
+                        </button>
                     </div>
                     <TableResponsive
                         columns={columns2}
                         data={datosActividadesFiltradas}
                         openModal={openModal}
                         btnActionName={"Editar"}
-                        toggleStatus={toggleStatus} 
+                        toggleStatus={toggleStatus}
                     />
                 </div>
             </div>

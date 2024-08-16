@@ -10,7 +10,7 @@ import '../../../css/OrdenCompra.css'
 import TableResponsive from "../../../components/table/tableDelete.tsx";
 import BordeSuperior from "../../../components/bordesuperior/BordeSuperior.tsx";
 import Modal from "../../../components/modal/Modal.tsx"
-import Swal from "sweetalert2"; 
+import Swal from "sweetalert2";
 import Topbar from "../../../components/topbar/Topbar.tsx";
 import CrearOrdenCompra from "../../../components/ordenCompra/InsertarOrdenCompra.tsx";
 import { saveAs } from 'file-saver';
@@ -264,10 +264,10 @@ function OrdenCompra() {
                 <Topbar />
                 <BordeSuperior text="Sección de Orden de Compra" />
                 <div className="content">
-                    <div className="filtro-container">
-                        <div className="filtro-item">
+                    <div className="filtro-container" style={{ display: 'flex', alignItems: 'center' }}>
+                        <div className="filtro-item" style={{ flexGrow: 1 }}>
 
-                            <label htmlFor="filtroIdentificacion">Filtrar:</label>
+                            <label htmlFor="filtroIdentificacion">Número de orden o finca:</label>
                             <input
                                 type="text"
                                 id="filtroIdentificacion"
@@ -279,11 +279,11 @@ function OrdenCompra() {
                             />
 
                         </div>
-                        <button onClick={() => abrirCerrarModalCrearOrdenCompra()} className="btn-crear-style" style={{ display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
+                        <button onClick={() => abrirCerrarModalCrearOrdenCompra()} className="btn-crear-style" style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', marginLeft: '10px' }}>
                             <IoAddCircleOutline size={27} />
                             <span style={{ marginLeft: '5px' }}>Crear Registro</span>
                         </button>
-                        <button onClick={exportToExcel} className="btn-exportar" style={{ display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
+                        <button onClick={exportToExcel} className="btn-exportar" style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', marginLeft: '10px' }}>
 
                             <IoDocumentTextSharp size={27} />
                             <span style={{ marginLeft: '5px' }}>Exportar</span>
