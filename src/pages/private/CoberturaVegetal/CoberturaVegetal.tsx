@@ -7,7 +7,7 @@ import { ObtenerParcelas } from "../../../servicios/ServicioParcelas.ts";
 import Swal from "sweetalert2";
 import { ObtenerFincas } from "../../../servicios/ServicioFincas.ts";
 import TableResponsiveDetalles from "../../../components/table/tableDetails.tsx";
-
+import '../../../css/OrdenCompra.css'
 
 //import { ObtenerManejoFertilizantes, CambiarEstadoManejoFertilizantes } from "../../../servicios/ServicioFertilizantes.ts";
 
@@ -27,6 +27,7 @@ import EditarCoberturaVegetal from "../../../components/CoberturaVegetal/EditarC
 import '../../../css/FormSeleccionEmpresa.css'
 import { ObtenerUsuariosAsignados, ObtenerUsuariosAsignadosPorIdentificacion } from "../../../servicios/ServicioUsuario.ts";
 import DetallesCoberturaVegetal from "../../../components/CoberturaVegetal/DetallesCoberturaVegetal.tsx";
+import { IoAddCircleOutline } from "react-icons/io5";
 
 
 
@@ -82,7 +83,7 @@ function AdministrarCoberturaVegetal() {
     const handleParcelaChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
         const value = e.target.value;
         setSelectedParcela(parseInt(value));
-        
+
     };
 
     // Obtener las fincas al cargar la página
@@ -203,13 +204,13 @@ function AdministrarCoberturaVegetal() {
                     nombrePuntoMedicion: datoCoberturaVegetal.idPuntoMedicion.nombre, // Aquí obtienes el nombre del punto de medición
                 }));
 
-// Filtrar por finca y parcela seleccionadas:
-const coberturaVegetalFiltrados = coberturaVegetalConEstado.filter((coberturaVegetal: any) => 
-    coberturaVegetal.idFinca === selectedFinca && coberturaVegetal.idParcela === selectedParcela
-);
+                // Filtrar por finca y parcela seleccionadas:
+                const coberturaVegetalFiltrados = coberturaVegetalConEstado.filter((coberturaVegetal: any) =>
+                    coberturaVegetal.idFinca === selectedFinca && coberturaVegetal.idParcela === selectedParcela
+                );
 
-setCoberturaVegetal(coberturaVegetalFiltrados);
-setcontenidoCoberturaFiltrados(coberturaVegetalFiltrados);
+                setCoberturaVegetal(coberturaVegetalFiltrados);
+                setcontenidoCoberturaFiltrados(coberturaVegetalFiltrados);
 
                 console.log("contenido", contenidoCoberturaFiltrados);
             }
@@ -256,63 +257,63 @@ setcontenidoCoberturaFiltrados(coberturaVegetalFiltrados);
     };
 
 
-        // Cambiar estado de la parcela
-        const toggleStatus = async (CoberturaVegetal: any) => {
-            Swal.fire({
-                title: "Eliminar Cobertura Vegetal",
-                text: "¿Estás seguro de que deseas eliminar la cobertura de: " + CoberturaVegetal.cultivo + "?",
-                icon: "warning",
-                showCancelButton: true,
-                confirmButtonText: "Sí",
-                cancelButtonText: "No"
-            }).then(async (result) => {
-                if (result.isConfirmed) {
-                    try {
-                        const datos = {
-                            IdCoberturaVegetal: CoberturaVegetal.idCoberturaVegetal,
-                        };
-    
-                        const resultado = await CambiarEstadoCoberturaVegetal(datos);
-                        if (parseInt(resultado.indicador) === 1) {
-                            Swal.fire({
-                                icon: 'success',
-                                title: '¡Registro eliminado! ',
-                                text: 'Eliminación exitosa.',
-                            });
-                            await obtenerRegistroCoberturaVegetal();
-                        } else {
-                            Swal.fire({
-                                icon: 'error',
-                                title: 'Error al eliminar el registro.',
-                                text: resultado.mensaje,
-                            });
-                        };
-                    } catch (error) {
-                        Swal.fire("Error al eliminar la cobertura Vegetal", "", "error");
-                    }
+    // Cambiar estado de la parcela
+    const toggleStatus = async (CoberturaVegetal: any) => {
+        Swal.fire({
+            title: "Eliminar Cobertura Vegetal",
+            text: "¿Estás seguro de que deseas eliminar la cobertura de: " + CoberturaVegetal.cultivo + "?",
+            icon: "warning",
+            showCancelButton: true,
+            confirmButtonText: "Sí",
+            cancelButtonText: "No"
+        }).then(async (result) => {
+            if (result.isConfirmed) {
+                try {
+                    const datos = {
+                        IdCoberturaVegetal: CoberturaVegetal.idCoberturaVegetal,
+                    };
+
+                    const resultado = await CambiarEstadoCoberturaVegetal(datos);
+                    if (parseInt(resultado.indicador) === 1) {
+                        Swal.fire({
+                            icon: 'success',
+                            title: '¡Registro eliminado! ',
+                            text: 'Eliminación exitosa.',
+                        });
+                        await obtenerRegistroCoberturaVegetal();
+                    } else {
+                        Swal.fire({
+                            icon: 'error',
+                            title: 'Error al eliminar el registro.',
+                            text: resultado.mensaje,
+                        });
+                    };
+                } catch (error) {
+                    Swal.fire("Error al eliminar la cobertura Vegetal", "", "error");
                 }
-            });
-        };
-
-        
-
-        const columns2 = [
-            { key: 'cultivo', header: 'Cultivo' },
-            { key: 'nombreAlturaMaleza', header: 'Altura Maleza' },
-            { key: 'nombreDensidadMaleza', header: 'Densidad Maleza' },
-            { key: 'nombreHumedadObservable', header: 'Humedad Observable' },
-            { key: 'codigo', header: 'Punto de Medición' }, // Cambio aquí para mostrar el nombre
-            { key: 'acciones', header: 'Acciones', actions: true }
-        ];
-        
-        // Dentro de renderHeader, si necesitas algún formato especial, puedes ajustarlo según tus necesidades
-        const renderHeader = (header: any) => {
-            if (header === 'Densidad Maleza') {
-                return <span>Densidad Maleza</span>;
             }
-            return header;
-        };
-        
+        });
+    };
+
+
+
+    const columns2 = [
+        { key: 'cultivo', header: 'Cultivo' },
+        { key: 'nombreAlturaMaleza', header: 'Altura Maleza' },
+        { key: 'nombreDensidadMaleza', header: 'Densidad Maleza' },
+        { key: 'nombreHumedadObservable', header: 'Humedad Observable' },
+        { key: 'codigo', header: 'Punto de Medición' }, // Cambio aquí para mostrar el nombre
+        { key: 'acciones', header: 'Acciones', actions: true }
+    ];
+
+    // Dentro de renderHeader, si necesitas algún formato especial, puedes ajustarlo según tus necesidades
+    const renderHeader = (header: any) => {
+        if (header === 'Densidad Maleza') {
+            return <span>Densidad Maleza</span>;
+        }
+        return header;
+    };
+
 
 
 
@@ -322,36 +323,51 @@ setcontenidoCoberturaFiltrados(coberturaVegetalFiltrados);
             <div className="main-container">
                 <Topbar />
                 <BordeSuperior text="Cobertura Vegetal" />
-                <div className="content" col-md-12>
-                    <button onClick={() => abrirCerrarModalInsertar()} className="btn-crear">Ingresar Cobertura Vegetal</button>
-                    <div className="filtro-container" style={{ width: '300px' }}>
-                        <select value={selectedFinca || ''} onChange={handleFincaChange} className="custom-select">
-                            <option value={0}>Seleccione una finca</option>
-                            {fincas.map(finca => (
-                                <option key={finca.idFinca} value={finca.idFinca}>{finca.nombre}</option>
-                            ))}
-                        </select>
+                <div className="content" >
+                    <div className="filtro-container" style={{ display: 'flex', flexWrap: 'wrap', alignItems: 'center' }}>
+                        <div className="filtro-item" style={{ width: '300px', marginTop: '5px' }}>
+                        <label >Finca:</label>
+                            <select 
+                            value={selectedFinca || ''} 
+                            onChange={handleFincaChange} 
+                            style={{ height: '45px', fontSize: '16px', padding: '10px', minWidth: '200px', marginTop: '0px' }}
+                            className="custom-select">
+                                <option value={0}>Seleccione una finca</option>
+                                {fincas.map(finca => (
+                                    <option key={finca.idFinca} value={finca.idFinca}>{finca.nombre}</option>
+                                ))}
+                            </select>
+                        </div>
+                        <div className="filtro-item" style={{ width: '300px', marginTop: '5px' }}>
+                            <label >Parcela:</label>
+                            <select 
+                            value={selectedParcela ? selectedParcela : ''} 
+                            onChange={handleParcelaChange} 
+                            style={{ height: '45px', fontSize: '16px', padding: '10px', minWidth: '200px', marginTop: '0px' }}
+                            className="custom-select">
+                                <option value="">Seleccione la parcela...</option>
+                                {parcelasFiltradas.map(parcela => (
+                                    <option key={parcela.idParcela} value={parcela.idParcela}>{parcela.nombre}</option>
+                                ))}
+                            </select>
+                        </div>
+                        <div className="filtro-item" style={{ marginBottom: '15px' }}>
+                            <label htmlFor="filtroNombre">Cultivo o punto de medición:</label>
+                            <input
+                                type="text"
+                                id="filtroNombre"
+                                value={filtroNombre}
+                                onChange={handleChangeFiltro}
+                                placeholder="Ingrese un cultivo o punto de medición"
+                                style={{ fontSize: '16px', padding: '10px', minWidth: '280px', marginTop: '0px' }}
+                                className="form-control"
+                            />
+                        </div>
+                        <button onClick={() => abrirCerrarModalInsertar()} className="btn-crear-style" style={{ marginLeft: 'auto', display: 'flex', justifyContent: 'center', alignItems: 'center', marginTop: '10px' }}>
+                            <IoAddCircleOutline size={27} />
+                            <span style={{ marginLeft: '5px' }}>Ingresar Cobertura Vegetal</span>
+                            </button>
                     </div>
-                    <div className="filtro-container" style={{ width: '300px' }}>
-                        <select value={selectedParcela ? selectedParcela : ''} onChange={handleParcelaChange} className="custom-select">
-                            <option value="">Seleccione la parcela...</option>
-                            {parcelasFiltradas.map(parcela => (
-                                <option key={parcela.idParcela} value={parcela.idParcela}>{parcela.nombre}</option>
-                            ))}
-                        </select>
-                    </div>
-                    <div className="filtro-container" style={{ width: '1100px' }}>
-                        <label htmlFor="filtroNombre">Filtrar:</label>
-                        <input
-                            type="text"
-                            id="filtroNombre"
-                            value={filtroNombre}
-                            onChange={handleChangeFiltro}
-                            placeholder="Ingrese un cultivo o punto de medición"
-                            className="form-control"
-                        />
-                    </div>
-
                     {/* openModalDetalles */}
 
                     <TableResponsiveDetalles

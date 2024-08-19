@@ -14,12 +14,13 @@ import { CambiarEstadoEmpresas, ObtenerEmpresas } from "../../../servicios/Servi
 import EditarEmpresa from "../../../components/empresa/EditarEmpresa.tsx";
 import CrearEmpresa from "../../../components/empresa/CrearEmpresa.tsx";
 import Swal from "sweetalert2";
+import { IoAddCircleOutline } from "react-icons/io5";
 
 // Componente funcional que representa la página de administración de empresas.
 function AdministrarEmpresas() {
     // Estado para el filtro por nombre de empresa
     const [filtroNombre, setFiltroNombre] = useState('')
-     // Estado para controlar la apertura y cierre del modal de edición
+    // Estado para controlar la apertura y cierre del modal de edición
     const [modalEditar, setModalEditar] = useState(false);
     // Estado para controlar la apertura y cierre del modal de inserción
     const [modalInsertar, setModalInsertar] = useState(false);
@@ -28,7 +29,7 @@ function AdministrarEmpresas() {
         idEmpresa: '',
         nombre: ''
     });
-     // Estado para almacenar todas las empresas
+    // Estado para almacenar todas las empresas
     const [empresas, setEmpresa] = useState<any[]>([]);
     // Estado para almacenar las empresas filtradas
     const [empresasFiltrados, setEmpresasFiltrados] = useState<any[]>([]);
@@ -39,7 +40,7 @@ function AdministrarEmpresas() {
     }, []); // Ejecutar solo una vez al montar el componente
 
     // Función para obtener todas las empresas
-    const obtenerEmpresas = async () => {  
+    const obtenerEmpresas = async () => {
         try {
             const empresas = await ObtenerEmpresas();
 
@@ -79,7 +80,7 @@ function AdministrarEmpresas() {
         setModalInsertar(!modalInsertar);
     }
 
-    
+
     const abrirCerrarModalEditar = () => {
         setModalEditar(!modalEditar);
     }
@@ -90,7 +91,7 @@ function AdministrarEmpresas() {
         abrirCerrarModalEditar();
     };
 
-     // Función para cambiar el estado de una empresa
+    // Función para cambiar el estado de una empresa
     const toggleStatus = (empresa: any) => {
         Swal.fire({
             title: "Cambiar Estado",
@@ -152,20 +153,26 @@ function AdministrarEmpresas() {
                 <Topbar />
                 <BordeSuperior text="Administrar Empresas" />
                 <div className="content">
-                    <button onClick={() => abrirCerrarModalInsertar()} className="btn-crear">Crear Empresa</button>
-                    <div className="filtro-container">
-                        <label htmlFor="filtroNombre">Filtrar por nombre:</label>
-                        <input
-                            type="text"
-                            id="filtroNombre"
-                            value={filtroNombre}
-                            onChange={handleChangeFiltro}
-                            placeholder="Ingrese el nombre"
-                            className="form-control"
-                        />
+                    <div className="filtro-container" style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+                        <div className="filtro-item" style={{ width: '300px', marginTop: '5px' }}>
+                            <label htmlFor="filtroNombre">Nombre:</label>
+                            <input
+                                type="text"
+                                id="filtroNombre"
+                                value={filtroNombre}
+                                onChange={handleChangeFiltro}
+                                placeholder="Ingrese el nombre"
+                                style={{ fontSize: '16px', padding: '10px', minWidth: '200px', marginTop: '0px' }}
+                                className="form-control"
+                            />
+                        </div>
+                        <button onClick={() => abrirCerrarModalInsertar()} className="btn-crear-style" style={{ marginLeft: 'auto', display: 'flex', justifyContent: 'center', alignItems: 'center', marginTop: '10px' }}>
+                            <IoAddCircleOutline size={27} />
+                            <span style={{ marginLeft: '5px' }}>Crear Empresa</span>
+                        </button>
                     </div>
-                    <TableResponsive columns={columns} data={empresasFiltrados} openModal={openModal}  btnActionName={"Editar"} toggleStatus={toggleStatus} />
-   
+                    <TableResponsive columns={columns} data={empresasFiltrados} openModal={openModal} btnActionName={"Editar"} toggleStatus={toggleStatus} />
+
                 </div>
             </div>
 

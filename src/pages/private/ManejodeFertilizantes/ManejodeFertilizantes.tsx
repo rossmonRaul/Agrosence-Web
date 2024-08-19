@@ -13,7 +13,9 @@ import InsertarManejoFertilizante from "../../../components/manejoFertilizante/I
 import ModificacionManejoFertilizante from "../../../components/manejoFertilizante/EditarManejoFertilizante.tsx";
 import { ObtenerUsuariosAsignadosPorIdentificacion } from '../../../servicios/ServicioUsuario.ts';
 import '../../../css/FormSeleccionEmpresa.css'
+import '../../../css/ordenCompra.css'
 import DetallesManejoFertilizantes from "../../../components/manejoFertilizante/DetallesManejoFertilizante.tsx";
+import { IoAddCircleOutline } from "react-icons/io5";
 
 function AdministrarManejoFertilizantes() {
     const [filtroNombreFertilizante, setFiltroNombreFertilizante] = useState('');
@@ -50,14 +52,14 @@ function AdministrarManejoFertilizantes() {
         setSelectedFinca(value);
         setSelectedParcela(null);
     };
- 
+
     const handleParcelaChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
         const value = e.target.value;
         setSelectedParcela(parseInt(value));
     };
 
     // Obtener las fincas al cargar la página
-    useEffect(() => { 
+    useEffect(() => {
         const obtenerFincas = async () => {
             try {
                 const idEmpresaString = localStorage.getItem('empresaUsuario');
@@ -65,7 +67,7 @@ function AdministrarManejoFertilizantes() {
                 if (identificacionString && idEmpresaString) {
 
                     const identificacion = identificacionString;
-                    
+
                     const usuariosAsignados = await ObtenerUsuariosAsignadosPorIdentificacion({ identificacion: identificacion });
                     const idFincasUsuario = usuariosAsignados.map((usuario: any) => usuario.idFinca);
                     const idParcelasUsuario = usuariosAsignados.map((usuario: any) => usuario.idParcela);
@@ -94,8 +96,8 @@ function AdministrarManejoFertilizantes() {
         const obtenerParcelasDeFinca = async () => {
             try {
                 const parcelasFinca = parcelas.filter(parcela => parcela.idFinca === selectedFinca);
-            //se asigna las parcelas de la IdFinca que se selecciona y se pone en parcelasfiltradas
-            setParcelasFiltradas(parcelasFinca);
+                //se asigna las parcelas de la IdFinca que se selecciona y se pone en parcelasfiltradas
+                setParcelasFiltradas(parcelasFinca);
 
             } catch (error) {
                 console.error('Error al obtener las parcelas de la finca:', error);
@@ -109,7 +111,7 @@ function AdministrarManejoFertilizantes() {
         setFiltroNombreFertilizante(e.target.value); // Convertir a minúsculas
     };
 
-    
+
     //este componente refrezca la tabla al momento
     useEffect(() => {
         filtrarFertilizantes();
@@ -119,14 +121,14 @@ function AdministrarManejoFertilizantes() {
     //     obtenerInfo();
     // }, []);
 
-   
+
     const filtrarFertilizantes = () => {
         const fertilizantesFiltrados = filtroNombreFertilizante
             ? datosFertilizantes.filter((fertilizante: any) =>
                 fertilizante.fertilizante.toLowerCase().includes(filtroNombreFertilizante.toLowerCase())
             )
             : datosFertilizantes;
-            setdatosFertilizantesFiltrados(fertilizantesFiltrados);
+        setdatosFertilizantesFiltrados(fertilizantesFiltrados);
 
     };
 
@@ -189,9 +191,9 @@ function AdministrarManejoFertilizantes() {
     //esto carga la tabla al momento de hacer cambios en el filtro
     //carga los datos de la tabla al momento de cambiar los datos de selected parcela
     //cada vez que selected parcela cambie de datos este use effect obtiene datos
-    useEffect(()=> {
+    useEffect(() => {
         obtenerInfo();
-    },[selectedParcela]);
+    }, [selectedParcela]);
 
     const abrirCerrarModalInsertar = () => {
         setModalInsertar(!modalInsertar);
@@ -214,10 +216,10 @@ function AdministrarManejoFertilizantes() {
         abrirCerrarModalDetalles();
     };
 
-        // Abrir/cerrar modal de edición
-        const abrirCerrarModalDetalles = () => {
-            setmodalDetalles(!modalDetalles);
-        };
+    // Abrir/cerrar modal de edición
+    const abrirCerrarModalDetalles = () => {
+        setmodalDetalles(!modalDetalles);
+    };
 
     const toggleStatus = async (parcela: any) => {
         Swal.fire({
@@ -265,7 +267,7 @@ function AdministrarManejoFertilizantes() {
         abrirCerrarModalInsertar();
     };
 
-    
+
     const columns2 = [
         { key: 'fecha', header: 'Fecha' },
         { key: 'fertilizante', header: 'Fertilizante' },
@@ -274,59 +276,74 @@ function AdministrarManejoFertilizantes() {
 
         { key: 'acciones', header: 'Acciones', actions: true }
     ];
-        // Dentro de renderHeader, si necesitas algún formato especial, puedes ajustarlo según tus necesidades
-        const renderHeader = (header: any) => {
-            if (header === 'Densidad Maleza') {
-                return <span>Densidad Maleza</span>;
-            }
-            return header;
-        };
+    // Dentro de renderHeader, si necesitas algún formato especial, puedes ajustarlo según tus necesidades
+    const renderHeader = (header: any) => {
+        if (header === 'Densidad Maleza') {
+            return <span>Densidad Maleza</span>;
+        }
+        return header;
+    };
 
     return (
         <Sidebar>
             <div className="main-container">
                 <Topbar />
                 <BordeSuperior text="Manejo de Fertilizantes" />
-                <div className="content" col-md-12>
-                    <button onClick={() => abrirCerrarModalInsertar()} className="btn-crear">Ingresar registro de fertilizante</button>
-                    <div className="filtro-container" style={{ width: '300px' }}>
-                        <select value={selectedFinca || ''} onChange={handleFincaChange} className="custom-select">
-                            <option value="">Seleccione la finca...</option>
-                            {fincas.map(finca => (
-                                <option key={finca.idFinca} value={finca.idFinca}>{finca.nombre}</option>
-                            ))}
-                        </select>
+                <div className="content" >
+                    <div className="filtro-container" style={{ display: 'flex', flexWrap: 'wrap', alignItems: 'center' }}>
+                        <div className="filtro-item" style={{ width: '300px', marginTop: '5px' }}>
+                            <label >Finca:</label>
+                            <select
+                                value={selectedFinca || ''}
+                                onChange={handleFincaChange}
+                                style={{ height: '45px', fontSize: '16px', padding: '10px', minWidth: '200px', marginTop: '0px' }}
+                                className="custom-select">
+                                <option value="">Seleccione la finca...</option>
+                                {fincas.map(finca => (
+                                    <option key={finca.idFinca} value={finca.idFinca}>{finca.nombre}</option>
+                                ))}
+                            </select>
+                        </div>
+                        <div className="filtro-item" style={{ width: '300px', marginTop: '5px' }}>
+                            <label >Parcela:</label>
+                            <select
+                                value={selectedParcela ? selectedParcela : ''}
+                                onChange={handleParcelaChange}
+                                style={{ height: '45px', fontSize: '16px', padding: '10px', minWidth: '200px', marginTop: '0px' }}
+                                className="custom-select">
+                                <option value="">Seleccione la parcela...</option>
+                                {parcelasFiltradas.map(parcela => (
+                                    <option key={parcela.idParcela} value={parcela.idParcela}>{parcela.nombre}</option>
+                                ))}
+                            </select>
+                        </div>
+                        <div className="filtro-item" style={{ marginBottom: '15px' }}>
+                            <label htmlFor="filtroNombreFertilizante">Fertilizante:</label>
+                            <input
+                                type="text"
+                                id="filtroNombreFertilizante"
+                                value={filtroNombreFertilizante}
+                                onChange={handleChangeFiltro}
+                                placeholder="Ingrese el nombre del fertilizante"
+                                style={{ fontSize: '16px', padding: '10px', minWidth: '250px', marginTop: '0px' }}
+                                className="form-control"
+                            />
+                        </div>
+                        <button onClick={() => abrirCerrarModalInsertar()} className="btn-crear-style" style={{ marginLeft: 'auto', display: 'flex', justifyContent: 'center', alignItems: 'center', marginTop: '10px' }}>
+                            <IoAddCircleOutline size={27} />
+                            <span style={{ marginLeft: '5px' }}>Ingresar registro de fertilizante</span>
+                        </button>
                     </div>
-                    <div className="filtro-container" style={{ width: '300px' }}>
-                        <select value={selectedParcela ? selectedParcela : ''} onChange={handleParcelaChange} className="custom-select">
-                            <option value="">Seleccione la parcela...</option>
-                            {parcelasFiltradas.map(parcela => (
-                                <option key={parcela.idParcela} value={parcela.idParcela}>{parcela.nombre}</option>
-                            ))}
-                        </select>
-                    </div>
-                    <div className="filtro-container">
-                        <label htmlFor="filtroNombreFertilizante">Filtrar por nombre de fertilizante:</label>
-                        <input
-                            type="text"
-                            id="filtroNombreFertilizante"
-                            value={filtroNombreFertilizante}
-                            onChange={handleChangeFiltro}
-                            placeholder="Ingrese el nombre del fertilizante"
-                            className="form-control"
-                        />
-                    </div>
-
                     {/* openModalDetalles */}
 
-                    <TableResponsiveDetalles 
-                    columns={columns2.map(col => ({ ...col, header: renderHeader(col.header) }))}
-                    data={datosFertilizantesFiltrados}
-                    openModalDetalles={openModalDetalles}
-                    btnActionNameDetails={"Detalles"}
-                    openModal={openModal} 
-                    btnActionName={"Editar"} 
-                    toggleStatus={toggleStatus} />
+                    <TableResponsiveDetalles
+                        columns={columns2.map(col => ({ ...col, header: renderHeader(col.header) }))}
+                        data={datosFertilizantesFiltrados}
+                        openModalDetalles={openModalDetalles}
+                        btnActionNameDetails={"Detalles"}
+                        openModal={openModal}
+                        btnActionName={"Editar"}
+                        toggleStatus={toggleStatus} />
                 </div>
             </div>
 

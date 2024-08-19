@@ -394,6 +394,12 @@ const Sidebar = ({ children }: { children: React.ReactNode }) => {
                     name: "Cobertura Vegetal",
                     icon: <img src='/clorofila.png' style={{ width: '22px' }} />,
                     roles: [3]
+                },
+                {
+                    path: "/ALERTASCATALOGO",
+                    name: "Catalogo de Alertas",
+                    icon: <img src='/inventario.png' style={{ width: '22px' }} />,
+                    roles: [3]
                 }
                
             ]

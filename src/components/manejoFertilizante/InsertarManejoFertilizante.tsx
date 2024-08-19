@@ -84,7 +84,7 @@ const InsertarManejoFertilizante: React.FC<InsertarManejoFertilizanteProps> = ({
                     // Obtener tipos de fertilizantes
                     const tiposFertilizantesResponse = await ObtenerTipoFertilizantes();
                     setTiposFertilizantes(tiposFertilizantesResponse.map((fertilizante: any) => fertilizante.nombre));
-
+                    console.log(tiposFertilizantes)
                     // Obtener tipos de fertilizantes
                     const TipoAplicacionResponse = await ObtenerTipoAplicacion();
                     setTipoAplicacion(TipoAplicacionResponse.map((Aplicacion: any) => Aplicacion.nombre));

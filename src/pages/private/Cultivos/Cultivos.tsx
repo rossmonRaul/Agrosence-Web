@@ -199,10 +199,10 @@ function Cultivos() {
                 <Topbar />
                 <BordeSuperior text="Sección de Cultivos" />
                 <div className="content" >
-                    <div className="filtro-container">
+                    <div className="filtro-container" style={{ display: 'flex', flexWrap: 'wrap', alignItems: 'center' }}>
                         <div className="filtro-item" style={{ width: '300px', marginTop: '5px' }}>
 
-                            <label htmlFor="filtroNombre">Filtrar Empresa:</label>
+                            <label htmlFor="filtroFinca">Finca:</label>
                             <select
                                 id="filtroFinca"
                                 value={selectedFinca || ''}
@@ -216,9 +216,9 @@ function Cultivos() {
                                 ))}
                             </select>
                         </div>
-                        <div className="filtro-item"style={{marginBottom: '15px' }}>
+                        <div className="filtro-item" style={{ marginBottom: '15px' }}>
 
-                            <label htmlFor="filtroNombre">Filtrar:</label>
+                            <label htmlFor="filtroNombre">Cultivo o Parcela:</label>
                             <input
                                 type="text"
                                 id="filtroNombre"
@@ -230,12 +230,12 @@ function Cultivos() {
                             />
 
                         </div>
-                        <button onClick={() => abrirCerrarModalCrearCultivo()} className="btn-crear-style" style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', marginTop: '10px' }}>
+                        <button onClick={() => abrirCerrarModalCrearCultivo()} className="btn-crear-style" style={{ marginLeft: 'auto', display: 'flex', justifyContent: 'center', alignItems: 'center', marginTop: '10px' }}>
                             <IoAddCircleOutline size={27} />
                             <span style={{ marginLeft: '5px' }}>Crear Registro</span>
                         </button>
                     </div>
-                    <TableResponsive columns={columns} data={cultivosFiltrados} openModal={openModal} btnActionName={"Editar"} toggleStatus={toggleStatus} useTrashIcon={true}/>
+                    <TableResponsive columns={columns} data={cultivosFiltrados} openModal={openModal} btnActionName={"Editar"} toggleStatus={toggleStatus} useTrashIcon={true} />
                 </div>
             </div>
 

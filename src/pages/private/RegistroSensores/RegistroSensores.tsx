@@ -15,6 +15,7 @@ import ModificarSensores from "../../../components/registroSensores/ModificarSen
 import { useSelector } from "react-redux";
 import { AppStore } from "../../../redux/Store.ts";
 import { ObtenerSensores, CambiarEstadoSensor, ObtenerMedicionesAutorizadasSensor } from "../../../servicios/ServicioSensor.ts";
+import { IoAddCircleOutline } from "react-icons/io5";
 interface Option {
     identificacion: string;
     idEmpresa: number;
@@ -254,31 +255,43 @@ function RegistroSensores() {
             <div className="main-container">
                 <Topbar />
                 <BordeSuperior text="Registro sensores" />
-                <div className="content" col-md-12>
-                    <button onClick={() => abrirCerrarModalInsertar()} className="btn-crear">Ingresar registro sensores</button>
-                    <div className="content" style={{ display: 'flex', flexDirection: 'row', flexWrap: 'wrap', gap: '20px' }}>
+                <div className="content" >
+                    <div className="filtro-container" style={{ display: 'flex', flexWrap: 'wrap', alignItems: 'center' }}>
+                        <div className="filtro-item" style={{ width: '300px', marginTop: '5px' }}>
 
-                        <div className="filtro-container" style={{ width: '265px' }}>
-                            <label >Filtrar por finca:</label>
-                            <select style={{ marginTop: '10px' }} value={selectedFinca || ''} onChange={handleFincaChange} className="custom-select">
+                            <label >Finca:</label>
+                            <select
+                                value={selectedFinca || ''}
+                                onChange={handleFincaChange}
+                                className="custom-select"
+                                style={{ height: '45px', fontSize: '16px', padding: '10px', minWidth: '200px', marginTop: '0px' }}
+                            >
                                 <option value="">Seleccione la finca...</option>
                                 {fincas.map(finca => (
                                     <option key={finca.idFinca} value={finca.idFinca}>{finca.nombre}</option>
                                 ))}
                             </select>
-                        </div>
 
-                        <div className="filtro-container" style={{ width: '265px' }}>
-                            <label >Filtrar por parcela:</label>
-                            <select style={{ marginTop: '10px' }} value={selectedParcela ? selectedParcela : ''} onChange={handleParcelaChange} className="custom-select">
+                        </div>
+                        <div className="filtro-item" style={{ width: '300px', marginTop: '5px' }}>
+
+                            <label >Parcela:</label>
+                            <select
+                                value={selectedParcela ? selectedParcela : ''}
+                                onChange={handleParcelaChange}
+                                className="custom-select"
+                                style={{ height: '45px', fontSize: '16px', padding: '10px', minWidth: '200px', marginTop: '0px' }}
+                            >
                                 <option value="">Seleccione la parcela...</option>
                                 {parcelasFiltradas.map(parcela => (
                                     <option key={parcela.idParcela} value={parcela.idParcela}>{parcela.nombre}</option>
                                 ))}
                             </select>
+
                         </div>
-                        <div className="filtro-container" >
-                            <label htmlFor="filtroNombreSensor" >Filtrar por nombre o modelo:</label>
+                        <div className="filtro-item" style={{ marginBottom: '15px' }}>
+
+                            <label htmlFor="filtroNombreSensor" >Nombre o modelo:</label>
                             <input
 
                                 type="text"
@@ -286,17 +299,14 @@ function RegistroSensores() {
                                 value={filtroSensor}
                                 onChange={handleChangeFiltro}
                                 placeholder="Ingrese el nombre o modelo"
-                                style={{ marginTop: '10px', width: '239px', height: '19px' }}
                                 className="form-control"
+                                style={{ fontSize: '16px', padding: '10px', minWidth: '200px', marginTop: '0px' }}
                             />
                         </div>
-                    </div>
-
-                    <div className="content" style={{ display: 'flex', flexDirection: 'row', alignItems: 'center', gap: '20px' }}>
-
-                        <div>
-
-                        </div>
+                        <button onClick={() => abrirCerrarModalInsertar()} className="btn-crear-style" style={{ marginLeft: 'auto', display: 'flex', justifyContent: 'center', alignItems: 'center', marginTop: '10px' }}>
+                            <IoAddCircleOutline size={27} />
+                            <span style={{ marginLeft: '5px' }}>Ingresar registro sensores</span>
+                        </button>
                     </div>
                     <TableResponsive columns={columns} data={datosProduccionFiltrados} openModal={openModal} btnActionName={"Editar"} toggleStatus={toggleStatus} />
 

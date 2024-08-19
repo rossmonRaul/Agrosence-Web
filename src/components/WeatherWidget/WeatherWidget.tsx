@@ -145,7 +145,11 @@ const WeatherWidget = () => {
       </Typography>
 
       <label htmlFor="fincas">Finca:</label>
-                    <select className="custom-select" id="fincas" value={selectedFinca} onChange={handleFincaChange}>
+                    <select 
+                    className="custom-select" 
+                    id="fincas" value={selectedFinca} 
+                    style={{ height: '45px', fontSize: '16px', padding: '10px', minWidth: '200px', marginTop: '0px' }}
+                    onChange={handleFincaChange}>
                         <option key="default-finca" value="">Seleccione...</option>
                         {fincas.map((finca) => (
                             <option key={`${finca.idFinca}-${finca.nombre || 'undefined'}`} value={finca.ubicacion}>{finca.nombre || 'Undefined'}</option>

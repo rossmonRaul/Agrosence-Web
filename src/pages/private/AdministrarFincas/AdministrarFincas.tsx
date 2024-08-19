@@ -14,6 +14,7 @@ import { CambiarEstadoFincas, ObtenerFincas } from "../../../servicios/ServicioF
 import EditarFinca from "../../../components/finca/EditarFinca.tsx";
 import CrearFinca from "../../../components/finca/CrearFinca.tsx";
 import Swal from "sweetalert2";
+import { IoAddCircleOutline } from "react-icons/io5";
 
 // Componente funcional que representa la página de administración de empresas.
 function AdministrarFincas() {
@@ -27,7 +28,7 @@ function AdministrarFincas() {
     const [selectedFinca, setSelectedFinca] = useState({
         idFinca: '',
         nombre: '',
-        ubicacion:''
+        ubicacion: ''
     });
     // Estado para almacenar todas las empresas
     const [fincas, setFinca] = useState<any[]>([]);
@@ -72,7 +73,7 @@ function AdministrarFincas() {
     // Función para manejar el cambio en el filtro de nombre
     const handleChangeFiltro = (e: React.ChangeEvent<HTMLInputElement>) => {
         setFiltroNombre(e.target.value);
-    };    
+    };
 
     // Función para filtrar las empresas por nombre sin key sensitive
     const filtrarFincas = () => {
@@ -163,17 +164,23 @@ function AdministrarFincas() {
                 <Topbar />
                 <BordeSuperior text="Administrar Fincas" />
                 <div className="content">
-                    <button onClick={() => abrirCerrarModalInsertar()} className="btn-crear">Crear Finca</button>
-                    <div className="filtro-container">
-                        <label htmlFor="filtroNombre">Filtrar por nombre:</label>
-                        <input
-                            type="text"
-                            id="filtroNombre"
-                            value={filtroNombre}
-                            onChange={handleChangeFiltro}
-                            placeholder="Ingrese el nombre"
-                            className="form-control"
-                        />
+                    <div className="filtro-container" style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+                        <div className="filtro-item" style={{ width: '300px', marginTop: '5px' }}>
+                            <label htmlFor="filtroNombre">Finca:</label>
+                            <input
+                                type="text"
+                                id="filtroNombre"
+                                value={filtroNombre}
+                                onChange={handleChangeFiltro}
+                                placeholder="Ingrese el nombre"
+                                className="form-control"
+                                style={{ fontSize: '16px', padding: '10px', minWidth: '200px', marginTop: '0px' }}
+                            />
+                        </div>
+                        <button onClick={() => abrirCerrarModalInsertar()} className="btn-crear-style" style={{ marginLeft: 'auto', display: 'flex', justifyContent: 'center', alignItems: 'center', marginTop: '10px' }}>
+                        <IoAddCircleOutline size={27} />
+                        <span style={{ marginLeft: '5px' }}>Crear Finca</span>
+                        </button>
                     </div>
                     <TableResponsive columns={columns} data={fincasFiltrados} openModal={openModal} btnActionName={"Editar"} toggleStatus={toggleStatus} />
 

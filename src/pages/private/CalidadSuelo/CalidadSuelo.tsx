@@ -18,6 +18,8 @@ import EditarMedicionSuelo from "../../../components/calidadsuelo/EditarMedicion
 import CrearMedicionSuelo from "../../../components/calidadsuelo/CrearMedicionSuelo.tsx";
 import { ObtenerMedicionesSuelo, CambiarEstadoMedicionesSuelo } from "../../../servicios/ServicioSuelos.ts"
 import { ObtenerUsuariosAsignados } from "../../../servicios/ServicioUsuario.ts"
+import '../../../css/ordenCompra.css'
+import { IoAddCircleOutline } from "react-icons/io5";
 
 
 /**
@@ -127,7 +129,7 @@ function CalidadSuelo() {
 
             const usuarioActual = datosUsuarios.find((usuario: any) => usuario.identificacion === idUsuario);
 
-            if (!usuarioActual) { 
+            if (!usuarioActual) {
                 console.error('No se encontró el usuario actual');
                 return;
             }
@@ -211,17 +213,23 @@ function CalidadSuelo() {
                 <Topbar />
                 <BordeSuperior text="Estudio de Calidad de Suelo" />
                 <div className="content">
-                    <button onClick={() => abrirCerrarModalCrearMedicion()} className="btn-crear">Crear Medición</button>
-                    <div className="filtro-container">
-                        <label htmlFor="filtroFincaParcelaUsuario">Filtrar:</label>
-                        <input
-                            type="text"
-                            id="filtroFincaParcelaUsuario"
-                            value={filtroInput}
-                            onChange={handleChangeFiltro}
-                            placeholder="Ingrese la finca, parcela o el usuario"
-                            className="form-control"
-                        />
+                    <div className="filtro-container" style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+                        <div className="filtro-item" style={{ width: '300px', marginTop: '5px' }}>
+                            <label htmlFor="filtroFincaParcelaUsuario">Finca, parcela o usuario:</label>
+                            <input
+                                type="text"
+                                id="filtroFincaParcelaUsuario"
+                                value={filtroInput}
+                                onChange={handleChangeFiltro}
+                                placeholder="Ingrese la finca, parcela o el usuario"
+                                className="form-control"
+                                style={{ fontSize: '16px', padding: '10px', minWidth: '275px', marginTop: '0px' }}
+                            />
+                        </div>
+                        <button onClick={() => abrirCerrarModalCrearMedicion()} className="btn-crear-style" style={{ marginLeft: 'auto', display: 'flex', justifyContent: 'center', alignItems: 'center', marginTop: '10px' }}>
+                            <IoAddCircleOutline size={27} />
+                            <span style={{ marginLeft: '5px' }}>Crear Medición</span>
+                            </button>
                     </div>
                     <TableResponsive columns={columns} data={MedicionesFiltradas} openModal={openModal} toggleStatus={toggleStatus} btnActionName={"Editar"} />
                 </div>

@@ -9,6 +9,8 @@ import { ObtenerTipoAplicacion, CambiarEstadoTipoAplicacion } from "../../../ser
 import InsertarTipoAplicacion from "../../../components/TipoAplicacion/InsertarTipoAplicacion.tsx"; // Asegúrate de tener este componente
 import EditarTipoAplicacion from "../../../components/TipoAplicacion/EditarTipoAplicacion.tsx";
 import '../../../css/FormSeleccionEmpresa.css'
+import '../../../css/ordenCompra.css'
+import { IoAddCircleOutline } from "react-icons/io5";
 
 function AdministrarTipoAplicacion() {
     const [tipoAplicaciones, setTipoAplicaciones] = useState<any[]>([]);
@@ -116,8 +118,11 @@ function AdministrarTipoAplicacion() {
                 <Topbar />
                 <BordeSuperior text="Administrar Tipo Aplicación" />
                 <div className="content" col-md-12>
-                    <button onClick={abrirCerrarModalInsertar} className="btn-crear">Agregar Tipo Aplicación</button>
-                    <TableResponsive columns={columns} data={tipoAplicaciones} openModal={openModal}  btnActionName={"Editar"} toggleStatus={toggleStatus} />
+                    <button onClick={abrirCerrarModalInsertar} className="btn-crear-style" style={{ marginLeft: 'auto', display: 'flex', justifyContent: 'center', alignItems: 'center', marginTop: '10px' }}>
+                        <IoAddCircleOutline size={27} />
+                        <span style={{ marginLeft: '5px' }}>Agregar Tipo Aplicación</span>
+                    </button>
+                    <TableResponsive columns={columns} data={tipoAplicaciones} openModal={openModal} btnActionName={"Editar"} toggleStatus={toggleStatus} />
                 </div>
             </div>
 
@@ -148,7 +153,7 @@ function AdministrarTipoAplicacion() {
                         <EditarTipoAplicacion
 
                             idTipoAplicacion={selectedDatos.idTipoAplicacion}
-                            
+
                             nombre={selectedDatos.nombre}
                             onEdit={handleEditarTipoAplicacion}
                         />

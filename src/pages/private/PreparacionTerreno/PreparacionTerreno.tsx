@@ -12,8 +12,10 @@ import InsertarPreparacionTerreno from "../../../components/preparacionTerreno/I
 import ModificacionPreparacionTerreno from "../../../components/preparacionTerreno/EditarPreparacionTerreno";
 import { ObtenerUsuariosAsignadosPorIdentificacion } from '../../../servicios/ServicioUsuario';
 import '../../../css/FormSeleccionEmpresa.css';
+import '../../../css/OrdenCompra.css'
 import { useSelector } from "react-redux";
 import { AppStore } from "../../../redux/Store";
+import { IoAddCircleOutline } from "react-icons/io5";
 
 interface Option {
     identificacion: string;
@@ -35,8 +37,8 @@ function AdministrarPreparacionTerreno() {
         idParcela: '',
         idPreparacionTerreno: '',
         fecha: '',
-        idActividad: '', 
-        idMaquinaria: '', 
+        idActividad: '',
+        idMaquinaria: '',
         observaciones: '',
         identificacion: '',
         horasTrabajadas: '',
@@ -260,34 +262,50 @@ function AdministrarPreparacionTerreno() {
             <div className="main-container">
                 <Topbar />
                 <BordeSuperior text="Preparación de Terreno" />
-                <div className="content col-md-12">
-                    <button onClick={() => abrirCerrarModalInsertar()} className="btn-crear">Ingresar preparación de terreno</button>
-                    <div className="filtro-container" style={{ width: '300px' }}>
-                        <select value={selectedFinca || ''} onChange={handleFincaChange} className="custom-select">
-                            <option value="">Seleccione la finca...</option>
-                            {filteredFincas.map(finca => (
-                                <option key={finca.idFinca} value={finca.idFinca}>{finca.nombre}</option>
-                            ))}
-                        </select>
-                    </div>
-                    <div className="filtro-container" style={{ width: '300px' }}>
-                        <select value={selectedParcela ? selectedParcela : ''} onChange={handleParcelaChange} className="custom-select">
-                            <option value="">Seleccione la parcela...</option>
-                            {parcelasFiltradas.map(parcela => (
-                                <option key={parcela.idParcela} value={parcela.idParcela}>{parcela.nombre}</option>
-                            ))}
-                        </select>
-                    </div>
-                    <div className="filtro-container">
-                        <label htmlFor="filtroNombreActividad">Filtrar por nombre de actividad:</label>
-                        <input
-                            type="text"
-                            id="filtroNombreActividad"
-                            value={filtroNombreActividad}
-                            onChange={handleChangeFiltro}
-                            placeholder="Ingrese el nombre del Actividad"
-                            className="form-control"
-                        />
+                <div className="content" >
+                    <div className="filtro-container" style={{ display: 'flex', flexWrap: 'wrap', alignItems: 'center' }}>
+                        <div className="filtro-item" style={{ width: '300px', marginTop: '5px' }}>
+                            <label >Finca:</label>
+                            <select
+                                value={selectedFinca || ''}
+                                onChange={handleFincaChange}
+                                style={{ height: '45px', fontSize: '16px', padding: '10px', minWidth: '200px', marginTop: '0px' }}
+                                className="custom-select">
+                                <option value="">Seleccione la finca...</option>
+                                {filteredFincas.map(finca => (
+                                    <option key={finca.idFinca} value={finca.idFinca}>{finca.nombre}</option>
+                                ))}
+                            </select>
+                        </div>
+                        <div className="filtro-item" style={{ width: '300px', marginTop: '5px' }}>
+                            <label >Parcela:</label>
+                            <select
+                                value={selectedParcela ? selectedParcela : ''}
+                                onChange={handleParcelaChange}
+                                style={{ height: '45px', fontSize: '16px', padding: '10px', minWidth: '200px', marginTop: '0px' }}
+                                className="custom-select">
+                                <option value="">Seleccione la parcela...</option>
+                                {parcelasFiltradas.map(parcela => (
+                                    <option key={parcela.idParcela} value={parcela.idParcela}>{parcela.nombre}</option>
+                                ))}
+                            </select>
+                        </div>
+                        <div className="filtro-item" style={{ marginBottom: '15px' }}>
+                            <label htmlFor="filtroNombreActividad">Actividad:</label>
+                            <input
+                                type="text"
+                                id="filtroNombreActividad"
+                                value={filtroNombreActividad}
+                                onChange={handleChangeFiltro}
+                                placeholder="Ingrese el nombre del Actividad"
+                                style={{ fontSize: '16px', padding: '10px', minWidth: '250px', marginTop: '0px' }}
+                                className="form-control"
+                            />
+                        </div>
+                        <button onClick={() => abrirCerrarModalInsertar()} className="btn-crear-style" style={{ marginLeft: 'auto', display: 'flex', justifyContent: 'center', alignItems: 'center', marginTop: '10px' }}>
+                            <IoAddCircleOutline size={27} />
+                            <span style={{ marginLeft: '5px' }}>Ingresar preparación de terreno</span>
+                            </button>
                     </div>
                     <TableResponsive columns={columns2} data={datosPreparacionTerrenoFiltrados} openModal={openModal} btnActionName={"Editar"} toggleStatus={toggleStatus} openDetallesModal={openDetallesModal} />
                 </div>

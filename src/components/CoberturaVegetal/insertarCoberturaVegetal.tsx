@@ -62,10 +62,15 @@ const insertarCoberturaVegetal: React.FC<InsertarCoberturaVegetalProps> = ({ onA
                 if (identificacionString && idEmpresaString) {
                     const fincasResponse = await ObtenerFincas();
                     const fincasFiltradas = fincasResponse.filter((f: any) => f.idEmpresa === parseInt(idEmpresaString));
+                    
                     setFincas(fincasFiltradas);
+
                     const parcelasResponse = await ObtenerParcelas();
+                    console.log(parcelasResponse)
                     const parcelasFiltradas = parcelasResponse.filter((parcela: any) => fincasFiltradas.some((f: any) => f.idFinca === parcela.idFinca));
                     setParcelas(parcelasFiltradas);
+
+
                 } else {
                     console.error('La identificación y/o el ID de la empresa no están disponibles en el localStorage.');
                 }
@@ -80,6 +85,7 @@ const insertarCoberturaVegetal: React.FC<InsertarCoberturaVegetalProps> = ({ onA
         try {
             const parcelasFinca = parcelas.filter(parcela => parcela.idFinca === parseInt(idFinca));
             setParcelasFiltradas(parcelasFinca);
+
         } catch (error) {
             console.error('Error al obtener las parcelas de la finca:', error);
         }
@@ -115,7 +121,7 @@ const insertarCoberturaVegetal: React.FC<InsertarCoberturaVegetalProps> = ({ onA
         }
 
         const puntosMedicion = await ObtenerPuntoMedicionFincaParcela(fincaParcela);
-
+        console.log('puntos de medicion ', puntosMedicion)
         setpuntosMedicion(puntosMedicion);
         console.log(puntosMedicion)
     };

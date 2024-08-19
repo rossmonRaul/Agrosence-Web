@@ -55,4 +55,5 @@ export const PrivateRoutes = {
    CATALOGOACTIVIDADESPT: 'catalogoactividadespt',
    MEDIDASCULTIVOS: "medidascultivos",
    CULTIVOS: 'cultivos',
+   ALERTASCATALOGO: 'alertascatalogo',
 };

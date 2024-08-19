@@ -8,13 +8,14 @@ import Modal from "../../../components/modal/Modal.tsx"
 import Swal from "sweetalert2";
 import Topbar from "../../../components/topbar/Topbar.tsx";
 import { ObtenerUsuariosAsignados } from "../../../servicios/ServicioUsuario.ts"
-
+import '../../../css/OrdenCompra.css'
 import EditarSaludDeLaPlanta from "../../../components/saludPlanta/EditarSaludPlanta.tsx";
 
 import TableResponsiveDetails from "../../../components/table/tableDetails.tsx";
 import { CambiarEstadoSaludDeLaPlanta, ObtenerSaludDeLaPlanta } from "../../../servicios/ServicioSaludPlanta.ts";
 import CrearSaludDeLaPlanta from "../../../components/saludPlanta/InsertarSaludPlanta.tsx";
 import DetallesSaludDeLaPlanta from "../../../components/saludPlanta/DetallesSaludPlanta.tsx";
+import { IoAddCircleOutline } from "react-icons/io5";
 
 
 /**
@@ -79,7 +80,7 @@ function SaludPlanta() {
     const filtrarDatos = () => {
         const datosFiltrados = filtroInput
             ? saludDeLaPlanta.filter((datosTabla: any) =>
-                datosTabla.nombreFinca.toLowerCase().includes(filtroInput.toLowerCase()) 
+                datosTabla.nombreFinca.toLowerCase().includes(filtroInput.toLowerCase())
             )
             : saludDeLaPlanta;
         setSaludDeLaPlantaFiltrados(datosFiltrados);
@@ -106,7 +107,7 @@ function SaludPlanta() {
         try {
             const idEmpresa = localStorage.getItem('empresaUsuario');
             const idUsuario = localStorage.getItem('identificacionUsuario');
-            
+
             const datosUsuarios = await ObtenerUsuariosAsignados({ idEmpresa: idEmpresa });
 
             const datosSaludDeLaPlanta = await ObtenerSaludDeLaPlanta();
@@ -197,19 +198,25 @@ function SaludPlanta() {
                 <Topbar />
                 <BordeSuperior text="Salud de la Planta" />
                 <div className="content">
-                    <button onClick={() => abrirCerrarModalCrearSaludDeLaPlanta()} className="btn-crear">Crear Salud de la Planta</button>
-                    <div className="filtro-container">
-                        <label htmlFor="filtroIdentificacion">Filtrar:</label>
-                        <input
-                            type="text"
-                            id="filtroIdentificacion"
-                            value={filtroInput}
-                            onChange={handleChangeFiltro}
-                            placeholder="Buscar por Finca"
-                            className="form-control"
-                        />
+                    <div className="filtro-container" style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+                        <div className="filtro-item" style={{ width: '300px', marginTop: '5px' }}>
+                            <label htmlFor="filtroIdentificacion">Finca:</label>
+                            <input
+                                type="text"
+                                id="filtroIdentificacion"
+                                value={filtroInput}
+                                onChange={handleChangeFiltro}
+                                placeholder="Buscar por Finca"
+                                style={{ fontSize: '16px', padding: '10px', minWidth: '200px', marginTop: '0px' }}
+                                className="form-control"
+                            />
+                        </div>
+                        <button onClick={() => abrirCerrarModalCrearSaludDeLaPlanta()} className="btn-crear-style" style={{ marginLeft: 'auto', display: 'flex', justifyContent: 'center', alignItems: 'center', marginTop: '10px' }}>
+                            <IoAddCircleOutline size={27} />
+                            <span style={{ marginLeft: '5px' }}>Crear Salud de la Planta</span>
+                            </button>
                     </div>
-                    <TableResponsiveDetails columns={columns} data={SaludDeLaPlantaFiltrados} openModal={openModal} toggleStatus={toggleStatus} btnActionName={"Editar"} openModalDetalles={openModalDetalles}  btnActionNameDetails={"Detalles"} />
+                    <TableResponsiveDetails columns={columns} data={SaludDeLaPlantaFiltrados} openModal={openModal} toggleStatus={toggleStatus} btnActionName={"Editar"} openModalDetalles={openModalDetalles} btnActionNameDetails={"Detalles"} />
                 </div>
             </div>
 

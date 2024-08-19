@@ -8,7 +8,7 @@ import { ObtenerParcelas } from "../../../servicios/ServicioParcelas.ts";
 import Swal from "sweetalert2";
 import { ObtenerFincas } from "../../../servicios/ServicioFincas.ts";
 //import { ObtenerManejoFertilizantes, CambiarEstadoManejoFertilizantes } from "../../../servicios/ServicioFertilizantes.ts";
-import { ObtenerRegistroPuntoMedicion , CambiarEstadoRegistroPuntoMedicion  } from "../../../servicios/ServicioPuntoMedicion.ts";
+import { ObtenerRegistroPuntoMedicion, CambiarEstadoRegistroPuntoMedicion } from "../../../servicios/ServicioPuntoMedicion.ts";
 //import InsertarManejoFertilizante from "../../../components/manejoFertilizante/InsertarManejoFertilizante.tsx";
 import InsertarPuntoMedicion from "../../../components/puntoMedicion/InsertarPuntoMedicion.tsx";
 import ModificacionPuntoMedicion from "../../../components/puntoMedicion/EditarPuntoMedicion.tsx";
@@ -16,6 +16,7 @@ import { ObtenerUsuariosAsignadosPorIdentificacion } from '../../../servicios/Se
 import '../../../css/FormSeleccionEmpresa.css'
 import { useSelector } from "react-redux";
 import { AppStore } from "../../../redux/Store.ts";
+import { IoAddCircleOutline } from "react-icons/io5";
 
 
 interface Option {
@@ -32,12 +33,12 @@ function AdministrarPuntoMedicion() {
     const [selectedDatos, setSelectedDatos] = useState({
         idFinca: '',
         idParcela: '',
-        idPuntoMedicion : '',
+        idPuntoMedicion: '',
         codigo: '',
-        altitud : '',
-        latitud : '',
+        altitud: '',
+        latitud: '',
         longitud: '',
-        nombreParcela:''
+        nombreParcela: ''
     });
     const [parcelas, setParcelas] = useState<any[]>([]);
     const [puntoMedicionFiltrados, setPuntoMedicionFiltrados] = useState<any[]>([]);
@@ -83,13 +84,13 @@ function AdministrarPuntoMedicion() {
     // Obtener parcelas cuando cambie la finca seleccionada
     useEffect(() => {
         obtenerRegistroPuntoMedicion();
-    },[selectedFinca] );
+    }, [selectedFinca]);
 
-      // Filtrar parcelas cuando cambien la finca seleccionada, las parcelas o el filtro por nombre
-      useEffect(() => {
+    // Filtrar parcelas cuando cambien la finca seleccionada, las parcelas o el filtro por nombre
+    useEffect(() => {
         filtrarParcelas();
     }, [selectedFinca, puntoMedicion, filtroNombre]);
-     // Función para filtrar las parcelas
+    // Función para filtrar las parcelas
     const filtrarParcelas = () => {
         let puntosMedicionFiltradosPorFinca = selectedFinca
             ? puntoMedicion.filter(puntoMedicion => puntoMedicion.idFinca === parseInt(selectedFinca))
@@ -114,7 +115,7 @@ function AdministrarPuntoMedicion() {
                 //const fincas = await ObtenerFincas();
                 //const fincasEmpresaUsuario = fincas.filter((finca: any) => finca.idEmpresa === parseInt(idEmpresaUsuario));
 
-                const puntosMedicionResponse = await ObtenerRegistroPuntoMedicion({IdEmpresa:idEmpresa});
+                const puntosMedicionResponse = await ObtenerRegistroPuntoMedicion({ IdEmpresa: idEmpresa });
                 const puntosMedicionConEstado = puntosMedicionResponse.map((puntoMedicion: any) => ({
                     ...puntoMedicion,
                     sEstado: puntoMedicion.estado === 1 ? 'Activo' : 'Inactivo'
@@ -142,7 +143,7 @@ function AdministrarPuntoMedicion() {
         setSelectedDatos(puntomedicion);
         abrirCerrarModalEditar();
     };
-    
+
     const handleAgregarPuntoMedicion = async () => {
         await obtenerRegistroPuntoMedicion();
         abrirCerrarModalInsertar();
@@ -205,26 +206,38 @@ function AdministrarPuntoMedicion() {
             <div className="main-container">
                 <Topbar />
                 <BordeSuperior text="Punto Medición" />
-                <div className="content" col-md-12>
-                    <button onClick={() => abrirCerrarModalInsertar()} className="btn-crear">Ingresar punto de medición</button>
-                    <div className="filtro-container" style={{ width: '300px' }}>
-                        <select value={selectedFinca || ''} onChange={handleFincaChange} className="custom-select">
-                            <option value={''}>Todas las fincas</option>
-                            {fincas.map(finca => (
-                                <option key={finca.idFinca} value={finca.idFinca}>{finca.nombre}</option>
-                            ))}
-                        </select>
-                    </div>
-                    <div className="filtro-container">
-                        <label htmlFor="filtroNombre">Filtrar por código:</label>
-                        <input
-                            type="text"
-                            id="filtroNombre"
-                            value={filtroNombre}
-                            onChange={handleChangeFiltro}
-                            placeholder="Ingrese algún código"
-                            className="form-control"
-                        />
+                <div className="content" >
+                    <div className="filtro-container" style={{ display: 'flex', flexWrap: 'wrap', alignItems: 'center' }}>
+                        <div className="filtro-item" style={{ width: '300px', marginTop: '5px' }}>
+                            <label htmlFor="filtroNombre">Finca:</label>
+                            <select
+                                value={selectedFinca || ''}
+                                onChange={handleFincaChange}
+                                className="custom-select"
+                                style={{ height: '45px', fontSize: '16px', padding: '10px', minWidth: '200px', marginTop: '0px' }}
+                            >
+                                <option value={''}>Todas las fincas</option>
+                                {fincas.map(finca => (
+                                    <option key={finca.idFinca} value={finca.idFinca}>{finca.nombre}</option>
+                                ))}
+                            </select>
+                        </div>
+                        <div className="filtro-item" style={{ marginBottom: '15px' }}>
+                            <label htmlFor="filtroNombre">Código:</label>
+                            <input
+                                type="text"
+                                id="filtroNombre"
+                                value={filtroNombre}
+                                onChange={handleChangeFiltro}
+                                placeholder="Ingrese algún código"
+                                style={{ fontSize: '16px', padding: '10px', minWidth: '200px', marginTop: '0px' }}
+                                className="form-control"
+                            />
+                        </div>
+                        <button onClick={() => abrirCerrarModalInsertar()} className="btn-crear-style" style={{ marginLeft: 'auto', display: 'flex', justifyContent: 'center', alignItems: 'center', marginTop: '10px' }}>
+                            <IoAddCircleOutline size={27} />
+                            <span style={{ marginLeft: '5px' }}>Ingresar punto de medición</span>
+                        </button>
                     </div>
                     <TableResponsive columns={columns2} data={puntoMedicionFiltrados} openModal={openModal} btnActionName={"Editar"} toggleStatus={toggleStatus} />
                 </div>
@@ -239,9 +252,9 @@ function AdministrarPuntoMedicion() {
                 <div className='form-container'>
                     <div className='form-group'>
                         {/* este es el componente para crear el manejo fertilizante */}
-                         <InsertarPuntoMedicion
+                        <InsertarPuntoMedicion
                             onAdd={handleAgregarPuntoMedicion}
-                        /> 
+                        />
                     </div>
                 </div>
             </Modal>
@@ -254,20 +267,20 @@ function AdministrarPuntoMedicion() {
             >
                 <div className='form-container'>
                     <div className='form-group'>
-                           <ModificacionPuntoMedicion
+                        <ModificacionPuntoMedicion
                             idFinca={parseInt(selectedDatos.idFinca)}
                             idParcela={parseInt(selectedDatos.idParcela)}
                             idPuntoMedicion={parseInt(selectedDatos.idPuntoMedicion)}
                             codigo={selectedDatos.codigo}
                             altitud={selectedDatos.altitud}
-                            latitud ={selectedDatos.latitud }
+                            latitud={selectedDatos.latitud}
                             longitud={selectedDatos.longitud}
                             onEdit={handleEditarPuntoMedicion}
-                        />  
+                        />
                     </div>
                 </div>
-            </Modal> 
-            
+            </Modal>
+
         </Sidebar>
     );
 }

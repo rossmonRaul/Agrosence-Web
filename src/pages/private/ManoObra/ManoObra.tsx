@@ -16,6 +16,7 @@ import CrearManoObra from "../../../components/manoObra/InsertarManoObra.tsx";
 import { CambiarEstadoRegistroManoObra, ObtenerDatosRegistroManoObra } from "../../../servicios/ServicioManoObra.ts";
 import EditarManoObra from "../../../components/manoObra/EditarManoObra.tsx";
 import { ObtenerFincas } from "../../../servicios/ServicioFincas.ts";
+import { IoAddCircleOutline } from "react-icons/io5";
 
 
 
@@ -37,7 +38,7 @@ function ManoObra() {
     // Estado para el filtro por identificación de usuario
     const [filtroInput, setfiltroInput] = useState('');
 
-    
+
 
     //puede que falten cambios a los datos seleccionados
     const [selectedDatos, setSelectedDatos] = useState({
@@ -46,7 +47,7 @@ function ManoObra() {
         actividad: '',
         fecha: '',
         trabajador: '',
-        identificacion: '', 
+        identificacion: '',
         horasTrabajadas: 0,
         pagoPorHora: '',
         totalPago: '',
@@ -112,12 +113,12 @@ function ManoObra() {
             const idEmpresa = localStorage.getItem('empresaUsuario');
             const datosManoObra = await ObtenerDatosRegistroManoObra();
             if (idEmpresa) {
-                const fincasResponse = await ObtenerFincas(); 
+                const fincasResponse = await ObtenerFincas();
                 const fincasFiltradas = fincasResponse.filter((finca: any) => finca.idEmpresa === parseInt(idEmpresa));
-                
+
                 // Extraer los identificadores de finca
-                const idsFincasFiltradas = fincasFiltradas.map((finca: any)=> finca.idFinca);
-    
+                const idsFincasFiltradas = fincasFiltradas.map((finca: any) => finca.idFinca);
+
                 // Filtrar registros de mano de obra usando los identificadores de finca
                 const manoObraFiltradas = datosManoObra.filter((manoObra: any) => {
                     return idsFincasFiltradas.includes(manoObra.idFinca);
@@ -125,18 +126,18 @@ function ManoObra() {
                     ...ordenCompra,
                     sEstado: ordenCompra.estado === 1 ? 'Activo' : 'Inactivo',
                 }));
-                
-                
+
+
                 setmanoObra(manoObraFiltradas);
                 setManoObraFiltrados(manoObraFiltradas);
             }
-    
+
         } catch (error) {
             console.error('Error al obtener las mediciones:', error);
         }
     };
-    
-    
+
+
 
 
     // Función para cambiar el estado de un mano obra
@@ -200,17 +201,23 @@ function ManoObra() {
                 <Topbar />
                 <BordeSuperior text="Mano Obra" />
                 <div className="content">
-                    <button onClick={() => abrirCerrarModalCrearManoObra()} className="btn-crear">Crear Registro</button>
-                    <div className="filtro-container">
-                        <label htmlFor="filtroIdentificacion">Filtrar:</label>
-                        <input
-                            type="text"
-                            id="filtroIdentificacion"
-                            value={filtroInput}
-                            onChange={handleChangeFiltro}
-                            placeholder="Buscar por Finca"
-                            className="form-control"
-                        />
+                    <div className="filtro-container" style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+                        <div className="filtro-item" style={{ width: '300px', marginTop: '5px' }}>
+                            <label htmlFor="filtroIdentificacion">Finca:</label>
+                            <input
+                                type="text"
+                                id="filtroIdentificacion"
+                                value={filtroInput}
+                                onChange={handleChangeFiltro}
+                                placeholder="Buscar por Finca"
+                                style={{ fontSize: '16px', padding: '10px', minWidth: '200px', marginTop: '0px' }}
+                                className="form-control"
+                            />
+                        </div>
+                        <button onClick={() => abrirCerrarModalCrearManoObra()} className="btn-crear-style" style={{ marginLeft: 'auto', display: 'flex', justifyContent: 'center', alignItems: 'center', marginTop: '10px' }}>
+                            <IoAddCircleOutline size={27} />
+                            <span style={{ marginLeft: '5px' }}>Crear Registro</span>
+                        </button>
                     </div>
                     <TableResponsive columns={columns} data={manoObraFiltrados} openModal={openModal} btnActionName={"Editar"} toggleStatus={toggleStatus} />
                 </div>

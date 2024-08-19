@@ -18,6 +18,7 @@ import EditarCuentaUsuario from "../../../components/crearcuentausuario/EditarCu
 import { useSelector } from "react-redux";
 import { AppStore } from "../../../redux/Store.ts";
 import AsignacionesUsuarios from "../../../components/asignacionesusuario/AsignacionesUsuarios.tsx";
+import { IoAddCircleOutline } from "react-icons/io5";
 
 /** 
  * Componente funcional que representa la página de mantenimiento de usuarios asignados.
@@ -61,7 +62,7 @@ function MantenimientoUsuariosAsignados() {
     localStorage.removeItem('selectedFinca');
     localStorage.removeItem('selectedParcela');
   }
- 
+
   const openModalAsignar = (usuario: any) => {
     setSelectedUsuario(usuario);
     abrirCerrarModalAsignar();
@@ -87,7 +88,7 @@ function MantenimientoUsuariosAsignados() {
     try {
       const datos = {
         idEmpresa: userLoginState.idEmpresa,
-      } 
+      }
       const usuarios = await ObtenerUsuariosPorEmpresa(datos);
       const usuariosConSEstado = usuarios.map((usuario: any) => ({
         ...usuario,
@@ -178,17 +179,23 @@ function MantenimientoUsuariosAsignados() {
         <Topbar />
         <BordeSuperior text="Mantenimiento Usuarios Asignados" />
         <div className="content">
-          <button onClick={() => abrirCerrarModalCrearUsuario()} className="btn-crear">Crear Usuario</button>
-          <div className="filtro-container">
-            <label htmlFor="filtroIdentificacion">Filtrar por identificación:</label>
-            <input
-              type="text"
-              id="filtroIdentificacion"
-              value={filtroIdentificacion}
-              onChange={handleChangeFiltro}
-              placeholder="Ingrese la identificación"
-              className="form-control"
-            />
+          <div className="filtro-container" style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+            <div className="filtro-item" style={{ width: '300px', marginTop: '5px' }}>
+              <label htmlFor="filtroIdentificacion">Identificación:</label>
+              <input
+                type="text"
+                id="filtroIdentificacion"
+                value={filtroIdentificacion}
+                onChange={handleChangeFiltro}
+                placeholder="Ingrese la identificación"
+                style={{ fontSize: '16px', padding: '10px', minWidth: '200px', marginTop: '0px' }}
+                className="form-control"
+              />
+            </div>
+            <button onClick={() => abrirCerrarModalCrearUsuario()} className="btn-crear-style" style={{ marginLeft: 'auto', display: 'flex', justifyContent: 'center', alignItems: 'center', marginTop: '10px' }}>
+            <IoAddCircleOutline size={27} />
+            <span style={{ marginLeft: '5px' }}>Crear Usuario</span>
+            </button>
           </div>
           <TableResponsive columns={columns} data={usuariosFiltrados} openModal={openModal} toggleStatus={toggleStatus} btnActionName={"Editar"}
             toggleOptionalStatus={openModalAsignar} btnToggleOptionalStatus={'Asignaciones'} propClassNameOpcional={'Asignar'} />
@@ -210,11 +217,11 @@ function MantenimientoUsuariosAsignados() {
               nombre={selectedUsuario.nombre}
               email={selectedUsuario.correo}
               onEdit={handleEditarUsuario}
-            /> 
+            />
           </div>
         </div>
       </Modal>
-      
+
       {/* modal para crear usuario */}
       <Modal
         isOpen={modalCrearUsuario}
@@ -225,11 +232,11 @@ function MantenimientoUsuariosAsignados() {
         <div className='form-container'>
           <div className='form-group'>
             <CrearCuentaUsuario
-            idEmpresa={userLoginState.idEmpresa}
-            toggleForm={handleAgregarUsuario}
+              idEmpresa={userLoginState.idEmpresa}
+              toggleForm={handleAgregarUsuario}
             />
           </div>
-        </div>  
+        </div>
       </Modal>
 
       <Modal

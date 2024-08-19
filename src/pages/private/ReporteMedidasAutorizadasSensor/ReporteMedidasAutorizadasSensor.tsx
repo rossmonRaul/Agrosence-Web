@@ -5,7 +5,9 @@ import TableResponsive from "../../../components/table/table.tsx";
 import BordeSuperior from "../../../components/bordesuperior/BordeSuperior.tsx";
 import Topbar from "../../../components/topbar/Topbar.tsx";
 import { ObtenerReporteMedidasAutorizadasSensor } from "../../../servicios/ServicioReporte.ts";
-import { IoDocumentTextSharp, IoFilter } from "react-icons/io5";
+import { IoFilter } from "react-icons/io5";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faFileExcel } from "@fortawesome/free-solid-svg-icons";
 import { exportToExcel } from '../../../utilities/exportReportToExcel.ts';
 import Swal from 'sweetalert2';
 import { ObtenerFincas } from "../../../servicios/ServicioFincas.ts";
@@ -128,8 +130,7 @@ function ReporteMedidasAutorizadasSensor() {
 
             if(datos.length < 1){
                 Swal.fire({
-                    icon: 'error',
-                    title: 'Error',
+                    icon: 'warning',
                     text: 'No se encontraron registros con los parámetros ingresados'
                 });
                 return;
@@ -137,7 +138,7 @@ function ReporteMedidasAutorizadasSensor() {
 
             let datosN: any = [];
 
-            datos.forEach(element => {   
+            datos.forEach((element: { fecha: string; }) => {   
 
                 element.fecha = formatFecha(element.fecha);
 
@@ -161,11 +162,8 @@ function ReporteMedidasAutorizadasSensor() {
             const idEmpresa = localStorage.getItem('empresaUsuario');
 
             if (idEmpresa) {
-                const fincasResponse = await ObtenerFincas();
-
-                const fincasFiltradas = fincasResponse.filter((finca: any) => finca.idEmpresa === parseInt(idEmpresa));
-
-                setFincas(fincasFiltradas);
+                const fincasResponse = await ObtenerFincas(parseInt(idEmpresa));
+                setFincas(fincasResponse);
             }
 
         } catch (error) {
@@ -175,10 +173,11 @@ function ReporteMedidasAutorizadasSensor() {
 
     const obtenerParcelas = async (idFinca?: number) => {
         try {
-            const parcelasResponse = await ObtenerParcelas();
+            const idEmpresa = localStorage.getItem('empresaUsuario');
+            const parcelasResponse = await ObtenerParcelas(parseInt(idEmpresa?idEmpresa:"0"));
 
             if(idFinca)
-                setParcelas(parcelasResponse.filter(x => x.idFinca === idFinca));
+                setParcelas(parcelasResponse.filter((x: { idFinca: number; }) => x.idFinca === idFinca));
             else
                 setParcelas(parcelasResponse);
         } catch (error) {
@@ -223,7 +222,7 @@ function ReporteMedidasAutorizadasSensor() {
                         </div>
                         <div >
                             <label htmlFor="filtroParcela" >Filtrar por Parcela:</label>
-                            <select id="filtroParcela" value={selectedParcela || ''} onChange={handleParcelaChange} className="form-select" >
+                            <select id="filtroParcela" value={selectedParcela || ''} onChange={handleParcelaChange} className="form-select">
                                 <option value={''}>Todas las parcelas</option>
                                 {parcelas.map(p => (
                                     <option key={p.idParcela} value={p.idParcela}>{p.nombre}</option>
@@ -257,8 +256,8 @@ function ReporteMedidasAutorizadasSensor() {
                         {apiData.length > 0 &&
                             <button onClick={() => exportToExcel({ reportName, data: apiData, columns, userName })}  className="btn-exportar" style={{ display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
 
-                                <IoDocumentTextSharp size={27} />
-                                <span style={{ marginLeft: '5px' }}>Exportar</span>
+                            <FontAwesomeIcon icon={faFileExcel} style={{ color: "#0CF25D", fontSize: '27px' }} />                                
+                            <span style={{ marginLeft: '5px' }}>Exportar</span>
 
                             </button>
                         }                        

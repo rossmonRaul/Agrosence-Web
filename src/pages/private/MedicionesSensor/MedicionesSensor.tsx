@@ -10,6 +10,7 @@ import { CambiarEstadoMedicionSensor, ObtenerMedicionesSensor } from "../../../s
 import Swal from "sweetalert2";
 import InsertarMedicionSensor from "../../../components/medicionesSensor/InsertarMedicionesSensor.tsx";
 import TableResponsiveState from "../../../components/table/tableState.tsx";
+import { IoAddCircleOutline } from "react-icons/io5";
 
 
 function MedicionesSensor() {
@@ -139,17 +140,23 @@ function MedicionesSensor() {
                 <Topbar />
                 <BordeSuperior text="Mediciones de Sensor" />
                 <div className="content">
-                    <button onClick={() => abrirCerrarModalInsertar()} className="btn-crear">Crear Medición</button>
-                    <div className="filtro-container">
-                        <label htmlFor="filtroNombre">Filtrar por nombre:</label>
-                        <input
-                            type="text"
-                            id="filtroNombre"
-                            value={filtroNombre}
-                            onChange={handleChangeFiltro}
-                            placeholder="Ingrese el nombre"
-                            className="form-control"
-                        />
+                    <div className="filtro-container" style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+                        <div className="filtro-item" style={{ width: '300px', marginTop: '5px' }}>
+                            <label htmlFor="filtroNombre">Nombre:</label>
+                            <input
+                                type="text"
+                                id="filtroNombre"
+                                value={filtroNombre}
+                                onChange={handleChangeFiltro}
+                                placeholder="Ingrese el nombre"
+                                style={{ fontSize: '16px', padding: '10px', minWidth: '200px', marginTop: '0px' }}
+                                className="form-control"
+                            />
+                        </div>
+                        <button onClick={() => abrirCerrarModalInsertar()} className="btn-crear-style" style={{ marginLeft: 'auto', display: 'flex', justifyContent: 'center', alignItems: 'center', marginTop: '10px' }}>
+                            <IoAddCircleOutline size={27} />
+                            <span style={{ marginLeft: '5px' }}>Crear Medición</span>
+                        </button>
                     </div>
                     <TableResponsiveState columns={columns} data={medicionesFiltrados} openModal={openModal} toggleStatus={toggleStatus} btnActionName={"Editar"} />
 

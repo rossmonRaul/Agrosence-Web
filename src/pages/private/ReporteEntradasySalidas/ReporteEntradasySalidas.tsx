@@ -7,9 +7,12 @@ import BordeSuperior from "../../../components/bordesuperior/BordeSuperior.tsx";
 import Topbar from "../../../components/topbar/Topbar.tsx";
 import { ObtenerFincas } from "../../../servicios/ServicioFincas.ts";
 import { ObtenerReporteEntradaSalidaTotal } from "../../../servicios/ServicioReporte.ts";
-import { IoDocumentTextSharp, IoFilter } from "react-icons/io5";
+import { IoFilter } from "react-icons/io5";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faFileExcel } from "@fortawesome/free-solid-svg-icons";
 import Swal from 'sweetalert2';
 import { exportToExcel } from '../../../utilities/exportReportToExcel.ts';
+import '../../../css/OrdenCompra.css'
 
 function ReporteEntradasYSalidas() {
 
@@ -89,7 +92,8 @@ function ReporteEntradasYSalidas() {
             const formData = {
                 fechaInicio: filtroInputInicio,
                 fechaFin: filtroInputFin,
-                idFinca: selectedFinca
+                idFinca: selectedFinca || '0',
+                idEmpresa:  idEmpresa
             }
 
             if (!validarFechas()) {
@@ -152,12 +156,8 @@ function ReporteEntradasYSalidas() {
             const idEmpresa = localStorage.getItem('empresaUsuario');
 
             if (idEmpresa) {
-                const fincasResponse = await ObtenerFincas();
-
-                const fincasFiltradas = fincasResponse.filter((finca: any) => finca.idEmpresa === parseInt(idEmpresa));
-
-
-                setFincas(fincasFiltradas);
+                const fincasResponse = await ObtenerFincas(parseInt(idEmpresa));
+                setFincas(fincasResponse);
             }
 
         } catch (error) {
@@ -169,6 +169,7 @@ function ReporteEntradasYSalidas() {
     // Columnas de la tabla
     const columns = [
         { key: 'fecha', header: 'Fecha' , width: 15 },
+        { key: 'finca', header: 'Finca' , width: 20 },
         { key: 'detallesCompraVenta', header: 'Detalles' , width: 30 },
         { key: 'tipo', header: 'Tipo' , width: 15 },
         { key: 'montoIngresoFormateado', header: 'Monto Ingreso', width: 15  },
@@ -184,7 +185,7 @@ function ReporteEntradasYSalidas() {
             data: apiData,
             columns,
             userName: nombreUsuario,
-            totales: ['Totales', '', '', montoIngreso, montoGasto, montoBalance]
+            totales: ['Totales', '', '', '', montoIngreso, montoGasto, montoBalance]
         });
     };
 
@@ -194,53 +195,62 @@ function ReporteEntradasYSalidas() {
                 <Topbar />
                 <BordeSuperior text="Reporte de Entradas y Salidas" />
                 <div className="content">
+                    <div className="filtro-container" style={{ display: 'flex', alignItems: 'flex-start', gap: '10px' }}>
+                        <div className="filtro-item" style={{ display: 'flex', alignItems: 'center', flexGrow: 1 }}>
+                            <div className="filtro-item" style={{ flexGrow: 0, display: 'flex', flexDirection: 'column', marginRight: '10px' }}>
+                                <label htmlFor="filtroFinca">Finca:</label>
+                                <select
+                                    id="filtroFinca"
+                                    value={selectedFinca || ''}
+                                    onChange={handleFincaChange}
+                                    style={{ height: '45px', fontSize: '16px', padding: '10px', minWidth: '200px' }}
+                                    className="form-select">
+                                    <option value={''}>Todas las fincas</option>
+                                    {fincas.map(finca => (
+                                        <option key={finca.idFinca} value={finca.idFinca}>{finca.nombre}</option>
+                                    ))}
+                                </select>
+                            </div>
 
-                    <div className="filtro-container">
-                        <div >
-                            <label htmlFor="filtroFinca" >Filtrar por Finca:</label>
-                            <select id="filtroFinca" value={selectedFinca || ''} onChange={handleFincaChange} className="form-select" >
-                                <option value={''}>Todas las fincas</option>
-                                {fincas.map(finca => (
-                                    <option key={finca.idFinca} value={finca.idFinca}>{finca.nombre}</option>
-                                ))}
-                            </select>
+                            <div className="filtro-item" style={{ display: 'flex', flexDirection: 'column', marginRight: '10px' }}>
+                                <label htmlFor="filtroInicio">Fecha de Inicio:</label>
+                                <input
+                                    type="date"
+                                    id="filtroInicio"
+                                    value={filtroInputInicio}
+                                    onChange={handleChangeFiltro}
+                                    style={{ fontSize: '16px', padding: '10px', minWidth: '200px' }}
+                                    className="form-control"
+                                />
+                            </div>
+
+                            <div className="filtro-item" style={{ display: 'flex', flexDirection: 'column' }}>
+                                <label htmlFor="filtroFin">Fecha de Fin:</label>
+                                <input
+                                    type="date"
+                                    id="filtroFin"
+                                    value={filtroInputFin}
+                                    onChange={handleChangeFiltro}
+                                    style={{ fontSize: '16px', padding: '10px', minWidth: '200px' }}
+                                    className="form-control"
+                                />
+                            </div>
                         </div>
-                        <div >
-                            <label htmlFor="filtroInicio">Fecha de Inicio:</label>
-                            <input
-                                type="date"
-                                id="filtroInicio"
-                                value={filtroInputInicio}
-                                onChange={handleChangeFiltro}
-                                className="form-control"
-                            />
-                        </div>
-                        <div >
-                            <label htmlFor="filtroFin">Fecha de Fin:</label>
-                            <input
-                                type="date"
-                                id="filtroFin"
-                                value={filtroInputFin}
-                                onChange={handleChangeFiltro}
-                                className="form-control"
-                            />
-                        </div>
-                        <button onClick={filtrarDatos} className="btn-filtrar" style={{ display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
+                        <button onClick={filtrarDatos} className="btn-filtrar" style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', marginLeft: '10px' }}>
                             <IoFilter size={27} />
                             <span style={{ marginLeft: '5px' }}>Filtrar</span>
                         </button>
                         {apiData.length > 0 &&
                             <button onClick={handleExport} className="btn-exportar" style={{ display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
-                                <IoDocumentTextSharp size={27} />
+                                <FontAwesomeIcon icon={faFileExcel} style={{ color: "#0CF25D", fontSize: '27px' }} />                                
                                 <span style={{ marginLeft: '5px' }}>Exportar</span>
-
                             </button>
                         }
                     </div>
+
                     {apiData.length > 0 &&
                         <TableResponsive columns={columns} data={apiData} totales={[montoIngreso, montoGasto, montoBalance]} />
                     }
-
                 </div>
             </div>
 
