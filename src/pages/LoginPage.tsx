@@ -39,10 +39,22 @@ const FormularioInicioSesion: React.FC<{
     onSubmit(formData);
   };
 
+  const [sessionExpired, setSessionExpired] = useState(false);
+
+  useEffect(() => {
+    const expired = localStorage.getItem('sessionExpired') === 'true';
+    if (expired) {
+      setSessionExpired(true);
+      localStorage.removeItem('sessionExpired');
+    }
+  }, []);
+
+
   const [empresaUsuario, setEmpresaUsuario] = useState<string>(() => localStorage.getItem('empresaUsuario') || '');
 
   return (
     <>
+    {sessionExpired && <p style={{ color: 'red', fontSize:15}}>Tu sesión ha expirado. Por favor, inicia sesión nuevamente.</p>}
       <div className="form-header">
         <h2>Iniciar Sesión</h2>
         <p>Inicia sesión en tu cuenta</p>

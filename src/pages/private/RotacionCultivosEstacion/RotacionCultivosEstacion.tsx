@@ -74,13 +74,15 @@ function AdministrarRotacionCultivosEstacion() {
                     const usuariosAsignados = await ObtenerUsuariosAsignadosPorIdentificacion({ identificacion: identificacion });
                     const idFincasUsuario = usuariosAsignados.map((usuario: any) => usuario.idFinca);
                     const idParcelasUsuario = usuariosAsignados.map((usuario: any) => usuario.idParcela);
-
-                    const fincasResponse = await ObtenerFincas();
+                    const idEmpresa = localStorage.getItem('empresaUsuario');
+                    if (idEmpresa) {
+                    const fincasResponse = await ObtenerFincas(parseInt(idEmpresa));
                     const fincasUsuario = fincasResponse.filter((finca: any) => idFincasUsuario.includes(finca.idFinca));
                     setFincas(fincasUsuario);
-                    const parcelasResponse = await ObtenerParcelas();
+                    const parcelasResponse = await ObtenerParcelas(parseInt(idEmpresa));
                     const parcelasUsuario = parcelasResponse.filter((parcela: any) => idParcelasUsuario.includes(parcela.idParcela));
                     setParcelas(parcelasUsuario)
+                    }
                 } else {
                     console.error('La identificación y/o el ID de la empresa no están disponibles en el localStorage.');
                 }
@@ -144,15 +146,15 @@ function AdministrarRotacionCultivosEstacion() {
             const idEmpresaUsuario = localStorage.getItem('empresaUsuario');
             if (idEmpresaUsuario) {
 
-                const fincas = await ObtenerFincas();
+                const fincas = await ObtenerFincas(parseInt(idEmpresaUsuario));
 
-                const fincasEmpresaUsuario = fincas.filter((finca: any) => finca.idEmpresa === parseInt(idEmpresaUsuario));
+                //const fincasEmpresaUsuario = fincas.filter((finca: any) => finca.idEmpresa === parseInt(idEmpresaUsuario));
 
-                const parcelasResponse = await ObtenerParcelas();
+                const parcelasResponse = await ObtenerParcelas(parseInt(idEmpresaUsuario));
 
                 const parcelasFincasEmpresaUsuario: any[] = [];
 
-                fincasEmpresaUsuario.forEach((finca: any) => {
+                fincas.forEach((finca: any) => {
                     const parcelasFinca = parcelasResponse.filter((parcela: any) => parcela.idFinca === finca.idFinca);
                     parcelasFincasEmpresaUsuario.push(...parcelasFinca);
                 });

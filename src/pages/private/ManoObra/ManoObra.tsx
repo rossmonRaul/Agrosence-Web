@@ -113,7 +113,7 @@ function ManoObra() {
             const idEmpresa = localStorage.getItem('empresaUsuario');
             const datosManoObra = await ObtenerDatosRegistroManoObra();
             if (idEmpresa) {
-                const fincasResponse = await ObtenerFincas();
+                const fincasResponse = await ObtenerFincas(parseInt(idEmpresa));
                 const fincasFiltradas = fincasResponse.filter((finca: any) => finca.idEmpresa === parseInt(idEmpresa));
 
                 // Extraer los identificadores de finca

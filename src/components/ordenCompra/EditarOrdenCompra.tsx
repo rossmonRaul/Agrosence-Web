@@ -174,14 +174,14 @@ const EditarOrdenCompra: React.FC<OrdenCompraSeleccionado> = ({
                 if (idEmpresaString) {
 
                     //se obtiene las fincas 
-                    const fincasResponse = await ObtenerFincas();
+                    const fincasResponse = await ObtenerFincas(parseInt(idEmpresaString));
                     //Se filtran las fincas del usuario
                     const fincasFiltradas = fincasResponse.filter((finca: any) => finca.idEmpresa === parseInt(idEmpresaString));
                     // Extraer los identificadores de finca
                     const idsFincasFiltradas = fincasFiltradas.map((finca: any) => finca.idFinca);
                     setFincas(fincasFiltradas);;
                     //se obtienen las parcelas
-                    const parcelasResponse = await ObtenerParcelas();
+                    const parcelasResponse = await ObtenerParcelas(parseInt(idEmpresaString));
                     //se filtran las parcelas con los idparcelasusuario
                     const parcelasUsuario = parcelasResponse.filter((parcela: any) => idsFincasFiltradas.includes(parcela.idFinca));
                     setParcelas(parcelasUsuario)

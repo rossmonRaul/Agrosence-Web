@@ -13,8 +13,7 @@ import '../../../css/OrdenCompra.css'
 import { ObtenerRegistroContenidoDeClorofila, CambiarEstadoRegistroContenidoDeClorofila } from "../../../servicios/ServicioContenidoDeClorofila.ts";
 
 
-//import InsertarManejoFertilizante from "../../../components/manejoFertilizante/InsertarManejoFertilizante.tsx";
-import InsertarContenidoDeClorofila from "../../../components/contenidoDeClorofila/InsertarContenidoDeClorofila.tsx";
+
 
 /////////////////////////////////
 import EditarContenidoDeClorofila from "../../../components/contenidoDeClorofila/EditarContenidoDeClorofila.tsx";
@@ -26,6 +25,7 @@ import '../../../css/FormSeleccionEmpresa.css'
 import { ObtenerUsuariosAsignados, ObtenerUsuariosAsignadosPorIdentificacion } from "../../../servicios/ServicioUsuario.ts";
 import DetallesContenidoDeClorofila from "../../../components/contenidoDeClorofila/DetallesContenidoDeClorofila.tsx";
 import { IoAddCircleOutline } from "react-icons/io5";
+import InsertarContenidoDeClorofila from "../../../components/contenidoDeClorofila/insertarContenidoDeClorofila.tsx";
 
 
 
@@ -98,17 +98,20 @@ function AdministrarContenidoDeClorofila() {
                     const usuariosAsignados = await ObtenerUsuariosAsignadosPorIdentificacion({ identificacion: identificacion });
                     const idFincasUsuario = usuariosAsignados.map((usuario: any) => usuario.idFinca);
                     const idParcelasUsuario = usuariosAsignados.map((usuario: any) => usuario.idParcela);
+                    const idEmpresa = localStorage.getItem('empresaUsuario');
+                    if (idEmpresa) {
                     //se obtiene las fincas 
-                    const fincasResponse = await ObtenerFincas();
+                    const fincasResponse = await ObtenerFincas(parseInt(idEmpresa));
                     //se filtran las fincas con las fincas del usuario
                     const fincasUsuario = fincasResponse.filter((finca: any) => idFincasUsuario.includes(finca.idFinca));
                     setFincas(fincasUsuario);
                     //se obtienen las parcelas
-                    const parcelasResponse = await ObtenerParcelas();
+                    const parcelasResponse = await ObtenerParcelas(parseInt(idEmpresa));
                     //se filtran las parcelas con los idparcelasusuario
                     const parcelasUsuario = parcelasResponse.filter((parcela: any) => idParcelasUsuario.includes(parcela.idParcela));
 
                     setParcelas(parcelasUsuario)
+                    }
                 } else {
                     console.error('La identificación y/o el ID de la empresa no están disponibles en el localStorage.');
                 }

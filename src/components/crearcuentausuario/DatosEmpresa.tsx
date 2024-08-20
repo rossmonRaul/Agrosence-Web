@@ -41,8 +41,11 @@ const DatosEmpresa: React.FC<Props> = ({ formData, prevStep, handleSubmit }) => 
   useEffect(() => {
     const obtenerFincas = async () => {
       try {
-        const fincasResponse = await ObtenerFincas();
+        const idEmpresa = localStorage.getItem('empresaUsuario');
+        if (idEmpresa) {
+        const fincasResponse = await ObtenerFincas(parseInt(idEmpresa));
         setFincas(fincasResponse);
+        }
       } catch (error) {
         console.error('Error al obtener las fincas:', error);
       }
@@ -53,8 +56,11 @@ const DatosEmpresa: React.FC<Props> = ({ formData, prevStep, handleSubmit }) => 
   useEffect(() => {
     const obtenerParcelas = async () => {
       try {
-        const parcelasResponse = await ObtenerParcelas();
+        const idEmpresa = localStorage.getItem('empresaUsuario');
+        if (idEmpresa) {
+        const parcelasResponse = await ObtenerParcelas(parseInt(idEmpresa));
         setParcelas(parcelasResponse);
+        }
       } catch (error) {
         console.error('Error al obtener las parcelas:', error);
       }

@@ -177,12 +177,15 @@ const InsertarRegistroSensores: React.FC<InsertarManejoFertilizanteProps> = ({ o
                     const estadosSensores = await ObtenerEstadoSensores();
                     setEstadoSensor(estadosSensores)
                     const puntoMedicion = await ObtenerRegistroPuntoMedicion({ idEmpresa: idEmpresaString });
-                    const fincasResponse = await ObtenerFincas();
+                    const idEmpresa = localStorage.getItem('empresaUsuario');
+                    if (idEmpresa) {
+                    const fincasResponse = await ObtenerFincas(parseInt(idEmpresa));
                     const fincasFiltradas = fincasResponse.filter((f: any) => f.idEmpresa === parseInt(idEmpresaString));
                     setFincas(fincasFiltradas);
-                    const parcelasResponse = await ObtenerParcelas();
+                    const parcelasResponse = await ObtenerParcelas(parseInt(idEmpresa));
                     const parcelasFiltradas = parcelasResponse.filter((parcela: any) => fincasFiltradas.some((f: any) => f.idFinca === parcela.idFinca));
                     setParcelas(parcelasFiltradas);
+                    }
                     const medicionesSensor = await ObtenerMedicionesSensor()
                     setMedicionesSensor(medicionesSensor);
                     const sensoresFiltrados = sensores.filter((sensor: any) => {

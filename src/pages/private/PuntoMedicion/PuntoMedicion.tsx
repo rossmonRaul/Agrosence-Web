@@ -61,12 +61,12 @@ function AdministrarPuntoMedicion() {
             try {
                 const idEmpresaUsuario = localStorage.getItem('empresaUsuario');
                 if (idEmpresaUsuario) {
-                    const fincasResponse = await ObtenerFincas();
-                    const fincasFiltradas = fincasResponse.filter((f: any) => f.idEmpresa === parseInt(idEmpresaUsuario));
-                    setFincas(fincasFiltradas);
-                    const parcelasResponse = await ObtenerParcelas();
-                    const parcelasFiltradas = parcelasResponse.filter((parcela: any) => fincasFiltradas.some((f: any) => f.idFinca === parcela.idFinca));
-                    setParcelas(parcelasFiltradas);
+                    const fincasResponse = await ObtenerFincas( parseInt(idEmpresaUsuario));
+                    //const fincasFiltradas = fincasResponse.filter((f: any) => f.idEmpresa === parseInt(idEmpresaUsuario));
+                    setFincas(fincasResponse);
+                    const parcelasResponse = await ObtenerParcelas( parseInt(idEmpresaUsuario));
+                    //const parcelasFiltradas = parcelasResponse.filter((parcela: any) => fincasFiltradas.some((f: any) => f.idFinca === parcela.idFinca));
+                    setParcelas(parcelasResponse);
                 }
             } catch (error) {
                 console.error('Error al obtener las fincas:', error);

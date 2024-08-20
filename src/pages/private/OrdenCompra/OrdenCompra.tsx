@@ -174,8 +174,9 @@ function OrdenCompra() {
             const idEmpresa = localStorage.getItem('empresaUsuario');
             const datosOrdenCompra = await ObtenerDatosOrdenDeCompra();
 
-            const fincasResponse = await ObtenerFincas();
+            
             if (idEmpresa) {
+                const fincasResponse = await ObtenerFincas(parseInt(idEmpresa));
                 const fincasFiltradas = fincasResponse.filter((finca: any) => finca.idEmpresa === parseInt(idEmpresa));
 
                 // Extraer los identificadores de finca

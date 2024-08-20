@@ -75,12 +75,12 @@ function RegistroSensores() {
                 const idEmpresaString = localStorage.getItem('empresaUsuario');
                 const identificacionString = localStorage.getItem('identificacionUsuario');
                 if (identificacionString && idEmpresaString) {
-                    const fincasResponse = await ObtenerFincas();
-                    const fincasFiltradas = fincasResponse.filter((f: any) => f.idEmpresa === parseInt(idEmpresaString));
-                    setFincas(fincasFiltradas);
-                    const parcelasResponse = await ObtenerParcelas();
-                    const parcelasFiltradas = parcelasResponse.filter((parcela: any) => fincasFiltradas.some((f: any) => f.idFinca === parcela.idFinca));
-                    setParcelas(parcelasFiltradas);
+                    const fincasResponse = await ObtenerFincas(parseInt(idEmpresaString));
+                    //const fincasFiltradas = fincasResponse.filter((f: any) => f.idEmpresa === parseInt(idEmpresaString));
+                    setFincas(fincasResponse);
+                    const parcelasResponse = await ObtenerParcelas(parseInt(idEmpresaString));
+                    //const parcelasFiltradas = parcelasResponse.filter((parcela: any) => fincasFiltradas.some((f: any) => f.idFinca === parcela.idFinca));
+                    setParcelas(parcelasResponse);
 
                 } else {
                     console.error('La identificación y/o el ID de la empresa no están disponibles en el localStorage.');
