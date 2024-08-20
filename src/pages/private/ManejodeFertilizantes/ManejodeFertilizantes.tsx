@@ -71,16 +71,19 @@ function AdministrarManejoFertilizantes() {
                     const usuariosAsignados = await ObtenerUsuariosAsignadosPorIdentificacion({ identificacion: identificacion });
                     const idFincasUsuario = usuariosAsignados.map((usuario: any) => usuario.idFinca);
                     const idParcelasUsuario = usuariosAsignados.map((usuario: any) => usuario.idParcela);
+                    const idEmpresa = localStorage.getItem('empresaUsuario');
+                    if (idEmpresa) {
                     //se obtiene las fincas 
-                    const fincasResponse = await ObtenerFincas();
+                    const fincasResponse = await ObtenerFincas(parseInt(idEmpresa));
                     //se filtran las fincas con las fincas del usuario
                     const fincasUsuario = fincasResponse.filter((finca: any) => idFincasUsuario.includes(finca.idFinca));
                     setFincas(fincasUsuario);
                     //se obtienen las parcelas
-                    const parcelasResponse = await ObtenerParcelas();
+                    const parcelasResponse = await ObtenerParcelas(parseInt(idEmpresa));
                     //se filtran las parcelas con los idparcelasusuario
                     const parcelasUsuario = parcelasResponse.filter((parcela: any) => idParcelasUsuario.includes(parcela.idParcela));
                     setParcelas(parcelasUsuario)
+                    }
                 } else {
                     console.error('La identificación y/o el ID de la empresa no están disponibles en el localStorage.');
                 }
@@ -138,12 +141,13 @@ function AdministrarManejoFertilizantes() {
         try {
             const idEmpresaUsuario = localStorage.getItem('empresaUsuario');
             if (idEmpresaUsuario) {
-
-                const fincas = await ObtenerFincas();
+                const idEmpresa = localStorage.getItem('empresaUsuario');
+                if (idEmpresa) {
+                const fincas = await ObtenerFincas(parseInt(idEmpresa));
 
                 const fincasEmpresaUsuario = fincas.filter((finca: any) => finca.idEmpresa === parseInt(idEmpresaUsuario));
 
-                const parcelasResponse = await ObtenerParcelas();
+                const parcelasResponse = await ObtenerParcelas(parseInt(idEmpresa));
 
                 const parcelasFincasEmpresaUsuario: any[] = [];
 
@@ -159,6 +163,7 @@ function AdministrarManejoFertilizantes() {
                 }));
 
                 setParcelas(parcelasConEstado);
+            }
             }
         } catch (error) {
             console.error('Error al obtener las parcelas:', error);

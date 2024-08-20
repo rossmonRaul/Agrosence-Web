@@ -147,10 +147,10 @@ const EditarEntradaYSalida: React.FC<EntradaYSalidaSeleccionado> = ({
                 if (idEmpresaString) {
 
                     //se obtiene las fincas 
-                    const fincasResponse = await ObtenerFincas();
+                    const fincasResponse = await ObtenerFincas(parseInt(idEmpresaString));
                     //Se filtran las fincas del usuario
-                    const fincasFiltradas = fincasResponse.filter((finca: any) => finca.idEmpresa === parseInt(idEmpresaString));
-                    setFincas(fincasFiltradas);;
+                    //const fincasFiltradas = fincasResponse.filter((finca: any) => finca.idEmpresa === parseInt(idEmpresaString));
+                    setFincas(fincasResponse);;
 
                     const detalles = await ObtenerDetalleRegistroEntradaSalidaPorId({ idRegistroEntradaSalida: idRegistroEntradaSalida.toString() });
                     setProductos(detalles);

@@ -131,17 +131,19 @@ const ModificacionContenidoDeAgua: React.FC<ContenidoDeAguaSeleccionado> = ({
                     const usuariosAsignados = await ObtenerUsuariosAsignadosPorIdentificacion({ identificacion: identificacion });
                     const idFincasUsuario = usuariosAsignados.map((usuario: any) => usuario.idFinca);
                     const idParcelasUsuario = usuariosAsignados.map((usuario: any) => usuario.idParcela);
+                    const idEmpresa = localStorage.getItem('empresaUsuario');
+                     if (idEmpresa) {
                     //Se obtienen las fincas 
-                    const fincasResponse = await ObtenerFincas();
+                    const fincasResponse = await ObtenerFincas(parseInt(idEmpresa));
                     //Se filtran las fincas del usuario
                     const fincasUsuario = fincasResponse.filter((finca: any) => idFincasUsuario.includes(finca.idFinca));
                     setFincas(fincasUsuario);
                     //se obtien las parcelas
-                    const parcelasResponse = await ObtenerParcelas();
+                    const parcelasResponse = await ObtenerParcelas(parseInt(idEmpresa));
                     //se filtran las parcelas
                     const parcelasUsuario = parcelasResponse.filter((parcela: any) => idParcelasUsuario.includes(parcela.idParcela));
                     setParcelas(parcelasUsuario)
-
+                     }
                     const fincaParcelaCargar = {
                         idFinca: idFinca,
                         idParcela: idParcela

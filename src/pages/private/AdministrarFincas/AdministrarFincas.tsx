@@ -49,7 +49,7 @@ function AdministrarFincas() {
 
             if (idEmpresaUsuario) {
                 // Si se encuentra el valor en localStorage, lo utilizamos para filtrar las fincas
-                const fincas = await ObtenerFincas();
+                const fincas = await ObtenerFincas(parseInt(idEmpresaUsuario));
 
                 const fincasEmpresaUsuario = fincas.filter((finca: any) => finca.idEmpresa === parseInt(idEmpresaUsuario));
 

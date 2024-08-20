@@ -115,14 +115,16 @@ const ModificacionCoberturaVegetal: React.FC<CoberturaVegetalSeleccionado> = ({
                     const idFincasUsuario = usuariosAsignados.map((usuario: any) => usuario.idFinca);
                     const idParcelasUsuario = usuariosAsignados.map((usuario: any) => usuario.idParcela);
                     
-                    const fincasResponse = await ObtenerFincas();
+                    const idEmpresa = localStorage.getItem('empresaUsuario');
+                    if (idEmpresa) {
+                    const fincasResponse = await ObtenerFincas(parseInt(idEmpresa));
                     const fincasUsuario = fincasResponse.filter((finca: any) => idFincasUsuario.includes(finca.idFinca));
                     setFincas(fincasUsuario);
                     
-                    const parcelasResponse = await ObtenerParcelas();
+                    const parcelasResponse = await ObtenerParcelas(parseInt(idEmpresa));
                     const parcelasUsuario = parcelasResponse.filter((parcela: any) => idParcelasUsuario.includes(parcela.idParcela));
                     setParcelas(parcelasUsuario);
-
+                    }
                     const fincaParcelaCargar = {
                         idFinca: idFinca,
                         idParcela: idParcela

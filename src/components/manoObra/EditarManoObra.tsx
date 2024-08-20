@@ -104,11 +104,13 @@ const EditarManoObra: React.FC<ManoObraSeleccionado> = ({
                 const idEmpresaString = localStorage.getItem('empresaUsuario');
                 const identificacionString = localStorage.getItem('identificacionUsuario');
                 if (identificacionString && idEmpresaString) {
-                    const fincasResponse = await ObtenerFincas();
+                    const idEmpresa = localStorage.getItem('empresaUsuario');
+                    if (idEmpresa) {
+                    const fincasResponse = await ObtenerFincas(parseInt(idEmpresa));
                     //Se filtran las fincas del usuario
                     const fincasFiltradas = fincasResponse.filter((finca: any) => finca.idEmpresa === parseInt(idEmpresaString));
                     setFincas(fincasFiltradas);
-
+                    }
                 } else {
                     console.error('La identificación y/o el ID de la empresa no están disponibles en el localStorage.');
                 }

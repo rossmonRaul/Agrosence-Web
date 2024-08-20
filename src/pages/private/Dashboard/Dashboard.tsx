@@ -193,7 +193,9 @@ const Dashboard: React.FC = () => {
           const puntosMedicionEmpresa = await ObtenerPuntosMedicionPorIdEmpresa(datosPuntoMedicion);
           setPuntosMedicionMaps(puntosMedicionEmpresa);
           const idFincasUsuario = usuariosAsignados.map((usuario: any) => usuario.idFinca);
-          const fincasResponse = await ObtenerFincas();
+          const idEmpresa = localStorage.getItem('empresaUsuario');
+          if (idEmpresa) {
+          const fincasResponse = await ObtenerFincas(parseInt(idEmpresa));
 
           const fincasUsuario = fincasResponse.filter((finca: any) => idFincasUsuario.includes(finca.idFinca));
           setFincas(fincasUsuario);
@@ -203,7 +205,7 @@ const Dashboard: React.FC = () => {
             const primeraFinca = fincasUsuario[0];
             setSelectedFincas([{value:primeraFinca.idFinca.toString(), label: primeraFinca.nombre}]);
 
-            const parcelasResponse = await ObtenerParcelas();
+            const parcelasResponse = await ObtenerParcelas(parseInt(idEmpresa));
 
             const parcelasUsuario = parcelasResponse.filter((parcela: any) => parcela.idFinca === primeraFinca.idFinca);
             setParcelas(parcelasUsuario);
@@ -227,6 +229,7 @@ const Dashboard: React.FC = () => {
               }
             }
           }
+        }
         } else {
           console.error('La identificación y/o el ID de la empresa no están disponibles en el localStorage.');
         }
@@ -240,8 +243,10 @@ const Dashboard: React.FC = () => {
   useEffect(() => {
     const cargarParcelas = async () => {
       if (selectedFincas) {
-        const parcelasResponse = await ObtenerParcelas();
-        const codigosFincas = selectedFincas.map(f=>parseInt(f.value))
+        const idEmpresa = localStorage.getItem('empresaUsuario');
+        if (idEmpresa) {
+        const parcelasResponse = await ObtenerParcelas(parseInt(idEmpresa));
+        const codigosFincas = selectedFincas.map((f: { value: string; })=>parseInt(f.value))
 
         const parcelasUsuario = parcelasResponse.filter((parcela: any) => codigosFincas.includes(parcela.idFinca));
         setParcelas(parcelasUsuario);
@@ -269,6 +274,7 @@ const Dashboard: React.FC = () => {
           setSelectedParcelas([]);
           setSelectedPuntosMedicion([]);
         }
+      }
       }
     };
     cargarParcelas();
@@ -346,9 +352,9 @@ const Dashboard: React.FC = () => {
         Usuario: userState.identificacion,
         FechaInicio: formData.fechaInicio,
         FechaFin: formData.fechaFin,
-        IdFincas: selectedFincas ? selectedFincas.map(f=>f.value).toString() : null,
-        IdParcelas: selectedParcelas ? selectedParcelas.map(p=>p.value).toString() : null,
-        IdPuntosMedicion: selectedPuntosMedicion ? selectedPuntosMedicion.map(p=>p.value).toString() : null
+        IdFincas: selectedFincas ? selectedFincas.map((f: { value: any; })=>f.value).toString() : null,
+        IdParcelas: selectedParcelas ? selectedParcelas.map((p: { value: any; })=>p.value).toString() : null,
+        IdPuntosMedicion: selectedPuntosMedicion ? selectedPuntosMedicion.map((p: { value: any; })=>p.value).toString() : null
       };
       const mediciones: Mediciones[] = await ObtenerMedicionesSensores(data);
 

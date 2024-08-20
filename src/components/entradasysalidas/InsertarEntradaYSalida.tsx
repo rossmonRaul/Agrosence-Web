@@ -119,10 +119,10 @@ const CrearEntradasSalidas: React.FC<CrearEntradasYSalidasProps> = ({ onAdd }) =
                 const idEmpresaString = localStorage.getItem('empresaUsuario');
                 if (idEmpresaString) {
                     //se obtiene las fincas 
-                    const fincasResponse = await ObtenerFincas();
+                    const fincasResponse = await ObtenerFincas(parseInt(idEmpresaString));
                     //Se filtran las fincas del usuario
-                    const fincasFiltradas = fincasResponse.filter((finca: any) => finca.idEmpresa === parseInt(idEmpresaString));
-                    setFincas(fincasFiltradas);
+                    //onst fincasFiltradas = fincasResponse.filter((finca: any) => finca.idEmpresa === parseInt(idEmpresaString));
+                    setFincas(fincasResponse);
 
                 } else {
                     console.error('El ID de la empresa no están disponibles en el localStorage.');

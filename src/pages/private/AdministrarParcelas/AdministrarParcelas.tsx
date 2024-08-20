@@ -37,7 +37,8 @@ function AdministrarParcelas() {
             try {
                 const idEmpresaUsuario = localStorage.getItem('empresaUsuario');
                 if (idEmpresaUsuario) {
-                    const fincasResponse = await ObtenerFincas(); // Suponiendo que ObtenerFincas devuelve las fincas de una empresa específica
+                    const fincasResponse = await ObtenerFincas(parseInt(idEmpresaUsuario)
+                ); // Suponiendo que ObtenerFincas devuelve las fincas de una empresa específica
                     const fincasFiltradas = fincasResponse.filter((finca: any) => finca.idEmpresa === parseInt(idEmpresaUsuario));
                     setFincas(fincasFiltradas);
                 }
@@ -85,10 +86,10 @@ function AdministrarParcelas() {
             const idEmpresaUsuario = localStorage.getItem('empresaUsuario');
             if (idEmpresaUsuario) {
 
-                const fincas = await ObtenerFincas();
+                const fincas = await ObtenerFincas(parseInt(idEmpresaUsuario));
                 const fincasEmpresaUsuario = fincas.filter((finca: any) => finca.idEmpresa === parseInt(idEmpresaUsuario));
 
-                const parcelasResponse = await ObtenerParcelas();
+                const parcelasResponse = await ObtenerParcelas(parseInt(idEmpresaUsuario));
 
                 const parcelasFincasEmpresaUsuario: any[] = [];
 

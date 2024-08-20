@@ -60,16 +60,17 @@ const insertarCoberturaVegetal: React.FC<InsertarCoberturaVegetalProps> = ({ onA
                 const idEmpresaString = localStorage.getItem('empresaUsuario');
                 const identificacionString = localStorage.getItem('identificacionUsuario');
                 if (identificacionString && idEmpresaString) {
-                    const fincasResponse = await ObtenerFincas();
+                    const idEmpresa = localStorage.getItem('empresaUsuario');
+                    if (idEmpresa) {
+                    const fincasResponse = await ObtenerFincas(parseInt(idEmpresa));
                     const fincasFiltradas = fincasResponse.filter((f: any) => f.idEmpresa === parseInt(idEmpresaString));
                     
                     setFincas(fincasFiltradas);
 
-                    const parcelasResponse = await ObtenerParcelas();
-                    console.log(parcelasResponse)
+                    const parcelasResponse = await ObtenerParcelas(parseInt(idEmpresa));
                     const parcelasFiltradas = parcelasResponse.filter((parcela: any) => fincasFiltradas.some((f: any) => f.idFinca === parcela.idFinca));
                     setParcelas(parcelasFiltradas);
-
+                    }
 
                 } else {
                     console.error('La identificación y/o el ID de la empresa no están disponibles en el localStorage.');

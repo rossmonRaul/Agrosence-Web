@@ -43,8 +43,11 @@ const CrearParcela: React.FC<AgregarParcela> = ({ onAdd }) => {
     useEffect(() => {
         const obtenerFincas = async () => {
             try {
-                const fincasResponse = await ObtenerFincas();
+                const idEmpresa = localStorage.getItem('empresaUsuario');
+                if (idEmpresa) {
+                const fincasResponse = await ObtenerFincas(parseInt(idEmpresa));
                 setFincas(fincasResponse);
+                }
             } catch (error) {
                 console.error('Error al obtener las fincas:', error);
             }
