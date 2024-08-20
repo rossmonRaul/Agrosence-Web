@@ -56,6 +56,7 @@ const ModificacionCoberturaVegetal: React.FC<CoberturaVegetalSeleccionado> = ({
         cultivo: '',
         alturaMaleza: '',
         densidadMaleza: '',
+        idPuntoMedicion: '',
         humedadObservable: '',
         usuarioCreacionModificacion: ''
     });
@@ -115,14 +116,16 @@ const ModificacionCoberturaVegetal: React.FC<CoberturaVegetalSeleccionado> = ({
                     const idFincasUsuario = usuariosAsignados.map((usuario: any) => usuario.idFinca);
                     const idParcelasUsuario = usuariosAsignados.map((usuario: any) => usuario.idParcela);
                     
-                    const fincasResponse = await ObtenerFincas();
+                    const idEmpresa = localStorage.getItem('empresaUsuario');
+                    if (idEmpresa) {
+                    const fincasResponse = await ObtenerFincas(parseInt(idEmpresa));
                     const fincasUsuario = fincasResponse.filter((finca: any) => idFincasUsuario.includes(finca.idFinca));
                     setFincas(fincasUsuario);
                     
-                    const parcelasResponse = await ObtenerParcelas();
+                    const parcelasResponse = await ObtenerParcelas(parseInt(idEmpresa));
                     const parcelasUsuario = parcelasResponse.filter((parcela: any) => idParcelasUsuario.includes(parcela.idParcela));
                     setParcelas(parcelasUsuario);
-
+                    }
                     const fincaParcelaCargar = {
                         idFinca: idFinca,
                         idParcela: idParcela
@@ -221,6 +224,12 @@ const ModificacionCoberturaVegetal: React.FC<CoberturaVegetalSeleccionado> = ({
             newErrors.densidadMaleza = 'La densidad de la Maleza es obligatoria';
         }
 
+        if (!selectedPuntoMedicion) {
+            newErrors.idPuntoMedicion = 'El punto de medición es obligatorio';
+        } else {
+            newErrors.idPuntoMedicion = '';
+        }
+
         if (!formData.humedadObservable.toString().trim()) {
             newErrors.humedadObservable = 'La humedad es obligatoria';
         }
@@ -250,6 +259,8 @@ const ModificacionCoberturaVegetal: React.FC<CoberturaVegetalSeleccionado> = ({
         };
 
         try {
+
+            console.log('datos', datos)
             const resultado = await ModificarCoberturaVegetal(datos);
             if (resultado.indicador === 1) {
                 Swal.fire({
@@ -376,7 +387,7 @@ const ModificacionCoberturaVegetal: React.FC<CoberturaVegetalSeleccionado> = ({
                                 <option key={`${puntoMedicion.idPuntoMedicion}-${puntoMedicion.codigo || 'undefined'}`} value={puntoMedicion.idPuntoMedicion}>{puntoMedicion.codigo || 'Undefined'}</option>
                             ))}
                         </select>
-                        {errors.puntoMedicion && <FormFeedback>{errors.puntoMedicion}</FormFeedback>}
+                        {errors.idPuntoMedicion && <FormFeedback>{errors.idPuntoMedicion}</FormFeedback>}
                     </FormGroup>
                 </div>
             </div>
