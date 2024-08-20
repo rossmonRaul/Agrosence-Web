@@ -29,17 +29,6 @@ import { ObtenerUsuariosAsignados, ObtenerUsuariosAsignadosPorIdentificacion } f
 import DetallesCoberturaVegetal from "../../../components/CoberturaVegetal/DetallesCoberturaVegetal.tsx";
 import { IoAddCircleOutline } from "react-icons/io5";
 
-
-
-// interface Option {
-//     identificacion: string;
-//     idEmpresa: number;
-//     nombre: string;
-//     idParcela: number;
-//     idFinca: number;
-// }
-
-
 function AdministrarCoberturaVegetal() {
     const [filtroNombre, setFiltroNombre] = useState('');
     const [modalEditar, setModalEditar] = useState(false);
@@ -161,10 +150,6 @@ function AdministrarCoberturaVegetal() {
         setcontenidoCoberturaFiltrados(ContenidoCoberturaFiltrado);
     };
 
-
-
-
-
     useEffect(() => {
         const obtenerParcelasDeFinca = async () => {
             try {
@@ -190,7 +175,6 @@ function AdministrarCoberturaVegetal() {
                 const datosUsuarios = await ObtenerUsuariosAsignados({ idEmpresa: idEmpresa });
 
                 const coberturaVegetalResponse = await ObtenerRegistroCoberturaVegetal();
-                console.log(coberturaVegetalResponse);
 
                 const usuarioActual = datosUsuarios.find((usuario: any) => usuario.identificacion === idUsuario);
 
@@ -215,8 +199,6 @@ function AdministrarCoberturaVegetal() {
 
                 setCoberturaVegetal(coberturaVegetalFiltrados);
                 setcontenidoCoberturaFiltrados(coberturaVegetalFiltrados);
-
-                console.log("contenido", contenidoCoberturaFiltrados);
             }
         } catch (error) {
             console.error('Error al obtener la cobertura:', error);

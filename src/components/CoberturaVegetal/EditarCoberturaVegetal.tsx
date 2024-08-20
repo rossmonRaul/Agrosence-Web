@@ -260,7 +260,6 @@ const ModificacionCoberturaVegetal: React.FC<CoberturaVegetalSeleccionado> = ({
 
         try {
 
-            console.log('datos', datos)
             const resultado = await ModificarCoberturaVegetal(datos);
             if (resultado.indicador === 1) {
                 Swal.fire({

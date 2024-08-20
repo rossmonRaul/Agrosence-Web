@@ -122,11 +122,7 @@ const insertarCoberturaVegetal: React.FC<InsertarCoberturaVegetalProps> = ({ onA
         }
 
         const puntosMedicion = await ObtenerPuntoMedicionFincaParcela(fincaParcela);
-
-        
-        console.log('puntos de medicion ', puntosMedicion)
         setpuntosMedicion(puntosMedicion);
-        console.log(puntosMedicion)
     };
 
     const handlePuntoMedicionChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
