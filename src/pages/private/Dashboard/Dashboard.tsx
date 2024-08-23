@@ -1,5 +1,5 @@
 import React, { useEffect, useState, useRef } from 'react';
-import { FormGroup, Label, Input, Col, FormFeedback, Button } from 'reactstrap';
+import { FormGroup, Label, Input, FormFeedback, Button } from 'reactstrap';
 import { useSelector } from "react-redux";
 import BordeSuperior from "../../../components/bordesuperior/BordeSuperior";
 import Sidebar from "../../../components/sidebar/Sidebar";
@@ -9,14 +9,12 @@ import Select, { MultiValue } from 'react-select';
 import '../../../css/Dashboard.css';
 import { ObtenerFincas } from '../../../servicios/ServicioFincas';
 import { ObtenerParcelas } from '../../../servicios/ServicioParcelas';
-import { ObtenerUsuariosAsignadosPorIdentificacion } from '../../../servicios/ServicioUsuario';
 import { ObtenerPuntoMedicionFincaParcela } from "../../../servicios/ServicioContenidoDeNitrogeno";
 import { ObtenerFincasParcelasDeEmpresaPorUsuario, ObtenerMedicionesSensores, ObtenerMedicionesSensoresPorUbicacionPM, ObtenerPuntosMedicionPorIdEmpresa } from "../../../servicios/ServiciosDashboard";
 import { AppStore } from "../../../redux/Store";
 import ReactEcharts from 'echarts-for-react'; 
 import 'leaflet/dist/leaflet.css';
 import { MapContainer, TileLayer, Marker, Popup } from 'react-leaflet';
-import L, { LatLngTuple } from 'leaflet';
 
 interface Option {
   identificacion: string;
@@ -99,6 +97,9 @@ const Dashboard: React.FC = () => {
   const [graficoHr, setGraficoHr] = useState<any>(opcionInicial);
   const [graficoTs, setGraficoTs] = useState<any>(opcionInicial);
   const [graficoTa, setGraficoTa] = useState<any>(opcionInicial);
+  const [graficoLuz, setGraficoLuz] = useState<any>(opcionInicial);
+  const [graficoDirViento, setGraficoDirViento] = useState<any>(opcionInicial);
+  const [graficoVelViento, setGraficoVelViento] = useState<any>(opcionInicial);
 
   const [keyRender, setKeyRender] = useState(0);
   const userState = useSelector((store: AppStore) => store.user);
@@ -107,10 +108,9 @@ const Dashboard: React.FC = () => {
   const [puntosMedicion, setPuntosMedicion] = useState<Option[]>([]);
   const [selectedParcelas, setSelectedParcelas] = useState<MultiValue<any>>([]);
   const [selectedPuntosMedicion, setSelectedPuntosMedicion] = useState<MultiValue<any>>([]);
-  const [selectedFincas, setSelectedFincas] = useState<MultiValue<any>>([]);
-  const [filteredParcelas, setFilteredParcelas] = useState([]);
-
-  const [errors, setErrors] = useState<Record<string, string>>({});
+  const [selectedFincas, setSelectedFincas] = useState<MultiValue<any>>([]);  			 
+	 
+  const [errors] = useState<Record<string, string>>({});
   const [loading, setLoading] = useState(false);
   const [loadingPuntos, setLoadingPuntos] = useState('');
 
@@ -123,6 +123,9 @@ const Dashboard: React.FC = () => {
     hr: true,
     ts: true,
     ta: true,
+	  luz: true,
+    dirViento: true,
+    velViento: true,
   });
 
   const obtenerFechaHaceUnMes = () => {
@@ -163,17 +166,6 @@ const Dashboard: React.FC = () => {
     }));
   };
 
-  const getTodayDate = () => {
-    const today = new Date();
-    return today.toISOString().split('T')[0];
-  };
-
-  const getMinDate = () => {
-    const today = new Date();
-    today.setMonth(today.getMonth() - 1);
-    return today.toISOString().split('T')[0];
-  };
-
   useEffect(() => {
     const obtenerFincas = async () => {
       try {
@@ -189,6 +181,7 @@ const Dashboard: React.FC = () => {
           };
 
           const usuariosAsignados = await ObtenerFincasParcelasDeEmpresaPorUsuario(datos);
+																
 
           const puntosMedicionEmpresa = await ObtenerPuntosMedicionPorIdEmpresa(datosPuntoMedicion);
           setPuntosMedicionMaps(puntosMedicionEmpresa);
@@ -196,6 +189,7 @@ const Dashboard: React.FC = () => {
           const idEmpresa = localStorage.getItem('empresaUsuario');
           if (idEmpresa) {
           const fincasResponse = await ObtenerFincas(parseInt(idEmpresa));
+														  
 
           const fincasUsuario = fincasResponse.filter((finca: any) => idFincasUsuario.includes(finca.idFinca));
           setFincas(fincasUsuario);
@@ -206,6 +200,7 @@ const Dashboard: React.FC = () => {
             setSelectedFincas([{value:primeraFinca.idFinca.toString(), label: primeraFinca.nombre}]);
 
             const parcelasResponse = await ObtenerParcelas(parseInt(idEmpresa));
+																  
 
             const parcelasUsuario = parcelasResponse.filter((parcela: any) => parcela.idFinca === primeraFinca.idFinca);
             setParcelas(parcelasUsuario);
@@ -255,6 +250,7 @@ const Dashboard: React.FC = () => {
         if (parcelasUsuario.length > 0) {
           const primeraParcela = parcelasUsuario[0];
           setSelectedParcelas([{value:primeraParcela.idParcela.toString(), label: primeraParcela.nombre}]);
+
           const fincaParcela = {
             idFinca: parseInt(selectedFincas[0].value),
             idParcela: primeraParcela.idParcela
@@ -288,6 +284,7 @@ const Dashboard: React.FC = () => {
           idParcela: parseInt(selectedParcelas[0].value)
         };
         const puntosMedicion = await ObtenerPuntoMedicionFincaParcela(fincaParcela);
+																				   
         setPuntosMedicion(puntosMedicion);
       }else{
         setSelectedPuntosMedicion([])
@@ -345,6 +342,10 @@ const Dashboard: React.FC = () => {
     setGraficoHr(JSON.parse(JSON.stringify(opcionInicial)));
     setGraficoTs(JSON.parse(JSON.stringify(opcionInicial)));
     setGraficoTa(JSON.parse(JSON.stringify(opcionInicial)));
+    setGraficoLuz(JSON.parse(JSON.stringify(opcionInicial)));
+    setGraficoDirViento(JSON.parse(JSON.stringify(opcionInicial)));
+    setGraficoVelViento(JSON.parse(JSON.stringify(opcionInicial)));																		 
+																			   
     setKeyRender(prevKey => prevKey + 10);
     setLoading(true);
     try {
@@ -368,18 +369,44 @@ const Dashboard: React.FC = () => {
         )
       ).map(date => formatDateToLocalString(date));
 
+     
+      const puntosMedicionUnicosLuz = Array.from(new Set(mediciones.filter(obj => obj.idMedicion === 22).map(obj => obj.codigo)));
+
+      const fechasMedicionUnicasLuz = Array.from(
+        new Set(
+          mediciones
+          .filter(obj => obj.idMedicion === 22)
+          .map(obj => new Date(obj.fechaMedicion))
+        )
+      ).map(date => formatDateToLocalString(date));
+
+      const puntosMedicionUnicosDirViento = Array.from(new Set(mediciones.filter(obj => obj.idMedicion === 23).map(obj => obj.codigo)));
+					
+      const fechasMedicionUnicasDirViento = Array.from(
+        new Set(
+          mediciones
+          .filter(obj => obj.idMedicion === 23)
+          .map(obj => new Date(obj.fechaMedicion))
+        )
+      ).map(date => formatDateToLocalString(date));
+      
+      const puntosMedicionUnicosVelViento = Array.from(new Set(mediciones.filter(obj => obj.idMedicion === 15).map(obj => obj.codigo)));
+					
+      const fechasMedicionUnicasVelViento = Array.from(
+        new Set(
+          mediciones
+          .filter(obj => obj.idMedicion === 15)
+          .map(obj => new Date(obj.fechaMedicion))
+        )
+      ).map(date => formatDateToLocalString(date));
+
       const puntosMedicionUnicosVWC = Array.from(new Set(mediciones.filter(obj => obj.idMedicion === 18).map(obj => obj.codigo)));
 
       const fechasMedicionUnicasVWC = Array.from(new Set(mediciones.filter(obj => obj.idMedicion === 18).map(obj => new Date(
         obj.fechaMedicion)))).map(date => formatDateToLocalString(date));
 
-      const puntosMedicionUnicosConductividad = Array.from(new Set(mediciones.filter(obj => obj.idMedicion === 9).map(obj => obj.codigo)));
-
-      // const fechasMedicionUnicasConductividad = Array.from(new Set(mediciones.filter(obj => obj.idMedicion === 9).map(obj => new Date(obj.fechaMedicion).toLocaleDateString())));
-
       const fechasMedicionUnicasConductividad = Array.from( new Set(mediciones.filter(obj => obj.idMedicion === 9).map(
         obj => new Date(obj.fechaMedicion)))).map(date => formatDateToLocalString(date));
-
 
       const puntosMedicionUnicosHr = Array.from(new Set(mediciones.filter(obj => obj.idMedicion === 21).map(obj => obj.codigo)));
       const fechasMedicionUnicasHr = Array.from(
@@ -389,7 +416,6 @@ const Dashboard: React.FC = () => {
             .map(obj => new Date(obj.fechaMedicion))
         )
       ).map(date => formatDateToLocalString(date));
-
       
       const puntosMedicionUnicosTs = Array.from(new Set(mediciones.filter(obj => obj.idMedicion === 10).map(obj => obj.codigo)));
       const fechasMedicionUnicasTs = Array.from(
@@ -410,6 +436,9 @@ const Dashboard: React.FC = () => {
       ).map(date => formatDateToLocalString(date));
 
       const phData: { name: string, type: string, stack: string, areaStyle: {}, emphasis: { focus: string }, data: number[] }[] = [];
+	    const luzData: { name: string, type: string, data: number[] }[] = [];
+      const dirVientoData: { name: string, type: string, data: number[] }[] = [];
+      const velVientoData: { name: string, type: string, data: number[] }[] = [];
       const vwcData: { name: string, type: string, stack: string, emphasis: { focus: string }, data: number[] }[] = [];
       const conductividadElectricaData: { name: string, type: string, stack: string, emphasis: { focus: string }, data: number[] }[] = [];
       const HrData: { name: string, type: string, data: number[] }[] = [];
@@ -422,6 +451,9 @@ const Dashboard: React.FC = () => {
         const valorMedicion = item.valor;
 
         let ArrayArea: { name: string, type: string, stack: string, areaStyle: {}, emphasis: { focus: string }, data: number[] }[];
+		    let ArrayAreaLuz: { name: string, type: string, data: number[] }[];
+        let ArrayAreaDirViento: { name: string, type: string, data: number[] }[];																			   
+        let ArrayAreaVelViento: { name: string, type: string, data: number[] }[];																			   
         let ArrayLineal: { name: string, type: string, stack: string, data: number[] }[];
         let ArrayLinealHr: { name: string, type: string, data: number[] }[];
         let ArrayLinealTs: { name: string, type: string, stack: string, label: { show: boolean }, emphasis: { focus: string }, data: number[] }[]
@@ -510,6 +542,42 @@ const Dashboard: React.FC = () => {
             ArrayLinealHr.push(existingItem);
           }
         }
+        else if (idMedicion === 22) {
+          ArrayAreaLuz = luzData;
+          existingItem = ArrayAreaLuz.find(obj => obj.name === puntoMedicion);
+          if (!existingItem) {
+            existingItem = {
+              name: puntoMedicion,
+              type: 'line',
+              data: []
+            };
+            ArrayAreaLuz.push(existingItem);
+          }
+        }
+        else if (idMedicion === 23) {
+          ArrayAreaDirViento = dirVientoData;
+          existingItem = ArrayAreaDirViento.find(obj => obj.name === puntoMedicion);
+          if (!existingItem) {
+            existingItem = {
+              name: puntoMedicion,
+              type: 'line',
+              data: []
+            };
+            ArrayAreaDirViento.push(existingItem);
+          }
+        }				
+        else if (idMedicion === 15) {
+          ArrayAreaVelViento = velVientoData;
+          existingItem = ArrayAreaVelViento.find(obj => obj.name === puntoMedicion);
+          if (!existingItem) {
+            existingItem = {
+              name: puntoMedicion,
+              type: 'line',
+              data: []
+            };
+            ArrayAreaVelViento.push(existingItem);
+          }
+        }										 
         else {
           return;
         }
@@ -714,6 +782,108 @@ const Dashboard: React.FC = () => {
         series: HrData
       });
 
+	   
+      setGraficoLuz({
+        ...graficoLuz,
+        title: {
+          text: 'Luz ambiental',
+          left: 'center',
+          top: 10,
+        },
+        legend: {
+          data: puntosMedicionUnicosLuz,
+          top: 35,
+        },
+        grid: {
+          top: 100,
+        },
+        xAxis: [{
+          ...graficoLuz.xAxis[0],
+          data: fechasMedicionUnicasLuz,
+          boundaryGap: true
+        }],
+        dataZoom: [ 
+          { 
+            type: 'inside',
+            start: 0, 
+            end: 25 
+          }, 
+          { 
+            start: 0, 
+            end: 25 
+          } 
+        ],
+        series: luzData
+      });
+
+     
+      setGraficoDirViento({
+        ...graficoDirViento,
+        title: {
+          text: 'Dirección Viento',
+          left: 'center',
+          top: 10,
+        },
+        legend: {
+          data: puntosMedicionUnicosDirViento,
+          top: 35,
+        },
+        grid: {
+          top: 100,
+        },
+        xAxis: [{
+          ...graficoDirViento.xAxis[0],
+          data: fechasMedicionUnicasDirViento,
+          boundaryGap: true
+        }],
+        dataZoom: [ 
+          { 
+            type: 'inside',
+            start: 0, 
+            end: 25 
+          }, 
+          { 
+            start: 0, 
+            end: 25 
+          } 
+        ],
+        series: dirVientoData
+      });
+
+      
+       setGraficoVelViento({
+        ...graficoVelViento,
+        title: {
+          text: 'Velocidad Viento',
+          left: 'center',
+          top: 10,
+        },
+        legend: {
+          data: puntosMedicionUnicosVelViento,
+          top: 35,
+        },
+        grid: {
+          top: 100,
+        },
+        xAxis: [{
+          ...graficoDirViento.xAxis[0],
+          data: fechasMedicionUnicasVelViento,
+          boundaryGap: true
+        }],
+        dataZoom: [ 
+          { 
+            type: 'inside',
+            start: 0, 
+            end: 25 
+          }, 
+          { 
+            start: 0, 
+            end: 25 
+          } 
+        ],
+        series: velVientoData
+      });
+
       setKeyRender(prevKey => prevKey + 1);
     } catch (error) {
       console.error('Error al obtener las mediciones de sensores:', error);
@@ -730,6 +900,10 @@ const Dashboard: React.FC = () => {
     setGraficoHr(JSON.parse(JSON.stringify(opcionInicial)));
     setGraficoTs(JSON.parse(JSON.stringify(opcionInicial)));
     setGraficoTa(JSON.parse(JSON.stringify(opcionInicial)));
+	  setGraficoLuz(JSON.parse(JSON.stringify(opcionInicial)));
+    setGraficoDirViento(JSON.parse(JSON.stringify(opcionInicial)));																	 
+    setGraficoVelViento(JSON.parse(JSON.stringify(opcionInicial)));																	 
+
     setKeyRender(prevKey => prevKey + 10);
     try {
       const data = {
@@ -754,13 +928,8 @@ const Dashboard: React.FC = () => {
       const fechasMedicionUnicasVWC = Array.from(new Set(mediciones.filter(obj => obj.idMedicion === 18).map(obj => new Date(
         obj.fechaMedicion)))).map(date => formatDateToLocalString(date));
 
-      const puntosMedicionUnicosConductividad = Array.from(new Set(mediciones.filter(obj => obj.idMedicion === 9).map(obj => obj.codigo)));
-
-      // const fechasMedicionUnicasConductividad = Array.from(new Set(mediciones.filter(obj => obj.idMedicion === 9).map(obj => new Date(obj.fechaMedicion).toLocaleDateString())));
-
       const fechasMedicionUnicasConductividad = Array.from( new Set(mediciones.filter(obj => obj.idMedicion === 9).map(
-        obj => new Date(obj.fechaMedicion)))).map(date => formatDateToLocalString(date));
-
+        obj => new Date(obj.fechaMedicion)))).map(date => formatDateToLocalString(date));							 															
 
       const puntosMedicionUnicosHr = Array.from(new Set(mediciones.filter(obj => obj.idMedicion === 21).map(obj => obj.codigo)));
       const fechasMedicionUnicasHr = Array.from(
@@ -789,7 +958,42 @@ const Dashboard: React.FC = () => {
             .map(obj => new Date(obj.fechaMedicion))
         )
       ).map(date => formatDateToLocalString(date));
+
+     
+      const puntosMedicionUnicosLuz = Array.from(new Set(mediciones.filter(obj => obj.idMedicion === 22).map(obj => obj.codigo)));
+
+      const fechasMedicionUnicasLuz = Array.from(
+        new Set(
+          mediciones
+            .filter(obj => obj.idMedicion === 22)
+            .map(obj => new Date(obj.fechaMedicion))
+        )
+      ).map(date => formatDateToLocalString(date));
+     
+      const puntosMedicionUnicosDirViento = Array.from(new Set(mediciones.filter(obj => obj.idMedicion === 23).map(obj => obj.codigo)));
+
+      const fechasMedicionUnicasDirViento = Array.from(
+        new Set(
+          mediciones
+            .filter(obj => obj.idMedicion === 23)
+            .map(obj => new Date(obj.fechaMedicion))
+        )
+      ).map(date => formatDateToLocalString(date));
+     
+      const puntosMedicionUnicosVelViento = Array.from(new Set(mediciones.filter(obj => obj.idMedicion === 15).map(obj => obj.codigo)));
+
+      const fechasMedicionUnicasVelViento = Array.from(
+        new Set(
+          mediciones
+            .filter(obj => obj.idMedicion === 15)
+            .map(obj => new Date(obj.fechaMedicion))
+        )
+      ).map(date => formatDateToLocalString(date));
+
       const phData: { name: string, type: string, stack: string, areaStyle: {}, emphasis: { focus: string }, data: number[] }[] = [];
+	    const luzData: { name: string, type: string, data: number[] }[] = [];
+      const dirVientoData: { name: string, type: string, data: number[] }[] = [];
+      const velVientoData: { name: string, type: string, data: number[] }[] = [];
       const vwcData: { name: string, type: string, stack: string, emphasis: { focus: string }, data: number[] }[] = [];
       const conductividadElectricaData: { name: string, type: string, stack: string, emphasis: { focus: string }, data: number[] }[] = [];
 
@@ -803,6 +1007,9 @@ const Dashboard: React.FC = () => {
         const valorMedicion = item.valor;
 
         let ArrayArea: { name: string, type: string, stack: string, areaStyle: {}, emphasis: { focus: string }, data: number[] }[];
+        let ArrayAreaLuz: { name: string, type: string, data: number[] }[];
+        let ArrayAreaDirViento: { name: string, type: string, data: number[] }[];
+        let ArrayAreaVelViento: { name: string, type: string, data: number[] }[];
         let ArrayLineal: { name: string, type: string, stack: string, data: number[] }[];
 
         let ArrayLinealHr: { name: string, type: string, data: number[] }[];
@@ -865,25 +1072,25 @@ const Dashboard: React.FC = () => {
             };
             ArrayLinealTa.push(existingItem);
           }
-          } 
-          else if (idMedicion === 10) {
-            ArrayLinealTs = TsData;
-            existingItem = ArrayLinealTs.find(obj => obj.name === puntoMedicion);
-            if (!existingItem) {
-              existingItem = {
-                name: puntoMedicion,
-                type: 'bar',
-                stack: 'total',
-                label: {show: true},
-                emphasis: { focus: 'series'},
-                data: []
-              };
-              ArrayLinealTs.push(existingItem);
-            }
+        } 
+        else if (idMedicion === 10) {
+          ArrayLinealTs = TsData;
+          existingItem = ArrayLinealTs.find(obj => obj.name === puntoMedicion);
+          if (!existingItem) {
+            existingItem = {
+              name: puntoMedicion,
+              type: 'bar',
+              stack: 'total',
+              label: {show: true},
+              emphasis: { focus: 'series'},
+              data: []
+            };
+            ArrayLinealTs.push(existingItem);
           }
-          else if (idMedicion === 21) {
-            ArrayLinealHr = HrData;
-            existingItem = ArrayLinealHr.find(obj => obj.name === puntoMedicion);
+        }
+        else if (idMedicion === 21) {
+          ArrayLinealHr = HrData;
+          existingItem = ArrayLinealHr.find(obj => obj.name === puntoMedicion);
             if (!existingItem) {
               existingItem = {
                 name: puntoMedicion,
@@ -892,7 +1099,43 @@ const Dashboard: React.FC = () => {
               };
               ArrayLinealHr.push(existingItem);
             }
+        }
+        else if (idMedicion === 22) {
+          ArrayAreaLuz = luzData;
+          existingItem = ArrayAreaLuz.find(obj => obj.name === puntoMedicion);
+          if (!existingItem) {
+            existingItem = {
+              name: puntoMedicion,
+              type: 'line',
+              data: []
+            };
+            ArrayAreaLuz.push(existingItem);
           }
+        }
+        else if (idMedicion === 23) {
+            ArrayAreaDirViento = dirVientoData;
+            existingItem = ArrayAreaDirViento.find(obj => obj.name === puntoMedicion);
+            if (!existingItem) {
+              existingItem = {
+                name: puntoMedicion,
+                type: 'line',
+                data: []
+              };
+              ArrayAreaDirViento.push(existingItem);
+            }									 
+        }		 
+        else if (idMedicion === 15) {
+          ArrayAreaVelViento = velVientoData;
+          existingItem = ArrayAreaVelViento.find(obj => obj.name === puntoMedicion);
+          if (!existingItem) {
+            existingItem = {
+              name: puntoMedicion,
+              type: 'line',
+              data: []
+            };
+            ArrayAreaVelViento.push(existingItem);
+          }									 
+      }		 
         else {
           return;
         }
@@ -1099,6 +1342,106 @@ const Dashboard: React.FC = () => {
         series: HrData
       });
 
+	   
+      setGraficoLuz({
+        ...graficoLuz,
+        title: {
+          text: 'Luz ambiental',
+          left: 'center',
+          top: 10,
+        },
+        legend: {
+          data: puntosMedicionUnicosLuz,
+          top: 35,
+        },
+        grid: {
+          top: 100,
+        },
+        xAxis: [{
+          ...graficoLuz.xAxis[0],
+          data: fechasMedicionUnicasLuz,
+          boundaryGap: true 
+        }],
+        dataZoom: [ 
+          { 
+            type: 'inside', 
+            start: 0, 
+            end: 25 
+          }, 
+          { 
+            start: 0, 
+            end: 25 
+          } 
+        ],
+        series: luzData
+      });
+     
+      setGraficoDirViento({
+        ...graficoDirViento,
+        title: {
+          text: 'Dirección viento',
+          left: 'center',
+          top: 10,
+        },
+        legend: {
+          data: puntosMedicionUnicosDirViento,
+          top: 35,
+        },
+        grid: {
+          top: 100,
+        },
+        xAxis: [{
+          ...graficoDirViento.xAxis[0],
+          data: fechasMedicionUnicasDirViento,
+          boundaryGap: true 
+        }],
+        dataZoom: [ 
+          { 
+            type: 'inside', 
+            start: 0, 
+            end: 25 
+          }, 
+          { 
+            start: 0, 
+            end: 25 
+          } 
+        ],
+        series: dirVientoData
+      });
+     
+      setGraficoVelViento({
+        ...graficoVelViento,
+        title: {
+          text: 'Velocidad viento',
+          left: 'center',
+          top: 10,
+        },
+        legend: {
+          data: puntosMedicionUnicosVelViento,
+          top: 35,
+        },
+        grid: {
+          top: 100,
+        },
+        xAxis: [{
+          ...graficoVelViento.xAxis[0],
+          data: fechasMedicionUnicasVelViento,
+          boundaryGap: true 
+        }],
+        dataZoom: [ 
+          { 
+            type: 'inside', 
+            start: 0, 
+            end: 25 
+          }, 
+          { 
+            start: 0, 
+            end: 25 
+          } 
+        ],
+        series: velVientoData
+      });
+
       setKeyRender(prevKey => prevKey + 1);
     } catch (error) {
       console.error('Error al obtener las mediciones de sensores:', error);
@@ -1168,9 +1511,12 @@ const Dashboard: React.FC = () => {
         </div>
       </div>
       <div className="form-row">
+									
           <FormGroup>
             <Label for="fechaInicio"  className="input-label">Fecha Inicio</Label>
+						
               <Input 
+										  
                 type="date"
                 id="fechaInicio"
                 style={{width:"86%"}}
@@ -1181,10 +1527,15 @@ const Dashboard: React.FC = () => {
                 placeholder="Selecciona una fecha"
               />
               <FormFeedback>{errors.fechaInicio}</FormFeedback>
+				  
           </FormGroup>
+			  
+									
           <FormGroup>
             <Label for="fechaFin" className="input-label">Fecha Fin</Label>
+						
               <Input
+										  
                 type="date"
                 id="fechaFin"
                 name="fechaFin"
@@ -1197,8 +1548,10 @@ const Dashboard: React.FC = () => {
                 // max={getTodayDate()}
               />
               <FormFeedback>{errors.fechaFin}</FormFeedback>
+				  
           </FormGroup>
           <FormGroup>
+			
           <Button style={{
         backgroundColor: '#a5cf60',
         color: 'white',
@@ -1249,6 +1602,15 @@ const Dashboard: React.FC = () => {
         <div style={{ marginRight: '20px' }}>
           <Input type="checkbox" name="ta" checked={visibleCharts.ta} onChange={handleCheckboxChange} /> Ta
         </div>
+        <div style={{ marginRight: '20px' }}>
+          <Input type="checkbox" name="luz" checked={visibleCharts.luz} onChange={handleCheckboxChange} /> Luz ambiental
+        </div>
+        <div style={{ marginRight: '20px' }}>
+          <Input type="checkbox" name="dirViento" checked={visibleCharts.dirViento} onChange={handleCheckboxChange} /> Dirección Viento
+        </div>
+        <div style={{ marginRight: '20px' }}>
+          <Input type="checkbox" name="velViento" checked={visibleCharts.velViento} onChange={handleCheckboxChange} /> Velocidad Viento
+        </div>
       </div>
 
       <div style={{ display: 'flex', flexDirection: 'row', flexWrap: 'wrap', justifyContent: 'space-around', marginTop: '30px' }}>
@@ -1296,6 +1658,30 @@ const Dashboard: React.FC = () => {
           <ReactEcharts
             ref={ref => chartRefs.current[5] = ref}
             option={graficoTs} key={keyRender + 5}
+            style={{ height: '500px', width: '500px', marginBottom: '20px' }}
+            className="react_for_echarts"
+          />
+        )}
+        {visibleCharts.luz && (
+          <ReactEcharts
+            ref={ref => chartRefs.current[6] = ref}
+            option={graficoLuz} key={keyRender + 6}
+            style={{ height: '500px', width: '500px', marginBottom: '20px' }}
+            className="react_for_echarts"
+          />
+        )}
+        {visibleCharts.dirViento && (
+          <ReactEcharts
+            ref={ref => chartRefs.current[7] = ref}
+            option={graficoDirViento} key={keyRender + 7}
+            style={{ height: '500px', width: '500px', marginBottom: '20px' }}
+            className="react_for_echarts"
+          />
+        )}
+        {visibleCharts.velViento && (
+          <ReactEcharts
+            ref={ref => chartRefs.current[8] = ref}
+            option={graficoVelViento} key={keyRender + 8}
             style={{ height: '500px', width: '500px', marginBottom: '20px' }}
             className="react_for_echarts"
           />
