@@ -1648,8 +1648,8 @@ const Dashboard: React.FC = () => {
               isMulti
               name="opciones"
               options={parcelas.map((p) => ({
-                label: String(p.nombre),
-                value: p.idParcela,
+                label: p.nombre,
+                value: String(p.idParcela),
               }))}
               className="basic-multi-select"
               onChange={onChangeParcelasSeleccionados}
