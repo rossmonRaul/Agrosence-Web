@@ -14,10 +14,13 @@ import { exportToExcel } from "../../../utilities/exportReportToExcel.ts";
 import jsPDF from "jspdf";
 import autoTable from "jspdf-autotable";
 import logo from "../../../img/AGROSENSER.png";
+import { ClipLoader } from "react-spinners";
 
 function ReportePlanilla() {
   // Estado para almacenar todos los usuarios asignados
   const [apiData, setApiData] = useState<any[]>([]);
+
+  const [loading, setLoading] = useState(true);
 
   // Estado para el filtro por identificación de usuario
 
@@ -81,6 +84,11 @@ function ReportePlanilla() {
   // Función para filtrar datos
   const filtrarDatos = async () => {
     try {
+      setLoading(true);
+
+      // Usar un pequeño delay para asegurarse de que el estado se actualice y se muestre el loader
+      new Promise<void>((resolve) => setTimeout(resolve, 50));
+
       const idEmpresa = localStorage.getItem("empresaUsuario");
       const formData = {
         fechaInicio: filtroInputInicio,
@@ -90,6 +98,7 @@ function ReportePlanilla() {
       };
 
       if (!validarFechas()) {
+        setLoading(false);
         return;
       }
 
@@ -121,9 +130,13 @@ function ReportePlanilla() {
 
         // Actualizar datos de la tabla
         setApiData(datosConFormato);
+
+        setLoading(false);
       }
     } catch (error) {
       console.error("Error al obtener los datos:", error);
+
+      setLoading(false);
     }
   };
 
@@ -145,7 +158,7 @@ function ReportePlanilla() {
   };
 
   const convertirImagenABase64 = (ruta: any): Promise<string> => {
-    return new Promise((resolve, reject) => {
+    return new Promise((resolve) => {
       const xhr = new XMLHttpRequest();
       xhr.onload = function () {
         const reader = new FileReader();
@@ -385,11 +398,19 @@ function ReportePlanilla() {
             )}
           </div>
           {apiData.length > 0 && (
-            <TableResponsive
-              columns={columns}
-              data={apiData}
-              totales={[montoTotal]}
-            />
+            <div style={{
+                display: 'flex',
+                justifyContent: 'center',
+                alignItems: 'center',
+                height: '50%',
+                margin: '5%'
+                }}>
+                {loading ? (
+                    <ClipLoader color={"#038c3e"} loading={loading} size={100} />
+                ) : (
+                    <TableResponsive columns={columns} data={apiData} totales={[montoTotal]}/>
+                )}
+            </div>
           )}
         </div>
       </div>

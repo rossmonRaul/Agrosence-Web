@@ -15,6 +15,7 @@ import { faFileExcel, faFilePdf } from "@fortawesome/free-solid-svg-icons";
 import jsPDF from "jspdf";
 import autoTable from "jspdf-autotable";
 import logo from '../../../img/AGROSENSER.png';
+import { ClipLoader } from "react-spinners";
 
 function formatFecha(pFecha: string) {
     const fecha = new Date(pFecha);
@@ -38,6 +39,8 @@ function ReporteMedidasAutorizadasSensor() {
     const [selectedParcela, setSelectedParcela] = useState<string>('');
     const [fincas, setFincas] = useState<any[]>([]);
     const [parcelas, setParcelas] = useState<any[]>([]);
+
+    const [loading, setLoading] = useState(false);
 
     // Estado para almacenar todos los usuarios asignados
     const [apiData, setApiData] = useState<any[]>([]);
@@ -114,6 +117,11 @@ function ReporteMedidasAutorizadasSensor() {
     const obtenerRegistros = async () => {
         try {
 
+            setLoading(true);
+
+            // Usar un pequeño delay para asegurarse de que el estado se actualice y se muestre el loader
+            await new Promise<void>((resolve) => setTimeout(resolve, 50));
+
             // Se resetea la tabla
             setApiData([]);
 
@@ -126,6 +134,7 @@ function ReporteMedidasAutorizadasSensor() {
             }
 
             if (!validarFechas()) {
+                setLoading(false);
                 return;
             }
 
@@ -136,6 +145,7 @@ function ReporteMedidasAutorizadasSensor() {
                     icon: 'warning',
                     text: 'No se encontraron registros con los parámetros ingresados'
                 });
+                setLoading(false);
                 return;
             }
 
@@ -150,6 +160,8 @@ function ReporteMedidasAutorizadasSensor() {
 
             // Actualizar datos de la tabla
             setApiData(datosN);
+
+            setLoading(false);
         } catch (error) {            
             console.error('Error al obtener los datos:', error);
         }
@@ -364,7 +376,19 @@ function ReporteMedidasAutorizadasSensor() {
                     </div>
                     <br />
                     {apiData.length > 0 &&
-                        <TableResponsive columns={columns} data={apiData} itemsPerPage={10}/>
+                        <div style={{
+                            display: 'flex',
+                            justifyContent: 'center',
+                            alignItems: 'center',
+                            height: '50%',
+                            margin: '5%'
+                        }}>
+                            {loading ? (
+                                <ClipLoader color={"#038c3e"} loading={loading} size={100} />
+                            ) : (
+                                <TableResponsive columns={columns} data={apiData} itemsPerPage={10}/>
+                            )}
+                        </div>
                     }
                 </div>
             </div>

@@ -12,14 +12,16 @@ import { faFileExcel, faFilePdf } from "@fortawesome/free-solid-svg-icons";
 import Swal from "sweetalert2";
 import { exportToExcel } from "../../../utilities/exportReportToExcel.ts";
 import "../../../css/OrdenCompra.css";
-import { FaFilePdf } from "react-icons/fa";
 import jsPDF from "jspdf";
 import autoTable from "jspdf-autotable";
 import logo from "../../../img/AGROSENSER.png";
+import { ClipLoader } from "react-spinners";
 
 function ReporteEntradasYSalidas() {
   // Estado para almacenar todos los usuarios asignados
   const [apiData, setApiData] = useState<any[]>([]);
+
+  const [loading, setLoading] = useState(true);
 
   // Estado para el filtro por identificación de usuario
 
@@ -83,7 +85,7 @@ function ReporteEntradasYSalidas() {
   };
 
   const convertirImagenABase64 = (ruta: any): Promise<string> => {
-    return new Promise((resolve, reject) => {
+    return new Promise((resolve) => {
       const xhr = new XMLHttpRequest();
       xhr.onload = function () {
         const reader = new FileReader();
@@ -167,6 +169,11 @@ function ReporteEntradasYSalidas() {
   // Función para filtrar datos
   const filtrarDatos = async () => {
     try {
+      setLoading(true);
+
+      // Usar un pequeño delay para asegurarse de que el estado se actualice y se muestre el loader
+      new Promise<void>((resolve) => setTimeout(resolve, 50));
+
       const idEmpresa = localStorage.getItem("empresaUsuario");
       const formData = {
         fechaInicio: filtroInputInicio,
@@ -176,6 +183,7 @@ function ReporteEntradasYSalidas() {
       };
 
       if (!validarFechas()) {
+        setLoading(false);
         return;
       }
 
@@ -216,9 +224,11 @@ function ReporteEntradasYSalidas() {
 
         // Actualizar datos de la tabla
         setApiData(datosConFormato);
+        setLoading(false);
       }
     } catch (error) {
       console.error("Error al obtener los datos:", error);
+      setLoading(false);
     }
   };
 
@@ -400,11 +410,19 @@ function ReporteEntradasYSalidas() {
           </div>
 
           {apiData.length > 0 && (
-            <TableResponsive
-              columns={columns}
-              data={apiData}
-              totales={[montoIngreso, montoGasto, montoBalance]}
-            />
+            <div style={{
+              display: 'flex',
+              justifyContent: 'center',
+              alignItems: 'center',
+              height: '50%',
+              margin: '5%'
+              }}>
+              {loading ? (
+                  <ClipLoader color={"#038c3e"} loading={loading} size={100} />
+              ) : (
+                  <TableResponsive columns={columns} data={apiData} totales={[montoIngreso, montoGasto, montoBalance]}/>
+              )}
+            </div>
           )}
         </div>
       </div>

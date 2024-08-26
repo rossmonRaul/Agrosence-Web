@@ -11,10 +11,13 @@ import { exportToExcel } from "../../../utilities/exportReportToExcel.ts";
 import jsPDF from "jspdf";
 import autoTable from "jspdf-autotable";
 import logo from "../../../img/AGROSENSER.png";
+import { ClipLoader } from "react-spinners";
 
 function ReporteSensores() {
   // Estado para almacenar todos los usuarios asignados
   const [apiData, setApiData] = useState<any[]>([]);
+
+  const [loading, setLoading] = useState(true);
 
   useEffect(() => {
     obtenerDatos();
@@ -22,6 +25,11 @@ function ReporteSensores() {
 
   const obtenerDatos = async () => {
     try {
+      setLoading(true);
+
+      // Usar un pequeño delay para asegurarse de que el estado se actualice y se muestre el loader
+      new Promise<void>((resolve) => setTimeout(resolve, 50));
+
       const idEmpresa = localStorage.getItem("empresaUsuario");
       if (idEmpresa) {
         const formData = {
@@ -31,14 +39,17 @@ function ReporteSensores() {
 
         // Actualizar datos de la tabla
         setApiData(datos);
+
+        setLoading(false);
       }
     } catch (error) {
       console.error("Error al obtener los datos:", error);
+      setLoading(false);
     }
   };
 
   const convertirImagenABase64 = (ruta: any): Promise<string> => {
-    return new Promise((resolve, reject) => {
+    return new Promise((resolve) => {
       const xhr = new XMLHttpRequest();
       xhr.onload = function () {
         const reader = new FileReader();
@@ -205,7 +216,19 @@ function ReporteSensores() {
             )}
           </div>
           {apiData.length > 0 && (
-            <TableResponsive columns={columns} data={apiData} />
+            <div style={{
+                display: 'flex',
+                justifyContent: 'center',
+                alignItems: 'center',
+                height: '50%',
+                margin: '5%'
+                }}>
+                {loading ? (
+                    <ClipLoader color={"#038c3e"} loading={loading} size={100} />
+                ) : (
+                    <TableResponsive columns={columns} data={apiData}/>
+                )}
+            </div>
           )}
         </div>
       </div>
