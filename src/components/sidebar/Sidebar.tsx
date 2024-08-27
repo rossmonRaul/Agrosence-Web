@@ -30,17 +30,28 @@ const isTokenExpired = (token: string | null) => {
 // Componente Sidebar que muestra un menú lateral.
 const Sidebar = ({ children }: { children: React.ReactNode }) => {
     const location = useLocation();
-    const [isOpen, setIsOpen] = useState(false);
-    const toggle = () => setIsOpen(!isOpen);
+
+    const [isOpen, setIsOpen] = useState(() => {
+        const savedState = localStorage.getItem('sidebarState');
+        return savedState ? JSON.parse(savedState) : false;
+    });
+
+    const toggle = () => {
+    const newState = !isOpen;
+    setIsOpen(newState);
+    localStorage.setItem('sidebarState', JSON.stringify(newState));
+};
     // Estado para controlar la apertura y cierre de los elementos secundarios del menú
-    const [submenuOpen, setSubmenuOpen] = useState<{ [path: string]: boolean }>({});
+    const [submenuOpen, setSubmenuOpen] = useState<{ [path: string]: boolean }>(() => {
+        const savedState = localStorage.getItem('submenuState');
+        return savedState ? JSON.parse(savedState) : {};
+    });
 
     // Funcion para manejar la expancion del sidebar
     const toggleSubmenu = (path: string) => {
-        setSubmenuOpen(prevState => ({
-            ...prevState,
-            [path]: !prevState[path]
-        }));
+        const newState = { [path]: !submenuOpen[path] };
+        setSubmenuOpen(newState);
+        localStorage.setItem('submenuState', JSON.stringify(newState));
     };
 
     const navigate = useNavigate();
