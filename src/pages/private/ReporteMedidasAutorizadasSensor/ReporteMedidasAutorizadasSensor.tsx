@@ -7,11 +7,15 @@ import Topbar from "../../../components/topbar/Topbar.tsx";
 import { ObtenerReporteMedidasAutorizadasSensor } from "../../../servicios/ServicioReporte.ts";
 import { IoFilter } from "react-icons/io5";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faFileExcel } from "@fortawesome/free-solid-svg-icons";
 import { exportToExcel } from '../../../utilities/exportReportToExcel.ts';
 import Swal from 'sweetalert2';
 import { ObtenerFincas } from "../../../servicios/ServicioFincas.ts";
 import { ObtenerParcelas } from '../../../servicios/ServicioParcelas';
+import { faFileExcel, faFilePdf } from "@fortawesome/free-solid-svg-icons";
+import jsPDF from "jspdf";
+import autoTable from "jspdf-autotable";
+import logo from '../../../img/AGROSENSER.png';
+import { ClipLoader } from "react-spinners";
 
 function formatFecha(pFecha: string) {
     const fecha = new Date(pFecha);
@@ -35,6 +39,8 @@ function ReporteMedidasAutorizadasSensor() {
     const [selectedParcela, setSelectedParcela] = useState<string>('');
     const [fincas, setFincas] = useState<any[]>([]);
     const [parcelas, setParcelas] = useState<any[]>([]);
+
+    const [loading, setLoading] = useState(false);
 
     // Estado para almacenar todos los usuarios asignados
     const [apiData, setApiData] = useState<any[]>([]);
@@ -111,6 +117,11 @@ function ReporteMedidasAutorizadasSensor() {
     const obtenerRegistros = async () => {
         try {
 
+            setLoading(true);
+
+            // Usar un pequeño delay para asegurarse de que el estado se actualice y se muestre el loader
+            await new Promise<void>((resolve) => setTimeout(resolve, 50));
+
             // Se resetea la tabla
             setApiData([]);
 
@@ -123,6 +134,7 @@ function ReporteMedidasAutorizadasSensor() {
             }
 
             if (!validarFechas()) {
+                setLoading(false);
                 return;
             }
 
@@ -133,6 +145,7 @@ function ReporteMedidasAutorizadasSensor() {
                     icon: 'warning',
                     text: 'No se encontraron registros con los parámetros ingresados'
                 });
+                setLoading(false);
                 return;
             }
 
@@ -147,6 +160,8 @@ function ReporteMedidasAutorizadasSensor() {
 
             // Actualizar datos de la tabla
             setApiData(datosN);
+
+            setLoading(false);
         } catch (error) {            
             console.error('Error al obtener los datos:', error);
         }
@@ -184,6 +199,94 @@ function ReporteMedidasAutorizadasSensor() {
             console.error('Error al obtener las parcelas:', error);
         }
     };
+
+    const convertirImagenABase64 = (ruta:any):Promise<string> => {
+        return new Promise((resolve) => {
+            const xhr = new XMLHttpRequest();
+            xhr.onload = function () {
+                const reader = new FileReader();
+                reader.onloadend = function () {
+                    resolve(reader.result as string);
+                };
+                reader.readAsDataURL(xhr.response);
+            };
+            xhr.open('GET', ruta);
+            xhr.responseType = 'blob';
+            xhr.send();
+        });
+    };
+
+    // Función para obtener la fecha y hora formateadas
+    const getFormattedDateTime = () => {
+        const now = new Date();
+        const year = now.getFullYear();
+        const month = String(now.getMonth() + 1).padStart(2, "0");
+        const day = String(now.getDate()).padStart(2, "0");
+        const hours = String(now.getHours()).padStart(2, "0");
+        const minutes = String(now.getMinutes()).padStart(2, "0");
+        const seconds = String(now.getSeconds()).padStart(2, "0");
+
+        return `${year}-${month}-${day}_${hours}-${minutes}-${seconds}`;
+    };
+
+    const generatePDF = async () => {
+        const doc = new jsPDF();
+    
+        doc.setFontSize(18);
+        doc.setTextColor(0, 0, 0);
+        doc.text("Mediciones Autorizadas de Sensor", 60, 10);
+    
+        const imgBase64 = await convertirImagenABase64(logo);
+        const imgWidth = 30;
+        const imgHeight = 30;
+    
+        doc.addImage(imgBase64, 'PNG', 170, -5, imgWidth, imgHeight);
+    
+        doc.setFontSize(10);
+        doc.setTextColor(0, 0, 0);
+        doc.text("Usuario: " + userName, 14, 25);
+    
+        doc.setFontSize(10);
+        doc.setTextColor(0, 0, 0);
+        doc.text("Fecha: " + getFormattedDateTime().slice(0, -9), 165, 25);
+    
+        autoTable(doc, {
+          startY: 30,
+          columns: [
+            { key: 'euiSensor', header: 'EUI Sensor' },
+            { key: 'nombreSensor', header: 'Nombre de Sensor' },
+            { key: 'puntoMedicion', header: 'Punto de Medición' },
+            { key: 'parcela', header: 'Parcela' },
+            { key: 'finca', header: 'Finca' },
+            { key: 'idMedicion', header: 'ID Medición' },
+            { key: 'nombreMedicion', header: 'Nombre Medición' },
+            { key: 'unidadMedida', header: 'Unidad Medida' },
+            { key: 'nomenclatura', header: 'Nomenclatura' },
+            { key: 'valor', header: 'Valor' },
+            { key: 'fecha', header: 'Fecha' },
+            { key: 'alerta', header: 'Alerta' }
+          ],
+          headStyles: { fillColor: [84, 132, 84], halign: 'center', valign: 'middle' },
+          body: apiData,
+          columnStyles: {
+            euiSensor: { cellWidth: 'auto' },
+            nombreSensor: { cellWidth: 'auto' },
+            puntoMedicion: { cellWidth: 'auto' },
+            parcela: { cellWidth: 'auto' },
+            finca: { cellWidth: 'auto' },
+            idMedicion: { cellWidth: 'auto' },
+            nombreMedicion: { cellWidth: 'auto' },
+            unidadMedida: { cellWidth: 'auto' },
+            nomenclatura: { cellWidth: 'auto' },
+            valor: { cellWidth: 'auto' },
+            fecha: { cellWidth: 'auto' },
+            alerta: { cellWidth: 'auto' }
+          },
+          styles: {fontSize: 5, halign: 'center', valign: 'middle'}
+        });
+    
+        doc.save("MedidasAutorizadasSensor.pdf");
+      };    
 
     // Columnas de la tabla
     const columns = [
@@ -253,18 +356,39 @@ function ReporteMedidasAutorizadasSensor() {
                             <IoFilter size={27} />
                             <span style={{ marginLeft: '5px' }}>Filtrar</span>
                         </button>
-                        {apiData.length > 0 &&
-                            <button onClick={() => exportToExcel({ reportName, data: apiData, columns, userName })}  className="btn-exportar" style={{ display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
+                        {apiData.length > 0 && (
+                            <>
+                                <button onClick={() => generatePDF()} className="btn-exportar" style={{ display: "flex", justifyContent: "center", alignItems: "center",}}>
+                                
+                                <FontAwesomeIcon icon={faFilePdf} style={{ color: "#0CF25D", fontSize: "27px" }} />
+                                <span style={{ marginLeft: "5px" }}>Imprimir</span>
+                                </button>
+                                
+                                <button onClick={() => exportToExcel({ reportName, data: apiData, columns, userName })}  className="btn-exportar" style={{ display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
 
-                            <FontAwesomeIcon icon={faFileExcel} style={{ color: "#0CF25D", fontSize: '27px' }} />                                
-                            <span style={{ marginLeft: '5px' }}>Exportar</span>
+                                <FontAwesomeIcon icon={faFileExcel} style={{ color: "#0CF25D", fontSize: '27px' }} />                                
+                                <span style={{ marginLeft: '5px' }}>Exportar</span>
 
-                            </button>
+                                </button>
+                            </>
+                        )                        
                         }                        
                     </div>
                     <br />
                     {apiData.length > 0 &&
-                        <TableResponsive columns={columns} data={apiData} itemsPerPage={10}/>
+                        <div style={{
+                            display: 'flex',
+                            justifyContent: 'center',
+                            alignItems: 'center',
+                            height: '50%',
+                            margin: '5%'
+                        }}>
+                            {loading ? (
+                                <ClipLoader color={"#038c3e"} loading={loading} size={100} />
+                            ) : (
+                                <TableResponsive columns={columns} data={apiData} itemsPerPage={10}/>
+                            )}
+                        </div>
                     }
                 </div>
             </div>
