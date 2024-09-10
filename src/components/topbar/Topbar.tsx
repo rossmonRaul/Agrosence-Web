@@ -58,20 +58,20 @@ const Topbar: React.FC = () => {
         const cargarDatos = async () => {
             const usuarios = await ObtenerUsuariosPorEmpresa(userState.idEmpresa);
             const notificaciones = await ObtenerNotificaciones();
-            const fincas = await ObtenerFincas();
-            const parcelas = await ObtenerParcelas();
+
+            const fincas = await ObtenerFincas(userState.idEmpresa);
+            const parcelas = await ObtenerParcelas(userState.idEmpresa);
 
             // Filtrar notificaciones por idEmpresa del usuario logueado
             const notificacionesFiltradas = notificaciones.filter((notificacion: { idFinca: any; }) => {
                 const finca = fincas.find((f: { idFinca: any; }) => f.idFinca === notificacion.idFinca);
                 return finca && finca.idEmpresa === userState.idEmpresa;
             });
-
+            console.log(parcelas)
             // Enlazar las notificaciones filtradas con sus respectivas fincas y parcelas
             const notificacionesDetalladas = notificacionesFiltradas.map((notificacion: { idFinca: any; idParcela: any; }) => {
                 const finca = fincas.find((f: { idFinca: any; }) => f.idFinca === notificacion.idFinca);
                 const parcela = parcelas.find((p: { idParcela: any; }) => p.idParcela === notificacion.idParcela);
-
                 return {
                     ...notificacion,
                     nombreFinca: finca?.nombre || 'Finca desconocida',
@@ -93,7 +93,7 @@ const Topbar: React.FC = () => {
             idNotificacion: idNotificacion
 
         }
-        console.log(idNotificacion);
+        
         await EliminarNotificaciones(Data);
         setNotifications((prevNotifications) =>
             prevNotifications.filter((notification) => notification.idNotificacion !== idNotificacion)
