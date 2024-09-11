@@ -62,6 +62,8 @@ const CatalogoActividadesPT = lazy(() => import('./pages/private/CatalogoActivid
 const MedidasCultivos = lazy(() => import('./pages/private/MedidasCultivos/MedidasCultivos'))
 const Cultivos = lazy(() => import('./pages/private/Cultivos/Cultivos'))
 const AlertasCatalogo = lazy(() => import('./pages/private/AlertasCatalogo/AlertasCatalogo'))
+const AdministrarRoles = lazy(() => import('./pages/private/AdministrarRoles/AdministrarRoles'))
+
 
 function App() {
   return (
@@ -92,6 +94,9 @@ function App() {
               <Route path={PrivateRoutes.ADMINISTRAREMPRESAS} element={<AdministrarEmpresas />} />
               <Route path={PrivateRoutes.MEDICIONESSENSOR} element={<MedicionesSensor />} />
               <Route path={PrivateRoutes.MEDIDASCULTIVOS} element={<MedidasCultivos />} />
+
+              <Route path={PrivateRoutes.ADMINISTRARROLES} element={<AdministrarRoles />} />
+              
             </Route>
 
             {/* Rutas accesibles solo para el rol de Admin */}
@@ -142,6 +147,8 @@ function App() {
               <Route path={PrivateRoutes.CONTENIDODENITROGENO} element={<ContenidoDeNitrogeno/>}/>
               <Route path={PrivateRoutes.CATALOGOACTIVIDADESPT} element={<CatalogoActividadesPT/>}/>
               <Route path={PrivateRoutes.ALERTASCATALOGO} element={<AlertasCatalogo/>}/>
+
+
             </Route>
           </RoutesWithNotFound>
         </BrowserRouter>

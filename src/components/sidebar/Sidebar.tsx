@@ -98,6 +98,12 @@ const Sidebar = ({ children }: { children: React.ReactNode }) => {
             roles: [1]
         },
         {
+            path: "/administrarroles",
+            name: "Administrar Roles",
+            icon: <img src='/medida-cultivo.png' style={{ width: '22px' }} />,
+            roles: [1]
+        },
+        {
             path: "/administrarusuariosasignados",
             name: "Usuarios Asignados",
             icon: <FaUserCog />,
