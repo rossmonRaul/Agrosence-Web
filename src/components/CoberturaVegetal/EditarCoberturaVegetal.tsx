@@ -6,6 +6,7 @@ import { ObtenerParcelas } from '../../servicios/ServicioParcelas.ts';
 import { ObtenerUsuariosAsignadosPorIdentificacion } from '../../servicios/ServicioUsuario.ts';
 import { ModificarCoberturaVegetal, ObtenerPuntoMedicionFincaParcela } from "../../servicios/ServicioCoberturaVegetal.ts";
 import '../../css/CrearCuenta.css';
+import { IoSave } from 'react-icons/io5';
 
 // Interfaz para las propiedades del componente
 interface CoberturaVegetalSeleccionado {
@@ -287,7 +288,6 @@ const ModificacionCoberturaVegetal: React.FC<CoberturaVegetalSeleccionado> = ({
 
     return (
         <div id='general' style={{ display: 'flex', flexDirection: 'column', paddingBottom: '0rem', width: '100%', margin: '0 auto' }}>
-            <h2>Cobertura Vegetal</h2>
             <div style={{ display: 'flex', flexDirection: 'row', marginBottom: '0rem' }}>
                 <div style={{ flex: 1, marginRight: '0.5rem', marginLeft: '0.5rem' }}>
                     <FormGroup>
@@ -413,11 +413,9 @@ const ModificacionCoberturaVegetal: React.FC<CoberturaVegetalSeleccionado> = ({
                     </FormGroup>
                 </div>
             </div>
-            <FormGroup row>
-                <Col sm={{ size: 10, offset: 2 }}>
-                    <Button onClick={handleSubmitConValidacion} className="btn-styled">Guardar</Button>
-                </Col>
-            </FormGroup>
+            <div className='botonesN'>
+                <Button onClick={handleSubmitConValidacion} className="btn-styled"><IoSave size={20} style={{marginRight: '1%'}}/>Actualizar datos</Button>
+            </div>
         </div>
     );
 };

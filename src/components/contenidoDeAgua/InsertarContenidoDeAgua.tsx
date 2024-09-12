@@ -6,6 +6,7 @@ import Swal from 'sweetalert2';
 import { ObtenerFincas } from '../../servicios/ServicioFincas.ts';
 import { ObtenerParcelas } from '../../servicios/ServicioParcelas.ts';
 import { ObtenerUsuariosAsignadosPorIdentificacion } from '../../servicios/ServicioUsuario.ts';
+import { IoSave } from 'react-icons/io5';
 
 interface InsertarContenidoDeAguaProps {
     onAdd: () => void;
@@ -301,7 +302,7 @@ const getTodayDate = () => {
 
     return (
         <div id='general' style={{ display: 'flex', flexDirection: 'column', paddingBottom: '0rem', width: '100%', margin: '0 auto' }}>
-          <h2>Contenido De Agua</h2>
+          
            <div className="form-container-fse" style={{ display: 'flex', flexDirection: 'column', width: '95%', marginLeft: '0.5rem' }}>
              <div style={{ flex: 1, marginRight: '0.5rem', marginLeft: '0.5rem' }}>
                 <FormGroup>
@@ -438,13 +439,8 @@ const getTodayDate = () => {
             </div>
         </div>
 
-        <div style={{ flex: 1, marginTop: '0.5rem', marginRight: '0.5rem', marginLeft: '0.5rem' }}>
-        <FormGroup row>
-                        <Col sm={{ size: 10, offset: 2 }}>
-                           
-                            <Button onClick={handleSubmit} className="btn-styled">Guardar</Button>
-                        </Col>
-                    </FormGroup>
+        <div className='botonesN'>
+            <Button onClick={handleSubmit} className="btn-styled"><IoSave size={20} style={{marginRight: '1%'}}/>Guardar</Button>
         </div>
     </div>
        );

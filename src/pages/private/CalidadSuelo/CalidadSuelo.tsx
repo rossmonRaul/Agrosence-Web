@@ -228,7 +228,7 @@ function CalidadSuelo() {
                         </div>
                         <button onClick={() => abrirCerrarModalCrearMedicion()} className="btn-crear-style" style={{ marginLeft: 'auto', display: 'flex', justifyContent: 'center', alignItems: 'center', marginTop: '10px' }}>
                             <IoAddCircleOutline size={27} />
-                            <span style={{ marginLeft: '5px' }}>Crear Medición</span>
+                            <span style={{ marginLeft: '5px' }}>Crear medición</span>
                             </button>
                     </div>
                     <TableResponsive columns={columns} data={MedicionesFiltradas} openModal={openModal} toggleStatus={toggleStatus} btnActionName={"Editar"} />
@@ -238,7 +238,7 @@ function CalidadSuelo() {
             <Modal
                 isOpen={modalEditar}
                 toggle={abrirCerrarModalEditar}
-                title="Editar Medición Suelo"
+                title="Editar medición de suelo"
                 onCancel={abrirCerrarModalEditar}
             >
                 <div className='form-container'>
@@ -273,7 +273,7 @@ function CalidadSuelo() {
             <Modal
                 isOpen={modalCrearMedicionSuelo}
                 toggle={abrirCerrarModalCrearMedicion}
-                title="Crear Medición"
+                title="Crear medición de suelo"
                 onCancel={abrirCerrarModalCrearMedicion}
             >
                 <div className='form-container'>

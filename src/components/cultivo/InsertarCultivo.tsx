@@ -6,6 +6,7 @@ import { ObtenerParcelas } from '../../servicios/ServicioParcelas.ts';
 import '../../css/OrdenCompra.css';
 import { InsertarCultivo } from '../../servicios/ServicioCultivo.ts';
 import '../../css/lista.css';
+import { IoSave } from 'react-icons/io5';
 
 interface CrearCultivoProps {
     onAdd: () => void;
@@ -184,8 +185,7 @@ const CrearCultivo: React.FC<CrearCultivoProps> = ({ onAdd }) => {
     };
 
     return (
-        <div id='general' style={{ display: 'flex', flexDirection: 'column', paddingBottom: '0rem', width: '100%', margin: '0 auto' }}>
-            <h2>Cultivo</h2>
+        <div id='general' style={{ display: 'flex', flexDirection: 'column', paddingBottom: '0rem', width: '100%', margin: '0 auto' }}>            
             <div style={{ display: 'flex', flexDirection: 'row', marginBottom: '0rem' }}>
                 <div style={{ flex: 1, marginRight: '0.5rem', marginLeft: '0.5rem' }}>
                     <FormGroup>
@@ -224,7 +224,7 @@ const CrearCultivo: React.FC<CrearCultivoProps> = ({ onAdd }) => {
                                 value={formData.cultivo}
                                 onChange={handleInputChange}
                                 className={errors.codigo ? 'input-styled input-error' : 'input-styled'}
-                                placeholder="cultivo"
+                                placeholder="Nombre del cultivo"
                                 maxLength={50}
                             />
                             <FormFeedback>{errors.cultivo}</FormFeedback>
@@ -232,11 +232,13 @@ const CrearCultivo: React.FC<CrearCultivoProps> = ({ onAdd }) => {
                     </FormGroup>
                 </div>
             </div>
-            <FormGroup row>
-                <Col sm={{ size: 10, offset: 2 }}>
-                    <Button onClick={handleSubmit} className="btn-styled">Guardar</Button>
-                </Col>
-            </FormGroup>
+            <div className='botonesN'>
+                <FormGroup row>
+                    <Col sm={{ size: 10, offset: 2 }}>
+                        <Button onClick={handleSubmit} className="btn-styled"><IoSave size={20} style={{marginRight: '1%'}}/>Guardar</Button>
+                    </Col>
+                </FormGroup>
+            </div>            
         </div >
     );
 

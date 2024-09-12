@@ -6,6 +6,7 @@ import Swal from 'sweetalert2';
 import { ObtenerFincas } from '../../servicios/ServicioFincas.ts';
 import { ObtenerParcelas } from '../../servicios/ServicioParcelas.ts';
 import { ObtenerUsuariosAsignadosPorIdentificacion } from '../../servicios/ServicioUsuario.ts';
+import { IoSave } from 'react-icons/io5';
 
 interface InsertarPuntoMedicionProps {
     onAdd: () => void;
@@ -197,7 +198,6 @@ const InsertarPuntoMedicion: React.FC<InsertarPuntoMedicionProps> = ({ onAdd }) 
 
     return (
         <div id='general' style={{ display: 'flex', flexDirection: 'column', paddingBottom: '0rem', width: '100%', margin: '0 auto' }}>
-                <h2>Punto de Medición</h2>
                 <div style={{ display: 'flex', flexDirection: 'row', marginBottom: '0rem' }}>
                 <div style={{ flex: 1, marginRight: '0.5rem', marginLeft: '0.5rem' }}>
                 <FormGroup> 
@@ -302,12 +302,9 @@ const InsertarPuntoMedicion: React.FC<InsertarPuntoMedicionProps> = ({ onAdd }) 
                 </div>
                 
             </div>
-            <FormGroup row>
-                <Col sm={{ size: 10, offset: 2 }}>
-                    {/* Agregar aquí el botón de cancelar proporcionado por el modal */}
-                    <Button onClick={handleSubmit} className="btn-styled">Guardar</Button>
-                </Col>
-            </FormGroup>
+            <div className='botonesN'>
+                <Button onClick={handleSubmit} className="btn-styled"><IoSave size={20} style={{marginRight: '1%'}}/>Guardar</Button>
+            </div>                    
         </div>
     );
     

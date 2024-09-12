@@ -282,7 +282,7 @@ function OrdenCompra() {
                         </div>
                         <button onClick={() => abrirCerrarModalCrearOrdenCompra()} className="btn-crear-style" style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', marginLeft: '10px' }}>
                             <IoAddCircleOutline size={27} />
-                            <span style={{ marginLeft: '5px' }}>Crear Registro</span>
+                            <span style={{ marginLeft: '5px' }}>Crear orden de compra</span>
                         </button>
                         <button onClick={exportToExcel} className="btn-exportar" style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', marginLeft: '10px' }}>
 
@@ -298,7 +298,7 @@ function OrdenCompra() {
             <Modal
                 isOpen={modalEditar}
                 toggle={abrirCerrarModalEditar}
-                title="Editar Orden Compra"
+                title="Editar orden de compra"
                 onCancel={abrirCerrarModalEditar}
             >
                 <div className='form-container'>
@@ -327,7 +327,7 @@ function OrdenCompra() {
             <Modal
                 isOpen={modalCrearOrdenCompra}
                 toggle={abrirCerrarModalCrearOrdenCompra}
-                title="Crear Orden de Compra"
+                title="Crear orden de compra"
                 onCancel={abrirCerrarModalCrearOrdenCompra}
             >
                 <div className='form-container'>

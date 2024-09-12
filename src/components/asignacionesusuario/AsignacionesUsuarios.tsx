@@ -10,6 +10,7 @@ import '../../css/CrearCuenta.css'
 import TableResponsive from '../table/table';
 import Modal from '../modal/Modal';
 import AsignarFincaParcela from '../asignarfincaparcela/AsignarFincaParcela';
+import {IoCheckmark} from 'react-icons/io5';
     
 // Definición de las propiedades que espera recibir el componente
 interface Props {
@@ -270,7 +271,6 @@ const AsignacionesUsuarios: React.FC<Props> = ({ identificacion, idEmpresa }) =>
     return (
         <div>
             <div className="form-container-fse">
-                <h2>Asignar nueva finca y parcela</h2>
                 <FormGroup>
                     <label htmlFor="fincas">Finca:</label>
                     <select className="custom-select" id="fincas" value={selectedFinca} onChange={handleFincaChange}>
@@ -293,16 +293,17 @@ const AsignacionesUsuarios: React.FC<Props> = ({ identificacion, idEmpresa }) =>
                     {errors.parcela && <FormFeedback>{errors.parcela}</FormFeedback>}
                 </FormGroup>
             </div>
-            <button onClick={handleSubmitConValidacion} className="btn-styled">Asignar Datos</button>
-
-            <h2>Fincas y Parcelas Asignadas</h2>
-
-            <TableResponsive columns={columns} data={usuariosAsignados} openModal={openModal} toggleStatus={toggleStatus} btnActionName={"Editar"} />
+            <div className='botonesN'>
+                <button onClick={handleSubmitConValidacion} className="btn-styled"><IoCheckmark size={20} style={{marginRight: '1%'}}/>Asignar datos</button>
+            </div>            
+            <br />
+            <h2>Fincas y parcelas asignadas</h2>
+            <TableResponsive itemsPerPage={2} columns={columns} data={usuariosAsignados} openModal={openModal} toggleStatus={toggleStatus} btnActionName={"Editar"} />
    
             <Modal
                 isOpen={modalEditar}
                 toggle={abrirCerrarModalEditar}
-                title="Editar Finca y Parcela"
+                title="Editar finca y parcela"
                 onCancel={abrirCerrarModalEditar}
             >
                 <div className='form-container'>

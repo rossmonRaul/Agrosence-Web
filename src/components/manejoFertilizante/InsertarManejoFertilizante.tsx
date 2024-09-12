@@ -7,6 +7,7 @@ import { ObtenerParcelas } from '../../servicios/ServicioParcelas.ts';
 import { ObtenerTipoFertilizantes } from '../../servicios/ServicioTipoFertilizante.ts';
 import { ObtenerTipoAplicacion } from '../../servicios/ServicioTipoAplicacion.ts';
 import { ObtenerUsuariosAsignadosPorIdentificacion } from '../../servicios/ServicioUsuario.ts';
+import { IoSave } from 'react-icons/io5';
 
 interface InsertarManejoFertilizanteProps {
     onAdd: () => void;
@@ -265,11 +266,11 @@ const InsertarManejoFertilizante: React.FC<InsertarManejoFertilizanteProps> = ({
     };
 
     return (
-        <div id='general' style={{ display: 'flex', flexDirection: 'column', paddingBottom: '1rem', width: '90%', margin: '0 auto' }}>
+        <div id='general' style={{ display: 'flex', flexDirection: 'column', paddingBottom: '1rem', width: '100%', margin: '0 auto' }}>
             <div className="form-container-fse" style={{ display: 'flex', flexDirection: 'column', width: '100%' }}>
                 <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: '1rem', flexWrap: 'wrap' }}>
                     <div style={{ flex: '1 1 45%', marginRight: '1rem' }}>
-                        <FormGroup>
+                        <FormGroup style={{padding: '0', margin: '0'}}>
                             <label htmlFor="fincas">Finca:</label>
                             <select className="custom-select input-styled" id="fincas" value={selectedFinca} onChange={handleFincaChange}>
                                 <option key="default-finca" value="">Seleccione una finca...</option>
@@ -312,7 +313,7 @@ const InsertarManejoFertilizante: React.FC<InsertarManejoFertilizanteProps> = ({
                     </div>
                     <div style={{ flex: '1 1 45%' }}>
                         <FormGroup>
-                            <label htmlFor="cultivoTratado">Cultivo Tratado</label>
+                            <label htmlFor="cultivoTratado">Cultivo tratado</label>
                             <Input
                                 type="text"
                                 id="cultivoTratado"
@@ -332,7 +333,7 @@ const InsertarManejoFertilizante: React.FC<InsertarManejoFertilizanteProps> = ({
                 <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: '1rem', flexWrap: 'wrap' }}>
                     <div style={{ flex: '1 1 45%', marginRight: '1rem' }}>
                         <FormGroup>
-                            <label htmlFor="fertilizante">Tipo de Fertilizante</label>
+                            <label htmlFor="fertilizante">Tipo de fertilizante</label>
                             <Input
                                 type="select"
                                 name="fertilizante"
@@ -355,7 +356,7 @@ const InsertarManejoFertilizante: React.FC<InsertarManejoFertilizanteProps> = ({
                     </div>
                     <div style={{ flex: '1 1 45%' }}>
                         <FormGroup>
-                            <label htmlFor="Aplicacion">Tipo de Aplicación</label>
+                            <label htmlFor="Aplicacion">Tipo de aplicación</label>
                             <Input
                                 type="select"
                                 name="Aplicacion"
@@ -433,7 +434,7 @@ const InsertarManejoFertilizante: React.FC<InsertarManejoFertilizanteProps> = ({
                 <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: '1rem', flexWrap: 'wrap' }}>
                     <div style={{ flex: '1 1 45%', marginRight: '1rem' }}>
                         <FormGroup>
-                            <label htmlFor="accionesAdicionales">Acciones Adicionales</label>
+                            <label htmlFor="accionesAdicionales">Acciones adicionales</label>
                             <Input
                                 type="text"
                                 id="accionesAdicionales"
@@ -450,7 +451,7 @@ const InsertarManejoFertilizante: React.FC<InsertarManejoFertilizanteProps> = ({
                     </div>
                     <div style={{ flex: '1 1 45%' }}>
                         <FormGroup>
-                            <label htmlFor="condicionesAmbientales">Condiciones Ambientales</label>
+                            <label htmlFor="condicionesAmbientales">Condiciones ambientales</label>
                             <Input
                                 type="textarea"
                                 id="condicionesAmbientales"
@@ -485,11 +486,9 @@ const InsertarManejoFertilizante: React.FC<InsertarManejoFertilizanteProps> = ({
                     </FormGroup>
                 </div>
     
-                <FormGroup row>
-                    <Col sm={{ size: 10, offset: 2 }}>
-                        <Button onClick={handleSubmit} className="btn-styled">Guardar</Button>
-                    </Col>
-                </FormGroup>
+                <div className='botonesN'>
+                        <Button onClick={handleSubmit} className="btn-styled"><IoSave size={20} style={{marginRight: '2%'}}/>Guardar</Button>
+                </div>
             </div>
         </div>
     );

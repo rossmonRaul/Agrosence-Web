@@ -168,7 +168,7 @@ function AdministrarEmpresas() {
                         </div>
                         <button onClick={() => abrirCerrarModalInsertar()} className="btn-crear-style" style={{ marginLeft: 'auto', display: 'flex', justifyContent: 'center', alignItems: 'center', marginTop: '10px' }}>
                             <IoAddCircleOutline size={27} />
-                            <span style={{ marginLeft: '5px' }}>Crear Empresa</span>
+                            <span style={{ marginLeft: '5px' }}>Crear empresa</span>
                         </button>
                     </div>
                     <TableResponsive columns={columns} data={empresasFiltrados} openModal={openModal} btnActionName={"Editar"} toggleStatus={toggleStatus} />
@@ -179,7 +179,7 @@ function AdministrarEmpresas() {
             <Modal
                 isOpen={modalInsertar}
                 toggle={abrirCerrarModalInsertar}
-                title="Insertar Empresa"
+                title="Insertar empresa"
                 onCancel={abrirCerrarModalInsertar}
             >
                 <div className='form-container'>
@@ -194,7 +194,7 @@ function AdministrarEmpresas() {
             <Modal
                 isOpen={modalEditar}
                 toggle={abrirCerrarModalEditar}
-                title="Editar Empresa"
+                title="Editar empresa"
                 onCancel={abrirCerrarModalEditar}
             >
                 <div className='form-container'>

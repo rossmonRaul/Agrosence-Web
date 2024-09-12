@@ -51,8 +51,19 @@
 
 .form-row {
   display: flex;
+  justify-content: space-around;
   flex-direction: row;
+  align-items: center;
   margin-bottom: 1rem;
+}
+
+/* Se acomodan los elementos en columna cuando la pantalla se hace mas pequeña */
+@media (max-width: 1300px) {
+  .form-row {
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+  }
 }
 
 .form-group {
@@ -64,4 +75,16 @@
 .button-custom:hover {
   width: 200px;
   background-color: royalblue;
+}
+
+.basic-multi-select{
+  width: 100%;
+}
+
+.form-row .form-group{
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: start;
+  width: 100%;
 }

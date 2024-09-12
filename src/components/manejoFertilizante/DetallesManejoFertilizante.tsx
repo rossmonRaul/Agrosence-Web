@@ -141,7 +141,6 @@ const DetallesManejoFertilizantes: React.FC<ManejoFertilizantesSeleccionado> = (
 
     return (
         <div id='general' style={{ display: 'flex', flexDirection: 'column', paddingBottom: '0rem', width: '100%', margin: '0 auto' }}>
-            <h2>Detalles Manejo de Fertilizantes</h2>
             <div style={{ display: 'flex', flexDirection: 'row', marginBottom: '0rem' }}>
                 <div style={{ flex: 1, marginRight: '0.5rem', marginLeft: '0.5rem' }}>
                     <FormGroup>

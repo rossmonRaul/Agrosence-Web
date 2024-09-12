@@ -4,6 +4,7 @@ import '../../css/FormSeleccionEmpresa.css'
 import Swal from 'sweetalert2';
 import '../../css/CrearCuenta.css'
 import { EditarFincas } from '../../servicios/ServicioFincas';
+import { IoSave } from 'react-icons/io5';
 
 // Interfaz para las propiedades del componente EditarEmpresa
 interface Props {
@@ -150,7 +151,9 @@ const EditarFinca: React.FC<Props> = ({ idFinca, nombreEditar,ubicacion, onEdit 
                     </Col>
                 </FormGroup>
             </div>
-            <button onClick={handleSubmitConValidacion} className="btn-styled">Actualizar Datos</button>
+            <div className='botonesN'>
+                <button onClick={handleSubmitConValidacion} className="btn-styled"><IoSave size={20} style={{marginRight: '2%'}}/>Actualizar</button>
+            </div>            
         </div>
     );
 }

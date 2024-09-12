@@ -219,7 +219,7 @@ function AdministrarParcelas() {
                         </div>
                         <button onClick={() => abrirCerrarModalInsertar()} className="btn-crear-style" style={{ marginLeft: 'auto', display: 'flex', justifyContent: 'center', alignItems: 'center', marginTop: '10px' }}>
                         <IoAddCircleOutline size={27} />
-                        <span style={{ marginLeft: '5px' }}>Crear Parcela</span>
+                        <span style={{ marginLeft: '5px' }}>Crear parcela</span>
                         </button>
                     </div>
                     <TableResponsive columns={columns} data={parcelasFiltradas} openModal={openModal} btnActionName={"Editar"} toggleStatus={toggleStatus} />
@@ -229,7 +229,7 @@ function AdministrarParcelas() {
             <Modal
                 isOpen={modalInsertar}
                 toggle={abrirCerrarModalInsertar}
-                title="Insertar Parcela"
+                title="Insertar parcela"
                 onCancel={abrirCerrarModalInsertar}
             >
                 <div className='form-container'>
@@ -244,7 +244,7 @@ function AdministrarParcelas() {
             <Modal
                 isOpen={modalEditar}
                 toggle={abrirCerrarModalEditar}
-                title="Editar Parcela"
+                title="Editar parcela"
                 onCancel={abrirCerrarModalEditar}
             >
                 <div className='form-container'>

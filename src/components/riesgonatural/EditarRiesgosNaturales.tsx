@@ -7,6 +7,7 @@ import { ObtenerUsuariosAsignadosPorIdentificacion } from '../../servicios/Servi
 import '../../css/CrearCuenta.css';
 import { useDropzone } from 'react-dropzone';
 import { ActualizarRiesgoNatural, DesactivarDocumentoRiesgoNatural, InsertarDocumentacionRiesgoNatural, ObtenerDocumentacionRiesgoNatural } from '../../servicios/ServicioRiesgoNatural.ts';
+import { IoArrowBack, IoArrowForward, IoSave } from 'react-icons/io5';
 
 // Interfaz para las propiedades del componente
 interface RiesgoSeleccionado {
@@ -512,7 +513,6 @@ const EditarRiesgoNatural: React.FC<RiesgoSeleccionado> = ({
         <div id='general' style={{ display: 'flex', flexDirection: 'column', paddingBottom: '0rem', width: '90%', margin: '0 auto', minWidth: '650px' }}>
             {step === 1 && (
                 <div>
-                    <h2>Riesgos Naturales</h2>
                     <div className="form-container-fse" style={{ display: 'flex', flexDirection: 'row', width: '100%' }}>
                         <div style={{ marginRight: '10px', width: '50%' }}>
                             <FormGroup>
@@ -602,13 +602,13 @@ const EditarRiesgoNatural: React.FC<RiesgoSeleccionado> = ({
 
                     </div>
 
-
-                    <button onClick={handleNextStep} className="btn-styled">Siguiente</button>
+                    <div className='botonesN'>
+                        <button onClick={handleNextStep} className="btn-styled">Siguiente<IoArrowForward size={20} style={{marginLeft: '2%'}}/></button>
+                    </div>
                 </div>
             )}
             {step === 2 && (
                 <div>
-                    <h2>Riesgos Naturales</h2>
                     <div className="row" style={{ display: "flex" }}>
                         <div className="col-sm-4" style={{ marginRight: '10px', width: '50%' }}>
                             <FormGroup row>
@@ -682,28 +682,25 @@ const EditarRiesgoNatural: React.FC<RiesgoSeleccionado> = ({
                             </Col>
                         </FormGroup>
                     </div>
-                    <button onClick={handlePreviousStep} className='btn-styled-danger'>Anterior</button>
-                    <button onClick={handleNextStep} className="btn-styled">Siguiente</button>
+                    <div className='botones'>
+                        <button onClick={handlePreviousStep} className='btn-styled-danger'><IoArrowBack size={20} style={{marginRight: '2%'}}/>Anterior</button>
+                        <button onClick={handleNextStep} className="btn-styled">Siguiente<IoArrowForward size={20} style={{marginLeft: '2%'}}/></button>
+                    </div>
                 </div>
 
             )}
             {step === 3 && (
                 <div>
-                    <h2>Riesgos Naturales</h2>
-
                     <div className="row" style={{ display: "flex", marginTop: "10px" }}>
                         <div className="col-sm-4" style={{ marginRight: '0px', width: '100%' }}>
                             <DropZoneComponent />
                         </div>
 
                     </div>
-                    <FormGroup row>
-                        <Col sm={{ size: 10, offset: 2 }}>
-                            {/* Agregar aquí el botón de cancelar proporcionado por el modal */}
-                            <button onClick={handlePreviousStep} className='btn-styled-danger'>Anterior</button>
-                            <Button onClick={handleSubmitConValidacion} className="btn-styled">Guardar</Button>
-                        </Col>
-                    </FormGroup>
+                    <div className='botones'>
+                        <button onClick={handlePreviousStep} className='btn-styled-danger'><IoArrowBack size={20} style={{marginRight: '2%'}}/>Anterior</button>
+                        <Button onClick={handleSubmitConValidacion} className="btn-styled"><IoSave size={20} style={{marginRight: '2%'}}/>Actualizar datos</Button>
+                    </div>
                 </div>
 
             )}

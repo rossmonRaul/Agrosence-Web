@@ -101,3 +101,57 @@ export const ObtenerFincasUbicacionPorIdEmpresa = async (data: any) => {
     const url = `${baseURL}/api/v1.0/${controlador}/ObtenerFincasUbicacionPorIdEmpresa`;
     return await ProcesarDatosApi('POST', url, data);
 }
+export const ObtenerAccesoMenuPorRol = async (data: any) => {
+    const url = `${baseURL}/api/v1.0/${controlador}/ObtenerAccesoMenuPorRol`;
+    return await ProcesarDatosApi('POST', url, data);
+}
+
+export const CrearRolAPI = async (data: any) => {
+    const url = `${baseURL}/api/v1.0/${controlador}/CrearRol`;
+    return await ProcesarDatosApi('POST', url, data);
+}
+
+export const ObtenerRoles = async () => {
+    const url = `${baseURL}/api/v1.0/${controlador}/ObtenerRoles`;
+    return await ProcesarDatosApi('POST', url, null);
+}
+
+export const CambiarEstadoRol = async (data: any) => {
+    const url = `${baseURL}/api/v1.0/${controlador}/CambiarEstadoRol`;
+    return await ProcesarDatosApi('POST', url, data);
+}
+
+export const ActualizarNombreRol = async (data: any) => {
+    const url = `${baseURL}/api/v1.0/${controlador}/CambiarNombreRol`;
+    return await ProcesarDatosApi('POST', url, data);
+}
+
+export const CambiarPermisosRol = async (data: any) => {
+    const url = `${baseURL}/api/v1.0/${controlador}/CambiarPermisosRol`;
+    return await ProcesarDatosApi('POST', url, data);
+}
+
+export const ObtenerCategorias = async () => {
+    const url = `${baseURL}/api/v1.0/${controlador}/ObtenerCategorias`;
+    return await ProcesarDatosApi('POST', url, null);
+}
+
+export const ObtenerOpcionesMenu = async () => {
+    const url = `${baseURL}/api/v1.0/${controlador}/ObtenerOpcionesMenu`;
+    return await ProcesarDatosApi('POST', url, null);
+}
+
+export const ObtenerOpcionesRol = async (data: any) => {
+    const url = `${baseURL}/api/v1.0/${controlador}/ObtenerOpcionesRol`;
+    return await ProcesarDatosApi('POST', url, data);
+}
+
+export const AgregarAccesoMenuRol = async (data: any) => {
+    const url = `${baseURL}/api/v1.0/${controlador}/AgregarAccesoMenuRol`;
+    return await ProcesarDatosApi('POST', url, data);
+}
+
+export const EliminarPermisosRolMenu = async (data: any) => {
+    const url = `${baseURL}/api/v1.0/${controlador}/EliminarPermisosRolMenu`;
+    return await ProcesarDatosApi('POST', url, data);
+}

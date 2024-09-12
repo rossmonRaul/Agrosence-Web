@@ -8,6 +8,7 @@ import { ObtenerTipoAplicacion } from '../../servicios/ServicioTipoAplicacion.ts
 import { ObtenerUsuariosAsignadosPorIdentificacion } from '../../servicios/ServicioUsuario.ts';
 import { EditarManejoFertilizantes } from "../../servicios/ServicioFertilizantes.ts";
 import '../../css/CrearCuenta.css';
+import { IoSave } from 'react-icons/io5';
 
 // Interfaz para las propiedades del componente
 interface FertilizanteSeleccionado {
@@ -355,8 +356,7 @@ const ModificacionManejoFertilizante: React.FC<FertilizanteSeleccionado> = ({
     };
 
     return (
-        <div id='general' style={{ display: 'flex', flexDirection: 'column', paddingBottom: '0rem', width: '100%', margin: '0 auto' }}>
-            <h2>Manejo de fertilizantes</h2>
+        <div id='general' style={{ display: 'flex', flexDirection: 'column', paddingBottom: '0rem', width: '100%', margin: '0 auto' }}> 
             <div className="form-container-fse" style={{ display: 'flex', flexDirection: 'row', width: '100%' }}>
                 <div style={{ marginRight: '10px', width: '50%' }}>
                     <FormGroup>
@@ -568,12 +568,9 @@ const ModificacionManejoFertilizante: React.FC<FertilizanteSeleccionado> = ({
                     <FormFeedback>{errors.observaciones}</FormFeedback>
                 </Col>
             </FormGroup>
-            <FormGroup row>
-                <Col sm={{ size: 10, offset: 2 }}>
-                    {/* Agregar aquí el botón de cancelar proporcionado por el modal */}
-                    <Button onClick={handleSubmitConValidacion} className="btn-styled">Guardar</Button>
-                </Col>
-            </FormGroup>
+            <div className='botonesN'>
+                <Button onClick={handleSubmitConValidacion} className="btn-styled"><IoSave size={20} style={{marginRight: '1%'}}/>Actualizar</Button>
+            </div>
         </div >
     );
 

@@ -351,7 +351,7 @@ function AdministrarCoberturaVegetal() {
                         </div>
                         <button onClick={() => abrirCerrarModalInsertar()} className="btn-crear-style" style={{ marginLeft: 'auto', display: 'flex', justifyContent: 'center', alignItems: 'center', marginTop: '10px' }}>
                             <IoAddCircleOutline size={27} />
-                            <span style={{ marginLeft: '5px' }}>Ingresar Cobertura Vegetal</span>
+                            <span style={{ marginLeft: '5px' }}>Ingresar cobertura vegetal</span>
                             </button>
                     </div>
                     {/* openModalDetalles */}
@@ -371,7 +371,7 @@ function AdministrarCoberturaVegetal() {
             <Modal
                 isOpen={modalInsertar}
                 toggle={abrirCerrarModalInsertar}
-                title="Insertar Cobertura Vegetal"
+                title="Insertar cobertura vegetal"
                 onCancel={abrirCerrarModalInsertar}
             >
                 <div className='form-container'>
@@ -386,7 +386,7 @@ function AdministrarCoberturaVegetal() {
             {<Modal
                 isOpen={modalEditar}
                 toggle={abrirCerrarModalEditar}
-                title="Editar Cobertura Vegetal"
+                title="Editar cobertura vegetal"
                 onCancel={abrirCerrarModalEditar}
             >
                 <div className='form-container'>
@@ -408,7 +408,7 @@ function AdministrarCoberturaVegetal() {
             {<Modal
                 isOpen={modalDetalles}
                 toggle={abrirCerrarModalDetalles}
-                title="Detalles Cobertura Vegetal"
+                title="Detalles cobertura vegetal"
                 onCancel={abrirCerrarModalDetalles}
             >
                 <div className='form-container'>

@@ -161,7 +161,7 @@ function ReporteSensores() {
       <div className="main-container">
         <Topbar />
         <BordeSuperior text="Reporte de Sensores" />
-        <div className="content">
+        <div className="content" style={{width: '90%'}}>
           <div
             className="filtro-item"
             style={{
@@ -221,7 +221,7 @@ function ReporteSensores() {
                 justifyContent: 'center',
                 alignItems: 'center',
                 height: '50%',
-                margin: '5%'
+                marginTop: '5%'
                 }}>
                 {loading ? (
                     <ClipLoader color={"#038c3e"} loading={loading} size={100} />

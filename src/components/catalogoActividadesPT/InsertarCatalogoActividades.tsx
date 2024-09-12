@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { FormGroup, Label, Input, Col, FormFeedback, Button } from 'reactstrap';
 import Swal from 'sweetalert2';
 import { InsertarActividadPreparacionTerreno } from '../../servicios/ServicioCatalogoActividadPT';
+import { IoSave } from 'react-icons/io5';
 
 interface InsertarCatalogoActividadesProps {
     onAdd: (nuevaActividad: any) => void; // Correcta firma
@@ -71,8 +72,7 @@ const InsertarCatalogoActividades: React.FC<InsertarCatalogoActividadesProps> = 
 
     return (
         <div id='general' style={{ display: 'flex', flexDirection: 'column', paddingBottom: '0rem', width: '100%', margin: '0 auto' }}>
-            <div className="form-container-fse" style={{ display: 'flex', flexDirection: 'column', width: '90%' }}>
-                <h2>Nueva Actividad</h2>
+            <div className="form-container-fse" style={{ display: 'flex', flexDirection: 'column', width: '100%' }}>                
                 <FormGroup>
                     <Label for="nombre">Nombre</Label>
                     <Input
@@ -88,11 +88,14 @@ const InsertarCatalogoActividades: React.FC<InsertarCatalogoActividadesProps> = 
                     <FormFeedback>{errors.nombre}</FormFeedback>
                 </FormGroup>
 
-                <FormGroup row>
-                    <Col sm={{ size: 10, offset: 2 }}>
-                        <Button onClick={handleSubmit} className="btn-styled">Guardar</Button>
-                    </Col>
-                </FormGroup>
+                <div className='botonesN'>
+                    <FormGroup row>
+                        <Col sm={{ size: 10, offset: 2 }}>
+                            <Button onClick={handleSubmit} className="btn-styled"><IoSave size={20} style={{marginRight: '2%'}}/>Guardar</Button>
+                        </Col>
+                    </FormGroup>
+                </div>
+                
             </div>
         </div>
     );

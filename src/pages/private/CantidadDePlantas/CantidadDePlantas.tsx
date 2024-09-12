@@ -342,7 +342,7 @@ function CantidadDePlantas() {
                         </div>
                         <button onClick={() => abrirCerrarModalInsertar()} className="btn-crear-style" style={{ marginLeft: 'auto', display: 'flex', justifyContent: 'center', alignItems: 'center', marginTop: '10px' }}>
                             <IoAddCircleOutline size={27} />
-                            <span style={{ marginLeft: '5px' }}>Ingresar cantidad de plantas</span>
+                            <span style={{ marginLeft: '5px' }}>Crear registro con cantidad de plantas</span>
                             </button>
                     </div>
                     <TableResponsive

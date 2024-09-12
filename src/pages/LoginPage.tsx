@@ -13,6 +13,7 @@ import { useNavigate } from 'react-router-dom';
 import { clearSessionStorage } from '../utilities/SessionStorageUtility.tsx';
 import { PrivateRoutes, PublicRoutes } from '../models/routes.ts';
 import CrearCuentaUsuario from '../components/crearcuentausuario/CrearCuentaUsuario.tsx';
+import { IoLockClosed, IoLogIn, IoPerson} from 'react-icons/io5';
 
 /**
  * Interfaz para el estado del formulario de inicio de sesión.
@@ -61,7 +62,7 @@ const FormularioInicioSesion: React.FC<{
       </div>
       <form onSubmit={handleSubmit}>
         <FormGroup row>
-          <Label for="usuario" sm={2} className="input-label">Usuario</Label>
+            <Label style={{display: 'flex', alignItems: 'center', flexDirection: 'row' }} for="usuario" sm={2} className="input-label"><IoPerson size={20} style={{marginRight: '1%'}}/>Usuario</Label>
           <Col sm={12}>
             <Input
               type="text"
@@ -72,30 +73,31 @@ const FormularioInicioSesion: React.FC<{
               onChange={handleInputChange}
               onBlur={() => handleInputBlur('usuario')} // Llama a handleInputBlur cuando se dispara el evento onBlur
               className={errors.usuario ? 'input-styled input-error' : 'input-styled'}
+              style={{marginTop: '5%', marginBottom: '15%'}}
             />
             <FormFeedback>{errors.usuario}</FormFeedback>
           </Col>
         </FormGroup>
         <FormGroup row>
-          <Label for="contrasena" sm={2} className="input-label">Contraseña</Label>
+          <Label style={{display: 'flex', alignItems: 'center', flexDirection: 'row' }} for="contrasena" sm={2} className="input-label"><IoLockClosed size={20} style={{marginRight: '1%'}}/>Contraseña</Label>
           <Col sm={12}>
             <Input
               type="password"
               id="contrasena"
               name="contrasena"
+              placeholder='Tu contraseña'
               value={formData.contrasena}
               onChange={handleInputChange}
               onBlur={() => handleInputBlur('contrasena')} // Llama a handleInputBlur cuando se dispara el evento onBlur
               className={errors.contrasena ? 'input-styled input-error' : 'input-styled'}
+              style={{marginTop: '5%', marginBottom: '15%'}}
             />
           </Col>
           <FormFeedback>{errors.contrasena}</FormFeedback>
         </FormGroup>
-        <FormGroup row>
-          <Col sm={{ size: 9, offset: 2 }}>
-            <Button type="submit" color="primary" className="btn-styled">Iniciar Sesión</Button>
-          </Col>
-        </FormGroup>
+        <div className='botonesN'>
+            <Button type="submit" color="primary" className="btn-styled"><IoLogIn size={20} style={{marginRight: '5%'}}/>Iniciar sesión</Button>
+        </div>
       </form>
       {/* boton para crear cuenta */}
       {/* <div className='container-btn-crear-iniciar'>
@@ -225,7 +227,15 @@ const Login: React.FC = () => {
 
     try {
       const usuarioEncontrado = await ValidarUsuario(formDataLogin);
-      if (usuarioEncontrado.usuario.mensaje === "Usuario no encontrado.") {
+
+      if(!usuarioEncontrado){
+        Swal.fire({
+          icon: 'error',
+          title: 'Error',
+          text: 'Ocurrió un error al contactar con el servicio del sistema',
+        });
+      }
+      else if (usuarioEncontrado.usuario.mensaje === "Usuario no encontrado.") {
         Swal.fire({
           icon: 'error',
           title: '¡Credenciales incorrectas!',
@@ -244,7 +254,7 @@ const Login: React.FC = () => {
         Swal.fire({
           icon: 'error',
           title: '¡Credenciales incorrectas!',
-          text: 'Los datos del usuario ingresado son incorrectas',
+          text: 'Los datos del usuario ingresado son incorrectos',
         });
       } else if (usuarioEncontrado.usuario.mensaje === "Usuario o empresa inactivos.") {
         Swal.fire({
@@ -260,7 +270,11 @@ const Login: React.FC = () => {
         });
       }
     } catch (error) {
-      console.log(error);
+      Swal.fire({
+        icon: 'error',
+        title: '¡Oops!',
+        text: "Ocurrió un error al iniciar sesión: " + error,
+      });
     }
   };
 

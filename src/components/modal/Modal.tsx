@@ -35,11 +35,11 @@ const CustomModal: React.FC<CustomModalProps> = ({ isOpen, toggle, title, onSubm
             display: 'flex', 
             alignItems: 'center', 
             justifyContent: 'center', 
-            marginRight: 'auto', 
-            marginLeft: 'auto', 
-            width: '95%' 
+            marginRight: '0.5%', 
+            marginLeft: '0.5%', 
+            width: '100%' 
           }}>
-          <IoCloseOutline size={20} style={{ marginRight: '8px' }} />
+          <IoCloseOutline size={20} style={{ marginRight: '1%' }} />
           Cancelar
         </button>
       </ModalFooter>

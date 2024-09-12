@@ -6,6 +6,7 @@ import { ObtenerParcelas } from '../../servicios/ServicioParcelas';
 import { ObtenerUsuariosAsignadosPorIdentificacion } from '../../servicios/ServicioUsuario';
 import { ModificarPreparacionTerreno, ObtenerDatosPreparacionTerrenoActividad, ObtenerDatosPreparacionTerrenoMaquinaria } from "../../servicios/ServicioPreparacionTerreno";
 import '../../css/CrearCuenta.css';
+import { IoSave } from 'react-icons/io5';
 
 interface PreparacionTerrenoSeleccionado {
     idFinca: number;
@@ -314,11 +315,10 @@ const ModificacionPreparacionTerreno: React.FC<PreparacionTerrenoSeleccionado> =
 
     return (
         <div id='general' style={{ display: 'flex', flexDirection: 'column', paddingBottom: '0rem', width: '100%', margin: '0 auto' }}>
-            <div className="form-container-fse" style={{ display: 'flex', flexDirection: 'column', width: '50%' }}>
-                <h2>Preparacion de Terreno</h2>
+            <div className="form-container-fse" style={{ display: 'flex', flexDirection: 'column', width: '100%' }}>
                 <FormGroup>
                     <label htmlFor="fincas">Finca:</label>
-                    <select className="custom-select" id="fincas" value={selectedFinca} onChange={handleFincaChange} disabled={readOnly}>
+                    <select className="custom-select" id="fincas" value={selectedFinca} onChange={handleFincaChange} disabled={readOnly} style={{marginTop: '1%'}}>
                         <option key="default-finca" value="">Seleccione...</option>
                         {filteredFincas.map((finca) => (
                             <option key={`${finca.idFinca}-${finca.nombre || 'undefined'}`} value={finca.idFinca}>{finca.nombre || 'Undefined'}</option>
@@ -329,7 +329,7 @@ const ModificacionPreparacionTerreno: React.FC<PreparacionTerrenoSeleccionado> =
 
                 <FormGroup>
                     <label htmlFor="parcelas">Parcela:</label>
-                    <select className="custom-select" id="parcelas" value={selectedParcela} onChange={handleParcelaChange} disabled={readOnly}>
+                    <select className="custom-select" id="parcelas" value={selectedParcela} onChange={handleParcelaChange} disabled={readOnly} style={{marginTop: '1%'}}>
                         <option key="default-parcela" value="">Seleccione...</option>
                         {filteredParcelas.map((parcela) => (
                             <option key={`${parcela.idParcela}-${parcela.nombre || 'undefined'}`} value={parcela.idParcela}>{parcela.nombre || 'Undefined'}</option>
@@ -352,6 +352,7 @@ const ModificacionPreparacionTerreno: React.FC<PreparacionTerrenoSeleccionado> =
                                 className={errors.fecha ? 'input-styled input-error' : 'input-styled'}
                                 placeholder="Selecciona una fecha"
                                 disabled={readOnly}
+                                style={{marginTop: '1%'}}
                             />
                             <FormFeedback>{errors.fecha}</FormFeedback>
                         </Col>
@@ -368,6 +369,7 @@ const ModificacionPreparacionTerreno: React.FC<PreparacionTerrenoSeleccionado> =
                                 value={formData.idActividad}
                                 onChange={handleInputChange}
                                 disabled={readOnly}
+                                style={{marginTop: '1%'}}
                             >
                                 <option value="">Seleccione...</option>
                                 {actividades.map((actividad) => (
@@ -389,6 +391,7 @@ const ModificacionPreparacionTerreno: React.FC<PreparacionTerrenoSeleccionado> =
                                 value={formData.idMaquinaria}
                                 onChange={handleInputChange}
                                 disabled={readOnly}
+                                style={{marginTop: '1%'}}
                             >
                                 <option value="">Seleccione...</option>
                                 {maquinarias.map((maquinaria) => (
@@ -416,6 +419,7 @@ const ModificacionPreparacionTerreno: React.FC<PreparacionTerrenoSeleccionado> =
                                 placeholder="Identificación"
                                 maxLength={50}
                                 disabled={readOnly}
+                                style={{marginTop: '1%'}}
                             />
                             <FormFeedback>{errors.identificacion}</FormFeedback>
                         </Col>
@@ -423,7 +427,7 @@ const ModificacionPreparacionTerreno: React.FC<PreparacionTerrenoSeleccionado> =
                 </div>
                 <div style={{ flex: 1, marginRight: '0.5rem', marginLeft: '0.5rem' }}>
                     <FormGroup row>
-                        <Label for="horasTrabajadas" sm={4} className="input-label">Horas Trabajadas</Label>
+                        <Label for="horasTrabajadas" sm={4} className="input-label">Horas trabajadas</Label>
                         <Col sm={8}>
                             <Input
                                 type="number"
@@ -432,8 +436,9 @@ const ModificacionPreparacionTerreno: React.FC<PreparacionTerrenoSeleccionado> =
                                 value={formData.horasTrabajadas}
                                 onChange={handleInputChange}
                                 className="input-styled"
-                                placeholder="Horas Trabajadas"
+                                placeholder="Horas trabajadas"
                                 disabled={readOnly}
+                                style={{marginTop: '1%'}}
                             />
                             <FormFeedback>{errors.horasTrabajadas}</FormFeedback>
                         </Col>
@@ -441,7 +446,7 @@ const ModificacionPreparacionTerreno: React.FC<PreparacionTerrenoSeleccionado> =
                 </div>
                 <div style={{ flex: 1, marginRight: '0.5rem', marginLeft: '0.5rem' }}>
                     <FormGroup row>
-                        <Label for="pagoPorHora" sm={4} className="input-label">Pago por Hora</Label>
+                        <Label for="pagoPorHora" sm={4} className="input-label">Pago por hora</Label>
                         <Col sm={8}>
                             <Input
                                 type="number"
@@ -450,17 +455,17 @@ const ModificacionPreparacionTerreno: React.FC<PreparacionTerrenoSeleccionado> =
                                 value={formData.pagoPorHora}
                                 onChange={handleInputChange}
                                 className="input-styled"
-                                placeholder="Pago por Hora"
+                                placeholder="Pago por hora"
                                 disabled={readOnly}
+                                style={{marginTop: '1%'}}
                             />
                             <FormFeedback>{errors.pagoPorHora}</FormFeedback>
                         </Col>
                     </FormGroup>
                 </div>
-
                 <div style={{ flex: 1, marginRight: '0.5rem', marginLeft: '0.5rem' }}>
                     <FormGroup row>
-                        <Label for="totalPago" sm={2} className="input-label">Total Pago</Label>
+                        <Label for="totalPago" sm={4} className="input-label">Total Pago</Label>
                         <Col sm={10}>
                             <Input
                                 type="number"
@@ -469,6 +474,7 @@ const ModificacionPreparacionTerreno: React.FC<PreparacionTerrenoSeleccionado> =
                                 value={totalPago}
                                 className="input-styled"
                                 disabled
+                                style={{marginTop: '1%'}}
                             />
                         </Col>
                     </FormGroup>
@@ -495,11 +501,9 @@ const ModificacionPreparacionTerreno: React.FC<PreparacionTerrenoSeleccionado> =
             </FormGroup>
 
             {!readOnly && (
-                <FormGroup row>
-                    <Col sm={{ size: 10, offset: 2 }}>
-                        <Button onClick={handleSubmitConValidacion} className="btn-styled">Guardar</Button>
-                    </Col>
-                </FormGroup>
+                <div className='botonesN'>
+                    <Button onClick={handleSubmitConValidacion} className="btn-styled"><IoSave size={20} style={{marginRight: '1%'}}/>Actualizar datos</Button>
+                </div>
             )}
         </div>
     );

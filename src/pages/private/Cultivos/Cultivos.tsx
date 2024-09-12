@@ -233,7 +233,7 @@ function Cultivos() {
                         </div>
                         <button onClick={() => abrirCerrarModalCrearCultivo()} className="btn-crear-style" style={{ marginLeft: 'auto', display: 'flex', justifyContent: 'center', alignItems: 'center', marginTop: '10px' }}>
                             <IoAddCircleOutline size={27} />
-                            <span style={{ marginLeft: '5px' }}>Crear Registro</span>
+                            <span style={{ marginLeft: '5px' }}>Crear cultivo</span>
                         </button>
                     </div>
                     <TableResponsive columns={columns} data={cultivosFiltrados} openModal={openModal} btnActionName={"Editar"} toggleStatus={toggleStatus} useTrashIcon={true} />
@@ -243,7 +243,7 @@ function Cultivos() {
             <Modal
                 isOpen={modalEditar}
                 toggle={abrirCerrarModalEditar}
-                title="Editar Cultivo"
+                title="Editar cultivo"
                 onCancel={abrirCerrarModalEditar}
             >
                 <div className='form-container'>
@@ -261,7 +261,7 @@ function Cultivos() {
             <Modal
                 isOpen={modalCrearCultivo}
                 toggle={abrirCerrarModalCrearCultivo}
-                title="Crear Cultivo"
+                title="Crear cultivo"
                 onCancel={abrirCerrarModalCrearCultivo}
             >
                 <div className='form-container'>

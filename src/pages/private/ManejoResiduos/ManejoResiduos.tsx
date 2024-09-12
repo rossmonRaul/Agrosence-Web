@@ -216,7 +216,7 @@ function ManejoResiduos() {
                         </div>
                         <button onClick={() => abrirCerrarModalCrearManejoResiduo()} className="btn-crear-style" style={{ marginLeft: 'auto', display: 'flex', justifyContent: 'center', alignItems: 'center', marginTop: '10px' }}>
                             <IoAddCircleOutline size={27} />
-                            <span style={{ marginLeft: '5px' }}>Crear Residuo</span>
+                            <span style={{ marginLeft: '5px' }}>Crear residuo</span>
                         </button>
                     </div>
                     <TableResponsive columns={columns} data={ResiduosFiltrados} openModal={openModal} toggleStatus={toggleStatus} btnActionName={"Editar"} />
@@ -226,7 +226,7 @@ function ManejoResiduos() {
             <Modal
                 isOpen={modalEditar}
                 toggle={abrirCerrarModalEditar}
-                title="Editar Manejo de Residuo"
+                title="Editar manejo de residuo"
                 onCancel={abrirCerrarModalEditar}
             >
                 <div className='form-container'>
@@ -255,7 +255,7 @@ function ManejoResiduos() {
             <Modal
                 isOpen={modalCrearManejoResiduos}
                 toggle={abrirCerrarModalCrearManejoResiduo}
-                title="Crear Manejo de Residuo"
+                title="Crear manejo de residuo"
                 onCancel={abrirCerrarModalCrearManejoResiduo}
             >
                 <div className='form-container'>

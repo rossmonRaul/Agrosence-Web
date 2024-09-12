@@ -4,6 +4,7 @@ import '../../css/FormSeleccionEmpresa.css'
 import Swal from 'sweetalert2';
 import '../../css/CrearCuenta.css'
 import { GuardarEmpresas } from '../../servicios/ServicioEmpresas';
+import { IoSave } from 'react-icons/io5';
 
 // Interfaz para las propiedades del componente AgregarEmpresa
 interface AgregarEmpresa {
@@ -104,12 +105,15 @@ const CrearEmpresa: React.FC<AgregarEmpresa> = ({ onAdd }) => {
                             onChange={handleInputChange}
                             onBlur={() => handleInputBlur('nombre')} // Manejar blur para quitar el mensaje de error
                             className={errors.nombre ? 'input-styled input-error' : 'input-styled'} // Aplicar clase 'is-invalid' si hay un error
+                            style={{marginTop: '5%'}}
                         />
                         <FormFeedback>{errors.nombre}</FormFeedback>
                     </Col>
                 </FormGroup>
             </div>
-            <button onClick={handleSubmitConValidacion} className="btn-styled">Crear Empresa</button>
+            <div className='botonesN'>
+                <button onClick={handleSubmitConValidacion} className="btn-styled"><IoSave size={20} style={{marginRight: '3%'}}/>Guardar</button>
+            </div>
         </div>
     );
 }

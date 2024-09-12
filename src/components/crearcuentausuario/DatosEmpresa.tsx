@@ -6,6 +6,7 @@ import { useSelector } from 'react-redux';
 import { AppStore } from '../../redux/Store';
 import { ObtenerFincas } from '../../servicios/ServicioFincas';
 import { ObtenerParcelas } from '../../servicios/ServicioParcelas';
+import { IoSave, IoArrowBack } from 'react-icons/io5';
 
 
 interface Props {
@@ -143,7 +144,6 @@ const DatosEmpresa: React.FC<Props> = ({ formData, prevStep, handleSubmit }) => 
   return (
     <div>
       <div className="form-container-fse">
-        <h2>Organización</h2>
         {/* Selector de empresas */}
         <FormGroup>
           <label htmlFor="fincas">Finca:</label>
@@ -166,8 +166,10 @@ const DatosEmpresa: React.FC<Props> = ({ formData, prevStep, handleSubmit }) => 
           {errors.parcela && <FormFeedback>{errors.parcela}</FormFeedback>}
         </FormGroup>
       </div>
-      <button onClick={prevStep} className='btn-styled-danger'>Anterior</button>
-      <button onClick={handleSubmitConValidacion} className="btn-styled">Crear Cuenta</button>
+      <div className='botones'>
+        <button onClick={prevStep} className='btn-styled-danger'><IoArrowBack size={20} style={{marginRight: '5%'}}/>Anterior</button>
+        <button onClick={handleSubmitConValidacion} className="btn-styled"><IoSave size={20} style={{marginRight: '5%'}}/>Guardar</button>
+      </div>      
     </div>
   );
 }

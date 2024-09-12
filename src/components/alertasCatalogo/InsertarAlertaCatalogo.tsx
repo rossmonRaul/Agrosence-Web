@@ -380,22 +380,22 @@ const InsertarAlertaCatalogoComponent: React.FC<InsertarAlertaCatalogoProps> = (
                             ))}
                         </div>
                         {errors.rolesUsuario && <FormFeedback>{errors.rolesUsuario}</FormFeedback>}
+
+                        <div className='botonesN' style={{marginTop: '1%'}}>
+                            <Button onClick={handleSubmit} className="btn-styled">
+                                <IoSaveOutline size={20} style={{ marginRight: '1%' }} />
+                                Guardar
+                            </Button>
+                        </div>
                     </FormGroup>
+                            
+                    
                 </div>
 
-                <FormGroup row>
-                    <Col sm={{ size: 10, offset: 2 }}>
-                        <Button onClick={handleSubmit} className="btn-styled" style={{marginTop: '10px', display: 'flex', alignItems: 'center', justifyContent: 'center'}}>
-                            <IoSaveOutline size={20} style={{ marginRight: '8px' }} />
-                            Guardar
-                        </Button>
-                    </Col>
-                </FormGroup>
-                
+               
             </div>
         </div>
-    );
-    
+    );    
 };
 
 export default InsertarAlertaCatalogoComponent;

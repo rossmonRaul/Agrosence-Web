@@ -7,7 +7,7 @@ import { ObtenerUsuariosAsignadosPorIdentificacion } from '../../servicios/Servi
 import { useSelector } from 'react-redux';
 import { AppStore } from '../../redux/Store.ts';
 import { AgregarProductividadCultivo, ObtenerMedidasCultivos } from '../../servicios/ServicioCultivo.ts';
-
+import { IoSave } from "react-icons/io5";
 
 interface InsertarManejoFertilizanteProps {
     onAdd: () => void;
@@ -298,8 +298,7 @@ const InsertarCalidadCultivo: React.FC<InsertarManejoFertilizanteProps> = ({ onA
     };
 
     return (
-        <div id='general' style={{ display: 'flex', flexDirection: 'column', paddingBottom: '0rem', width: '100%', margin: '0 auto' }}>
-            <h2>Productividad de Cultivos</h2>
+        <div id='general' style={{ display: 'flex', flexDirection: 'column', paddingBottom: '0rem', width: '100%', margin: '0 auto' }}>            
             <div style={{ display: 'flex', flexDirection: 'row', marginBottom: '0rem' }}>
             <div style={{ flex: 1, marginRight: '0.5rem', marginLeft: '0.5rem' }}>
             <FormGroup>
@@ -459,12 +458,10 @@ const InsertarCalidadCultivo: React.FC<InsertarManejoFertilizanteProps> = ({ onA
 
             </div>
 
-            <FormGroup row>
-                <Col sm={{ size: 10, offset: 2 }}>
-                    {/* Agregar aquí el botón de cancelar proporcionado por el modal */}
-                    <Button onClick={handleSubmitConValidacion} className="btn-styled">Guardar</Button>
-                </Col>
-            </FormGroup>
+            <div className='botonesN'>
+                <Button onClick={handleSubmitConValidacion} className="btn-styled"><IoSave style={{marginRight: '1%'}} size={20}/>Guardar</Button>
+            </div>
+                
         </div>
     );
 };

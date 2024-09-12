@@ -128,7 +128,7 @@ function MedicionesSensor() {
 
     // Definición de las columnas de la tabl
     const columns = [
-        { key: 'nombre', header: 'Nombre Medicion' },
+        { key: 'nombre', header: 'Nombre Medición' },
         { key: 'unidadMedida', header: 'Unidad Medida' },
         { key: 'nomenclatura', header: 'Nomenclatura' },
         { key: 'acciones', header: 'Acciones', actions: true } // Columna para acciones
@@ -155,7 +155,7 @@ function MedicionesSensor() {
                         </div>
                         <button onClick={() => abrirCerrarModalInsertar()} className="btn-crear-style" style={{ marginLeft: 'auto', display: 'flex', justifyContent: 'center', alignItems: 'center', marginTop: '10px' }}>
                             <IoAddCircleOutline size={27} />
-                            <span style={{ marginLeft: '5px' }}>Crear Medición</span>
+                            <span style={{ marginLeft: '5px' }}>Crear medición</span>
                         </button>
                     </div>
                     <TableResponsiveState columns={columns} data={medicionesFiltrados} openModal={openModal} toggleStatus={toggleStatus} btnActionName={"Editar"} />
@@ -166,7 +166,7 @@ function MedicionesSensor() {
             <Modal
                 isOpen={modalInsertar}
                 toggle={abrirCerrarModalInsertar}
-                title="Insertar Medicion"
+                title="Insertar medición"
                 onCancel={abrirCerrarModalInsertar}
             >
                 <div className='form-container'>

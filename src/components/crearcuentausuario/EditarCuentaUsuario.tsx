@@ -5,6 +5,7 @@ import { ActualizarAsignarUsuario } from '../../servicios/ServicioUsuario.ts';
 import Swal from 'sweetalert2';
 import '../../css/CrearCuenta.css'
 import '../../css/FormSeleccionEmpresa.css'
+import { IoSave } from 'react-icons/io5';
 
 // Interfaz para las propiedades del componente
 interface UsuarioSeleccionadoProps {
@@ -218,11 +219,9 @@ const EditarCuentaUsuario: React.FC<UsuarioSeleccionadoProps> = ({ identificacio
                     <FormFeedback>{errors.contrasenaConfirmar}</FormFeedback>
                 </Col>
             </FormGroup>
-            <FormGroup row>
-                <Col sm={{ size: 9, offset: 2 }}>
-                    <Button onClick={handleSubmitConValidacion} className="btn-styled" >Editar Datos</Button>
-                </Col>
-            </FormGroup>
+            <div className='botonesN'>
+                <Button onClick={handleSubmitConValidacion} className="btn-styled" ><IoSave size={20} style={{marginRight: '2%'}}/>Actualizar datos</Button>   
+            </div>           
         </div>
     );
 }

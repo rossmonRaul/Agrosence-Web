@@ -6,6 +6,7 @@ import { ObtenerParcelas } from '../../servicios/ServicioParcelas.ts';
 import { ObtenerUsuariosAsignadosPorIdentificacion } from '../../servicios/ServicioUsuario.ts';
 import { ModificarManejoResiduos } from "../../servicios/ServicioResiduo.ts";
 import '../../css/CrearCuenta.css';
+import { IoArrowBack, IoArrowForward, IoSave } from 'react-icons/io5';
 
 // Interfaz para las propiedades del componente
 interface ResiduoSeleccionado {
@@ -327,12 +328,11 @@ const EditarManejoResiduo: React.FC<ResiduoSeleccionado> = ({
         <div id='general' style={{ display: 'flex', flexDirection: 'column', paddingBottom: '0rem', width: '90%', margin: '0 auto' }}>
             {step === 1 && (
                 <div>
-                    <h2>Manejo de Residuos</h2>
                     <div className="form-container-fse" style={{ display: 'flex', flexDirection: 'row', width: '100%' }}>
                         <div style={{ marginRight: '10px', width: '50%' }}>
                             <FormGroup>
                                 <label htmlFor="fincas">Finca:</label>
-                                <select className="custom-select input-styled" id="fincas" value={selectedFinca} onChange={handleFincaChange}>
+                                <select className="custom-select input-styled" id="fincas" value={selectedFinca} onChange={handleFincaChange} style={{marginTop: '1%'}}>
                                     <option key="default-finca" value="">Seleccione...</option>
                                     {filteredFincas.map((finca) => (
                                         <option key={`${finca.idFinca}-${finca.nombre || 'undefined'}`} value={finca.idFinca}>{finca.nombre || 'Undefined'}</option>
@@ -344,7 +344,7 @@ const EditarManejoResiduo: React.FC<ResiduoSeleccionado> = ({
                         <div style={{ marginRight: '0px', width: '50%' }}>
                             <FormGroup>
                                 <label htmlFor="parcelas">Parcela:</label>
-                                <select className="custom-select input-styled" id="parcelas" value={selectedParcela} onChange={handleParcelaChange}>
+                                <select className="custom-select input-styled" id="parcelas" value={selectedParcela} onChange={handleParcelaChange} style={{marginTop: '1%'}}>
                                     <option key="default-parcela" value="">Seleccione...</option>
                                     {filteredParcelas.map((parcela) => (
                                         <option key={`${parcela.idParcela}-${parcela.nombre || 'undefined'}`} value={parcela.idParcela}>{parcela.nombre || 'Undefined'}</option>
@@ -369,6 +369,7 @@ const EditarManejoResiduo: React.FC<ResiduoSeleccionado> = ({
                                         className={errors.cantidad ? 'input-styled input-error' : 'input-styled'}
                                         placeholder="0.0"
                                         maxLength={50}
+                                        style={{marginTop: '1%'}}
                                     />
                                     <FormFeedback>{errors.cantidad}</FormFeedback>
                                 </Col>
@@ -377,7 +378,7 @@ const EditarManejoResiduo: React.FC<ResiduoSeleccionado> = ({
                         <div className="col-sm-4" style={{ marginRight: "0px", width: '50%' }}>
                             <FormGroup row>
                                 <label htmlFor="residuos">Residuo:</label>
-                                <select className="custom-select" id="residuo" value={selectedResiduo} onChange={handleResiduoChange}>
+                                <select className="custom-select" id="residuo" value={selectedResiduo} onChange={handleResiduoChange} style={{marginTop: '1%'}}>
                                     <option key="default-residuo" value="">Seleccione un residuo...</option>
                                     <option key="organicos" value="Organicos">Orgánicos</option>
                                     <option key="inorganicos" value="Inorganicos">Inorgánicos</option>
@@ -396,7 +397,7 @@ const EditarManejoResiduo: React.FC<ResiduoSeleccionado> = ({
                     <div className="row" style={{ display: "flex" }}>
                         <div style={{ flex: 1, marginRight: '10px' }}>
                             <FormGroup row>
-                                <Label for="fechaGeneracion" sm={4} className="input-label">Fecha Generativa</Label>
+                                <Label for="fechaGeneracion" sm={4} className="input-label">Fecha generativa</Label>
                                 <Col sm={8}>
                                     <Input
                                         type="date"
@@ -406,6 +407,7 @@ const EditarManejoResiduo: React.FC<ResiduoSeleccionado> = ({
                                         onChange={handleInputChange}
                                         className={errors.fechaGeneracion ? 'input-styled input-error' : 'input-styled'}
                                         placeholder="Selecciona una fecha"
+                                        style={{marginTop: '1%'}}
                                     />
                                     <FormFeedback>{errors.fechaGeneracion}</FormFeedback>
                                 </Col>
@@ -413,7 +415,7 @@ const EditarManejoResiduo: React.FC<ResiduoSeleccionado> = ({
                         </div>
                         <div style={{ flex: 1 }}>
                             <FormGroup row>
-                                <Label for="fechaManejo" sm={4} className="input-label">Fecha Manejo</Label>
+                                <Label for="fechaManejo" sm={4} className="input-label">Fecha manejo</Label>
                                 <Col sm={8}>
                                     <Input
                                         type="date"
@@ -423,21 +425,23 @@ const EditarManejoResiduo: React.FC<ResiduoSeleccionado> = ({
                                         onChange={handleInputChange}
                                         className={errors.fechaManejo ? 'input-styled input-error' : 'input-styled'}
                                         placeholder="Selecciona una fecha"
+                                        style={{marginTop: '1%'}}
                                     />
                                     <FormFeedback>{errors.fechaManejo}</FormFeedback>
                                 </Col>
                             </FormGroup>
                         </div>
                     </div>
-                    <button onClick={handleNextStep} className="btn-styled">Siguiente</button>
+                    <div className='botonesN'>
+                        <button onClick={handleNextStep} className="btn-styled">Siguiente<IoArrowForward size={20} style={{marginLeft: '1%'}}/></button>
+                    </div>
                 </div>
             )}
             {step === 2 && (
                 <div>
-                    <h2>Manejo de Residuo</h2>
                     <div className="col-sm-4" style={{ marginRight: "40px" }}>
                         <FormGroup row>
-                            <Label for="accionManejo" sm={4} className="input-label">Accion del Manejo</Label>
+                            <Label for="accionManejo" sm={4} className="input-label">Accóon del manejo</Label>
                             <Col sm={8}>
                                 <Input
                                     type="text"
@@ -446,9 +450,9 @@ const EditarManejoResiduo: React.FC<ResiduoSeleccionado> = ({
                                     value={formData.accionManejo}
                                     onChange={handleInputChange}
                                     className={errors.accionManejo ? 'input-styled input-error' : 'input-styled'}
-                                    style={{ minWidth: '350px' }}
+                                    style={{ minWidth: '350px', marginTop: '1%' }}
                                     placeholder="Accion del Manejo"
-                                    maxLength={100}
+                                    maxLength={100}                                    
                                 />
                                 <FormFeedback>{errors.accionManejo}</FormFeedback>
                             </Col>
@@ -456,7 +460,7 @@ const EditarManejoResiduo: React.FC<ResiduoSeleccionado> = ({
                     </div>
                     <div className="col-sm-4" style={{ marginRight: "40px" }}>
                         <FormGroup row>
-                            <Label for="destinoFinal" sm={4} className="input-label">Destino Final del Residuo</Label>
+                            <Label for="destinoFinal" sm={4} className="input-label">Destino final del residuo</Label>
                             <Col sm={8}>
                                 <Input
                                     type="text"
@@ -465,7 +469,7 @@ const EditarManejoResiduo: React.FC<ResiduoSeleccionado> = ({
                                     value={formData.destinoFinal}
                                     onChange={handleInputChange}
                                     className={errors.destinoFinal ? 'input-styled input-error' : 'input-styled'}
-                                    style={{ minWidth: '350px' }}
+                                    style={{ minWidth: '350px', marginTop: '1%' }}
                                     placeholder="Destino Final"
                                     maxLength={100}
                                 />
@@ -474,13 +478,10 @@ const EditarManejoResiduo: React.FC<ResiduoSeleccionado> = ({
                         </FormGroup>
                     </div>
 
-                    <FormGroup row>
-                        <Col sm={{ size: 10, offset: 2 }}>
-                            {/* Agregar aquí el botón de cancelar proporcionado por el modal */}
-                            <button onClick={handlePreviousStep} className='btn-styled-danger'>Anterior</button>
-                            <Button onClick={handleSubmitConValidacion} className="btn-styled">Guardar</Button>
-                        </Col>
-                    </FormGroup>
+                    <div className='botones'>
+                        <button onClick={handlePreviousStep} className='btn-styled-danger'><IoArrowBack size={20} style={{marginRight: '2%'}}/>Anterior</button>
+                        <Button onClick={handleSubmitConValidacion} className="btn-styled"><IoSave size={20} style={{marginRight: '5%'}}/>Guardar</Button>
+                    </div>
                 </div>
 
             )}

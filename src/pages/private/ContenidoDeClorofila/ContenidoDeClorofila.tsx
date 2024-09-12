@@ -364,7 +364,7 @@ function AdministrarContenidoDeClorofila() {
                         </div>
                         <button onClick={() => abrirCerrarModalInsertar()} className="btn-crear-style" style={{ marginLeft: 'auto', display: 'flex', justifyContent: 'center', alignItems: 'center', marginTop: '10px' }}>
                             <IoAddCircleOutline size={27} />
-                            <span style={{ marginLeft: '5px' }}>Ingresar contenido de clorofila</span>
+                            <span style={{ marginLeft: '5px' }}>Crear contenido de clorofila</span>
                         </button>
                     </div>
                     {/* openModalDetalles */}
@@ -399,7 +399,7 @@ function AdministrarContenidoDeClorofila() {
             {<Modal
                 isOpen={modalEditar}
                 toggle={abrirCerrarModalEditar}
-                title="Editar Contenido de Clorofila"
+                title="Editar contenido de clorofila"
                 onCancel={abrirCerrarModalEditar}
             >
                 <div className='form-container'>

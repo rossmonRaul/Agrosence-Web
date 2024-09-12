@@ -4,6 +4,7 @@ import '../../css/FormSeleccionEmpresa.css'
 import Swal from 'sweetalert2';
 import '../../css/CrearCuenta.css'
 import { GuardarFincas } from '../../servicios/ServicioFincas';
+import { IoSave } from 'react-icons/io5';
 
 // Interfaz para las propiedades del componente AgregarEmpresa
 interface AgregarFinca {
@@ -142,7 +143,10 @@ const CrearFinca: React.FC<AgregarFinca> = ({ onAdd }) => {
                 </FormGroup>
 
             </div>
-            <button onClick={handleSubmitConValidacion} className="btn-styled">Crear Finca</button>
+            <div className='botonesN'>
+                <button onClick={handleSubmitConValidacion} className="btn-styled"><IoSave size={20} style={{marginRight: '2%'}}/>Guardar</button>
+            </div>
+            
         </div>
     );
 }

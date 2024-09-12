@@ -305,7 +305,7 @@ function AdministrarContenidoDeNitrogeno() {
             <Modal
                 isOpen={modalEditar}
                 toggle={abrirCerrarModalEditar}
-                title="Editar Contenido de Nitrógeno"
+                title="Editar contenido de nitrógeno"
                 onCancel={abrirCerrarModalEditar}
             >
                 <div className='form-container'>
@@ -331,7 +331,7 @@ function AdministrarContenidoDeNitrogeno() {
             <Modal
                 isOpen={modalDetalles}
                 toggle={abrirCerrarModalDetalles}
-                title="Detalles del Contenido de Nitrógeno"
+                title="Detalles del contenido de nitrógeno"
                 onCancel={abrirCerrarModalDetalles}
             >
                 <div className='form-container'>

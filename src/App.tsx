@@ -87,7 +87,7 @@ function App() {
             </Route>
 
             {/* Rutas accesibles solo para el rol de SuperAdmin */}
-            <Route element={<RolGuard rol={Roles.SuperAdmin} />}>
+            {/* <Route element={<RolGuard rol={Roles.SuperAdmin} />}> */}
               <Route path={PrivateRoutes.DASHBOARD} element={<Dashboard />} />
               {/* donde se crean los administradores */}
               <Route path={PrivateRoutes.CREARUSUARIOSA} element={<AdministacionAdministradores />} />
@@ -97,10 +97,10 @@ function App() {
 
               <Route path={PrivateRoutes.ADMINISTRARROLES} element={<AdministrarRoles />} />
               
-            </Route>
+            {/* </Route> */}
 
             {/* Rutas accesibles solo para el rol de Admin */}
-            <Route element={<RolGuard rol={Roles.Admin} />}>
+            {/* <Route element={<RolGuard rol={Roles.Admin} />}> */}
               <Route path={PrivateRoutes.DASHBOARD} element={<Dashboard />} />
               <Route path={PrivateRoutes.ASIGNAREMPRESA} element={<AsignarEmpresa />} />
               <Route path={PrivateRoutes.MATENIMIENTOUSUARIOSASIGNADOS} element={<MantenimientoUsuariosAsignados />} />
@@ -121,9 +121,9 @@ function App() {
               <Route path={PrivateRoutes.REPORTESENSORES} element={<ReporteSensores />} />
               <Route path={PrivateRoutes.CATALOGOACTIVIDADESPT} element={<CatalogoActividadesPT/>}/>
               <Route path={PrivateRoutes.CULTIVOS} element={<Cultivos/>} />
-            </Route>
+            {/* </Route> */}
             {/* Rutas accesibles solo para el rol de usuario asignado */}
-            <Route element={<RolGuard rol={Roles.UsuarioAsignado} />}>
+            {/* <Route element={<RolGuard rol={Roles.UsuarioAsignado} />}> */}
               <Route path={PrivateRoutes.DASHBOARD} element={<Dashboard />} />
               <Route path={PrivateRoutes.MANEJODEFERTILIZANTES} element={<ManejodeFertilizantes />} />
               <Route path={PrivateRoutes.MEDICIONESDESUELOS} element={<MedicionesdeSuelos />} />
@@ -149,7 +149,7 @@ function App() {
               <Route path={PrivateRoutes.ALERTASCATALOGO} element={<AlertasCatalogo/>}/>
 
 
-            </Route>
+            {/* </Route> */}
           </RoutesWithNotFound>
         </BrowserRouter>
       </Provider>
@@ -158,4 +158,3 @@ function App() {
 }
 
 export default App;
-

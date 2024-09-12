@@ -6,6 +6,7 @@ import { ObtenerParcelas } from '../../servicios/ServicioParcelas.ts';
 import { ObtenerTipoFertilizantes } from '../../servicios/ServicioTipoFertilizante.ts';
 import { InsertarTipoAplicacion } from '../../servicios/ServicioTipoAplicacion.ts';
 import { ObtenerUsuariosAsignadosPorIdentificacion } from '../../servicios/ServicioUsuario.ts';
+import { IoSave } from 'react-icons/io5';
 
 interface InsertarTipoAplicacionProps {
     onAdd: () => void;
@@ -131,11 +132,11 @@ const InsertarManejoFertilizante: React.FC<InsertarTipoAplicacionProps> = ({ onA
     };
 
     return (
-        <div id='general' style={{ display: 'flex', flexDirection: 'column', paddingBottom: '0rem', width: '100%', margin: '0 auto' }}>
+        <div id='general' style={{ display: 'flex', flexDirection: 'column', paddingBottom: '0rem', width: '100%', margin: '0' }}>
             <div style={{ display: 'flex', flexDirection: 'row', marginBottom: '0rem' }}>
-                <div style={{ flex: 1, marginRight: '0.5rem', marginLeft: '0.5rem' }}>
+                <div style={{ flex: 1 }}>
                     <FormGroup row>
-                        <Label for="nombre" sm={4} className="input-label">nombre</Label>
+                        <Label for="nombre" sm={4} className="input-label">Nombre</Label>
                         <Col sm={8}>
                             <Input
                                 type="text"
@@ -146,19 +147,17 @@ const InsertarManejoFertilizante: React.FC<InsertarTipoAplicacionProps> = ({ onA
                                 className="input-styled"
                                 placeholder="Acciones adicionales"
                                 maxLength={200}
+                                style={{marginTop: '3%'}}
                             />
                             <FormFeedback>{errors.nombre}</FormFeedback>
                         </Col>
                     </FormGroup>
                 </div>
             </div>
-
-            <FormGroup row>
-                <Col sm={{ size: 10, offset: 2 }}>
-                    {/* Agregar aquí el botón de cancelar proporcionado por el modal */}
-                    <Button onClick={handleSubmit} className="btn-styled">Guardar</Button>
-                </Col>
-            </FormGroup>
+            
+            <div className='botonesN'>
+                <Button onClick={handleSubmit} className="btn-styled"><IoSave size={20} style={{marginRight: '2%'}}/>Guardar</Button>
+            </div>
         </div >
     );
 

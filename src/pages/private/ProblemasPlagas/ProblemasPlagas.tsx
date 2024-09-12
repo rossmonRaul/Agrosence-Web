@@ -368,7 +368,7 @@ function ProblemasPlagas() {
 
                         <button onClick={() => abrirCerrarModalInsertar()} className="btn-crear-style" style={{ marginLeft: 'auto', display: 'flex', justifyContent: 'center', alignItems: 'center', marginTop: '10px' }}>
                             <IoAddCircleOutline size={27} />
-                            <span style={{ marginLeft: '5px' }}>Crear Problema o Enfermedad</span>
+                            <span style={{ marginLeft: '5px' }}>Crear problema o enfermedad</span>
                             </button>
                     </div>
                     {/* openModalDetalles */}

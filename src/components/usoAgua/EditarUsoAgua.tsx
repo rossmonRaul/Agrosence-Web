@@ -6,6 +6,7 @@ import { ObtenerParcelas } from '../../servicios/ServicioParcelas.ts';
 import { ObtenerUsuariosAsignadosPorIdentificacion } from '../../servicios/ServicioUsuario.ts';
 import '../../css/CrearCuenta.css';
 import { EditarRegistroSeguimientoUsoAgua } from '../../servicios/ServicioUsoAgua.ts';
+import { IoSave } from "react-icons/io5";
 
 // Interfaz para las propiedades del componente
 interface RegistroSeguimientoUsoAguaSeleccionado {
@@ -283,7 +284,6 @@ const ModificacionRegistroSeguimientoUsoAgua: React.FC<RegistroSeguimientoUsoAgu
 
     return (
         <div id='general' style={{ display: 'flex', flexDirection: 'column', paddingBottom: '0rem', width: '90%', margin: '0 auto' }}>
-            <h2>Registro de seguimiento del uso del agua</h2>
             <div className="form-container-fse" style={{ display: 'flex', flexDirection: 'row', width: '100%' }}>
                 <div style={{ marginRight: '10px', width: '50%' }}>
                     <FormGroup>
@@ -402,12 +402,9 @@ const ModificacionRegistroSeguimientoUsoAgua: React.FC<RegistroSeguimientoUsoAgu
                     <FormFeedback>{errors.observaciones}</FormFeedback>
                 </Col>
             </FormGroup>
-            <FormGroup row>
-                <Col sm={{ size: 10, offset: 2 }}>
-                    {/* Agregar aquí el botón de cancelar proporcionado por el modal */}
-                    <Button onClick={handleSubmitConValidacion} className="btn-styled">Guardar</Button>
-                </Col>
-            </FormGroup>
+            <div className='botonesN'>
+                <Button onClick={handleSubmit} className="btn-styled"><IoSave size={20} style={{marginRight: '2%'}}/>Actualizar datos</Button>
+            </div>
         </div >
     );
 };

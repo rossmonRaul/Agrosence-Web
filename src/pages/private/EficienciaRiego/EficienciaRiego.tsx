@@ -300,7 +300,7 @@ function AdministrarEficienciaRiegos() {
                         </div>
                         <button onClick={() => abrirCerrarModalInsertar()} className="btn-crear-style" style={{ marginLeft: 'auto', display: 'flex', justifyContent: 'center', alignItems: 'center', marginTop: '10px' }}>
                             <IoAddCircleOutline size={27} />
-                            <span style={{ marginLeft: '5px' }}>Crear Riego</span>
+                            <span style={{ marginLeft: '5px' }}>Crear riego</span>
                         </button>
                     </div>
                     <TableResponsive
@@ -315,7 +315,7 @@ function AdministrarEficienciaRiegos() {
             <Modal
                 isOpen={modalInsertar}
                 toggle={abrirCerrarModalInsertar}
-                title="Eficiencia del Riego"
+                title="Eficiencia del riego"
                 onCancel={abrirCerrarModalInsertar}
             >
                 <div className='form-container'>

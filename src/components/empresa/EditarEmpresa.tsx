@@ -4,6 +4,7 @@ import '../../css/FormSeleccionEmpresa.css'
 import Swal from 'sweetalert2';
 import '../../css/CrearCuenta.css'
 import { EditarEmpresas } from '../../servicios/ServicioEmpresas';
+import { IoSave } from 'react-icons/io5';
 
 // Interfaz para las propiedades del componente EditarEmpresa
 interface Props {
@@ -119,12 +120,16 @@ const EditarEmpresa: React.FC<Props> = ({ idEmpresa, nombrebase, onEdit }) => {
                             onChange={handleInputChange}
                             onBlur={() => handleInputBlur('nombre')} // Manejar blur para quitar el mensaje de error
                             className={errors.nombre ? 'input-styled input-error' : 'input-styled'} // Aplicar clase 'is-invalid' si hay un error
+                            style={{marginTop: '5%'}}
                         />
                         <FormFeedback>{errors.nombre}</FormFeedback>
                     </Col>
                 </FormGroup>
             </div>
-            <button onClick={handleSubmitConValidacion} className="btn-styled">Actualizar Datos</button>
+            <div className='botonesN'>
+                <button onClick={handleSubmitConValidacion} className="btn-styled"><IoSave size={20} style={{marginRight: '3%'}}/>Actualizar</button>
+            </div>
+            
         </div>
     );
 }

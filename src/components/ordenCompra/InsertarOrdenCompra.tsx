@@ -731,7 +731,7 @@ const CrearOrdenCompra: React.FC<CrearOrdenCompraProps> = ({ onAdd }) => {
                                         <th>Precio U.</th>
                                         <th>Monto T.</th>
                                         <th>IVA</th>
-                                        <th>Accion</th>
+                                        <th>Acción</th>
                                     </tr>
                                 </thead>
                                 <tbody>

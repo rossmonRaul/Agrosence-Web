@@ -236,7 +236,7 @@ function AdministrarPuntoMedicion() {
                         </div>
                         <button onClick={() => abrirCerrarModalInsertar()} className="btn-crear-style" style={{ marginLeft: 'auto', display: 'flex', justifyContent: 'center', alignItems: 'center', marginTop: '10px' }}>
                             <IoAddCircleOutline size={27} />
-                            <span style={{ marginLeft: '5px' }}>Ingresar punto de medición</span>
+                            <span style={{ marginLeft: '5px' }}>Crear punto de medición</span>
                         </button>
                     </div>
                     <TableResponsive columns={columns2} data={puntoMedicionFiltrados} openModal={openModal} btnActionName={"Editar"} toggleStatus={toggleStatus} />

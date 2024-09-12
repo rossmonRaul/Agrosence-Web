@@ -6,6 +6,7 @@ import { ObtenerParcelas } from '../../servicios/ServicioParcelas.ts';
 import { ObtenerUsuariosAsignadosPorIdentificacion } from '../../servicios/ServicioUsuario.ts';
 import '../../css/CrearCuenta.css';
 import { ActualizarRegistroEficienciaRiego } from '../../servicios/ServicioRiego.ts';
+import { IoSave, IoArrowForward, IoArrowBack } from "react-icons/io5";
 
 // Interfaz para las propiedades del componente
 interface RiegoSeleccionado {
@@ -359,7 +360,6 @@ const ModificacionEficienciaRiego: React.FC<RiegoSeleccionado> = ({
             
         {step === 1 && (
             <div>
-                <h2>Eficiencia de riego</h2>
                 <div className="form-container-fse" style={{ display: 'flex', flexDirection: 'row', width: '100%' }}>
                     <div style={{ marginRight: '10px', width: '50%' }}>
                         <FormGroup>
@@ -429,13 +429,14 @@ const ModificacionEficienciaRiego: React.FC<RiegoSeleccionado> = ({
                     </div>
 
                 </div>
-                <button onClick={handleNextStep} className="btn-styled">Siguiente</button>
+                <div className='botonesN'>
+                  <button onClick={handleNextStep} className="btn-styled">Siguiente <IoArrowForward size={20} style={{marginLeft: '2%'}}/></button>
+                </div>
          </div>
 
         )}
         {step === 2 && (
     <div>
-        <h2>Problemas Plagas</h2>
         
         {/* <div className="row" style={{ marginTop: '5px' }}>
             <div className="col-sm-4" style={{ marginRight: "10px" }}>
@@ -777,13 +778,10 @@ const ModificacionEficienciaRiego: React.FC<RiegoSeleccionado> = ({
       </div>
     </div>
 
-        <FormGroup row>
-            <Col sm={{ size: 10, offset: 2 }}>
-                {/* Agregar aquí el botón de cancelar proporcionado por el modal */}
-                <button onClick={handlePreviousStep} className='btn-styled-danger'>Anterior</button>
-                <Button onClick={handleSubmit} className="btn-styled">Guardar</Button>
-            </Col>
-        </FormGroup>
+    <div className='botones'>
+          <button onClick={handlePreviousStep} className='btn-styled-danger'><IoArrowBack size={20} style={{marginRight: '2%'}}/>Anterior</button>
+          <Button onClick={handleSubmit} className="btn-styled"><IoSave size={20} style={{marginRight: '2%'}}/>Guardar</Button>
+      </div>
     </div>
 )}
 

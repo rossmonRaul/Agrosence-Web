@@ -6,6 +6,7 @@ import '../../css/CrearCuenta.css'
 import { ModificarMedidasCultivos } from '../../servicios/ServicioCultivo';
 import { AppStore } from '../../redux/Store';
 import { useSelector } from 'react-redux';
+import { IoSave } from 'react-icons/io5';
 
 // Interfaz para las propiedades del componente EditarEmpresa
 interface Props {
@@ -112,7 +113,7 @@ const EditarMedidasCultivos: React.FC<Props> = ({ idMedidasCultivo, medida, onEd
         <div>
             <div className="form-container-fse">
                 <FormGroup row>
-                    <Label for="nombre" sm={2} className="input-label">Medida de Cultivo: </Label>
+                    <Label for="nombre" sm={2} className="input-label">Medida de cultivo: </Label>
                     <Col sm={12}>
                         <Input
                             type="text"
@@ -123,12 +124,15 @@ const EditarMedidasCultivos: React.FC<Props> = ({ idMedidasCultivo, medida, onEd
                             onChange={handleInputChange}
                             onBlur={() => handleInputBlur('medida')} // Manejar blur para quitar el mensaje de error
                             className={errors.medida ? 'input-styled input-error' : 'input-styled'} // Aplicar clase 'is-invalid' si hay un error
+                            style={{marginTop: '3%'}}
                         />
                         <FormFeedback>{errors.medida}</FormFeedback>
                     </Col>
                 </FormGroup>
             </div>
-            <button onClick={handleSubmitConValidacion} className="btn-styled">Actualizar Datos</button>
+            <div className='botonesN'>
+                <button onClick={handleSubmitConValidacion} className="btn-styled"><IoSave size={20} style={{marginRight: '2%'}}/>Actualizar</button>
+            </div>
         </div>
     );
 }

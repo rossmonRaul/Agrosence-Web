@@ -169,7 +169,7 @@ function MedidasCultivos() {
                         </div>
                         <button onClick={() => abrirCerrarModalInsertar()} className="btn-crear-style" style={{ marginLeft: 'auto', display: 'flex', justifyContent: 'center', alignItems: 'center', marginTop: '10px' }}>
                             <IoAddCircleOutline size={27} />
-                            <span style={{ marginLeft: '5px' }}>Crear Medida</span>
+                            <span style={{ marginLeft: '5px' }}>Crear medida</span>
                         </button>
                     </div>
                     <TableDelete columns={columns} data={medidasCultivoFiltrados} openModal={openModal} btnActionName={"Editar"} toggleStatus={toggleStatus} useTrashIcon={true} />
@@ -180,7 +180,7 @@ function MedidasCultivos() {
             <Modal
                 isOpen={modalInsertar}
                 toggle={abrirCerrarModalInsertar}
-                title="Insertar Medida"
+                title="Insertar medida"
                 onCancel={abrirCerrarModalInsertar}
             >
                 <div className='form-container'>
@@ -195,7 +195,7 @@ function MedidasCultivos() {
             <Modal
                 isOpen={modalEditar}
                 toggle={abrirCerrarModalEditar}
-                title="Editar Medida"
+                title="Editar medida"
                 onCancel={abrirCerrarModalEditar}
             >
                 <div className='form-container'>

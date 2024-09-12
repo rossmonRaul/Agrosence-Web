@@ -6,7 +6,7 @@ import { useDispatch } from "react-redux";
 import '../../css/Logout.css';
 import Swal from "sweetalert2";
 import { CerrarSesion } from "../../servicios/ServicioUsuario";
-
+import { IoLogOut } from 'react-icons/io5';
 /**
  * Componente funcional para cerrar sesión de usuario.
  */
@@ -20,7 +20,7 @@ function Logout() {
      */
     const logOut = async () => {
         Swal.fire({
-            title: "Cerrar Sesión",
+            title: "Cerrar sesión",
             text: "¿Estás seguro de que deseas cerrar la sesión?",
             icon: "warning",
             showCancelButton: true, // Mostrar el botón de cancelar
@@ -49,7 +49,7 @@ function Logout() {
         });
     };
 
-    return <button className="btn-cerrar-sesion" onClick={logOut}>Cerrar Sesión</button>;
+    return <div className="botonesN"><button className="btn-cerrar-sesion" onClick={logOut}><IoLogOut size={25} style={{marginRight: '5%'}}/>Cerrar sesión</button></div>;
 }
 
 export default Logout;

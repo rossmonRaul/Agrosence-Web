@@ -7,6 +7,7 @@ import { ObtenerFincas } from '../../servicios/ServicioFincas.ts';
 import { ObtenerParcelas } from '../../servicios/ServicioParcelas.ts';
 import { ObtenerUsuariosAsignadosPorIdentificacion } from '../../servicios/ServicioUsuario.ts';
 import { InsertarRegistroCantidadDePlantas } from '../../servicios/ServicioCantidadDePlantas.ts';
+import { IoSave } from 'react-icons/io5';
 
 interface InsertarCantidadDePlantasProps {
     onAdd: () => void;
@@ -222,7 +223,6 @@ const InsertarCantidadDePlantas: React.FC<InsertarCantidadDePlantasProps> = ({ o
 
     return (
         <div id='general' style={{ display: 'flex', flexDirection: 'column', paddingBottom: '0rem', width: '100%', margin: '0 auto' }}>
-            <h2>Cantidad de Plantas</h2>
             <div style={{ display: 'flex', flexDirection: 'row', marginBottom: '0rem' }}>
                 <div style={{ flex: 1, marginRight: '0.5rem', marginLeft: '0.5rem' }}>
                     <FormGroup>
@@ -302,11 +302,9 @@ const InsertarCantidadDePlantas: React.FC<InsertarCantidadDePlantasProps> = ({ o
                     </FormGroup>
                 </div>
             </div>
-            <FormGroup row>
-                <Col sm={{ size: 10, offset: 2 }}>
-                    <Button onClick={handleSubmit} className="btn-styled">Guardar</Button>
-                </Col>
-            </FormGroup>
+            <div className='botonesN'>
+                <Button onClick={handleSubmit} className="btn-styled"><IoSave size={20} style={{marginRight: '2%'}}/>Guardar</Button>
+            </div>
         </div >
     );
 

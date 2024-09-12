@@ -7,6 +7,7 @@ import '../../css/CrearCuenta.css';
 import { ObtenerDocumentacionSaludDeLaPlanta } from '../../servicios/ServicioSaludPlanta.ts';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faEye } from '@fortawesome/free-solid-svg-icons';
+import { IoArrowBack, IoArrowForward } from 'react-icons/io5';
 
 // Interfaz para las propiedades del componente
 interface SaludDeLaPlantaSeleccionado {
@@ -216,7 +217,6 @@ const DetallesSaludDeLaPlanta: React.FC<SaludDeLaPlantaSeleccionado> = ({
         <div id='general' style={{ display: 'flex', flexDirection: 'column', paddingBottom: '0rem', width: '90%', margin: '0 auto', minWidth: '650px' }}>
             {step === 1 && (
                 <div>
-                    <h2>Salud de la Planta</h2>
                     <div className="form-container-fse" style={{ display: 'flex', flexDirection: 'row', width: '100%' }}>
                         <div style={{ marginRight: '10px', width: '50%' }}>
                             <FormGroup>
@@ -343,13 +343,14 @@ const DetallesSaludDeLaPlanta: React.FC<SaludDeLaPlantaSeleccionado> = ({
                             </div>
                         </div>
                     </div>
-                    <button onClick={handleNextStep} className="btn-styled">Siguiente</button>
+                    <div className='botonesN'>
+                        <button onClick={handleNextStep} className="btn-styled">Siguiente<IoArrowForward size={20} style={{marginLeft: '2%'}}/></button>
+                    </div>
                 </div>
             )}
 
             {step === 2 && (
                 <div>
-                    <h2>Listado de imágenes</h2>
                     <div style={{ display: "flex", height: "100%", width: "900px", paddingBottom: '10px' }}>
                         <table style={{ width: "50%", marginRight: "10px", textAlign: 'center', borderCollapse: "collapse", border: "1px solid #ddd", maxHeight: '330px', minHeight: '330px' }}>
                             <thead style={{ backgroundColor: "#f2f2f2", border: "1px solid #ddd" }}>
@@ -376,7 +377,9 @@ const DetallesSaludDeLaPlanta: React.FC<SaludDeLaPlantaSeleccionado> = ({
                                 <img src={imageURL} alt="img" style={{ width: '300px', height: '300px' }} />
                             </div>)}
                     </div>
-                    <button onClick={handlePreviousStep} className='btn-styled-danger'>Anterior</button>
+                    <div className='botonesN'>
+                        <button onClick={handlePreviousStep} className='btn-styled-danger'><IoArrowBack size={20} style={{marginRight: '2%'}}/>Anterior</button>
+                    </div>
                 </div>
 
             )}

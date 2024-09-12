@@ -152,7 +152,7 @@ function ReporteMedicionesSensor() {
       <div className="main-container">
         <Topbar />
         <BordeSuperior text="Reporte Medidas de Sensor" />
-        <div>
+        <div style={{width: '90%'}}>
           <div
             className="filtro-item" style={{ display: 'flex', alignItems: 'center', flexGrow: 1, marginTop:"10px", marginBottom:"10px" }}
           >
@@ -206,7 +206,7 @@ function ReporteMedicionesSensor() {
                 justifyContent: 'center',
                 alignItems: 'center',
                 height: '50%',
-                margin: '5%'
+                width: '100%'
                 }}>
                 {loading ? (
                     <ClipLoader color={"#038c3e"} loading={loading} size={100} />

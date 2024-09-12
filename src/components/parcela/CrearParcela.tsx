@@ -5,6 +5,7 @@ import Swal from 'sweetalert2';
 import '../../css/CrearCuenta.css'
 import { GuardarParcelas } from '../../servicios/ServicioParcelas';
 import { ObtenerFincas } from '../../servicios/ServicioFincas';
+import { IoSave } from 'react-icons/io5';
 
 // Interfaz para las propiedades del componente AgregarEmpresa
 interface AgregarParcela {
@@ -193,7 +194,9 @@ const CrearParcela: React.FC<AgregarParcela> = ({ onAdd }) => {
                     </Col>
                 </FormGroup>
             </div>
-            <button onClick={handleSubmitConValidacion} className="btn-styled">Crear Parcela</button>
+            <div className='botonesN'>
+                <button onClick={handleSubmitConValidacion} className="btn-styled"><IoSave size={20} style={{marginRight: '2%'}}/>Guardar</button>
+            </div>            
         </div>
     );
 }

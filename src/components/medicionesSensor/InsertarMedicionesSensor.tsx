@@ -4,6 +4,7 @@ import '../../css/FormSeleccionEmpresa.css'
 import Swal from 'sweetalert2';
 import '../../css/CrearCuenta.css'
 import { InsertarMedicionesSensor } from '../../servicios/ServicioMedicionesSensor';
+import { IoSave } from 'react-icons/io5';
 
 // Interfaz para las propiedades del componente AgregarMedicion
 interface AgregarMedicion {
@@ -171,7 +172,9 @@ const InsertarMedicionSensor: React.FC<AgregarMedicion> = ({ onAdd }) => {
                     </Col>
                 </FormGroup>
             </div>
-            <button onClick={handleSubmitConValidacion} className="btn-styled">Crear Medicion</button>
+            <div className='botonesN'>
+                <button onClick={handleSubmitConValidacion} className="btn-styled"><IoSave size={20} style={{marginRight: '2%'}}/>Guardar medición</button>
+            </div>
         </div>
     );
 }

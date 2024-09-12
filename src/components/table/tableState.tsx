@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import '../../css/Table.css'
 import { Table } from 'reactstrap'
+import { IoAtCircle, IoCheckmark, IoRemoveCircle, IoSave } from 'react-icons/io5';
 
 // Interface que define la estructura de una columna de la tabla.
 interface Column {
@@ -91,10 +92,11 @@ const TableResponsiveState: React.FC<TableProps> = ({ propClassNameOpcional, col
                           
                           {toggleStatus && (
                             <button
-                              className={item.estado === 1 ? 'btn-inactivate' : 'btn-activate'}
+                              className={item.estado === 1 || true ? 'btn-inactivate' : 'btn-activate'}
                               onClick={() => toggleStatus(item)}
                             >
-                              {item.estado === 1 ? 'Inactivar' : 'Activar'}
+                              {item.estado === 1 || true ? <IoRemoveCircle size={20} style={{marginRight: '1%'}}/> : <IoCheckmark size={20} style={{marginRight: '1%'}}/>}
+                              {item.estado === 1 || true ? 'Desactivar' : 'Activar'}
                             </button>
                           )}
                           {btnToggleOptionalStatus && toggleOptionalStatus && (

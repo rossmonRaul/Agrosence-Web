@@ -3,8 +3,8 @@ import { FormGroup, FormFeedback, Col, Input, Label } from 'reactstrap';
 import '../../css/FormSeleccionEmpresa.css'
 import Swal from 'sweetalert2';
 import '../../css/CrearCuenta.css'
-import { GuardarParcelas } from '../../servicios/ServicioParcelas';
-import { ObtenerFincas } from '../../servicios/ServicioFincas';
+import { CrearRolAPI } from '../../servicios/ServicioUsuario';
+import { IoSave } from 'react-icons/io5';
 
 // Interfaz para las propiedades del componente AgregarEmpresa
 interface AgregarRol {
@@ -65,81 +65,88 @@ const CrearRol: React.FC<AgregarRol> = ({ onAdd }) => {
             [name]: value
         }));
     };
-  
 
-    // Función para manejar el envío del formulario con validación
-    const handleSubmitConValidacion = () => {
-        // Validar campos antes de enviar los datos al servidor
-        const newErrors: Record<string, string> = {};
-
-        // Validar selección de finca
-        // if (!selectedFinca) {
-        //     newErrors.finca = 'Debe seleccionar una finca';
-        // } else {
-        //     newErrors.finca = '';
-        // }
-
-        // Actualizar los errores
-        setErrors(newErrors);
-
-        // Si no hay errores, enviar los datos al servidor
-        if (Object.values(newErrors).every(error => error === '')) {
-            // Llamar a la función handleSubmit para enviar los datos al servidor
-            handleSubmit();
-        }
-    };
     // Función para manejar el envío del formulario(metodo para guardar)
     const handleSubmit = async () => {
-        // const datos = {
-        //     nombre: formData.nombre,
-        //     idFinca: formData.idFinca,
-        // };
-        // try {
-        //     const resultado = await GuardarParcelas(datos);
-        //     if (parseInt(resultado.indicador) === 1) {
-        //         Swal.fire({
-        //             icon: 'success',
-        //             title: 'Parcela Agregada! ',
-        //             text: 'Parcela agregada con éxito.',
-        //         });
-        //     } else {
-        //         Swal.fire({
-        //             icon: 'error',
-        //             title: 'Error al agregar la parcela.',
-        //             text: resultado.mensaje,
-        //         });
-        //     };
-        //     onAdd()
-        // } catch (error) {
-        //     console.log(error)
-        // }
 
+        let continuar;
+
+        if(!formData.nombre) {
+            Swal.fire({
+                icon: 'warning',
+                title: 'Cuidado',
+                text: "Ingrese un nombre de rol",
+            });
+
+            return;
+        }
+        else if(formData.nombre.trim().length < 1){
+            Swal.fire({
+                icon: 'warning',
+                title: 'Cuidado',
+                text: "Ingrese un nombre de rol",
+            });
+            
+            return;
+        }
+
+        const datos = {
+            nombreRol: formData.nombre,
+            permisoAgregar: formData.agregar,
+            permisoActualizar: formData.actualizar,
+            permisoEliminar: formData.eliminar
+        };
+
+        try {
+            const resultado = await CrearRolAPI(datos);
+
+            console.log(resultado)
+
+            if (parseInt(resultado[0].indicador) === 1) {
+                Swal.fire({
+                    icon: 'success',
+                    title: 'Rol creado ',
+                    text: 'Rol creado correctamente',
+                });
+            } else {
+                Swal.fire({
+                    icon: 'error',
+                    title: 'Error al agregar el rol',
+                    text: "Ocurrió un error al contactar con el servicio",
+                });
+            };
+
+            onAdd()
+        } catch (error) {
+            console.log(error)
+        }
     };
 
     // Renderizado del componente
     return (
         <div>
             <div className="form-container-fse">
-            <div style={{ flex: 1, marginRight: '0.5rem', marginLeft: '0.5rem' }}>
+            <div style={{ flex: 1 }}>
                 <FormGroup row>
-                    <Label for="descripcion" sm={2} className="input-label">Descripción: </Label>
+                    <Label for="nombre" sm={2} className="input-label">Nombre:</Label>
                     <Col sm={12}>
                         <Input
                             type="text"
-                            id="descripcion"
-                            name="descripcion"
-                            placeholder="Ingrese la descripcion"
+                            id="nombre"
+                            name="nombre"
+                            placeholder="Nombre del rol"
                             value={formData.descripcion}
                             onChange={handleInputChange}
                             onBlur={() => handleInputBlur('nombre')} // Manejar blur para quitar el mensaje de error
                             className={errors.descripcion ? 'input-styled input-error' : 'input-styled'} // Aplicar clase 'is-invalid' si hay un error
+                            style={{marginTop: '3%'}}
                         />
                         <FormFeedback>{errors.descripcion}</FormFeedback>
                     </Col>
                 </FormGroup>
                 </div>
-                <h5>Permisos Generales</h5>
-                <div style={{ display: 'flex', flexDirection: 'row', marginBottom: '0rem',justifyContent:' space-between' }}>
+                <h5>Permisos generales</h5>
+                <div style={{ display: 'flex', flexDirection: 'row', alignItems: 'center', justifyContent:' space-between', marginTop: '2%' }}>
                 <FormGroup check>
                     <Label check>
                         <Input
@@ -175,7 +182,10 @@ const CrearRol: React.FC<AgregarRol> = ({ onAdd }) => {
                 </FormGroup>
             </div>
             </div>
-            <button onClick={handleSubmitConValidacion} className="btn-styled">Crear Rol</button>
+            <br />
+            <div className='botonesN'>
+                <button onClick={handleSubmit} className="btn-styled"><IoSave size={20} style={{marginRight: '2%'}}/>Crear rol</button>
+            </div>
         </div>
     );
 }

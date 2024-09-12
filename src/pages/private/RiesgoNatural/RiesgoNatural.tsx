@@ -201,7 +201,7 @@ function RiesgoNatural() {
                         </div>
                         <button onClick={() => abrirCerrarModalCrearRiesgoNatural()} className="btn-crear-style" style={{ marginLeft: 'auto', display: 'flex', justifyContent: 'center', alignItems: 'center', marginTop: '10px' }}>
                             <IoAddCircleOutline size={27} />
-                            <span style={{ marginLeft: '5px' }}>Crear Riesgo</span>
+                            <span style={{ marginLeft: '5px' }}>Crear riesgo</span>
                         </button>
                     </div>
                     <TableResponsiveDelete columns={columns} data={RiesgosFiltrados} openModal={openModal} toggleStatus={toggleStatus} btnActionName={"Editar"} />
@@ -211,7 +211,7 @@ function RiesgoNatural() {
             <Modal
                 isOpen={modalEditar}
                 toggle={abrirCerrarModalEditar}
-                title="Editar Manejo de Riesgo"
+                title="Editar manejo de riesgo"
                 onCancel={abrirCerrarModalEditar}
             >
                 <div className='form-container'>
@@ -240,7 +240,7 @@ function RiesgoNatural() {
             <Modal
                 isOpen={modalCrearRiesgos}
                 toggle={abrirCerrarModalCrearRiesgoNatural}
-                title="Riesgos Naturales"
+                title="Riesgos naturales"
                 onCancel={abrirCerrarModalCrearRiesgoNatural}
             >
                 <div className='form-container'>

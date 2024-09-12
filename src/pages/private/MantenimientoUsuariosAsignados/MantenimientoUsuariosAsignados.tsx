@@ -194,7 +194,7 @@ function MantenimientoUsuariosAsignados() {
             </div>
             <button onClick={() => abrirCerrarModalCrearUsuario()} className="btn-crear-style" style={{ marginLeft: 'auto', display: 'flex', justifyContent: 'center', alignItems: 'center', marginTop: '10px' }}>
             <IoAddCircleOutline size={27} />
-            <span style={{ marginLeft: '5px' }}>Crear Usuario</span>
+            <span style={{ marginLeft: '5px' }}>Crear usuario</span>
             </button>
           </div>
           <TableResponsive columns={columns} data={usuariosFiltrados} openModal={openModal} toggleStatus={toggleStatus} btnActionName={"Editar"}
@@ -205,7 +205,7 @@ function MantenimientoUsuariosAsignados() {
       <Modal
         isOpen={modalEditar}
         toggle={abrirCerrarModalEditar}
-        title="Editar Usuario"
+        title="Editar usuario"
         onCancel={abrirCerrarModalEditar}
       >
         <div className='form-container'>
@@ -226,7 +226,7 @@ function MantenimientoUsuariosAsignados() {
       <Modal
         isOpen={modalCrearUsuario}
         toggle={abrirCerrarModalCrearUsuario}
-        title="Crear Usuario"
+        title="Crear usuario"
         onCancel={abrirCerrarModalCrearUsuario}
       >
         <div className='form-container'>
@@ -242,7 +242,7 @@ function MantenimientoUsuariosAsignados() {
       <Modal
         isOpen={modalAsignar}
         toggle={abrirCerrarModalAsignar}
-        title="Editar Asignaciones"
+        title="Editar asignaciones"
         onCancel={abrirCerrarModalAsignar}
       >
         <div className='form-container'>

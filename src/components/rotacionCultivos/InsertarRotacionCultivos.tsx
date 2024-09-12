@@ -5,6 +5,8 @@ import Swal from 'sweetalert2';
 import { ObtenerFincas } from '../../servicios/ServicioFincas.ts';
 import { ObtenerParcelas } from '../../servicios/ServicioParcelas.ts';
 import { ObtenerUsuariosAsignadosPorIdentificacion } from '../../servicios/ServicioUsuario.ts';
+import { IoSave } from 'react-icons/io5';
+import '../../css/FormSeleccionEmpresa.css'
 
 interface InsertarRotacionCultivosProps {
     onAdd: () => void;
@@ -233,11 +235,10 @@ const InsertarRotacionCultivos: React.FC<InsertarRotacionCultivosProps> = ({ onA
 
     return (
         <div id='general' style={{ display: 'flex', flexDirection: 'column', paddingBottom: '0rem', width: '100%', margin: '0 auto' }}>
-            <div className="form-container-fse" style={{ display: 'flex', flexDirection: 'column', width: '60%' }}>
-                <h2>Manejo de rotación de cultivos</h2>
+            <div className="form-container-fse" style={{ display: 'flex', flexDirection: 'column', width: '100%' }}>
                 <FormGroup>
                     <label htmlFor="fincas">Finca:</label>
-                    <select className="custom-select" id="fincas" value={selectedFinca} onChange={handleFincaChange}>
+                    <select className="custom-select" id="fincas" value={selectedFinca} onChange={handleFincaChange} style={{marginTop: '1%'}}>
                         <option key="default-finca" value="">Seleccione...</option>
                         {filteredFincas.map((finca) => (
                             <option key={`${finca.idFinca}-${finca.nombre || 'undefined'}`} value={finca.idFinca}>{finca.nombre || 'Undefined'}</option>
@@ -248,7 +249,7 @@ const InsertarRotacionCultivos: React.FC<InsertarRotacionCultivosProps> = ({ onA
 
                 <FormGroup>
                     <label htmlFor="parcelas">Parcela:</label>
-                    <select className="custom-select" id="parcelas" value={selectedParcela} onChange={handleParcelaChange}>
+                    <select className="custom-select" id="parcelas" value={selectedParcela} onChange={handleParcelaChange} style={{marginTop: '1%'}}>
                         <option key="default-parcela" value="">Seleccione...</option>
                         {parcelasFiltradas.map((parcela) => (
                             <option key={`${parcela.idParcela}-${parcela.nombre || 'undefined'}`} value={parcela.idParcela}>{parcela.nombre || 'Undefined'}</option>
@@ -271,6 +272,7 @@ const InsertarRotacionCultivos: React.FC<InsertarRotacionCultivosProps> = ({ onA
                                 onChange={handleInputChange}
                                 className={errors.epocaSiembra ? 'input-styled input-error' : 'input-styled'}
                                 placeholder="Selecciona una fecha"
+                                style={{marginTop: '2%'}}
                             />
                             <FormFeedback>{errors.epocaSiembra}</FormFeedback>
                         </Col>
@@ -288,6 +290,7 @@ const InsertarRotacionCultivos: React.FC<InsertarRotacionCultivosProps> = ({ onA
                                 onChange={handleInputChange}
                                 className={errors.tiempoCosecha ? 'input-styled input-error' : 'input-styled'}
                                 placeholder="Selecciona una fecha"
+                                style={{marginTop: '2%'}}
                             />
                             <FormFeedback>{errors.tiempoCosecha}</FormFeedback>
                         </Col>
@@ -305,6 +308,7 @@ const InsertarRotacionCultivos: React.FC<InsertarRotacionCultivosProps> = ({ onA
                                 onChange={handleInputChange}
                                 className={errors.epocaSiembraCultivoSiguiente ? 'input-styled input-error' : 'input-styled'}
                                 placeholder="Selecciona una fecha"
+                                style={{marginTop: '2%'}}
                             />
                             <FormFeedback>{errors.epocaSiembraCultivoSiguiente}</FormFeedback>
                         </Col>
@@ -324,6 +328,7 @@ const InsertarRotacionCultivos: React.FC<InsertarRotacionCultivosProps> = ({ onA
                                 onChange={handleInputChange}
                                 className={errors.cultivo ? 'input-styled input-error' : 'input-styled'}
                                 placeholder="Nombre de cultivo"
+                                style={{marginTop: '2%'}}
                             />
                             <FormFeedback>{errors.cultivo}</FormFeedback>
                         </Col>
@@ -342,6 +347,7 @@ const InsertarRotacionCultivos: React.FC<InsertarRotacionCultivosProps> = ({ onA
                                 className={errors.cultivoSiguiente ? 'input-styled input-error' : 'input-styled'}
                                 placeholder="Nombre del siguiente cultivo"
                                 maxLength={50}
+                                style={{marginTop: '2%'}}
                             />
                             <FormFeedback>{errors.cultivoSiguiente}</FormFeedback>
                         </Col>
@@ -350,12 +356,9 @@ const InsertarRotacionCultivos: React.FC<InsertarRotacionCultivosProps> = ({ onA
 
             </div>
 
-            <FormGroup row>
-                <Col sm={{ size: 10, offset: 2 }}>
-                    {/* Agregar aquí el botón de cancelar proporcionado por el modal */}
-                    <Button onClick={handleSubmit} className="btn-styled">Guardar</Button>
-                </Col>
-            </FormGroup>
+            <div className='botonesN'>
+                <Button onClick={handleSubmit} className="btn-styled"><IoSave size={20} style={{marginRight: '1%'}}/>Guardar</Button>
+            </div>
         </div>
     );
 

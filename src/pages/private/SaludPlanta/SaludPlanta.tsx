@@ -213,7 +213,7 @@ function SaludPlanta() {
                         </div>
                         <button onClick={() => abrirCerrarModalCrearSaludDeLaPlanta()} className="btn-crear-style" style={{ marginLeft: 'auto', display: 'flex', justifyContent: 'center', alignItems: 'center', marginTop: '10px' }}>
                             <IoAddCircleOutline size={27} />
-                            <span style={{ marginLeft: '5px' }}>Crear Salud de la Planta</span>
+                            <span style={{ marginLeft: '5px' }}>Crear salud de la planta</span>
                             </button>
                     </div>
                     <TableResponsiveDetails columns={columns} data={SaludDeLaPlantaFiltrados} openModal={openModal} toggleStatus={toggleStatus} btnActionName={"Editar"} openModalDetalles={openModalDetalles} btnActionNameDetails={"Detalles"} />
@@ -223,7 +223,7 @@ function SaludPlanta() {
             <Modal
                 isOpen={modalEditar}
                 toggle={abrirCerrarModalEditar}
-                title="Editar Salud de la Planta"
+                title="Editar salud de la planta"
                 onCancel={abrirCerrarModalEditar}
             >
                 <div className='form-container'>
@@ -247,7 +247,7 @@ function SaludPlanta() {
             <Modal
                 isOpen={modalDetalles}
                 toggle={abrirCerrarModalDetalles}
-                title="Detalles Salud de la Planta"
+                title="Detalles salud de la planta"
                 onCancel={abrirCerrarModalDetalles}
             >
                 <div className='form-container'>
@@ -271,7 +271,7 @@ function SaludPlanta() {
             <Modal
                 isOpen={modalCrearSaludDeLaPlanta}
                 toggle={abrirCerrarModalCrearSaludDeLaPlanta}
-                title="Salud de la Planta"
+                title="Salud de la planta"
                 onCancel={abrirCerrarModalCrearSaludDeLaPlanta}
             >
                 <div className='form-container'>

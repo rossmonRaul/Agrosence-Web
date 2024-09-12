@@ -18,6 +18,28 @@
     align-items: left;
 }
 
+.botones{
+    display: flex;
+    flex-direction: row;
+    justify-content: space-around;
+    width: 100%;
+}
+
+.botones button{
+    display: flex;
+    flex-direction: row;
+    align-Items: center;
+    justify-content: center;
+    width: 45%;
+}
+
+.botonesN button{
+    display: flex;
+    flex-direction: row;
+    align-Items: center;
+    justify-content: center; 
+}
+
 .btn-styled-danger {
     border-radius: 5px;
     padding: 8px 16px;

@@ -299,7 +299,7 @@ function RegistroProductividadCultivo() {
                     </div>
                     <button onClick={() => abrirCerrarModalInsertar()} className="btn-crear-style" style={{ marginLeft: 'auto', display: 'flex', justifyContent: 'center', alignItems: 'center', marginTop: '10px' }}>
                             <IoAddCircleOutline size={27} />
-                            <span style={{ marginLeft: '5px' }}>Ingresar Producción de Cultivo</span>
+                            <span style={{ marginLeft: '5px' }}>Crear producción de cultivo</span>
                         </button>
                     </div>
                         {/* <TableResponsive columns={columns} data={datosProduccionFiltrados} openModal={openModal} btnActionName={"Editar"} toggleStatus={toggleStatus} /> */}
@@ -318,7 +318,7 @@ function RegistroProductividadCultivo() {
             <Modal
                 isOpen={modalInsertar}
                 toggle={abrirCerrarModalInsertar}
-                title="Insertar Productividad"
+                title="Crear producción"
                 onCancel={abrirCerrarModalInsertar}
             >
                 <div className='form-container'>

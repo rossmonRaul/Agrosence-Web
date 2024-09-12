@@ -6,6 +6,7 @@ import { ObtenerParcelas } from '../../servicios/ServicioParcelas.ts';
 import { ObtenerUsuariosAsignadosPorIdentificacion } from '../../servicios/ServicioUsuario.ts';
 import { ModificarMedicionesSuelo } from "../../servicios/ServicioSuelos.ts";
 import '../../css/CrearCuenta.css';
+import { IoArrowBack, IoArrowForward, IoSave } from 'react-icons/io5';
 
 // Interfaz para las propiedades del componente
 interface FertilizanteSeleccionado {
@@ -369,7 +370,6 @@ const EditarMedicionSuelo: React.FC<FertilizanteSeleccionado> = ({
         <div id='general' style={{ display: 'flex', flexDirection: 'column', paddingBottom: '0rem', width: '90%', margin: '0 auto' }}>
             {step === 1 && (
                 <div>
-                    <h2>Medición de la calidad del suelo</h2>
                     <div className="form-container-fse" style={{ display: 'flex', flexDirection: 'row', width: '100%' }}>
                         <div style={{ marginRight: '10px', width: '50%' }}>
                             <FormGroup>
@@ -511,15 +511,14 @@ const EditarMedicionSuelo: React.FC<FertilizanteSeleccionado> = ({
                             </FormGroup>
                         </div>
                     </div>
-
-                    <button onClick={handleNextStep} className="btn-styled">Siguiente</button>
+                    <div className='botonesN'>
+                        <button onClick={handleNextStep} className="btn-styled">Siguiente<IoArrowForward size={20} style={{marginLeft: '2%'}}/></button>
+                    </div>
                 </div>
             )}
             {step === 2 && (
                 <div>
                     <div className="form-container-fse" style={{ display: 'flex', flexDirection: 'column', width: '100%' }}>
-                        <h2>Medición de la calidad del suelo</h2>
-
                         <div className="row" style={{ display: "flex" }}>
                             <div className="col-sm-4" style={{ marginRight: "10px" }}>
                                 <FormGroup row>
@@ -632,13 +631,10 @@ const EditarMedicionSuelo: React.FC<FertilizanteSeleccionado> = ({
                                 <FormFeedback>{errors.observaciones}</FormFeedback>
                             </Col>
                         </FormGroup>
-                        <FormGroup row>
-                            <Col sm={{ size: 10, offset: 2 }}>
-                                {/* Agregar aquí el botón de cancelar proporcionado por el modal */}
-                                <button onClick={handlePreviousStep} className='btn-styled-danger'>Anterior</button>
-                                <Button onClick={handleSubmitConValidacion} className="btn-styled">Guardar</Button>
-                            </Col>
-                        </FormGroup>
+                        <div className='botones'>
+                            <button onClick={handlePreviousStep} className='btn-styled-danger'><IoArrowBack size={20} style={{marginRight: '2%'}}/>Anterior</button>
+                            <Button onClick={handleSubmitConValidacion} className="btn-styled"><IoSave size={20} style={{marginRight: '2%'}}/>Actualizar datos</Button>                            
+                        </div>
                     </div>
                 </div>
             )}

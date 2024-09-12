@@ -22,7 +22,7 @@ interface TableProps {
   data: TableRow[]; // Datos a mostrar en la tabla
   itemsPerPage?: number; // Número de elementos por página (opcional, por defecto es 5)
   btnActionName: string; // Nombre del botón de acción en cada fila
-  openModal: (user: any) => void; // Función para abrir un modal con los detalles de un elemento
+  openModal?: (user: any) => void; // Función para abrir un modal con los detalles de un elemento
   toggleStatus?: (user: any) => void; // Función para cambiar el estado de un elemento (opcional)
   btnToggleOptionalStatus?: string; // Nombre del botón de acción opcional en cada fila (opcional)
   toggleOptionalStatus?: (user: any) => void; // Función para realizar una acción opcional en cada fila (opcional)

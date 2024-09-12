@@ -4,6 +4,7 @@ import { InsertarCoberturaVegetal, ObtenerPuntoMedicionFincaParcela } from '../.
 import Swal from 'sweetalert2';
 import { ObtenerFincas } from '../../servicios/ServicioFincas.ts';
 import { ObtenerParcelas } from '../../servicios/ServicioParcelas.ts';
+import { IoSave } from 'react-icons/io5';
 
 interface InsertarCoberturaVegetalProps {
     onAdd: () => void;
@@ -223,7 +224,6 @@ const insertarCoberturaVegetal: React.FC<InsertarCoberturaVegetalProps> = ({ onA
 
     return (
         <div id='general' style={{ display: 'flex', flexDirection: 'column', paddingBottom: '0rem', width: '100%', margin: '0 auto' }}>
-            <h2>Cobertura Vegetal</h2>
             <div style={{ display: 'flex', flexDirection: 'row', marginBottom: '0rem' }}>
                 <div style={{ flex: 1, marginRight: '0.5rem', marginLeft: '0.5rem' }}>
                     <FormGroup>
@@ -349,11 +349,9 @@ const insertarCoberturaVegetal: React.FC<InsertarCoberturaVegetalProps> = ({ onA
                     </FormGroup>
                 </div>
             </div>
-            <FormGroup row>
-                <Col sm={{ size: 10, offset: 2 }}>
-                    <Button onClick={handleSubmit} className="btn-styled">Guardar</Button>
-                </Col>
-            </FormGroup>
+            <div className='botonesN'>
+                <Button onClick={handleSubmit} className="btn-styled"><IoSave size={20} style={{marginRight: '2%'}}/>Guardar</Button>
+            </div>
         </div>
     );
 };

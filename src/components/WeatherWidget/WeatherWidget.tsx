@@ -135,13 +135,13 @@ const WeatherWidget = () => {
       maxWidth="xs"
       sx={{ mt: 2 }}
     >
+      <br /><br />
       <Typography
         variant="h3"
         component="h3"
         align="left"
         gutterBottom
         style={{ fontSize: 'xx-large' }}>
-        Pronóstico Meteorológico
       </Typography>
 
       <label htmlFor="fincas">Finca:</label>

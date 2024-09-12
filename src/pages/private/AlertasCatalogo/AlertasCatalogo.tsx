@@ -347,7 +347,7 @@ function AdministrarAlertasCatalogo() {
             <Modal
                 isOpen={modalInsertar}
                 toggle={abrirCerrarModalInsertar}
-                title="Ingresar Nueva Alerta"
+                title="Ingresar nueva alerta"
                 onCancel={abrirCerrarModalInsertar}
             >
                 <div className='form-container' style={{ width: '600px', height: '400px' }}>
@@ -362,7 +362,7 @@ function AdministrarAlertasCatalogo() {
             <Modal
                 isOpen={modalEditar}
                 toggle={abrirCerrarModalEditar}
-                title="Editar Alerta del Catálogo"
+                title="Editar alerta del catálogo"
                 onCancel={abrirCerrarModalEditar}
             >
                 <div className='form-container' style={{ width: '600px' }}>
@@ -386,7 +386,7 @@ function AdministrarAlertasCatalogo() {
             <Modal
                 isOpen={modalDetalles}
                 toggle={abrirCerrarModalDetalles}
-                title="Detalles de la Alerta del Catálogo"
+                title="Detalles de la alerta del catálogo"
                 onCancel={abrirCerrarModalDetalles}
             >
                 <div className='form-container' style={{ width: '600px' }}>

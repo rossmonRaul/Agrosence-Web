@@ -9,6 +9,8 @@ import { useSelector } from 'react-redux';
 import { AppStore } from '../../redux/Store.ts';
 import { convertirHora, convertirHoraA24 } from '../../utilities/horaFormat.ts';
 import { ModificarRegistroSeguimientoCondicionesMeteorologicas } from '../../servicios/ServicioClima.ts';
+import { IoSave } from "react-icons/io5";
+
 // Interfaz para las propiedades del componente
 interface Props {
     idRegistroCondicionesMeteorologicasClimaticas: number;
@@ -294,7 +296,6 @@ const ModificarCondicionesMeteorologicasClimaticas: React.FC<Props> = ({
 
     return (
         <div id='general' style={{ display: 'flex', flexDirection: 'column', paddingBottom: '0rem', width: '100%', margin: '0 auto' }}>
-            <h2>Registro de Datos</h2>
             <div className="form-container-fse" style={{ display: 'flex', flexDirection: 'column', width: '95%', marginLeft: '0.5rem' }}>
                 <div style={{ flex: 1, marginRight: '0.5rem', marginLeft: '0.5rem' }}>
                     <FormGroup>
@@ -435,12 +436,8 @@ const ModificarCondicionesMeteorologicasClimaticas: React.FC<Props> = ({
                 </div>
             </div>
 
-            <div style={{ flex: 1, marginTop: '0.5rem', marginRight: '0.5rem', marginLeft: '0.5rem' }}>
-                <FormGroup row>
-                    <Col sm={{ size: 10, offset: 2 }}>
-                        <Button onClick={handleSubmitConValidacion} className="btn-styled btn btn-secondary">Guardar</Button>
-                    </Col>
-                </FormGroup>
+            <div className='botonesN'>
+                <Button onClick={handleSubmitConValidacion} className="btn-styled btn btn-secondary"><IoSave size={20} style={{marginRight: '2%'}}/>Actualizar datos</Button>                    
             </div>
         </div>
     );

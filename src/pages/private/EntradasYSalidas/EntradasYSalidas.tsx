@@ -265,7 +265,7 @@ function EntradasYSalidas() {
                         </div>
                         <button onClick={() => abrirCerrarModalCrearEntradasYSalidas()} className="btn-crear-style" style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', marginLeft: '10px' }}>
                             <IoAddCircleOutline size={27} />
-                            <span style={{ marginLeft: '5px' }}>Crear Registro</span>
+                            <span style={{ marginLeft: '5px' }}>Crear entrada o salida</span>
                         </button>
                         <button onClick={exportToExcel} className="btn-exportar" style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', marginLeft: '10px' }}>
 
@@ -281,7 +281,7 @@ function EntradasYSalidas() {
             <Modal
                 isOpen={modalEditar}
                 toggle={abrirCerrarModalEditar}
-                title="Editar Entrada o Salida"
+                title="Editar entrada o salida"
                 onCancel={abrirCerrarModalEditar}
             >
                 <div className='form-container'>

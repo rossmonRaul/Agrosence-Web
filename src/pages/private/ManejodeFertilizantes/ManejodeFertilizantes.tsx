@@ -336,7 +336,7 @@ function AdministrarManejoFertilizantes() {
                         </div>
                         <button onClick={() => abrirCerrarModalInsertar()} className="btn-crear-style" style={{ marginLeft: 'auto', display: 'flex', justifyContent: 'center', alignItems: 'center', marginTop: '10px' }}>
                             <IoAddCircleOutline size={27} />
-                            <span style={{ marginLeft: '5px' }}>Ingresar registro de fertilizante</span>
+                            <span style={{ marginLeft: '5px' }}>Crear manejo de fertilizante</span>
                         </button>
                     </div>
                     {/* openModalDetalles */}
@@ -355,7 +355,7 @@ function AdministrarManejoFertilizantes() {
             <Modal
                 isOpen={modalInsertar}
                 toggle={abrirCerrarModalInsertar}
-                title="Manejo Fertilizantes"
+                title="Manejo de fertilizantes"
                 onCancel={abrirCerrarModalInsertar}
             >
                 <div className='form-container'>
@@ -371,7 +371,7 @@ function AdministrarManejoFertilizantes() {
             {<Modal
                 isOpen={modalDetalles}
                 toggle={abrirCerrarModalDetalles}
-                title="Detalles Manejo de Fertilizantes"
+                title="Detalles manejo de fertilizantes"
                 onCancel={abrirCerrarModalDetalles}
             >
                 <div className='form-container'>
@@ -397,7 +397,7 @@ function AdministrarManejoFertilizantes() {
             <Modal
                 isOpen={modalEditar}
                 toggle={abrirCerrarModalEditar}
-                title="Editar Manejo de Fertilizantes"
+                title="Editar manejo de fertilizantes"
                 onCancel={abrirCerrarModalEditar}
             >
                 <div className='form-container'>

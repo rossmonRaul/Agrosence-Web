@@ -216,7 +216,7 @@ function ManoObra() {
                         </div>
                         <button onClick={() => abrirCerrarModalCrearManoObra()} className="btn-crear-style" style={{ marginLeft: 'auto', display: 'flex', justifyContent: 'center', alignItems: 'center', marginTop: '10px' }}>
                             <IoAddCircleOutline size={27} />
-                            <span style={{ marginLeft: '5px' }}>Crear Registro</span>
+                            <span style={{ marginLeft: '5px' }}>Crear mano de obra</span>
                         </button>
                     </div>
                     <TableResponsive columns={columns} data={manoObraFiltrados} openModal={openModal} btnActionName={"Editar"} toggleStatus={toggleStatus} />
@@ -226,7 +226,7 @@ function ManoObra() {
             <Modal
                 isOpen={modalEditar}
                 toggle={abrirCerrarModalEditar}
-                title="Editar Mano Obra"
+                title="Editar mano de obra"
                 onCancel={abrirCerrarModalEditar}
             >
                 <div className='form-container'>
@@ -252,7 +252,7 @@ function ManoObra() {
             <Modal
                 isOpen={modalCrearManoObra}
                 toggle={abrirCerrarModalCrearManoObra}
-                title="Crear Mano Obra"
+                title="Crear mano de obra"
                 onCancel={abrirCerrarModalCrearManoObra}
             >
                 <div className='form-container'>

@@ -3,6 +3,7 @@ import { FormGroup, Label, Input, Col, FormFeedback, Button } from 'reactstrap';
 import Swal from 'sweetalert2';
 import { EditarTipoAplicacion } from "../../servicios/ServicioTipoAplicacion.ts";
 import '../../css/CrearCuenta.css';
+import { IoSave } from 'react-icons/io5';
 
 // Interfaz para las propiedades del componente
 interface TipoAplicacionSeleccionado {
@@ -150,12 +151,10 @@ const ModificacionManejoFertilizante: React.FC<TipoAplicacionSeleccionado> = ({
 
     return (
         <div id='general' style={{ display: 'flex', flexDirection: 'column', paddingBottom: '0rem', width: '100%', margin: '0 auto' }}>
-            <h2>Manejo de fertilizantes</h2>
-
             <div style={{ display: 'flex', flexDirection: 'row', marginBottom: '0rem' }}>
-                <div style={{ flex: 1, marginRight: '0.5rem', marginLeft: '0.5rem' }}>
+                <div style={{ flex: 1 }}>
                     <FormGroup row>
-                        <Label for="nombre" sm={4} className="input-label">nombre</Label>
+                        <Label for="nombre" sm={4} className="input-label">Nombre</Label>
                         <Col sm={8}>
                             <Input
                                 type="text"
@@ -165,6 +164,7 @@ const ModificacionManejoFertilizante: React.FC<TipoAplicacionSeleccionado> = ({
                                 onChange={handleInputChange}
                                 className={errors.nombre ? 'input-styled input-error' : 'input-styled'}
                                 placeholder="Cantidad de nombre"
+                                style={{marginTop: '2%'}}
                             />
                             <FormFeedback>{errors.nombre}</FormFeedback>
                         </Col>
@@ -172,12 +172,9 @@ const ModificacionManejoFertilizante: React.FC<TipoAplicacionSeleccionado> = ({
                 </div>
             </div>
 
-            <FormGroup row>
-                <Col sm={{ size: 10, offset: 2 }}>
-                    {/* Agregar aquí el botón de cancelar proporcionado por el modal */}
-                    <Button onClick={handleSubmitConValidacion} className="btn-styled">Guardar</Button>
-                </Col>
-            </FormGroup>
+            <div className='botonesN'>
+                <Button onClick={handleSubmitConValidacion} className="btn-styled"><IoSave size={20} style={{marginRight: '2%'}}/>Actualizar</Button>
+            </div>
         </div >
     );
 

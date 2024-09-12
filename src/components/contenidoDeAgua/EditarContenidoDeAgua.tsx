@@ -6,6 +6,7 @@ import { ObtenerParcelas } from '../../servicios/ServicioParcelas.ts';
 import { ObtenerUsuariosAsignadosPorIdentificacion } from '../../servicios/ServicioUsuario.ts';
 import { ModificarRegistroContenidoDeAgua, ObtenerPuntoMedicionFincaParcela } from "../../servicios/ServicioContenidoDeAgua.ts";
 import '../../css/CrearCuenta.css';
+import { IoSave } from 'react-icons/io5';
 
 // Interfaz para las propiedades del componente
 interface ContenidoDeAguaSeleccionado {
@@ -335,7 +336,6 @@ const ModificacionContenidoDeAgua: React.FC<ContenidoDeAguaSeleccionado> = ({
     };
     return (
         <div id='general' style={{ display: 'flex', flexDirection: 'column', paddingBottom: '0rem', width: '100%', margin: '0 auto' }}>
-            <h2>Contenido de Agua</h2>
          <div>
             <div className="form-container-fse" style={{ display: 'flex', flexDirection: 'column', width: '95%', marginLeft: '0.5rem' }}>
                <div style={{ flex: 1, marginRight: '0.5rem', marginLeft: '0.5rem' }}>
@@ -475,12 +475,10 @@ const ModificacionContenidoDeAgua: React.FC<ContenidoDeAguaSeleccionado> = ({
             </div>
           </div>
 
-            <FormGroup row>
-                <Col sm={{ size: 10, offset: 2 }}>
-                    <Button onClick={handleSubmitConValidacion} className="btn-styled">Guardar</Button>
-                </Col>
-            </FormGroup>
-            </div >
+            <div className='botonesN'>
+                <Button onClick={handleSubmitConValidacion} className="btn-styled"><IoSave size={20} style={{marginRight: '1%'}}/>Actualizar datos</Button>
+            </div>
+        </div>
 
     );
 };

@@ -1,12 +1,12 @@
 import React, { useEffect, useState } from 'react';
 import { FormGroup, Label, Input, Col, FormFeedback, Button } from 'reactstrap';
-import { InsertarManejoFertilizantes } from '../../servicios/ServicioFertilizantes.ts';
 import Swal from 'sweetalert2';
 import { ObtenerFincas } from '../../servicios/ServicioFincas.ts';
 import { ObtenerParcelas } from '../../servicios/ServicioParcelas.ts';
 import { ObtenerUsuariosAsignadosPorIdentificacion } from '../../servicios/ServicioUsuario.ts';
 import { InsertarMedicionesSuelo } from '../../servicios/ServicioSuelos.ts';
 import '../../css/FormSeleccionEmpresa.css';
+import { IoArrowBack, IoArrowForward, IoSave } from 'react-icons/io5';
 
 
 interface InsertarManejoFertilizanteProps {
@@ -296,7 +296,6 @@ const CrearMedicionSuelo: React.FC<InsertarManejoFertilizanteProps> = ({ onAdd }
         <div id='general' style={{ display: 'flex', flexDirection: 'column', paddingBottom: '0rem', width: '90%', margin: '0 auto' }}>
             {step === 1 && (
                 <div>
-                    <h2>Medición de la calidad del suelo</h2>
                     <div className="form-container-fse" style={{ display: 'flex', flexDirection: 'row', width: '100%' }}>
                         <div style={{ marginRight: '10px', width: '50%' }}>
                             <FormGroup>
@@ -438,14 +437,14 @@ const CrearMedicionSuelo: React.FC<InsertarManejoFertilizanteProps> = ({ onAdd }
                             </FormGroup>
                         </div>
                     </div>
-
-                    <button onClick={handleNextStep} className="btn-styled">Siguiente</button>
+                    <div className='botonesN'>
+                        <button onClick={handleNextStep} className="btn-styled">Siguiente<IoArrowForward size={20} style={{marginLeft: '2%'}}/></button>
+                    </div>
                 </div>
             )}
             {step === 2 && (
                 <div>
                     <div className="form-container-fse" style={{ display: 'flex', flexDirection: 'column', width: '100%' }}>
-                        <h2>Medición de la calidad del suelo</h2>
 
                         <div className="row" style={{ display: "flex" }}>
                             <div className="col-sm-4" style={{ marginRight: "10px" }}>
@@ -461,6 +460,7 @@ const CrearMedicionSuelo: React.FC<InsertarManejoFertilizanteProps> = ({ onAdd }
                                             className={errors.nitratosSuelo ? 'input-styled input-error' : 'input-styled'}
                                             placeholder="0.0"
                                             maxLength={50}
+                                            style={{marginTop: '2%'}}
                                         />
                                         <FormFeedback>{errors.nitratosSuelo}</FormFeedback>
                                     </Col>
@@ -479,6 +479,7 @@ const CrearMedicionSuelo: React.FC<InsertarManejoFertilizanteProps> = ({ onAdd }
                                             className="input-styled"
                                             placeholder="0.0"
                                             maxLength={50}
+                                            style={{marginTop: '2%'}}
                                         />
                                     </Col>
                                 </FormGroup>
@@ -495,6 +496,7 @@ const CrearMedicionSuelo: React.FC<InsertarManejoFertilizanteProps> = ({ onAdd }
                                             onChange={handleInputChange}
                                             className={errors.desleimiento ? 'input-styled input-error' : 'input-styled'}
                                             placeholder="0.0"
+                                            style={{marginTop: '2%'}}
                                         />
                                         <FormFeedback>{errors.desleimiento}</FormFeedback>
                                     </Col>
@@ -518,6 +520,7 @@ const CrearMedicionSuelo: React.FC<InsertarManejoFertilizanteProps> = ({ onAdd }
                                             className={errors.lombrices ? 'input-styled input-error' : 'input-styled'}
                                             placeholder="0"
                                             maxLength={50}
+                                            style={{marginTop: '2%'}}
                                         />
                                         <FormFeedback>{errors.lombrices}</FormFeedback>
                                     </Col>
@@ -536,6 +539,7 @@ const CrearMedicionSuelo: React.FC<InsertarManejoFertilizanteProps> = ({ onAdd }
                                             className="input-styled"
                                             placeholder="0.0"
                                             maxLength={200}
+                                            style={{marginTop: '2%'}}
                                         />
                                         <FormFeedback>{errors.calidadAgua}</FormFeedback>
                                     </Col>
@@ -555,17 +559,15 @@ const CrearMedicionSuelo: React.FC<InsertarManejoFertilizanteProps> = ({ onAdd }
                                     className="input-styled"
                                     placeholder="Estimaciones y observaciones de fisica del suelo"
                                     maxLength={200}
+                                    style={{marginTop: '2%'}}
                                 />
                                 <FormFeedback>{errors.observaciones}</FormFeedback>
                             </Col>
                         </FormGroup>
-                        <FormGroup row>
-                            <Col sm={{ size: 10, offset: 2 }}>
-                                {/* Agregar aquí el botón de cancelar proporcionado por el modal */}
-                                <button onClick={handlePreviousStep} className='btn-styled-danger'>Anterior</button>
-                                <Button onClick={handleSubmit} className="btn-styled">Guardar</Button>
-                            </Col>
-                        </FormGroup>
+                        <div className='botones'>
+                                <button onClick={handlePreviousStep} className='btn-styled-danger'><IoArrowBack size={20} style={{marginRight: '1%'}}/>Anterior</button>
+                                <Button onClick={handleSubmit} className="btn-styled"><IoSave size={20} style={{marginRight: '1%'}}/>Guardar</Button>
+                        </div>
                     </div>
                 </div>
             )}

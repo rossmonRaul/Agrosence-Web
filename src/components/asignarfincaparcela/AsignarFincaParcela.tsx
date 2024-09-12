@@ -6,6 +6,7 @@ import { ObtenerFincas } from '../../servicios/ServicioFincas';
 import Swal from 'sweetalert2';
 import { EditarFincaParsela } from '../../servicios/ServicioUsuario';
 import '../../css/CrearCuenta.css'
+import {IoCheckmark} from 'react-icons/io5';
 
 // Definición de las propiedades que espera recibir el componente
 interface Props {
@@ -197,7 +198,9 @@ const AsignarFincaParcela: React.FC<Props> = ({ idEmpresa, onEdit, identificacio
                     {errors.parcela && <FormFeedback>{errors.parcela}</FormFeedback>}
                 </FormGroup>
             </div>
-            <button onClick={handleSubmitConValidacion} className="btn-styled">Asignar</button>
+            <div className='botonesN'>
+                <button onClick={handleSubmitConValidacion} className="btn-styled"><IoCheckmark size={20} style={{marginRight: '1%'}}/>Asignar</button>
+            </div>            
         </div>
     );
 }

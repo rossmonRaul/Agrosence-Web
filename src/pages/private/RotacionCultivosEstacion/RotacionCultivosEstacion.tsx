@@ -263,10 +263,10 @@ function AdministrarRotacionCultivosEstacion() {
 
     const columns2 = [
         { key: 'cultivo', header: 'Cultivo' },
-        { key: 'epocaSiembra', header: 'Epoca de siembra' },
+        { key: 'epocaSiembra', header: 'Época de siembra' },
         { key: 'tiempoCosecha', header: 'Tiempo cosecha' },
         { key: 'cultivoSiguiente', header: 'Cultivos siguientes' },
-        { key: 'epocaSiembraCultivoSiguiente', header: 'Epoca siembra de los siguientes cultivos' },
+        { key: 'epocaSiembraCultivoSiguiente', header: 'Época siembra de los siguientes cultivos' },
         { key: 'sEstado', header: 'Estado' },
         { key: 'acciones', header: 'Acciones', actions: true }
     ];
@@ -318,7 +318,7 @@ function AdministrarRotacionCultivosEstacion() {
                         </div>
                         <button onClick={() => abrirCerrarModalInsertar()} className="btn-crear-style" style={{ marginLeft: 'auto', display: 'flex', justifyContent: 'center', alignItems: 'center', marginTop: '10px' }}>
                             <IoAddCircleOutline size={27} />
-                            <span style={{ marginLeft: '5px' }}>Ingresar registro rotación de cultivo</span>
+                            <span style={{ marginLeft: '5px' }}>Crear rotación de cultivo</span>
                         </button>
                     </div>
                     <TableResponsive columns={columns2} data={datosFertilizantesFiltrados} openModal={openModal} btnActionName={"Editar"} toggleStatus={toggleStatus} />
@@ -328,7 +328,7 @@ function AdministrarRotacionCultivosEstacion() {
             <Modal
                 isOpen={modalInsertar}
                 toggle={abrirCerrarModalInsertar}
-                title="Manejo rotación de cultivos"
+                title="Crear rotación de cultivo"
                 onCancel={abrirCerrarModalInsertar}
             >
                 <div className='form-container'>

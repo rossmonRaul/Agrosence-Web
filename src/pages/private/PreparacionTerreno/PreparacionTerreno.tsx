@@ -308,7 +308,7 @@ function AdministrarPreparacionTerreno() {
                         </div>
                         <button onClick={() => abrirCerrarModalInsertar()} className="btn-crear-style" style={{ marginLeft: 'auto', display: 'flex', justifyContent: 'center', alignItems: 'center', marginTop: '10px' }}>
                             <IoAddCircleOutline size={27} />
-                            <span style={{ marginLeft: '5px' }}>Ingresar preparación de terreno</span>
+                            <span style={{ marginLeft: '5px' }}>Crear preparación de terreno</span>
                             </button>
                     </div>
                     <TableResponsive columns={columns2} data={datosPreparacionTerrenoFiltrados} openModal={openModal} btnActionName={"Editar"} toggleStatus={toggleStatus} openDetallesModal={openDetallesModal} />
@@ -318,7 +318,7 @@ function AdministrarPreparacionTerreno() {
             <Modal
                 isOpen={modalInsertar}
                 toggle={abrirCerrarModalInsertar}
-                title=""
+                title="Crear preparación de terreno "
                 onCancel={abrirCerrarModalInsertar}
             >
                 <div className='form-container' style={{ width: '600px' }}>
@@ -331,7 +331,7 @@ function AdministrarPreparacionTerreno() {
             <Modal
                 isOpen={modalEditar}
                 toggle={abrirCerrarModalEditar}
-                title="Editar Preparacion de Terreno"
+                title="Editar preparación de terreno"
                 onCancel={abrirCerrarModalEditar}
             >
                 <div className='form-container' style={{ width: '600px' }}>
@@ -357,7 +357,7 @@ function AdministrarPreparacionTerreno() {
             <Modal
                 isOpen={modalDetalles}
                 toggle={abrirCerrarModalDetalles}
-                title="Detalles de la Preparación de Terreno"
+                title="Detalles de la preparación de terreno"
                 onCancel={abrirCerrarModalDetalles}
             >
                 <div className='form-container' style={{ width: '600px' }}>

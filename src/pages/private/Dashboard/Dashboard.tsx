@@ -20,6 +20,7 @@ import { AppStore } from "../../../redux/Store";
 import ReactEcharts from 'echarts-for-react'; 
 import 'leaflet/dist/leaflet.css';
 import { MapContainer, TileLayer, Marker, Popup } from 'react-leaflet';
+import { IoSave, IoSearch } from 'react-icons/io5';
 
 interface Option {
   identificacion: string;
@@ -907,7 +908,7 @@ const Dashboard: React.FC = () => {
       setGraficoDirViento({
         ...graficoDirViento,
         title: {
-          text: 'Dirección Viento',
+          text: 'Dirección del viento',
           left: 'center',
           top: 10,
         },
@@ -941,7 +942,7 @@ const Dashboard: React.FC = () => {
        setGraficoVelViento({
         ...graficoVelViento,
         title: {
-          text: 'Velocidad Viento',
+          text: 'Velocidad del viento',
           left: 'center',
           top: 10,
         },
@@ -1536,7 +1537,7 @@ const Dashboard: React.FC = () => {
       setGraficoDirViento({
         ...graficoDirViento,
         title: {
-          text: 'Dirección viento',
+          text: 'Dirección del viento',
           left: 'center',
           top: 10,
         },
@@ -1569,7 +1570,7 @@ const Dashboard: React.FC = () => {
       setGraficoVelViento({
         ...graficoVelViento,
         title: {
-          text: 'Velocidad viento',
+          text: 'Velocidad del viento',
           left: 'center',
           top: 10,
         },
@@ -1677,10 +1678,10 @@ const Dashboard: React.FC = () => {
             />
           </FormGroup>
         </div>
-      </div>
-      <div className="form-row">
+      {/* </div> */}
+      {/* <div className="form-row"> */}
 									
-          <FormGroup>
+          <FormGroup className='form-group'>
             <Label for="fechaInicio"  className="input-label">Fecha Inicio</Label>
 						
               <Input 
@@ -1699,7 +1700,7 @@ const Dashboard: React.FC = () => {
           </FormGroup>
 			  
 									
-          <FormGroup>
+          <FormGroup className='form-group'>
             <Label for="fechaFin" className="input-label">Fecha Fin</Label>
 						
               <Input
@@ -1718,7 +1719,7 @@ const Dashboard: React.FC = () => {
               <FormFeedback>{errors.fechaFin}</FormFeedback>
 				  
           </FormGroup>
-          <FormGroup>
+          <FormGroup className='form-group'>
 			
           <Button style={{
         backgroundColor: '#a5cf60',
@@ -1730,8 +1731,11 @@ const Dashboard: React.FC = () => {
         borderRadius: '4px',
         fontSize: '16px',
         cursor: 'pointer',
-        transition: 'background-color 0.3s ease'
-      }} onClick={handleObtenerMedicionesSensores}>{loading ? `Cargando${loadingPuntos}` : 'Obtener Mediciones'}</Button>
+        transition: 'background-color 0.3s ease',
+        display: 'flex',
+        justifyContent: 'center',
+        flexDirection: 'row'
+      }} onClick={handleObtenerMedicionesSensores}><IoSearch size={20} style={{marginRight: '5px'}}/>{loading ? `Cargando${loadingPuntos}` : 'Obtener Mediciones'}</Button>
           </FormGroup>
       </div>
 
@@ -1746,7 +1750,7 @@ const Dashboard: React.FC = () => {
           width: "100%",
         }}
       >
-        <h2>Mapa con Puntos de Medición</h2>
+        <h2>Mapa con puntos de medición</h2>
         {/* <MapComponent /> */}
         <MapContainer
           center={[9.936681, -84.103964]}
@@ -1813,10 +1817,10 @@ const Dashboard: React.FC = () => {
           <Input type="checkbox" name="luz" checked={visibleCharts.luz} onChange={handleCheckboxChange} /> Luz ambiental
         </div>
         <div style={{ marginRight: '20px' }}>
-          <Input type="checkbox" name="dirViento" checked={visibleCharts.dirViento} onChange={handleCheckboxChange} /> Dirección Viento
+          <Input type="checkbox" name="dirViento" checked={visibleCharts.dirViento} onChange={handleCheckboxChange} /> Dirección del viento
         </div>
         <div style={{ marginRight: '20px' }}>
-          <Input type="checkbox" name="velViento" checked={visibleCharts.velViento} onChange={handleCheckboxChange} /> Velocidad Viento
+          <Input type="checkbox" name="velViento" checked={visibleCharts.velViento} onChange={handleCheckboxChange} /> Velocidad del viento
         </div>
       </div>
 

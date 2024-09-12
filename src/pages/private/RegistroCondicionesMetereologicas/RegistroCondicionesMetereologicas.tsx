@@ -288,7 +288,7 @@ function CondicionesMeteorologicasClimaticas() {
                         </div>
                         <button onClick={() => abrirCerrarModalInsertar()} className="btn-crear-style" style={{ marginLeft: 'auto', display: 'flex', justifyContent: 'center', alignItems: 'center', marginTop: '10px' }}>
                             <IoAddCircleOutline size={27} />
-                            <span style={{ marginLeft: '5px' }}>Ingresar registro condiciones</span>
+                            <span style={{ marginLeft: '5px' }}>Crear registro condiciones</span>
                             </button>
                     </div>
                     <TableResponsive columns={columns} data={datosProduccionFiltrados} openModal={openModal} btnActionName={"Editar"} toggleStatus={toggleStatus} />

@@ -312,9 +312,9 @@ function ReporteMedidasAutorizadasSensor() {
             <div className="main-container">
                 <Topbar />
                 <BordeSuperior text="Reporte Medidas Autorizadas de Sensor" />
-                <div className="content">
+                <div className="content" style={{width: '90%'}}>
                     <div className="filtro-container">
-                        <div >
+                        <div>
                             <label htmlFor="filtroFinca" >Filtrar por Finca:</label>
                             <select id="filtroFinca" value={selectedFinca || ''} onChange={handleFincaChange} className="form-select" >
                                 <option value={''}>Todas las fincas</option>
@@ -380,8 +380,7 @@ function ReporteMedidasAutorizadasSensor() {
                             display: 'flex',
                             justifyContent: 'center',
                             alignItems: 'center',
-                            height: '50%',
-                            margin: '5%'
+                            height: '50%'
                         }}>
                             {loading ? (
                                 <ClipLoader color={"#038c3e"} loading={loading} size={100} />

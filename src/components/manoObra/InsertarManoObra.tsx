@@ -4,7 +4,7 @@ import Swal from 'sweetalert2';
 import { ObtenerFincas } from '../../servicios/ServicioFincas.ts';
 import '../../css/ManejoResiduos.css';
 import { InsertarRegistroManoObra } from '../../servicios/ServicioManoObra.ts';
-
+import { IoSave } from 'react-icons/io5';
 
 
 interface CrearManoObraProps {
@@ -215,10 +215,9 @@ const CrearManoObra: React.FC<CrearManoObraProps> = ({ onAdd }) => {
     };
 
     return (
-        <div id='general' style={{ display: 'flex', flexDirection: 'column', paddingBottom: '0rem', width: '90%', margin: '0 auto' }}>
+        <div id='general' style={{ display: 'flex', flexDirection: 'column', paddingBottom: '0rem', width: '100%', margin: '0 auto' }}>
 
             <div>
-                <h2>Mano de obra</h2>
                 <div className="form-container-fse" style={{ display: 'flex', flexDirection: 'row', width: '100%' }}>
                     <div style={{ marginRight: '10px', width: '50%' }}>
                         <FormGroup>
@@ -371,12 +370,9 @@ const CrearManoObra: React.FC<CrearManoObraProps> = ({ onAdd }) => {
 
 
                 </div>
-                <FormGroup row>
-                    <Col sm={{ size: 10, offset: 2 }}>
-
-                        <Button onClick={handleSubmit} className="btn-styled">Guardar</Button>
-                    </Col>
-                </FormGroup>
+                <div className='botonesN'>
+                    <Button onClick={handleSubmit} className="btn-styled"><IoSave size={20} style={{marginRight: '2%'}}/>Guardar</Button>
+                </div>
             </div>
         </div>
     );

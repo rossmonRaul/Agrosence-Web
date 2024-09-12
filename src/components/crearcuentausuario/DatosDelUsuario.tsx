@@ -1,6 +1,8 @@
 import React, { useState } from 'react';
 import '../../css/DatosPersonales.css';
 import { FormGroup, Label, Input, Button, Col, FormFeedback } from 'reactstrap';
+import {IoArrowForward} from 'react-icons/io5';
+
 interface Props {
   formData: any;
   handleInputChange: (event: React.ChangeEvent<HTMLInputElement>) => void;
@@ -79,8 +81,6 @@ const DatosPersonales: React.FC<Props> = ({ formData, handleInputChange, nextSte
 
   return (
     <div>
-      <h2>Crear una Cuenta</h2>
-
       <FormGroup row>
         <Label for="nombre" sm={2} className="input-label">Nombre</Label>
         <Col sm={12}>
@@ -163,9 +163,8 @@ const DatosPersonales: React.FC<Props> = ({ formData, handleInputChange, nextSte
         </Col>
       </FormGroup>
       <FormGroup row>
-
-        <Col sm={{ size: 9, offset: 2 }}>
-          <Button onClick={handleSubmit} className="btn-styled" >Siguiente</Button>
+        <Col sm={{ size: 6 }}>    
+          <Button onClick={handleSubmit} className="btn-styled" style={{display: 'flex', alignItems: 'center', justifyContent: 'center'}}>Siguiente<IoArrowForward size={20} style={{marginLeft: '5%'}}/></Button>
         </Col>
       </FormGroup>
     </div>

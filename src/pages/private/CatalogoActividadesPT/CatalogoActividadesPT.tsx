@@ -191,7 +191,7 @@ function CatalogoActividadesPT() {
             <Modal
                 isOpen={modalInsertar}
                 toggle={abrirCerrarModalInsertar}
-                title="Insertar Nueva Actividad"
+                title="Agregar nueva actividad"
                 onCancel={abrirCerrarModalInsertar}
             >
                 <div className='form-container' style={{ width: '350px' }}>
@@ -204,7 +204,7 @@ function CatalogoActividadesPT() {
             <Modal
                 isOpen={modalEditar}
                 toggle={abrirCerrarModalEditar}
-                title="Editar Actividad"
+                title="Editar actividad"
                 onCancel={abrirCerrarModalEditar}
             >
                 <div className='form-container' style={{ width: '350px' }}>

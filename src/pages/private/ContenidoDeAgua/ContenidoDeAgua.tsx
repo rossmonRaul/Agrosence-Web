@@ -318,7 +318,7 @@ function AdministrarContenidoDeAgua() {
                         </div>
                         <button onClick={() => abrirCerrarModalInsertar()} className="btn-crear-style" style={{ marginLeft: 'auto', display: 'flex', justifyContent: 'center', alignItems: 'center', marginTop: '10px' }}>
                             <IoAddCircleOutline size={27} />
-                            <span style={{ marginLeft: '5px' }}>Ingresar contenido de Agua</span>
+                            <span style={{ marginLeft: '5px' }}>Ingresar contenido de agua</span>
                             </button>
                     </div>
                     {/* openModalDetalles */}
@@ -337,7 +337,7 @@ function AdministrarContenidoDeAgua() {
             <Modal
                 isOpen={modalInsertar}
                 toggle={abrirCerrarModalInsertar}
-                title="Insertar Contenido de Agua"
+                title="Insertar contenido de agua"
                 onCancel={abrirCerrarModalInsertar}
             >
                 <div className='form-container'>
@@ -352,7 +352,7 @@ function AdministrarContenidoDeAgua() {
             {<Modal
                 isOpen={modalEditar}
                 toggle={abrirCerrarModalEditar}
-                title="Editar Contenido de Agua"
+                title="Editar contenido de agua"
                 onCancel={abrirCerrarModalEditar}
             >
                 <div className='form-container'>
@@ -375,7 +375,7 @@ function AdministrarContenidoDeAgua() {
             {<Modal
                 isOpen={modalDetalles}
                 toggle={abrirCerrarModalDetalles}
-                title="Detalles Contenido de Agua"
+                title="Detalles contenido de agua"
                 onCancel={abrirCerrarModalDetalles}
             >
                 <div className='form-container'>

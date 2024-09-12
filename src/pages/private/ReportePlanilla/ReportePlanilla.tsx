@@ -270,7 +270,7 @@ function ReportePlanilla() {
       <div className="main-container">
         <Topbar />
         <BordeSuperior text="Reporte de Planilla" />
-        <div className="content">
+        <div className="content" style={{width: '90%'}}>
           <div
             className="filtro-container"
             style={{ display: "flex", alignItems: "flex-start", gap: "10px" }}
@@ -403,7 +403,7 @@ function ReportePlanilla() {
                 justifyContent: 'center',
                 alignItems: 'center',
                 height: '50%',
-                margin: '5%'
+                marginTop: '5%'
                 }}>
                 {loading ? (
                     <ClipLoader color={"#038c3e"} loading={loading} size={100} />

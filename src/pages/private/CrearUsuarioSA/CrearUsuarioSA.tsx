@@ -172,7 +172,7 @@ function CrearCuentaSA() {
             {/* aca esta el boton para crear usuarios */}
             <button onClick={() => abrirCerrarModalInsertar()} className="btn-crear-style" style={{ marginLeft: 'auto', display: 'flex', justifyContent: 'center', alignItems: 'center', marginTop: '10px' }}>
               <IoAddCircleOutline size={27} />
-              <span style={{ marginLeft: '5px' }}>Crear Administrador</span>
+              <span style={{ marginLeft: '5px' }}>Crear administrador</span>
             </button>
           </div>
           <TableResponsive columns={columns} data={usuariosFiltrados} openModal={openModal} toggleStatus={toggleStatus} btnActionName={"Editar"} />
@@ -184,7 +184,7 @@ function CrearCuentaSA() {
       <Modal
         isOpen={modalInsertar}
         toggle={abrirCerrarModalInsertar}
-        title="Insertar Administrador"
+        title="Insertar administrador"
         onCancel={abrirCerrarModalInsertar}
       >
         <div className='form-container'>
@@ -200,7 +200,7 @@ function CrearCuentaSA() {
       <Modal
         isOpen={modalEditar}
         toggle={abrirCerrarModalEditar}
-        title="Editar Administrador"
+        title="Editar administrador"
         onCancel={abrirCerrarModalEditar}
       >
         <div className='form-container'>

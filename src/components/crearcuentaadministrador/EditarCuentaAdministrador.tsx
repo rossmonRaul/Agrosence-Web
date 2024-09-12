@@ -6,6 +6,7 @@ import Swal from 'sweetalert2';
 import '../../css/CrearCuenta.css'
 import { ObtenerEmpresas } from '../../servicios/ServicioEmpresas.ts';
 import '../../css/FormSeleccionEmpresa.css'
+import { IoSave } from 'react-icons/io5';
 
 // Interfaz para las opciones de empresa
 interface Option {
@@ -286,11 +287,9 @@ const EditarCuentaAdministrador: React.FC<AdministradorSeleccionadoProps> = ({ i
  
                 {errors.empresa && <FormFeedback>{errors.empresa}</FormFeedback>}
             </FormGroup>
-            <FormGroup row>
-                <Col sm={{ size: 9, offset: 2 }}>
-                    <Button onClick={handleSubmitConValidacion} className="btn-styled" >Editar Datos</Button>
-                </Col>
-            </FormGroup>
+            <div className='botonesN'>
+                <Button onClick={handleSubmitConValidacion} className="btn-styled" ><IoSave size={20} style={{marginRight: '2%'}}/>Actualizar datos</Button>
+            </div>
         </div>
     );
 }

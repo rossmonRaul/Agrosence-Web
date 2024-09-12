@@ -6,10 +6,10 @@ import { ObtenerParcelas } from '../../servicios/ServicioParcelas.ts';
 import '../../css/CrearCuenta.css';
 import { useSelector } from 'react-redux';
 import { AppStore } from '../../redux/Store.ts';
-
 import { ModificarSensor, ModificarMedicionAutorizadaSensor, ObtenerEstadoSensores, EliminarMedicionesAutorizadasSensor } from '../../servicios/ServicioSensor.ts';
 import { ObtenerRegistroPuntoMedicion } from '../../servicios/ServicioPuntoMedicion.ts';
 import { ObtenerMedicionesSensor } from '../../servicios/ServicioMedicionesSensor.ts';
+import { IoSave, IoArrowForward, IoArrowBack } from 'react-icons/io5';
 
 // Interfaz para las propiedades del componente
 interface Props {
@@ -429,7 +429,6 @@ const ModificarSensores: React.FC<Props> = ({
         <div id='general' style={{ display: 'flex', flexDirection: 'column', paddingBottom: '0rem', width: '100%', margin: '0 auto' }}>
             {step === 1 && (
                 <div>
-                    <h2>Registro de Datos</h2>
                     <div className="form-container-fse" style={{ display: 'flex', flexDirection: 'column', width: '600px', marginLeft: '0.5rem' }}>
 
                         <div style={{ display: 'flex', flexDirection: 'row', marginBottom: '0rem' }}>
@@ -516,24 +515,23 @@ const ModificarSensores: React.FC<Props> = ({
                                 {errors.idPuntoMedicion && <FormFeedback>{errors.idPuntoMedicion}</FormFeedback>}
                             </FormGroup>
                         </div>
-
-                        <button onClick={handleNextStep} className="btn-styled">Siguiente</button>
+                        <div className='botonesN'>
+                            <button onClick={handleNextStep} className="btn-styled">Siguiente<IoArrowForward size={20} style={{marginLeft: '1%'}}/></button>
+                        </div>
                     </div>
                 </div>
             )}
             {step === 2 && (
                 <div>
-
-                    <h2>Registro de Datos</h2>
                     <div className="form-container-fse" style={{ display: 'flex', flexDirection: 'column', width: '600px', marginLeft: '0.5rem' }}>
-                        <label htmlFor="">Mediciones autorizadas del sensor</label>
+                        <label htmlFor="" style={{fontSize: '18px'}}>Mediciones autorizadas del sensor</label>
                         <div style={{ overflow: 'auto', maxHeight: '200px', padding: '10px', marginBottom: '20px' }}>
                             {inputs.map((input, index) => (
                                 <div style={{ display: 'flex', flexDirection: 'row', marginBottom: '20px', gap: '0.5rem' }} key={index}>
                                     <select
                                         value={input}
                                         onChange={(e) => handleInputsChange(index, e)}
-                                        style={{ width: '90%', padding: '5px', borderRadius: '5px', height: '40px', border: '1px solid #ccc' }}
+                                        style={{ width: '90%', padding: '5px', borderRadius: '5px', height: '40px', border: '1px solid #ccc', fontSize: '16px' }}
                                     >
                                         <option value="">Seleccione...</option>
                                         {medicionesSensor.map((medicion) => (
@@ -549,12 +547,10 @@ const ModificarSensores: React.FC<Props> = ({
                             </div>
                         </div>
                         {errors.medicionAutorizadaSensor && <FormFeedback>{errors.medicionAutorizadaSensor}</FormFeedback>}
-                        <FormGroup row>
-                            <Col sm={{ size: 10, offset: 2 }}>
-                                <button onClick={handlePreviousStep} className='btn-styled-danger'>Anterior</button>
-                                <Button onClick={handleSubmitConValidacion} className="btn-styled btn btn-secondary">Guardar</Button>
-                            </Col>
-                        </FormGroup>
+                        <div className='botones'>
+                            <button onClick={handlePreviousStep} className='btn-styled-danger'><IoArrowBack size={20} style={{marginLeft: '2%'}}/>Anterior</button>
+                            <Button onClick={handleSubmitConValidacion} className="btn-styled btn btn-secondary"><IoSave size={20} style={{marginRight: '2%'}}/>Actualizar datos</Button>
+                        </div>
                     </div>
                 </div>
             )

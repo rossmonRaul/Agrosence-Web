@@ -120,7 +120,7 @@ function AdministrarTipoAplicacion() {
                 <div className="content" col-md-12>
                     <button onClick={abrirCerrarModalInsertar} className="btn-crear-style" style={{ marginLeft: 'auto', display: 'flex', justifyContent: 'center', alignItems: 'center', marginTop: '10px' }}>
                         <IoAddCircleOutline size={27} />
-                        <span style={{ marginLeft: '5px' }}>Agregar Tipo Aplicación</span>
+                        <span style={{ marginLeft: '5px' }}>Agregar tipo aplicación</span>
                     </button>
                     <TableResponsive columns={columns} data={tipoAplicaciones} openModal={openModal} btnActionName={"Editar"} toggleStatus={toggleStatus} />
                 </div>
@@ -129,7 +129,7 @@ function AdministrarTipoAplicacion() {
             <Modal
                 isOpen={modalInsertar}
                 toggle={abrirCerrarModalInsertar}
-                title="Agregar Tipo Aplicación"
+                title="Agregar tipo aplicación"
                 onCancel={abrirCerrarModalInsertar}
             >
                 <div className='form-container'>
@@ -145,7 +145,7 @@ function AdministrarTipoAplicacion() {
             <Modal
                 isOpen={modalEditar}
                 toggle={abrirCerrarModalEditar}
-                title="Editar Manejo de Fertilizantes"
+                title="Editar manejo de fertilizantes"
                 onCancel={abrirCerrarModalEditar}
             >
                 <div className='form-container'>

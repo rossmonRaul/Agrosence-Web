@@ -276,7 +276,7 @@ function AdministrarRegistroSeguimientoUsoAgua() {
                         </div>
                         <button onClick={() => abrirCerrarModalInsertar()} className="btn-crear-style" style={{ marginLeft: 'auto', display: 'flex', justifyContent: 'center', alignItems: 'center', marginTop: '10px' }}>
                             <IoAddCircleOutline size={27} />
-                            <span style={{ marginLeft: '5px' }}>Ingresar registro de seguimiento del uso del agua</span>
+                            <span style={{ marginLeft: '5px' }}>Crear registro de seguimiento del uso del agua</span>
                         </button>
                     </div>
                     <TableResponsive columns={columns} data={datosUsoAguaFiltrados} openModal={openModal} btnActionName={"Editar"} toggleStatus={toggleStatus} />

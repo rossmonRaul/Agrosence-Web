@@ -3,6 +3,7 @@ import { FormGroup, Label, Input, Col, FormFeedback, Button } from 'reactstrap';
 import Swal from 'sweetalert2';
 import { ModificarActividadPreparacionTerreno } from '../../servicios/ServicioCatalogoActividadPT';
 import '../../css/CrearCuenta.css';
+import { IoSave } from 'react-icons/io5';
 
 interface ActividadSeleccionada {
     idActividad: number;
@@ -81,8 +82,7 @@ const EditarCatalogoActividades: React.FC<ActividadSeleccionada> = ({
 
     return (
         <div id='general' style={{ display: 'flex', flexDirection: 'column', paddingBottom: '0rem', width: '100%', margin: '0 auto' }}>
-            <div className="form-container-fse" style={{ display: 'flex', flexDirection: 'column', width: '90%' }}>
-                <h2>Editar Actividad</h2>
+            <div className="form-container-fse" style={{ display: 'flex', flexDirection: 'column', width: '100%' }}>                
                 <FormGroup>
                     <Label for="nombre">Nombre</Label>
                     <Input
@@ -100,11 +100,13 @@ const EditarCatalogoActividades: React.FC<ActividadSeleccionada> = ({
                 </FormGroup>
 
                 {!readOnly && (
-                    <FormGroup row>
-                        <Col sm={{ size: 10, offset: 2 }}>
-                            <Button onClick={handleSubmitConValidacion} className="btn-styled">Guardar</Button>
-                        </Col>
-                    </FormGroup>
+                    <div className='botonesN'>
+                        <FormGroup row>
+                            <Col sm={{ size: 10, offset: 2 }}>
+                                <Button onClick={handleSubmitConValidacion} className="btn-styled"><IoSave size={20} style={{marginRight: '2%'}}/>Actualizar datos</Button>
+                            </Col>
+                        </FormGroup>
+                    </div>
                 )}
             </div>
         </div>

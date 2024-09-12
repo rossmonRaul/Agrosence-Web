@@ -7,6 +7,7 @@ import { ObtenerUsuariosAsignadosPorIdentificacion } from '../../servicios/Servi
 //import { EditarManejoFertilizantes } from "../../servicios/ServicioFertilizantes.ts";
 import { ModificarRegistroPuntoMedicion } from "../../servicios/ServicioPuntoMedicion.ts";
 import '../../css/CrearCuenta.css';
+import { IoSave } from 'react-icons/io5';
 
 // Interfaz para las propiedades del componente
 interface PuntoMedicionSeleccionado {
@@ -250,8 +251,7 @@ const ModificacionPuntoMedicion: React.FC<PuntoMedicionSeleccionado> = ({
 
     return (
         <div id='general' style={{ display: 'flex', flexDirection: 'column', paddingBottom: '0rem', width: '100%', margin: '0 auto' }}>
-            <div className="form-container-fse" style={{ display: 'flex', flexDirection: 'column', width: '100%' }}>
-                <h2>Punto de medición</h2>
+            <div className="form-container-fse" style={{ display: 'flex', flexDirection: 'column', width: '100%' }}>               
 
                 <div style={{ display: 'flex', flexDirection: 'row', marginBottom: '0rem' }}>
                 <div style={{ flex: 1, marginRight: '0.5rem', marginLeft: '0.5rem' }}>
@@ -358,12 +358,9 @@ const ModificacionPuntoMedicion: React.FC<PuntoMedicionSeleccionado> = ({
                     </FormGroup>
                 </div>
             </div>
-            <FormGroup row>
-                <Col sm={{ size: 10, offset: 2 }}>
-                    {/* Agregar aquí el botón de cancelar proporcionado por el modal */}
-                    <Button onClick={handleSubmitConValidacion} className="btn-styled">Guardar</Button>
-                </Col>
-            </FormGroup>
+            <div className='botonesN'>
+                <Button onClick={handleSubmitConValidacion} className="btn-styled"><IoSave size={20} style={{marginRight: '1%'}}/>Guardar</Button>
+            </div>
         </div>
     );
 

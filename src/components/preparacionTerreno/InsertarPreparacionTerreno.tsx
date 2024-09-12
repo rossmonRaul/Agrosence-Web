@@ -5,6 +5,7 @@ import Swal from 'sweetalert2';
 import { ObtenerFincas } from '../../servicios/ServicioFincas';
 import { ObtenerParcelas } from '../../servicios/ServicioParcelas';
 import { ObtenerUsuariosAsignadosPorIdentificacion } from '../../servicios/ServicioUsuario';
+import { IoSave } from 'react-icons/io5';
 
 interface InsertarPreparacionTerrenoProps {
     onAdd: () => void;
@@ -256,11 +257,10 @@ const InsertarPreparacionTerreno: React.FC<InsertarPreparacionTerrenoProps> = ({
 
     return (
         <div id='general' style={{ display: 'flex', flexDirection: 'column', paddingBottom: '0rem', width: '100%', margin: '0 auto' }}>
-            <div className="form-container-fse" style={{ display: 'flex', flexDirection: 'column', width: '50%' }}>
-                <h2>Preparación de Terreno</h2>
+            <div className="form-container-fse" style={{ display: 'flex', flexDirection: 'column', width: '100%' }}>
                 <FormGroup>
                     <label htmlFor="fincas">Finca:</label>
-                    <select className="custom-select" id="fincas" value={selectedFinca} onChange={handleFincaChange}>
+                    <select className="custom-select" id="fincas" value={selectedFinca} onChange={handleFincaChange} style={{marginTop: '1%'}}>
                         <option key="default-finca" value="">Seleccione...</option>
                         {filteredFincas.map((finca) => (
                             <option key={`${finca.idFinca}-${finca.nombre || 'undefined'}`} value={finca.idFinca}>{finca.nombre || 'Undefined'}</option>
@@ -271,7 +271,7 @@ const InsertarPreparacionTerreno: React.FC<InsertarPreparacionTerrenoProps> = ({
 
                 <FormGroup>
                     <label htmlFor="parcelas">Parcela:</label>
-                    <select className="custom-select" id="parcelas" value={selectedParcela} onChange={handleParcelaChange}>
+                    <select className="custom-select" id="parcelas" value={selectedParcela} onChange={handleParcelaChange} style={{marginTop: '1%'}}>
                         <option key="default-parcela" value="">Seleccione...</option>
                         {parcelasFiltradas.map((parcela) => (
                             <option key={`${parcela.idParcela}-${parcela.nombre || 'undefined'}`} value={parcela.idParcela}>{parcela.nombre || 'Undefined'}</option>
@@ -293,6 +293,7 @@ const InsertarPreparacionTerreno: React.FC<InsertarPreparacionTerrenoProps> = ({
                                 onChange={handleInputChange}
                                 className={errors.fecha ? 'input-styled input-error' : 'input-styled'}
                                 placeholder="Selecciona una fecha"
+                                style={{marginTop: '1%'}}
                             />
                             <FormFeedback>{errors.fecha}</FormFeedback>
                         </Col>
@@ -309,6 +310,7 @@ const InsertarPreparacionTerreno: React.FC<InsertarPreparacionTerrenoProps> = ({
                                 value={formData.idActividad}
                                 onChange={handleInputChange}
                                 className={errors.actividad ? 'input-styled input-error' : 'input-styled'}
+                                style={{marginTop: '1%'}}
                             >
                                 <option value="">Seleccione...</option>
                                 {actividades.map((actividad) => (
@@ -330,6 +332,7 @@ const InsertarPreparacionTerreno: React.FC<InsertarPreparacionTerrenoProps> = ({
                                 value={formData.idMaquinaria}
                                 onChange={handleInputChange}
                                 className={errors.maquinaria ? 'input-styled input-error' : 'input-styled'}
+                                style={{marginTop: '1%'}}
                             >
                                 <option value="">Seleccione...</option>
                                 {maquinarias.map((maquinaria) => (
@@ -356,6 +359,7 @@ const InsertarPreparacionTerreno: React.FC<InsertarPreparacionTerrenoProps> = ({
                                 className="input-styled"
                                 placeholder="Identificación"
                                 maxLength={50}
+                                style={{marginTop: '1%'}}
                             />
                             <FormFeedback>{errors.identificacion}</FormFeedback>
                         </Col>
@@ -364,7 +368,7 @@ const InsertarPreparacionTerreno: React.FC<InsertarPreparacionTerrenoProps> = ({
 
                 <div style={{ flex: 1, marginRight: '0.5rem', marginLeft: '0.5rem' }}>
                     <FormGroup row>
-                        <Label for="horasTrabajadas" sm={2} className="input-label">Horas Trabajadas</Label>
+                        <Label for="horasTrabajadas" sm={2} className="input-label">Horas trabajadas</Label>
                         <Col sm={10}>
                             <Input
                                 type="number"
@@ -373,7 +377,8 @@ const InsertarPreparacionTerreno: React.FC<InsertarPreparacionTerrenoProps> = ({
                                 value={formData.horasTrabajadas}
                                 onChange={handleInputChange}
                                 className="input-styled"
-                                placeholder="Horas Trabajadas"
+                                placeholder="Horas trabajadas"
+                                style={{marginTop: '1%'}}
                             />
                             <FormFeedback>{errors.horasTrabajadas}</FormFeedback>
                         </Col>
@@ -382,7 +387,7 @@ const InsertarPreparacionTerreno: React.FC<InsertarPreparacionTerrenoProps> = ({
 
                 <div style={{ flex: 1, marginRight: '0.5rem', marginLeft: '0.5rem' }}>
                     <FormGroup row>
-                        <Label for="pagoPorHora" sm={2} className="input-label">Pago por Hora</Label>
+                        <Label for="pagoPorHora" sm={2} className="input-label">Pago por hora</Label>
                         <Col sm={10}>
                             <Input
                                 type="number"
@@ -391,7 +396,8 @@ const InsertarPreparacionTerreno: React.FC<InsertarPreparacionTerrenoProps> = ({
                                 value={formData.pagoPorHora}
                                 onChange={handleInputChange}
                                 className="input-styled"
-                                placeholder="Pago por Hora"
+                                placeholder="Pago por hora"
+                                style={{marginTop: '1%'}}
                             />
                             <FormFeedback>{errors.pagoPorHora}</FormFeedback>
                         </Col>
@@ -410,7 +416,7 @@ const InsertarPreparacionTerreno: React.FC<InsertarPreparacionTerrenoProps> = ({
                         value={formData.observaciones}
                         onChange={handleInputChange}
                         className="input-styled"
-                        style={{ height: '75px', resize: "none" }}
+                        style={{ height: '75px', resize: "none", marginTop: '1%' }}
                         placeholder="Observaciones"
                         maxLength={200}
                     />
@@ -418,11 +424,9 @@ const InsertarPreparacionTerreno: React.FC<InsertarPreparacionTerrenoProps> = ({
                 </Col>
             </FormGroup>
 
-            <FormGroup row>
-                <Col sm={{ size: 10, offset: 2 }}>
-                    <Button onClick={handleSubmit} className="btn-styled">Guardar</Button>
-                </Col>
-            </FormGroup>
+            <div className='botonesN'>
+                <Button onClick={handleSubmit} className="btn-styled"><IoSave size={20} style={{marginRight: '1%'}}/>Guardar</Button>
+            </div>
         </div>
     );
 };
