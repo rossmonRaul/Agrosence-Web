@@ -280,7 +280,7 @@ function OrdenCompra() {
                             />
 
                         </div>
-                        <button onClick={() => abrirCerrarModalCrearOrdenCompra()} className="btn-crear-style" style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', marginLeft: '10px' }}>
+                        <button onClick={() => abrirCerrarModalCrearOrdenCompra()} className="btn-crear-style" style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', marginLeft: '10px',backgroundColor: '#548454', color: 'white', borderColor: '#548454' }}>
                             <IoAddCircleOutline size={27} />
                             <span style={{ marginLeft: '5px' }}>Crear orden de compra</span>
                         </button>

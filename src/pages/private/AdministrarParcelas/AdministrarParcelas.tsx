@@ -217,7 +217,7 @@ function AdministrarParcelas() {
                                 style={{ fontSize: '16px', padding: '10px', minWidth: '200px', marginTop: '0px' }}
                             />
                         </div>
-                        <button onClick={() => abrirCerrarModalInsertar()} className="btn-crear-style" style={{ marginLeft: 'auto', display: 'flex', justifyContent: 'center', alignItems: 'center', marginTop: '10px' }}>
+                        <button onClick={() => abrirCerrarModalInsertar()} className="btn-crear-style" style={{ marginLeft: 'auto', display: 'flex', justifyContent: 'center', alignItems: 'center', marginTop: '10px',backgroundColor: '#548454', color: 'white', borderColor: '#548454' }}>
                         <IoAddCircleOutline size={27} />
                         <span style={{ marginLeft: '5px' }}>Crear parcela</span>
                         </button>

@@ -231,7 +231,7 @@ function Cultivos() {
                             />
 
                         </div>
-                        <button onClick={() => abrirCerrarModalCrearCultivo()} className="btn-crear-style" style={{ marginLeft: 'auto', display: 'flex', justifyContent: 'center', alignItems: 'center', marginTop: '10px' }}>
+                        <button onClick={() => abrirCerrarModalCrearCultivo()} className="btn-crear-style" style={{ marginLeft: 'auto', display: 'flex', justifyContent: 'center', alignItems: 'center', marginTop: '10px', backgroundColor: '#548454', color: 'white', borderColor: '#548454' }}>
                             <IoAddCircleOutline size={27} />
                             <span style={{ marginLeft: '5px' }}>Crear cultivo</span>
                         </button>

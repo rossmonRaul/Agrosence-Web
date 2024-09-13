@@ -214,7 +214,7 @@ function ManoObra() {
                                 className="form-control"
                             />
                         </div>
-                        <button onClick={() => abrirCerrarModalCrearManoObra()} className="btn-crear-style" style={{ marginLeft: 'auto', display: 'flex', justifyContent: 'center', alignItems: 'center', marginTop: '10px' }}>
+                        <button onClick={() => abrirCerrarModalCrearManoObra()} className="btn-crear-style" style={{ marginLeft: 'auto', display: 'flex', justifyContent: 'center', alignItems: 'center', marginTop: '10px',backgroundColor: '#548454', color: 'white', borderColor: '#548454' }}>
                             <IoAddCircleOutline size={27} />
                             <span style={{ marginLeft: '5px' }}>Crear mano de obra</span>
                         </button>

@@ -263,7 +263,7 @@ function EntradasYSalidas() {
                             />
 
                         </div>
-                        <button onClick={() => abrirCerrarModalCrearEntradasYSalidas()} className="btn-crear-style" style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', marginLeft: '10px' }}>
+                        <button onClick={() => abrirCerrarModalCrearEntradasYSalidas()} className="btn-crear-style" style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', marginLeft: '10px',backgroundColor: '#548454', color: 'white', borderColor: '#548454' }}>
                             <IoAddCircleOutline size={27} />
                             <span style={{ marginLeft: '5px' }}>Crear entrada o salida</span>
                         </button>

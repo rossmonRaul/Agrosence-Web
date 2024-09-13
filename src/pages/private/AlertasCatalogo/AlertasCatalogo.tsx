@@ -324,7 +324,8 @@ function AdministrarAlertasCatalogo() {
                     marginTop: '20px', 
                     display: 'flex', 
                     alignItems: 'center', 
-                    justifyContent: 'center' 
+                    justifyContent: 'center' ,
+                    backgroundColor: '#548454', color: 'white', borderColor: '#548454'
                 }}
             >
                 <AiOutlinePlusCircle  style={{ marginRight: '8px' }} />

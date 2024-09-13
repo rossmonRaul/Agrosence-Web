@@ -78,14 +78,21 @@ const EditarRol: React.FC<Props> = ({ rol }) => {
     };
 
     const obtenerOpcionesRol = async() => {
+        console.log('formData',formData.rol);
         if(formData.rol){
             const data = {
-                idRol: formData.rol.idRol
+                idRol: parseInt(formData.rol.idRol)
             };
 
             const response = await ObtenerOpcionesRol(data);
 
-            setOpcionesRol(response);
+            const responseConEstado = response
+                .map((dato: any) => ({
+                    ...dato,
+                    estado: 1
+                }));
+
+            setOpcionesRol(responseConEstado);
         }
     };
 
@@ -191,6 +198,7 @@ const EditarRol: React.FC<Props> = ({ rol }) => {
             const response = await AgregarAccesoMenuRol(data);
 
             if(response[0].indicador === 1){
+                obtenerOpcionesRol();
                 Swal.fire({
                     title: 'Opción agregada',
                     text: 'La opción se agregó correctamente para el rol',

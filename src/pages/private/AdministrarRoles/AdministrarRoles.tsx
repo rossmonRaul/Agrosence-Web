@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import Sidebar from "../../../components/sidebar/Sidebar";
-import TableResponsiveState from "../../../components/table/table.tsx";
+import TableResponsiveState from "../../../components/table/tableDeactivate.tsx";
 import BordeSuperior from "../../../components/bordesuperior/BordeSuperior.tsx";
 import Modal from "../../../components/modal/Modal.tsx";
 import Topbar from "../../../components/topbar/Topbar.tsx";
@@ -60,7 +60,7 @@ function AdministrarRoles() {
 
     // Abrir modal de edición
     const openModal = (rol: any) => {     
-
+        console.log("rol",rol);
         setSelectedRol({
             idRol: rol.idRol, 
             nombreRol: rol.rol,
@@ -149,7 +149,7 @@ function AdministrarRoles() {
                                 style={{ fontSize: '16px', padding: '10px', minWidth: '200px', marginTop: '0px' }}
                             />
                         </div>
-                        <button onClick={() => abrirCerrarModalInsertar()} className="btn-crear-style" style={{ marginLeft: 'auto', display: 'flex', justifyContent: 'center', alignItems: 'center', marginTop: '10px' }}>
+                        <button onClick={() => abrirCerrarModalInsertar()} className="btn-crear-style" style={{ marginLeft: 'auto', display: 'flex', justifyContent: 'center', alignItems: 'center', marginTop: '10px',backgroundColor: '#548454', color: 'white', borderColor: '#548454' }}>
                         <IoAddCircleOutline size={27} />
                         <span style={{ marginLeft: '5px' }}>Crear rol</span>
                         </button>
