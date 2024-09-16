@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { NavLink, useLocation } from 'react-router-dom';
+import { Navigate, NavLink, useLocation } from 'react-router-dom';
 import { FaBars, FaAngleRight, FaAngleDown } from "react-icons/fa";
 import '../../css/Sidebar.css';
 import { useSelector } from 'react-redux';
@@ -9,6 +9,7 @@ import { useNavigate } from 'react-router-dom';
 import { PublicRoutes } from '../../models';
 import { ObtenerAccesoMenuPorRol } from '../../servicios/ServicioUsuario';
 import Swal from 'sweetalert2';
+
 
 /**
  * Definición de la interfaz para los elementos del menú.
@@ -24,7 +25,6 @@ const isTokenExpired = (token: string | null) => {
 // Componente Sidebar que muestra un menú lateral.
 const Sidebar = ({ children }: { children: React.ReactNode }) => {
     const location = useLocation();
-
     const [isOpen, setIsOpen] = useState(() => {
         const savedState = localStorage.getItem('sidebarState');
         return savedState ? JSON.parse(savedState) : false;
@@ -55,6 +55,7 @@ const Sidebar = ({ children }: { children: React.ReactNode }) => {
     const [menuItems, setMenu] = useState<any[]>([]);
 
     const ObtenerMenu = async () => {
+        console.log("UserState",userState )
         const menu = await ObtenerAccesoMenuPorRol({idRol: (userState.idRol)});
         
         const menuCategorizado: any = {};
@@ -112,6 +113,22 @@ const Sidebar = ({ children }: { children: React.ReactNode }) => {
     // Obtener el estado del usuario del almacenamiento Redux
     
     const userState = useSelector((store: AppStore) => store.user);
+
+
+    //console.log("prueba",localStorage.getItem('sidebarState'));
+    const hasAccess = localStorage.getItem('sidebarState');
+    // Lógica condicional para renderizar o redirigir
+    if (!hasAccess) {
+        if(localStorage.getItem('contadorSesion')=='1'){
+            navigate('/private/dashboard', { replace: true });
+        }else{
+            localStorage.setItem('contadorSesion', '1');
+        }
+        //return <Navigate to="/private/dashboard" replace />;
+        //navigate('/pagina-de-acceso-denegado');
+        //window.location.href = 'http://127.0.0.1:5173/private/dashboard';
+        
+    }
 
     return (
         <div style={{ marginLeft: isOpen ? "200px" : "83px" }} className="container">

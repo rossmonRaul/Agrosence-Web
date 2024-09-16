@@ -248,6 +248,7 @@ const Login: React.FC = () => {
         localStorage.setItem('identificacionUsuario', usuarioEncontrado.usuario.identificacion);
         localStorage.setItem('nombreUsuario', usuarioEncontrado.usuario.nombre);
         localStorage.setItem('token', usuarioEncontrado.token);
+        localStorage.setItem('contadorSesion', '0');
         navigate(`/${PrivateRoutes.PRIVATE}`, { replace: true });
         setIsLoggedIn(true);
       } else if (usuarioEncontrado.usuario.mensaje === "Credenciales incorrectas.") {
