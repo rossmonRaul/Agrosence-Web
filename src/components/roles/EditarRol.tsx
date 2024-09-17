@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { FormGroup, FormFeedback, Col, Input, Label, Button, Table } from 'reactstrap';
+import { FormGroup, Input, Label, Button } from 'reactstrap';
 import '../../css/FormSeleccionEmpresa.css'
 import Swal from 'sweetalert2';
 import '../../css/CrearCuenta.css'
@@ -20,12 +20,8 @@ interface Props {
     rol: any;
     onEdit(): void;
 }
-type Acceso = {
-    categoria: string;
-    opcion: string;
-};
 
-// Componente funcional EditarEmpresa
+// Componente funcional EditarRol
 const EditarRol: React.FC<Props> = ({ rol }) => {   
 
     const [categoria, setCategoria] = useState<any[]>([]);
@@ -33,7 +29,6 @@ const EditarRol: React.FC<Props> = ({ rol }) => {
     const [opcionesRol, setOpcionesRol] = useState<any[]>([]);
     const [selectedCategoria, setSelectedCategoria] = useState<string>('');
     const [selectedOpcion, setSelectedOpcion] = useState<string>('');
-    const [accesos, setAccesos] = useState<Acceso[]>([]);
     // Estado para almacenar los errores de validación del formulario
     const [errors] =  useState<Record<string, string>>({});
 
@@ -54,8 +49,6 @@ const EditarRol: React.FC<Props> = ({ rol }) => {
         setFormData({            
             rol: rol
         });
-
-        console.log(localStorage.getItem('empresaUsuario'))
 
         obtenerCategorias();
         obtenerOpcionesMenu();
@@ -78,7 +71,6 @@ const EditarRol: React.FC<Props> = ({ rol }) => {
     };
 
     const obtenerOpcionesRol = async() => {
-        console.log('formData',formData.rol);
         if(formData.rol){
             const data = {
                 idRol: parseInt(formData.rol.idRol)
@@ -133,7 +125,13 @@ const EditarRol: React.FC<Props> = ({ rol }) => {
                     icon: 'success'
                 });
             }
-            
+            else if (parseInt(response[0].indicador) === 2) {
+                Swal.fire({
+                    icon: 'warning',
+                    title: 'Nombre existente ',
+                    text: 'Ya existe un rol con el mismo nombre',
+                });
+            }
         }
     };
 
@@ -232,8 +230,8 @@ const EditarRol: React.FC<Props> = ({ rol }) => {
 
     const toggleStatus = async (opcionRol: any) => {
         Swal.fire({
-            title: "Quitar acceso",
-            text: "¿Estás seguro de que deseas quitar el acceso a "+opcionRol.descOpcion+" al rol "+formData.rol.nombreRol+"?",
+            title: "Eliminar acceso",
+            text: "¿Estás seguro de que deseas eliminar el acceso a "+opcionRol.descOpcion+" al rol "+formData.rol.nombreRol+"?",
             icon: "question",
             showCancelButton: true,
             confirmButtonText: "Sí",
@@ -278,34 +276,25 @@ const EditarRol: React.FC<Props> = ({ rol }) => {
     return (
         <div>
         <div className="form-container-fse">
-            <div style={{ display: 'flex', flexDirection: 'row', marginBottom: '0rem' }}>
-                <div style={{ flex: 1, marginRight: '0.5rem', marginLeft: '0.5rem' }}>
-                    <FormGroup row>
-                        <Label for="nombreRol" sm={12} className="input-label">Nombre: </Label>
-                        <Col sm={12}>
-                            <Input
-                                type="text"
-                                id="nombreRol"
-                                name="nombreRol"
-                                placeholder="Nombre del rol"
-                                value={formData.rol.nombreRol}
-                                onChange={handleInputChange}
-                                className={errors.nombre ? 'input-styled input-error' : 'input-styled'}
-                            />
-                            <FormFeedback>{errors.nombre}</FormFeedback>
-                        </Col>
-                    </FormGroup>
-                </div>
-                
-                <div className='botonesN' style={{ flex: 1, marginRight: '0.5rem', marginLeft: '0.5rem' }}>
-                    <Button color="primary" block className="btn-styled" style={{ marginBottom: '20px', marginTop: '11%' }} onClick={handleChangeName}>
-                    <IoCheckmark size={20} style={{marginRight: '2%'}}/>Actualizar nombre
-                    </Button>
-                </div>
-            </div>
+            <FormGroup row style={{display: 'flex', alignContent: 'center', alignItems: 'center', flexDirection: 'row', justifyContent: 'space-around'}}>
+                <Input
+                    type="text"
+                    id="nombreRol"
+                    name="nombreRol"
+                    placeholder="Nombre del rol"
+                    value={formData.rol.nombreRol}
+                    onChange={handleInputChange}
+                    className={errors.nombre ? 'input-styled input-error' : 'input-styled'}
+                    style={{margin: '1%', width: '100%'}}
+                />
 
-            <h4>Permisos generales</h4>
-            <div style={{ display: 'flex', flexDirection: 'row', marginBottom: '0rem', justifyContent: 'space-between' }}>
+                <Button color="primary" block className="btn-styled" onClick={handleChangeName} style={{margin: '1%', width: '66%'}}>
+                    <IoCheckmark size={20} style={{marginRight: '2%'}}/>Actualizar nombre
+                </Button>
+            </FormGroup>         
+
+            <h4 style={{marginBottom: '1%', marginTop: '1%'}}>Permisos generales</h4>
+            <div style={{ display: 'flex', flexDirection: 'row', alignContent: 'center', alignItems: 'center', justifyContent: 'space-between' }}>
                 <FormGroup check>
                     <Label check>
                         <Input
@@ -339,13 +328,13 @@ const EditarRol: React.FC<Props> = ({ rol }) => {
                         Eliminar
                     </Label>
                 </FormGroup>
-            </div>
-            <div className='botonesN'>
-                <button onClick={handleSubmitPermisos} className="btn-styled"><IoSave size={20} style={{marginRight: '2%'}}/>Actualizar permisos</button>
+                {/* <div style={{  }}> */}
+                    <button style={{width: '40%', display: 'flex', justifyContent: 'center', alignItems: 'center'}} onClick={handleSubmitPermisos} className="btn-styled"><IoSave size={20} style={{marginRight: '2%'}}/>Actualizar permisos</button>
+                {/* </div> */}
             </div>
             <br />
 
-            <h4>Accesos del menú para el rol</h4>
+            <h4 style={{marginTop: '1%', marginBottom: '1%'}}>Accesos del menú para el rol</h4>
             <div style={{ display: 'flex', flexDirection: 'row', marginBottom: '20px', justifyContent: 'space-between' }}>
                 <FormGroup style={{ flex: 1, marginRight: '0.5rem' }}>
                     <Label for="categoria">Categoría:</Label><br />
@@ -354,6 +343,7 @@ const EditarRol: React.FC<Props> = ({ rol }) => {
                         id="categoria"
                         value={selectedCategoria || ''}
                         onChange={handleCategoriaChange}
+                        className="custom-select"
                         style={{fontSize: '16px', padding: '2%', outline: 'none', marginTop: '2%'}}
                     >
                         <option value="">Seleccione</option>
@@ -370,6 +360,7 @@ const EditarRol: React.FC<Props> = ({ rol }) => {
                         id="opcion"
                         value={selectedOpcion || ''}
                         onChange={handleOpcionChange}
+                        className="custom-select"
                         style={{fontSize: '16px', padding: '2%', outline: 'none', marginTop: '2%'}}
                     >
                         <option value="">Seleccione</option>
@@ -377,15 +368,13 @@ const EditarRol: React.FC<Props> = ({ rol }) => {
                             <option key={opcion.idOpcion} value={opcion.idOpcion}>{opcion.descripcion}</option>
                         ))}
                     </Input>
-                </FormGroup>                                
-            </div>
-            <div className='botonesN'>
-                <Button color="primary"
-                    onClick={handleAddAcceso}       
-                >
-                    <IoAddCircle style={{marginRight: '5%'}}/> Agregar
-                </Button>
-            </div>
+                </FormGroup>
+                <div style={{padding: '2%', marginTop: '2%'}}>
+                    <Button color="primary" onClick={handleAddAcceso} style={{display: 'flex', alignItems: 'center', justifyContent: 'center'}}>
+                        <IoAddCircle style={{marginRight: '5%'}}/> Agregar
+                    </Button>                                
+                </div>
+            </div>                           
             
             <TableResponsive columns={columns} data={opcionesRol} itemsPerPage={2} btnActionName={"Eliminar"} toggleStatus={toggleStatus}/>           
         </div>        

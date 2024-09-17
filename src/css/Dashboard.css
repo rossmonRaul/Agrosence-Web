@@ -57,19 +57,18 @@
   margin-bottom: 1rem;
 }
 
-/* Se acomodan los elementos en columna cuando la pantalla se hace mas pequeña */
-@media (max-width: 1300px) {
-  .form-row {
-    flex-direction: column;
-    justify-content: center;
-    align-items: center;
-  }
+.form-rowN{
+  display: flex;
+  justify-content: space-between;
+  width: 100%;
+
 }
 
 .form-group {
   flex: 1;
   margin-right: 0.5rem;
   margin-left: 0.5rem;
+  width: 100%;
 }
 
 .button-custom:hover {
@@ -84,7 +83,9 @@
 .form-row .form-group{
   display: flex;
   flex-direction: column;
-  justify-content: center;
-  align-items: start;
+  justify-content: space-around;
+  align-items: end;
+  align-content: end;
   width: 100%;
+  margin: 1%;
 }

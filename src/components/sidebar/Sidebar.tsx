@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { Navigate, NavLink, useLocation } from 'react-router-dom';
+import { NavLink, useLocation } from 'react-router-dom';
 import { FaBars, FaAngleRight, FaAngleDown } from "react-icons/fa";
 import '../../css/Sidebar.css';
 import { useSelector } from 'react-redux';
@@ -55,39 +55,7 @@ const Sidebar = ({ children }: { children: React.ReactNode }) => {
     const [menuItems, setMenu] = useState<any[]>([]);
 
     const ObtenerMenu = async () => {
-        console.log("UserState",userState )
         const menu = await ObtenerAccesoMenuPorRol({idRol: (userState.idRol)});
-        
-        const menuCategorizado: any = {};
-
-        menu.forEach((item: any) => {
-            if (item.name === item.nombreCategoria) {
-                // NavItem directamente
-                menuCategorizado[item.nombreCategoria] = {
-                    ...menuCategorizado[item.nombreCategoria],
-                    title: item.nombreCategoria,
-                    icon: item.iconCategoria,
-                    target: item.pathCategoria,
-                    items: menuCategorizado[item.nombreCategoria]?.items || []
-                };
-            } else {
-                // Submenú
-                if (!menuCategorizado[item.nombreCategoria]) {
-                    menuCategorizado[item.nombreCategoria] = {
-                        title: item.nombreCategoria,
-                        icon: item.iconCategoria,
-                        target: item.pathCategoria,
-                        items: []
-                    };
-                }
-                
-                menuCategorizado[item.nombreCategoria].items.push({
-                    title: item.name,
-                    target: item.path,
-                    icon: item.icon,
-                });
-            }
-        });
 
         if(!menu){
             Swal.fire({
@@ -96,8 +64,44 @@ const Sidebar = ({ children }: { children: React.ReactNode }) => {
                 text: "Ocurrió un error al contactar con el servicio",
             });
         }
+        else{        
+            const menuCategorizado: any = {};
 
-        setMenu(menuCategorizado);
+            // Opciones sin submenú
+            menu.forEach((item: any) => {
+                if (item.name === item.nombreCategoria) {
+                    menuCategorizado[item.nombreCategoria] = {
+                        ...menuCategorizado[item.nombreCategoria],
+                        title: item.nombreCategoria,
+                        icon: item.iconCategoria,
+                        target: item.pathCategoria,
+                        items: []
+                    };
+                }
+            });
+
+			// Opciones con submenú
+            menu.forEach((item: any) => {
+                if (item.name !== item.nombreCategoria) {
+                    if (!menuCategorizado[item.nombreCategoria]) {
+                        menuCategorizado[item.nombreCategoria] = {
+                            title: item.nombreCategoria,
+                            icon: item.iconCategoria,
+                            target: item.pathCategoria,
+                            items: []
+                        };
+                    }
+
+                    menuCategorizado[item.nombreCategoria].items.push({
+                        title: item.name,
+                        target: item.path,
+                        icon: item.icon,
+                    });
+                }
+            });    
+
+            setMenu(menuCategorizado);
+        }
     };
 
     useEffect(() => {
@@ -113,9 +117,7 @@ const Sidebar = ({ children }: { children: React.ReactNode }) => {
     // Obtener el estado del usuario del almacenamiento Redux
     
     const userState = useSelector((store: AppStore) => store.user);
-
-
-    //console.log("prueba",localStorage.getItem('sidebarState'));
+    
     const hasAccess = localStorage.getItem('sidebarState');
     // Lógica condicional para renderizar o redirigir
     if (!hasAccess) {

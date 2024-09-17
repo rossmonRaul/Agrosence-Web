@@ -12,7 +12,6 @@ import { CambiarEstadoRol } from '../../../servicios/ServicioUsuario';
 import { IoAddCircleOutline } from "react-icons/io5";
 
 function AdministrarRoles() {
-    const [filtroDescripcion, setFiltroDescripcion] = useState('');
     const [modalEditar, setModalEditar] = useState(false);
     const [modalInsertar, setModalInsertar] = useState(false);
     const [roles, setRoles] = useState<any[]>([]);
@@ -24,16 +23,21 @@ function AdministrarRoles() {
         permisoEliminar: false
     });
 
-    const obtenerRegistros = async () => {
+    const obtenerRegistros = async (nombreFiltro?: string) => {
 
         const obj = await ObtenerRoles();
 
-        const roles = obj.map((r: any) => ({
+        let roles = await obj.map((r: any) => ({
             ...r,
             sEstado: r.estado === true ? 'Activo' : 'Inactivo',
         }));
 
-        setRoles(roles);
+        roles = roles.filter((x: { idRol: number; }) => x.idRol !== 1);
+
+        if(nombreFiltro)
+            setRoles(roles.filter((x: { rol: string; }) => x.rol.toUpperCase().includes(nombreFiltro.toUpperCase())));
+        else
+            setRoles(roles); 
     };
 
     // Obtener datos iniciales
@@ -44,7 +48,7 @@ function AdministrarRoles() {
 
     const handleChangeFiltro = (e: React.ChangeEvent<HTMLInputElement>) => {
         const { value } = e.target;
-        setFiltroDescripcion(value);
+        obtenerRegistros(value);
     };   
 
     // Abrir/cerrar modal de inserción
@@ -59,8 +63,8 @@ function AdministrarRoles() {
     };
 
     // Abrir modal de edición
-    const openModal = (rol: any) => {     
-        console.log("rol",rol);
+    const openModal = (rol: any) => {
+
         setSelectedRol({
             idRol: rol.idRol, 
             nombreRol: rol.rol,
@@ -126,7 +130,7 @@ function AdministrarRoles() {
 
     // Configuración de columnas para la tabla
     const columns = [
-        { key: 'rol', header: 'Nombre de rol' },
+        { key: 'rol', header: 'Rol' },
         { key: 'acciones', header: 'Acciones', actions: true }
     ];
 
@@ -138,11 +142,10 @@ function AdministrarRoles() {
                 <div className="content" >
                     <div className="filtro-container" style={{ display: 'flex', flexWrap: 'wrap', alignItems: 'center' }}>                        
                         <div className="filtro-item" style={{ marginBottom: '15px' }}>
-                            <label htmlFor="filtroNombre">Nombre de Rol:</label>
+                            <label htmlFor="filtroNombre">Rol:</label>
                             <input
                                 type="text"
                                 id="filtroNombre"
-                                value={filtroDescripcion}
                                 onChange={handleChangeFiltro}
                                 placeholder="Ingrese el nombre"
                                 className="form-control"

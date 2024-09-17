@@ -20,7 +20,7 @@ import { AppStore } from "../../../redux/Store";
 import ReactEcharts from 'echarts-for-react'; 
 import 'leaflet/dist/leaflet.css';
 import { MapContainer, TileLayer, Marker, Popup } from 'react-leaflet';
-import { IoSave, IoSearch } from 'react-icons/io5';
+import { IoSearch } from 'react-icons/io5';
 
 interface Option {
   identificacion: string;
@@ -1623,8 +1623,8 @@ const Dashboard: React.FC = () => {
       className="form-container"
       style={{ alignItems: "center", marginTop: "20px" }}
     >
-      <div className="form-row">
-        <div className="form-group">
+      <div className="form-rowN">
+        <div className="form-group" style={{width: '100%'}}>
           <FormGroup>
             <Label for="fincas">Finca:</Label>
             <Select
@@ -1642,7 +1642,7 @@ const Dashboard: React.FC = () => {
             />
           </FormGroup>
         </div>
-        <div className="form-group">
+        <div className="form-group" style={{width: '100%'}}>
           <FormGroup>
             <Label for="parcelas">Parcela:</Label>
             <Select
@@ -1660,9 +1660,9 @@ const Dashboard: React.FC = () => {
             />
           </FormGroup>
         </div>
-        <div className="form-group">
+        <div className="form-group" style={{width: '100%'}}>
           <FormGroup>
-            <Label for="puntosMedicion">Puntos de medición:</Label>
+            <Label for="puntosMedicion" className="input-label">Punto de medición:</Label>
             <Select
               isMulti
               name="opciones"
@@ -1678,14 +1678,12 @@ const Dashboard: React.FC = () => {
             />
           </FormGroup>
         </div>
-      {/* </div> */}
-      {/* <div className="form-row"> */}
-									
+      </div> 
+      <div className="form-rowN" style={{marginTop: '4%'}}>									
           <FormGroup className='form-group'>
-            <Label for="fechaInicio"  className="input-label">Fecha Inicio</Label>
+            <Label for="fechaInicio"  className="input-label">Fecha de inicio</Label>
 						
-              <Input 
-										  
+              <Input 										  
                 type="date"
                 id="fechaInicio"
                 style={{width:"86%"}}
@@ -1695,16 +1693,12 @@ const Dashboard: React.FC = () => {
                 className={errors.fechaInicio ? 'input-styled input-error' : 'input-styled'}
                 placeholder="Selecciona una fecha"
               />
-              <FormFeedback>{errors.fechaInicio}</FormFeedback>
-				  
-          </FormGroup>
-			  
+              <FormFeedback>{errors.fechaInicio}</FormFeedback>				  
+          </FormGroup>			  
 									
           <FormGroup className='form-group'>
-            <Label for="fechaFin" className="input-label">Fecha Fin</Label>
-						
-              <Input
-										  
+            <Label for="fechaFin" className="input-label">Fecha de fin</Label>						
+              <Input										  
                 type="date"
                 id="fechaFin"
                 name="fechaFin"
@@ -1719,23 +1713,23 @@ const Dashboard: React.FC = () => {
               <FormFeedback>{errors.fechaFin}</FormFeedback>
 				  
           </FormGroup>
-          <FormGroup className='form-group'>
-			
-          <Button style={{
-        backgroundColor: '#a5cf60',
-        color: 'white',
-        marginTop: "22px",
-        marginLeft: "60px",
-        padding: '10px 20px',
-        border: 'none',
-        borderRadius: '4px',
-        fontSize: '16px',
-        cursor: 'pointer',
-        transition: 'background-color 0.3s ease',
-        display: 'flex',
-        justifyContent: 'center',
-        flexDirection: 'row'
-      }} onClick={handleObtenerMedicionesSensores}><IoSearch size={20} style={{marginRight: '5px'}}/>{loading ? `Cargando${loadingPuntos}` : 'Obtener Mediciones'}</Button>
+          <FormGroup className='form-group'>			
+            <Button style={{
+              backgroundColor: '#a5cf60',
+              color: 'white',
+              marginTop: "22px",
+              marginLeft: "60px",
+              padding: '10px 20px',
+              border: 'none',
+              borderRadius: '4px',
+              fontSize: '16px',
+              cursor: 'pointer',
+              transition: 'background-color 0.3s ease',
+              display: 'flex',
+              justifyContent: 'center',
+              flexDirection: 'row',
+              alignItems: 'center'
+            }} onClick={handleObtenerMedicionesSensores}><IoSearch size={20} />{loading ? `Cargando${loadingPuntos}` : 'Obtener mediciones'}</Button>
           </FormGroup>
       </div>
 
@@ -1751,6 +1745,7 @@ const Dashboard: React.FC = () => {
         }}
       >
         <h2>Mapa con puntos de medición</h2>
+        <br />
         {/* <MapComponent /> */}
         <MapContainer
           center={[9.936681, -84.103964]}

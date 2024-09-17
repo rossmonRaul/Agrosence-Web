@@ -1,5 +1,5 @@
 import React from 'react';
-import { Modal, ModalHeader, ModalBody, ModalFooter } from 'reactstrap';
+import { Modal, ModalHeader, ModalBody } from 'reactstrap';
 import '../../css/Modal.css'
 import { IoCloseOutline } from 'react-icons/io5';
 
@@ -19,30 +19,18 @@ interface CustomModalProps {
 /**
  * Componente funcional que representa un modal personalizado.
  */
-const CustomModal: React.FC<CustomModalProps> = ({ isOpen, toggle, title, onSubmit, onCancel, children, btnSubmit }) => {
+const CustomModal: React.FC<CustomModalProps> = ({ isOpen, toggle, title, onCancel, children }) => {
   return (
     <Modal isOpen={isOpen} toggle={toggle}>
-      <ModalHeader>{title}</ModalHeader>
+      <ModalHeader>
+        <div className='header'>
+          {title}
+          <button onClick={onCancel}>
+              <IoCloseOutline size={20} style={{ marginRight: '1%' }} />
+          </button>
+        </div>
+      </ModalHeader>
       <ModalBody>{children}</ModalBody>
-      <ModalFooter>
-        {btnSubmit && onSubmit && (
-          <button className='btn btn-primary' onClick={onSubmit}>{btnSubmit}</button>
-        )}
-        <button 
-          className='btn btn-danger' 
-          onClick={onCancel} 
-          style={{ 
-            display: 'flex', 
-            alignItems: 'center', 
-            justifyContent: 'center', 
-            marginRight: '0.5%', 
-            marginLeft: '0.5%', 
-            width: '100%' 
-          }}>
-          <IoCloseOutline size={20} style={{ marginRight: '1%' }} />
-          Cancelar
-        </button>
-      </ModalFooter>
     </Modal>
   );
 };
