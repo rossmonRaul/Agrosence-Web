@@ -31,6 +31,7 @@ function Logout() {
                 try {
                     // Realizar la acción de cierre de sesión
                     await CerrarSesion();
+                    localStorage.removeItem('token');
                     clearSessionStorage(UserKey); // Limpiar el almacenamiento de sesión
                     dispatch(resetUser()); // Restablecer el estado del usuario
                     navigate(`/${PublicRoutes.LOGIN}`, { replace: true }); // Redirigir al usuario a la página de inicio de sesión

@@ -31,10 +31,11 @@ const Sidebar = ({ children }: { children: React.ReactNode }) => {
     });
 
     const toggle = () => {
-    const newState = !isOpen;
-    setIsOpen(newState);
-    localStorage.setItem('sidebarState', JSON.stringify(newState));
-};
+        const newState = !isOpen;
+        setIsOpen(newState);
+        localStorage.setItem('sidebarState', JSON.stringify(newState));
+    };
+
     // Estado para controlar la apertura y cierre de los elementos secundarios del menú
     const [submenuOpen, setSubmenuOpen] = useState<{ [path: string]: boolean }>(() => {
         const savedState = localStorage.getItem('submenuState');
@@ -56,6 +57,13 @@ const Sidebar = ({ children }: { children: React.ReactNode }) => {
 
     const ObtenerMenu = async () => {
         const menu = await ObtenerAccesoMenuPorRol({idRol: (userState.idRol)});
+
+        const url = location.pathname;
+
+        // Validar si rol tiene acceso
+        if(menu.filter((x: { path: any; }) => x.path === url).length < 1){
+            navigate('/private/dashboard');
+        }
 
         if(!menu){
             Swal.fire({
@@ -104,7 +112,7 @@ const Sidebar = ({ children }: { children: React.ReactNode }) => {
         }
     };
 
-    useEffect(() => {
+    useEffect(() => {      
         if (isTokenExpired(userToken)) {
             localStorage.removeItem('token');
             resetUser()
@@ -112,25 +120,41 @@ const Sidebar = ({ children }: { children: React.ReactNode }) => {
         }
 
         ObtenerMenu();
+
     }, [userToken, history]);
+
+    useEffect(() => {
+        // Prevenir navegación hacia atrás
+        window.history.pushState(null, '', window.location.href);
+        window.addEventListener('popstate', handlePopState);
+   
+        return () => {
+          window.removeEventListener('popstate', handlePopState);
+        };
+      }, []);
+
+    const handlePopState = () => {
+        // Forzar la navegación hacia el dashboard o alguna otra ruta
+        navigate('/private/dashboard', { replace: true });
+    };
 
     // Obtener el estado del usuario del almacenamiento Redux
     
     const userState = useSelector((store: AppStore) => store.user);
     
-    const hasAccess = localStorage.getItem('sidebarState');
+    // const hasAccess = localStorage.getItem('sidebarState');
     // Lógica condicional para renderizar o redirigir
-    if (!hasAccess) {
-        if(localStorage.getItem('contadorSesion')=='1'){
-            navigate('/private/dashboard', { replace: true });
-        }else{
-            localStorage.setItem('contadorSesion', '1');
-        }
-        //return <Navigate to="/private/dashboard" replace />;
-        //navigate('/pagina-de-acceso-denegado');
-        //window.location.href = 'http://127.0.0.1:5173/private/dashboard';
+    // if (!hasAccess) {
+    //     if(localStorage.getItem('contadorSesion')=='1'){
+    //         navigate('/private/dashboard', { replace: true });
+    //     }else{
+    //         localStorage.setItem('contadorSesion', '1');
+    //     }
+    //     //return <Navigate to="/private/dashboard" replace />;
+    //     //navigate('/pagina-de-acceso-denegado');
+    //     //window.location.href = 'http://127.0.0.1:5173/private/dashboard';
         
-    }
+    // }
 
     return (
         <div style={{ marginLeft: isOpen ? "200px" : "83px" }} className="container">
