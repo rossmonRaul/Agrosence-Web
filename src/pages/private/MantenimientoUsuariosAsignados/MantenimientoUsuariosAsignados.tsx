@@ -38,6 +38,7 @@ function MantenimientoUsuariosAsignados() {
     nombre: '',
     correo: '',
     idEmpresa: '',
+    idRol: '',
   });
   // Estado para almacenar todos los usuarios asignados
   const [usuariosAsignados, setUsuariosAsignados] = useState<any[]>([]);
@@ -61,6 +62,7 @@ function MantenimientoUsuariosAsignados() {
     setModalCrearUsuario(!modalCrearUsuario);
     localStorage.removeItem('selectedFinca');
     localStorage.removeItem('selectedParcela');
+    localStorage.removeItem('selectedRoles');
   }
 
   const openModalAsignar = (usuario: any) => {
@@ -208,7 +210,7 @@ function MantenimientoUsuariosAsignados() {
         title="Editar usuario"
         onCancel={abrirCerrarModalEditar}
       >
-        <div className='form-container'>
+        <div className='form-container' style={{  width: '90%' }}>
           <div className='form-group'>
             {/* hay que modificar el nombre porque modifica mas datos */}
             {/* <CambiarContrasenaAsignados */}
@@ -216,6 +218,7 @@ function MantenimientoUsuariosAsignados() {
               identificacion={selectedUsuario.identificacion}
               nombre={selectedUsuario.nombre}
               email={selectedUsuario.correo}
+              idRol={selectedUsuario.idRol}
               onEdit={handleEditarUsuario}
             />
           </div>
@@ -229,7 +232,7 @@ function MantenimientoUsuariosAsignados() {
         title="Crear usuario"
         onCancel={abrirCerrarModalCrearUsuario}
       >
-        <div className='form-container'>
+        <div className='form-container' style={{  width: '90%' }}>
           <div className='form-group'>
             <CrearCuentaUsuario
               idEmpresa={userLoginState.idEmpresa}
@@ -245,7 +248,7 @@ function MantenimientoUsuariosAsignados() {
         title="Editar asignaciones"
         onCancel={abrirCerrarModalAsignar}
       >
-        <div className='form-container'>
+        <div className='form-container' style={{  width: '90%' }}>
           <div className='form-group'>
             <AsignacionesUsuarios
               identificacion={selectedUsuario.identificacion}

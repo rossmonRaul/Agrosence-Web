@@ -188,7 +188,8 @@ const EditarCuentaAdministrador: React.FC<AdministradorSeleccionadoProps> = ({ i
     // Renderizado del componente
     return (
         <div>
-            <FormGroup row>
+             <div className="form-container-fse" style={{ display: 'flex', flexDirection: 'row', width: '96.5%',justifyContent: 'center', marginLeft: '9px',marginRight: '0', gap: '0' }}>
+             <FormGroup row style={{margin: '5px', width: '65%',padding: '0px',flexGrow: '1', maxWidth:' 100%'}}>
                 <Label for="identificacion" sm={2} className="input-label">Identificación</Label>
                 <Col sm={12}>
                     <Input
@@ -206,7 +207,7 @@ const EditarCuentaAdministrador: React.FC<AdministradorSeleccionadoProps> = ({ i
                     <FormFeedback>{errors.identificacion}</FormFeedback>
                 </Col>
             </FormGroup>
-            <FormGroup row>
+            <FormGroup row style={{margin: '5px', width: '65%',padding: '0px',flexGrow: '1', maxWidth:' 100%'}}>
                 <Label for="nombre" sm={2} className="input-label">Nombre</Label>
                 <Col sm={12}>
                     <Input
@@ -222,7 +223,9 @@ const EditarCuentaAdministrador: React.FC<AdministradorSeleccionadoProps> = ({ i
                     <FormFeedback>{errors.nombre}</FormFeedback>
                 </Col>
             </FormGroup>
-            <FormGroup row>
+             </div>
+             <div className="form-container-fse" style={{ display: 'flex', flexDirection: 'row', width: '96.5%',justifyContent: 'center', marginLeft: '9px',marginRight: '0', gap: '0' }}>
+             <FormGroup row style={{margin: '5px', width: '65%',padding: '0px',flexGrow: '1', maxWidth:' 100%'}}>
                 <Label for="email" sm={2} className="input-label">Correo</Label>
                 <Col sm={12}>
                     <Input
@@ -238,7 +241,26 @@ const EditarCuentaAdministrador: React.FC<AdministradorSeleccionadoProps> = ({ i
                     <FormFeedback>{errors.email}</FormFeedback>
                 </Col>
             </FormGroup>
-            <FormGroup row>
+            <FormGroup style={{margin: '5px', width: '65%',padding: '0px',flexGrow: '1', maxWidth:' 100%'}}>
+                <Label htmlFor="empresas" className="input-label">Empresa</Label>
+                <select className="custom-select" id="empresas" value={empresaSeleccionada?.idEmpresa || ''} onChange={handleEmpresaChange} style={{height:'44px'}}>
+                    <option key="default-empresa" value="">Seleccione...</option>
+                    {empresas.map((empresa) => (
+                        <option
+                            key={`${empresa.idEmpresa}-${empresa.nombre}`}
+                            value={empresa.idEmpresa}
+                        >
+                            {empresa.nombre}
+                        </option>
+                    ))}
+                </select>
+
+ 
+                {errors.empresa && <FormFeedback>{errors.empresa}</FormFeedback>}
+            </FormGroup>
+             </div>
+             <div className="form-container-fse" style={{ display: 'flex', flexDirection: 'row', width: '96.5%',justifyContent: 'center', marginLeft: '9px',marginRight: '0', gap: '0' }}>
+             <FormGroup row style={{margin: '5px', width: '65%',padding: '0px',flexGrow: '1', maxWidth:' 100%'}}>
                 <Label for="contrasena" sm={2} className="input-label">Contraseña</Label>
                 <Col sm={12}>
                     <Input
@@ -254,7 +276,7 @@ const EditarCuentaAdministrador: React.FC<AdministradorSeleccionadoProps> = ({ i
                     <FormFeedback>{errors.contrasena}</FormFeedback>
                 </Col>
             </FormGroup>
-            <FormGroup row>
+            <FormGroup row style={{margin: '5px', width: '65%',padding: '0px',flexGrow: '1', maxWidth:' 100%'}}>
                 <Label for="contrasenaConfirmar" sm={2} className="input-label">Confirme la contraseña</Label>
                 <Col sm={12}>
                     <Input
@@ -270,25 +292,10 @@ const EditarCuentaAdministrador: React.FC<AdministradorSeleccionadoProps> = ({ i
                     <FormFeedback>{errors.contrasenaConfirmar}</FormFeedback>
                 </Col>
             </FormGroup>
-            <FormGroup>
-                <Label htmlFor="empresas" className="input-label">Empresa</Label>
-                <select className="custom-select" id="empresas" value={empresaSeleccionada?.idEmpresa || ''} onChange={handleEmpresaChange}>
-                    <option key="default-empresa" value="">Seleccione...</option>
-                    {empresas.map((empresa) => (
-                        <option
-                            key={`${empresa.idEmpresa}-${empresa.nombre}`}
-                            value={empresa.idEmpresa}
-                        >
-                            {empresa.nombre}
-                        </option>
-                    ))}
-                </select>
+             </div>
 
- 
-                {errors.empresa && <FormFeedback>{errors.empresa}</FormFeedback>}
-            </FormGroup>
-            <div className='botonesN'>
-                <Button onClick={handleSubmitConValidacion} className="btn-styled" ><IoSave size={20} style={{marginRight: '2%'}}/>Actualizar datos</Button>
+            <div className='botonesN' style={{display:'flex', justifyContent:'center'}}>
+                <Button onClick={handleSubmitConValidacion} className="btn-styled" style={{width:'50%'}}><IoSave size={20} style={{marginRight: '2%'}}/>Actualizar datos</Button>
             </div>
         </div>
     );

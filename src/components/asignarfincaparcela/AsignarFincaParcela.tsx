@@ -174,11 +174,11 @@ const AsignarFincaParcela: React.FC<Props> = ({ idEmpresa, onEdit, identificacio
      // Renderizado del componente
     return (
         <div>
-            <div className="form-container-fse">
+            <div className="form-container-fse" style={{ display: 'flex', flexDirection: 'row', width: '96.5%',justifyContent: 'center', marginLeft: '9px',marginRight: '0', gap: '0' }}>
                 
-                <FormGroup>
+                <FormGroup style={{margin: '5px', width: '65%',padding: '0px',flexGrow: '1', maxWidth:' 100%'}}>
                     <label htmlFor="fincas">Finca:</label>
-                    <select className="custom-select" id="fincas" value={selectedFinca} onChange={handleFincaChange}>
+                    <select className="custom-select" id="fincas" value={selectedFinca} onChange={handleFincaChange} style={{height:'44px'}}>
                         <option key="default-finca" value="">Seleccione...</option>
                         {filteredFincas.map((finca) => (
                             <option key={`${finca.idFinca}-${finca.nombre || 'undefined'}`} value={finca.idFinca}>{finca.nombre || 'Undefined'}</option>
@@ -187,9 +187,9 @@ const AsignarFincaParcela: React.FC<Props> = ({ idEmpresa, onEdit, identificacio
                     {errors.finca && <FormFeedback>{errors.finca}</FormFeedback>}
                 </FormGroup>
 
-                <FormGroup>
+                <FormGroup style={{margin: '5px', width: '65%',padding: '0px',flexGrow: '1', maxWidth:' 100%'}}>
                     <label htmlFor="parcelas">Parcela:</label>
-                    <select className="custom-select" id="parcelas" value={selectedParcela} onChange={handleParcelaChange}>
+                    <select className="custom-select" id="parcelas" value={selectedParcela} onChange={handleParcelaChange} style={{height:'44px'}}>
                         <option key="default-parcela" value="">Seleccione...</option>
                         {filteredParcelas.map((parcela) => (
                             <option key={`${parcela.idParcela}-${parcela.nombre || 'undefined'}`} value={parcela.idParcela}>{parcela.nombre || 'Undefined'}</option>
@@ -198,8 +198,8 @@ const AsignarFincaParcela: React.FC<Props> = ({ idEmpresa, onEdit, identificacio
                     {errors.parcela && <FormFeedback>{errors.parcela}</FormFeedback>}
                 </FormGroup>
             </div>
-            <div className='botonesN'>
-                <button onClick={handleSubmitConValidacion} className="btn-styled"><IoCheckmark size={20} style={{marginRight: '1%'}}/>Asignar</button>
+            <div className='botonesN' style={{display:'flex', justifyContent:'center'}}>
+                <button onClick={handleSubmitConValidacion} className="btn-styled" style={{width:'50%'}}><IoCheckmark size={20} style={{marginRight: '1%'}}/>Asignar</button>
             </div>            
         </div>
     );

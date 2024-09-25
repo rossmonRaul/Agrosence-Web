@@ -298,10 +298,10 @@ const ModificacionRotacionCultivos: React.FC<RotacionCultivosProps> = ({
     };
     return (
         <div id='general' style={{ display: 'flex', flexDirection: 'column', paddingBottom: '0rem', width: '100%', margin: '0 auto' }}>
-            <div className="form-container-fse" style={{ display: 'flex', flexDirection: 'column', width: '100%' }}>
-                <FormGroup>
+            <div className="form-container-fse" style={{  display: 'flex', flexDirection: 'row', width: '96.5%',justifyContent: 'center', marginLeft: '9px',marginRight: '0', gap: '0' }}>
+                <FormGroup  style={{margin: '5px', width: '65%',padding: '0px',flexGrow: '1', maxWidth:' 100%'}}>
                     <label htmlFor="fincas">Finca:</label>
-                    <select className="custom-select" id="fincas" value={selectedFinca} onChange={handleFincaChange} style={{marginTop: '1%'}}>
+                    <select className="custom-select" id="fincas" value={selectedFinca} onChange={handleFincaChange} style={{marginTop: '1%', height: '55%'}}>
                         <option key="default-finca" value="">Seleccione...</option>
                         {filteredFincas.map((finca) => (
                             <option key={`${finca.idFinca}-${finca.nombre || 'undefined'}`} value={finca.idFinca}>{finca.nombre || 'Undefined'}</option>
@@ -310,9 +310,9 @@ const ModificacionRotacionCultivos: React.FC<RotacionCultivosProps> = ({
                     {errors.finca && <FormFeedback>{errors.finca}</FormFeedback>}
                 </FormGroup>
 
-                <FormGroup>
+                <FormGroup  style={{margin: '5px', width: '65%',padding: '0px',flexGrow: '1', maxWidth:' 100%'}}>
                     <label htmlFor="parcelas">Parcela:</label>
-                    <select className="custom-select" id="parcelas" value={selectedParcela} onChange={handleParcelaChange} style={{marginTop: '1%'}}>
+                    <select className="custom-select" id="parcelas" value={selectedParcela} onChange={handleParcelaChange} style={{marginTop: '1%', height: '55%'}}>
                         <option key="default-parcela" value="">Seleccione...</option>
                         {filteredParcelas.map((parcela) => (
                             <option key={`${parcela.idParcela}-${parcela.nombre || 'undefined'}`} value={parcela.idParcela}>{parcela.nombre || 'Undefined'}</option>
@@ -371,14 +371,14 @@ const ModificacionRotacionCultivos: React.FC<RotacionCultivosProps> = ({
                                 onChange={handleInputChange}
                                 className={errors.epocaSiembraCultivoSiguiente ? 'input-styled input-error' : 'input-styled'}
                                 placeholder="Selecciona una fecha"
-                                style={{marginTop: '2%'}}
+                                style={{marginTop: '2%',width:'98%'}}
                             />
                             <FormFeedback>{errors.epocaSiembraCultivoSiguiente}</FormFeedback>
                         </Col>
                     </FormGroup>
                 </div>
             </div>
-            <div style={{ display: 'flex', flexDirection: 'row', marginBottom: '0rem' }}>
+            <div style={{ display: 'flex', flexDirection: 'row', marginBottom: '0rem',width:'100%' }}>
                 <div style={{ flex: 1, marginRight: '0.5rem', marginLeft: '0.5rem' }}>
                     <FormGroup row>
                         <Label for="cultivo" sm={4} className="input-label">Cultivo</Label>
@@ -391,7 +391,7 @@ const ModificacionRotacionCultivos: React.FC<RotacionCultivosProps> = ({
                                 onChange={handleInputChange}
                                 className={errors.cultivo ? 'input-styled input-error' : 'input-styled'}
                                 placeholder="Nombre de cultivo"
-                                style={{marginTop: '2%'}}
+                                style={{marginTop: '2%',height: '44px', width:'101%'}}
                             />
                             <FormFeedback>{errors.cultivo}</FormFeedback>
                         </Col>
@@ -410,7 +410,7 @@ const ModificacionRotacionCultivos: React.FC<RotacionCultivosProps> = ({
                                 className={errors.cultivoSiguiente ? 'input-styled input-error' : 'input-styled'}
                                 placeholder="Nombre del siguiente cultivo"
                                 maxLength={50}
-                                style={{marginTop: '2%'}}
+                                style={{marginTop: '2%',height: '44px', marginLeft:'-22px', width:'101%'}}
                             />
                             <FormFeedback>{errors.cultivoSiguiente}</FormFeedback>
                         </Col>
@@ -419,8 +419,8 @@ const ModificacionRotacionCultivos: React.FC<RotacionCultivosProps> = ({
 
             </div>
 
-            <div className='botonesN'>
-                <Button onClick={handleSubmitConValidacion} className="btn-styled"><IoSave size={20} style={{marginRight: '1%'}}/>Actualizar datos</Button>
+            <div className='botonesN'  style={{display:'flex', justifyContent:'center'}}>
+                <Button onClick={handleSubmitConValidacion} className="btn-styled" style={{width:'50%'}}><IoSave size={20} style={{marginRight: '1%'}}/>Actualizar datos</Button>
             </div>
         </div>
     );

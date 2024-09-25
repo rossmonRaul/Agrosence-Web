@@ -429,7 +429,7 @@ const ModificarSensores: React.FC<Props> = ({
         <div id='general' style={{ display: 'flex', flexDirection: 'column', paddingBottom: '0rem', width: '100%', margin: '0 auto' }}>
             {step === 1 && (
                 <div>
-                    <div className="form-container-fse" style={{ display: 'flex', flexDirection: 'column', width: '600px', marginLeft: '0.5rem' }}>
+                    <div className="form-container-fse" style={{ display: 'flex', flexDirection: 'column',  width: '100%', marginLeft: '0.5rem' }}>
 
                         <div style={{ display: 'flex', flexDirection: 'row', marginBottom: '0rem' }}>
                             <div style={{ flex: 1, marginRight: '0.5rem', marginLeft: '0.5rem' }}>
@@ -469,32 +469,10 @@ const ModificarSensores: React.FC<Props> = ({
                         </div>
 
                         <div style={{ display: 'flex', flexDirection: 'row', marginBottom: '0rem' }}>
-                            <div style={{ flex: 1, marginRight: '0.5rem', marginLeft: '0.5rem' }}>
-                                <FormGroup row>
-                                    <Label for="identificadorSensor" sm={4} className="input-label">Identificador sensor (EUI):</Label>
-                                    <Col sm={8}>
-                                        <Input
-                                            id="identificadorSensor"
-                                            name="identificadorSensor"
-                                            value={formData.identificadorSensor}
-                                            onChange={handleInputChange}
-                                            placeholder='Identificador sensor...'
-                                            className={errors.identificadorSensor ? 'input-styled input-error' : 'input-styled'}
-                                        />
-                                        <FormFeedback>{errors.identificadorSensor}</FormFeedback>
-                                    </Col>
-                                </FormGroup>
-
-                            </div>
-
-                        </div>
-                    </div>
-
-                    <div style={{ flex: 1, marginTop: '0.5rem', marginRight: '0.5rem', marginLeft: '0.5rem' }}>
                         <div style={{ flex: 1, marginRight: '0.5rem', marginLeft: '0.5rem' }}>
                             <FormGroup>
                                 <label htmlFor="estados">Estado de sensor:</label>
-                                <select className="custom-select" id="estados" value={selectedEstadoSensor} onChange={handleEstadoSensorChange}>
+                                <select className="custom-select" id="estados" value={selectedEstadoSensor} onChange={handleEstadoSensorChange} style={{height:'44px'}}>
                                     <option key="default-sensor" value="">Seleccione...</option>
                                     {estadoSensor.map((sensor) => (
                                         <option key={`${sensor.idEstado}-${sensor.estado || 'undefined'}`} value={sensor.idEstado}>{sensor.estado || 'Undefined'}</option>
@@ -506,7 +484,7 @@ const ModificarSensores: React.FC<Props> = ({
                         <div style={{ flex: 1, marginRight: '0.5rem', marginLeft: '0.5rem' }}>
                             <FormGroup>
                                 <label htmlFor="puntoMedicion">Punto medición:</label>
-                                <select className="custom-select" id="puntoMedicion" value={selectedPuntoMedicion} onChange={handlePuntoMedicionChange}>
+                                <select className="custom-select" id="puntoMedicion" value={selectedPuntoMedicion} onChange={handlePuntoMedicionChange} style={{height:'44px'}}>
                                     <option key="default-punto-medicion" value="">Seleccione...</option>
                                     {sensores.map((sensor: any) => (
                                         <option key={`${sensor.idPuntoMedicion}-${sensor.codigo || 'undefined'}`} value={sensor.idPuntoMedicion}>{sensor.codigo || 'Undefined'}</option>
@@ -515,15 +493,41 @@ const ModificarSensores: React.FC<Props> = ({
                                 {errors.idPuntoMedicion && <FormFeedback>{errors.idPuntoMedicion}</FormFeedback>}
                             </FormGroup>
                         </div>
-                        <div className='botonesN'>
-                            <button onClick={handleNextStep} className="btn-styled">Siguiente<IoArrowForward size={20} style={{marginLeft: '1%'}}/></button>
+                           
+
+                        </div>
+                    </div>
+
+                    <div style={{ flex: 1, marginTop: '0.5rem', marginRight: '0.5rem', marginLeft: '0.5rem' }}>
+                    <div style={{ flex: 1, marginRight: '0.5rem', marginLeft: '0.5rem', width:'100%' }}>
+                                <FormGroup row>
+                                    <Label for="identificadorSensor" sm={4} className="input-label">Identificador sensor (EUI):</Label>
+                                    <Col sm={8}>
+                                        <Input
+                                            id="identificadorSensor"
+                                            name="identificadorSensor"
+                                            value={formData.identificadorSensor}
+                                            onChange={handleInputChange}
+                                            placeholder='Identificador sensor...'
+                                            className={errors.identificadorSensor ? 'input-styled input-error' : 'input-styled'}
+                                            style={{ width:'100%'}}
+                                        />
+                                        <FormFeedback>{errors.identificadorSensor}</FormFeedback>
+                                    </Col>
+                                </FormGroup>
+
+                            </div>
+
+
+                        <div className='botonesN' style={{display:'flex', justifyContent:'end', marginLeft:'30px'}}>
+                            <button onClick={handleNextStep} className="btn-styled" style={{width:'47.5%'}}>Siguiente<IoArrowForward size={20} style={{marginLeft: '1%'}}/></button>
                         </div>
                     </div>
                 </div>
             )}
             {step === 2 && (
                 <div>
-                    <div className="form-container-fse" style={{ display: 'flex', flexDirection: 'column', width: '600px', marginLeft: '0.5rem' }}>
+                    <div className="form-container-fse" style={{ display: 'flex', flexDirection: 'column',  width: '100%', marginLeft: '0.5rem' }}>
                         <label htmlFor="" style={{fontSize: '18px'}}>Mediciones autorizadas del sensor</label>
                         <div style={{ overflow: 'auto', maxHeight: '200px', padding: '10px', marginBottom: '20px' }}>
                             {inputs.map((input, index) => (

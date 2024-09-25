@@ -364,7 +364,7 @@ const ModificacionEficienciaRiego: React.FC<RiegoSeleccionado> = ({
                     <div style={{ marginRight: '10px', width: '50%' }}>
                         <FormGroup>
                             <label htmlFor="fincas">Finca:</label>
-                            <select className="custom-select input-styled" id="fincas" value={selectedFinca} onChange={handleFincaChange}>
+                            <select className="custom-select input-styled" id="fincas" value={selectedFinca} onChange={handleFincaChange} style={{height:'44px'}}>
                                 <option key="default-finca" value="">Seleccione...</option>
                                 {filteredFincas.map((finca) => (
                                     <option key={`${finca.idFinca}-${finca.nombre || 'undefined'}`} value={finca.idFinca}>{finca.nombre || 'Undefined'}</option>
@@ -376,7 +376,7 @@ const ModificacionEficienciaRiego: React.FC<RiegoSeleccionado> = ({
                     <div style={{ marginRight: '0px', width: '50%' }}>
                         <FormGroup>
                             <label htmlFor="parcelas">Parcela:</label>
-                            <select className="custom-select" id="parcelas" value={selectedParcela} onChange={handleParcelaChange}>
+                            <select className="custom-select" id="parcelas" value={selectedParcela} onChange={handleParcelaChange} style={{height:'44px'}}>
                                 <option key="default-parcela" value="">Seleccione...</option>
                                 {filteredParcelas.map((parcela) => (
                                     <option key={`${parcela.idParcela}-${parcela.nombre || 'undefined'}`} value={parcela.idParcela}>{parcela.nombre || 'Undefined'}</option>
@@ -429,8 +429,8 @@ const ModificacionEficienciaRiego: React.FC<RiegoSeleccionado> = ({
                     </div>
 
                 </div>
-                <div className='botonesN'>
-                  <button onClick={handleNextStep} className="btn-styled">Siguiente <IoArrowForward size={20} style={{marginLeft: '2%'}}/></button>
+                <div className='botonesN' style={{display:'flex', justifyContent:'end', marginLeft:'22px'}}>
+                  <button onClick={handleNextStep} className="btn-styled" style={{width:'49.5%'}}>Siguiente <IoArrowForward size={20} style={{marginLeft: '2%'}}/></button>
                 </div>
          </div>
 

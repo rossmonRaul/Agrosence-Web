@@ -153,7 +153,7 @@ const ModificacionManejoFertilizante: React.FC<TipoAplicacionSeleccionado> = ({
         <div id='general' style={{ display: 'flex', flexDirection: 'column', paddingBottom: '0rem', width: '100%', margin: '0 auto' }}>
             <div style={{ display: 'flex', flexDirection: 'row', marginBottom: '0rem' }}>
                 <div style={{ flex: 1 }}>
-                    <FormGroup row>
+                    <FormGroup row style={{display:'flex', alignItems:'center',justifyContent:'space-between'}}>
                         <Label for="nombre" sm={4} className="input-label">Nombre</Label>
                         <Col sm={8}>
                             <Input
@@ -164,17 +164,18 @@ const ModificacionManejoFertilizante: React.FC<TipoAplicacionSeleccionado> = ({
                                 onChange={handleInputChange}
                                 className={errors.nombre ? 'input-styled input-error' : 'input-styled'}
                                 placeholder="Cantidad de nombre"
-                                style={{marginTop: '2%'}}
+                                style={{marginTop: '3%',width:'170%'}}
                             />
                             <FormFeedback>{errors.nombre}</FormFeedback>
                         </Col>
+                        <div className='botonesN' style={{marginLeft:'25%', width:'25%', marginTop:'1%'}}>
+                        <Button onClick={handleSubmitConValidacion} className="btn-styled"><IoSave size={20} style={{marginRight: '2%'}}/>Actualizar</Button>
+                        </div>
                     </FormGroup>
                 </div>
             </div>
 
-            <div className='botonesN'>
-                <Button onClick={handleSubmitConValidacion} className="btn-styled"><IoSave size={20} style={{marginRight: '2%'}}/>Actualizar</Button>
-            </div>
+
         </div >
     );
 

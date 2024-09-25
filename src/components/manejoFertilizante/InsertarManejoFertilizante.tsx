@@ -266,39 +266,38 @@ const InsertarManejoFertilizante: React.FC<InsertarManejoFertilizanteProps> = ({
     };
 
     return (
-        <div id='general' style={{ display: 'flex', flexDirection: 'column', paddingBottom: '1rem', width: '100%', margin: '0 auto' }}>
-            <div className="form-container-fse" style={{ display: 'flex', flexDirection: 'column', width: '100%' }}>
-                <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: '1rem', flexWrap: 'wrap' }}>
-                    <div style={{ flex: '1 1 45%', marginRight: '1rem' }}>
-                        <FormGroup style={{padding: '0', margin: '0'}}>
-                            <label htmlFor="fincas">Finca:</label>
-                            <select className="custom-select input-styled" id="fincas" value={selectedFinca} onChange={handleFincaChange}>
+        <div id='general' style={{ display: 'flex', flexDirection: 'column', paddingBottom: '0rem', width: '100%', margin: '0 auto' }}> 
+            <div className="form-container-fse" style={{ display: 'flex', flexDirection: 'row', marginLeft:'1%', width:'97%' }}>
+                <div style={{ marginRight: '10px', width: '50%' }}>
+                    <FormGroup>
+                    <label htmlFor="fincas">Finca:</label>
+                            <select className="custom-select input-styled" id="fincas" value={selectedFinca} onChange={handleFincaChange} style={{height:'44px'}}>
                                 <option key="default-finca" value="">Seleccione una finca...</option>
                                 {filteredFincas.map((finca) => (
                                     <option key={`${finca.idFinca}-${finca.nombre || 'undefined'}`} value={finca.idFinca}>{finca.nombre || 'Undefined'}</option>
                                 ))}
                             </select>
                             {errors.finca && <FormFeedback>{errors.finca}</FormFeedback>}
-                        </FormGroup>
-                    </div>
-                    <div style={{ flex: '1 1 45%' }}>
-                        <FormGroup>
-                            <label htmlFor="parcelas">Parcela:</label>
-                            <select className="custom-select input-styled" id="parcelas" value={selectedParcela} onChange={handleParcelaChange}>
+                    </FormGroup>
+                </div>
+                <div style={{ marginRight: '0px', width: '50%' }}>
+                    <FormGroup>
+                    <label htmlFor="parcelas">Parcela:</label>
+                            <select className="custom-select input-styled" id="parcelas" value={selectedParcela} onChange={handleParcelaChange} style={{height:'44px'}}>
                                 <option key="default-parcela" value="">Seleccione una parcela...</option>
                                 {parcelasFiltradas.map((parcela) => (
                                     <option key={`${parcela.idParcela}-${parcela.nombre || 'undefined'}`} value={parcela.idParcela}>{parcela.nombre || 'Undefined'}</option>
                                 ))}
                             </select>
                             {errors.parcela && <FormFeedback>{errors.parcela}</FormFeedback>}
-                        </FormGroup>
-                    </div>
+                    </FormGroup>
                 </div>
-    
-                <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: '1rem', flexWrap: 'wrap' }}>
-                    <div style={{ flex: '1 1 45%', marginRight: '1rem' }}>
-                        <FormGroup>
-                            <label htmlFor="fechaCreacion">Fecha</label>
+            </div>
+
+            <div style={{ display: 'flex', flexDirection: 'row', marginBottom: '0rem' }}>
+                <div style={{ flex: 1, marginRight: '0.5rem', marginLeft: '0.5rem' }}>
+                    <FormGroup row>
+                    <label htmlFor="fechaCreacion">Fecha</label>
                             <Input
                                 type="date"
                                 id="fechaCreacion"
@@ -309,31 +308,11 @@ const InsertarManejoFertilizante: React.FC<InsertarManejoFertilizanteProps> = ({
                                 placeholder="Selecciona una fecha"
                             />
                             {errors.fechaCreacion && <FormFeedback>{errors.fechaCreacion}</FormFeedback>}
-                        </FormGroup>
-                    </div>
-                    <div style={{ flex: '1 1 45%' }}>
-                        <FormGroup>
-                            <label htmlFor="cultivoTratado">Cultivo tratado</label>
-                            <Input
-                                type="text"
-                                id="cultivoTratado"
-                                name="cultivoTratado"
-                                style={{ height: '44px'}}
-                                value={formData.cultivoTratado}
-                                onChange={handleInputChange}
-                                className={errors.cultivoTratado ? 'input-styled input-error' : 'input-styled'}
-                                placeholder="Nombre del cultivo"
-                                maxLength={50}
-                            />
-                            {errors.cultivoTratado && <FormFeedback>{errors.cultivoTratado}</FormFeedback>}
-                        </FormGroup>
-                    </div>
+                    </FormGroup>
                 </div>
-    
-                <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: '1rem', flexWrap: 'wrap' }}>
-                    <div style={{ flex: '1 1 45%', marginRight: '1rem' }}>
-                        <FormGroup>
-                            <label htmlFor="fertilizante">Tipo de fertilizante</label>
+                <div style={{ flex: 1, marginRight: '0.5rem', marginLeft: '0.5rem' }}>
+                <FormGroup row>
+                <label htmlFor="fertilizante">Tipo de fertilizante</label>
                             <Input
                                 type="select"
                                 name="fertilizante"
@@ -352,11 +331,13 @@ const InsertarManejoFertilizante: React.FC<InsertarManejoFertilizanteProps> = ({
                                 ))}
                             </Input>
                             {errors.fertilizante && <FormFeedback>{errors.fertilizante}</FormFeedback>}
-                        </FormGroup>
-                    </div>
-                    <div style={{ flex: '1 1 45%' }}>
-                        <FormGroup>
-                            <label htmlFor="Aplicacion">Tipo de aplicación</label>
+            </FormGroup>
+            
+        </div>
+
+        <div style={{ flex: 1, marginRight: '0.5rem', marginLeft: '0.5rem' }}>
+        <FormGroup row>
+        <label htmlFor="Aplicacion">Tipo de aplicación</label>
                             <Input
                                 type="select"
                                 name="Aplicacion"
@@ -375,14 +356,13 @@ const InsertarManejoFertilizante: React.FC<InsertarManejoFertilizanteProps> = ({
                                 ))}
                             </Input>
                             {errors.Aplicacion && <FormFeedback>{errors.Aplicacion}</FormFeedback>}
-                        </FormGroup>
-                    </div>
-                </div>
-    
-                <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: '1rem', flexWrap: 'wrap' }}>
-                    <div style={{ flex: '1 1 45%', marginRight: '1rem' }}>
-                        <FormGroup>
-                            <label htmlFor="dosis">Dosis</label>
+            </FormGroup>
+        </div>
+            </div>
+            <div style={{ display: 'flex', flexDirection: 'row', marginBottom: '0rem' }}>
+                <div style={{ flex: 1, marginRight: '0.5rem', marginLeft: '0.5rem' }}>
+                    <FormGroup row>
+                    <label htmlFor="dosis">Dosis</label>
                             <Input
                                 type="text"
                                 id="dosis"
@@ -393,11 +373,12 @@ const InsertarManejoFertilizante: React.FC<InsertarManejoFertilizanteProps> = ({
                                 placeholder="Cantidad de dosis"
                             />
                             {errors.dosis && <FormFeedback>{errors.dosis}</FormFeedback>}
-                        </FormGroup>
-                    </div>
-                    <div style={{ flex: '1 1 45%' }}>
-                        <FormGroup>
-                            <label htmlFor="dosisUnidad">Unidad de medida</label>
+                    </FormGroup>
+                </div>
+
+                <div style={{ flex: 1, marginRight: '0.5rem', marginLeft: '0.5rem' }}>
+            <FormGroup row>
+            <label htmlFor="dosisUnidad">Unidad de medida</label>
                             <Input
                                 type="select"
                                 id="dosisUnidad"
@@ -427,31 +408,45 @@ const InsertarManejoFertilizante: React.FC<InsertarManejoFertilizanteProps> = ({
                                 </optgroup>
                             </Input>
                             {errors.dosisUnidad && <FormFeedback>{errors.dosisUnidad}</FormFeedback>}
-                        </FormGroup>
-                    </div>
-                </div>
-    
-                <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: '1rem', flexWrap: 'wrap' }}>
-                    <div style={{ flex: '1 1 45%', marginRight: '1rem' }}>
-                        <FormGroup>
-                            <label htmlFor="accionesAdicionales">Acciones adicionales</label>
+            </FormGroup>
+        </div>
+                <div style={{ flex: 1, marginRight: '0.5rem', marginLeft: '0.5rem' }}>
+                    <FormGroup row>
+                    <label htmlFor="cultivoTratado">Cultivo tratado</label>
                             <Input
                                 type="text"
+                                id="cultivoTratado"
+                                name="cultivoTratado"
+                                style={{ height: '44px'}}
+                                value={formData.cultivoTratado}
+                                onChange={handleInputChange}
+                                className={errors.cultivoTratado ? 'input-styled input-error' : 'input-styled'}
+                                placeholder="Nombre del cultivo"
+                                maxLength={50}
+                            />
+                            {errors.cultivoTratado && <FormFeedback>{errors.cultivoTratado}</FormFeedback>}
+                    </FormGroup>
+                </div>
+
+            </div>
+                    <FormGroup row style={{marginLeft:'1%', width:'97%'}}>
+                         <label htmlFor="accionesAdicionales">Acciones adicionales</label>
+                            <Input
+                                type="textarea"
                                 id="accionesAdicionales"
                                 name="accionesAdicionales"
                                 value={formData.accionesAdicionales}
                                 onChange={handleInputChange}
                                 className="input-styled"
-                                style={{ height: '100px', resize: "none" }}
+                                style={{ height: '75px', resize: "none" }}
                                 placeholder="Acciones adicionales"
                                 maxLength={200}
                             />
                             {errors.accionesAdicionales && <FormFeedback>{errors.accionesAdicionales}</FormFeedback>}
-                        </FormGroup>
-                    </div>
-                    <div style={{ flex: '1 1 45%' }}>
-                        <FormGroup>
-                            <label htmlFor="condicionesAmbientales">Condiciones ambientales</label>
+                    </FormGroup>
+    
+            <FormGroup row style={{marginLeft:'1%', width:'97%'}}>
+            <label htmlFor="condicionesAmbientales">Condiciones ambientales</label>
                             <Input
                                 type="textarea"
                                 id="condicionesAmbientales"
@@ -459,18 +454,14 @@ const InsertarManejoFertilizante: React.FC<InsertarManejoFertilizanteProps> = ({
                                 value={formData.condicionesAmbientales}
                                 onChange={handleInputChange}
                                 className="input-styled"
-                                style={{ height: '100px', resize: "none" }}
+                                style={{ height: '75px', resize: "none"}}
                                 placeholder="Descripción de las condiciones ambientales"
                                 maxLength={200}
                             />
                             {errors.condicionesAmbientales && <FormFeedback>{errors.condicionesAmbientales}</FormFeedback>}
-                        </FormGroup>
-                    </div>
-                </div>
-    
-                <div style={{ marginBottom: '1rem' }}>
-                    <FormGroup>
-                        <label htmlFor="observaciones">Observaciones</label>
+            </FormGroup>
+            <FormGroup row style={{marginLeft:'1%', width:'97%'}}>
+            <label htmlFor="observaciones">Observaciones</label>
                         <Input
                             type="textarea"
                             id="observaciones"
@@ -478,19 +469,16 @@ const InsertarManejoFertilizante: React.FC<InsertarManejoFertilizanteProps> = ({
                             value={formData.observaciones}
                             onChange={handleInputChange}
                             className="input-styled"
-                            style={{ height: '100px', resize: "none" }}
+                            style={{ height: '75px', resize: "none" }}
                             placeholder="Observaciones"
                             maxLength={200}
                         />
                         {errors.observaciones && <FormFeedback>{errors.observaciones}</FormFeedback>}
-                    </FormGroup>
+            </FormGroup>
+            <div className='botonesN' style={{display:'flex', justifyContent:'center'}}>
+                        <Button onClick={handleSubmit} className="btn-styled" style={{width:'50%'}}><IoSave size={20} style={{marginRight: '2%'}}/>Guardar</Button>
                 </div>
-    
-                <div className='botonesN'>
-                        <Button onClick={handleSubmit} className="btn-styled"><IoSave size={20} style={{marginRight: '2%'}}/>Guardar</Button>
-                </div>
-            </div>
-        </div>
+        </div >
     );
 
 

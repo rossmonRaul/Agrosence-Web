@@ -106,9 +106,10 @@ const EditarParcela: React.FC<Props> = ({ idParcela, nombreEditar, onEdit }) => 
     };
 
     return (
-        <div> 
-            <div className="form-container-fse">
-                <FormGroup row>
+        <div id='general' style={{ display: 'flex', flexDirection: 'column', paddingBottom: '0rem', width: '100%', margin: '0' }}> 
+            <div  style={{ display: 'flex', flexDirection: 'row', width: '96.5%',justifyContent: 'center', marginLeft: '9px',marginRight: '0', gap: '0'  }}>
+            <div style={{ flex: 1 }} >
+                <FormGroup row style={{display:'flex', alignItems:'center',justifyContent:'space-between'}}>
                     <Label for="nombre" sm={2} className="input-label">Nombre: </Label>
                     <Col sm={12}>
                         <Input
@@ -120,14 +121,18 @@ const EditarParcela: React.FC<Props> = ({ idParcela, nombreEditar, onEdit }) => 
                             onChange={handleInputChange}
                             onBlur={() => handleInputBlur('nombre')} // Manejar blur para quitar el mensaje de error
                             className={errors.nombre ? 'input-styled input-error' : 'input-styled'} // Aplicar clase 'is-invalid' si hay un error
+                            style={{marginTop: '3%',width:'200%'}}
                         />
                         <FormFeedback>{errors.nombre}</FormFeedback>
                     </Col>
+                    <div className='botonesN'  style={{marginLeft:'25%', width:'25%', marginTop:'1%'}}>
+                <button onClick={handleSubmitConValidacion} className="btn-styled" ><IoSave size={20} style={{marginRight: '2%'}}/>Actualizar</button>
+            </div> 
+
                 </FormGroup>
             </div>
-            <div className='botonesN'>
-                <button onClick={handleSubmitConValidacion} className="btn-styled"><IoSave size={20} style={{marginRight: '2%'}}/>Actualizar</button>
-            </div>            
+    
+            </div>       
         </div>
     );
 }

@@ -253,11 +253,11 @@ const InsertarContenidoDeClorofila: React.FC<InsertarContenidoDeClorofilaProps> 
     return (
         <div id='general' style={{ display: 'flex', flexDirection: 'column', paddingBottom: '0rem', width: '100%', margin: '0 auto' }}>
             
-            <div style={{ display: 'flex', flexDirection: 'row', marginBottom: '0rem' }}>
+            <div style={{ display: 'flex', flexDirection: 'row', width: '97.5%',justifyContent: 'center', marginLeft: '0.8%',marginRight: '0', gap: '0' }}>
                 <div style={{ flex: 1, marginRight: '0.5rem', marginLeft: '0.5rem' }}>
                     <FormGroup>
                         <label htmlFor="fincas">Finca:</label>
-                        <select className="custom-select" id="fincas" value={selectedFinca} onChange={handleFincaChange}>
+                        <select className="custom-select" id="fincas" value={selectedFinca} onChange={handleFincaChange} style={{height:'44px'}}>
                             <option key="default-finca" value="">Seleccione...</option>
                             {filteredFincas.map((finca) => (
                                 <option key={`${finca.idFinca}-${finca.nombre || 'undefined'}`} value={finca.idFinca}>{finca.nombre || 'Undefined'}</option>
@@ -269,7 +269,7 @@ const InsertarContenidoDeClorofila: React.FC<InsertarContenidoDeClorofilaProps> 
                 <div style={{ flex: 1, marginRight: '0.5rem', marginLeft: '0.5rem' }}>
                     <FormGroup>
                         <label htmlFor="parcelas">Parcela:</label>
-                        <select className="custom-select" id="parcelas" value={selectedParcela} onChange={handleParcelaChange}>
+                        <select className="custom-select" id="parcelas" value={selectedParcela} onChange={handleParcelaChange} style={{height:'44px'}}>
                             <option key="default-parcela" value="">Seleccione...</option>
                             {parcelasFiltradas.map((parcela) => (
                                 <option key={`${parcela.idParcela}-${parcela.nombre || 'undefined'}`} value={parcela.idParcela}>{parcela.nombre || 'Undefined'}</option>
@@ -279,8 +279,8 @@ const InsertarContenidoDeClorofila: React.FC<InsertarContenidoDeClorofilaProps> 
                     </FormGroup>
                 </div>
             </div>
-            <div style={{ display: 'flex', flexDirection: 'row', marginBottom: '0rem' }}>
-                <div style={{ flex: 1, marginRight: '0.5rem', marginLeft: '0.5rem' }}>
+            <div style={{ display: 'flex', flexDirection: 'row', marginBottom: '0rem', marginLeft: '0.8%',width:'97.5%' }}>
+                <div style={{ flex: 1, marginRight: '0.5rem', marginLeft: '0.5rem', marginTop:'0.3%'}}>
                     <FormGroup row>
                         <Label for="cultivo" sm={4} className="input-label">Cultivo</Label>
                         <Col sm={8}>
@@ -317,7 +317,7 @@ const InsertarContenidoDeClorofila: React.FC<InsertarContenidoDeClorofilaProps> 
                 </div>
 
             </div>
-            <div style={{ display: 'flex', flexDirection: 'row', marginBottom: '0rem', width: '100%' }}>
+            <div style={{ display: 'flex', flexDirection: 'row', marginBottom: '0rem', width: '97.5%', marginLeft: '0.8%' }}>
                 <div style={{ flex: 2, marginRight: '0.5rem', marginLeft: '0.5rem' }}>
                     <FormGroup row>
                         <Label for="valorDeClorofila" sm={4} className="input-label">Valor de Clorofila (μmol m<sup>2</sup>)</Label>
@@ -336,10 +336,10 @@ const InsertarContenidoDeClorofila: React.FC<InsertarContenidoDeClorofilaProps> 
                         </Col>
                     </FormGroup>
                 </div>
-                <div style={{ flex: 2, marginRight: '0.5rem', marginLeft: '0.5rem' }}>
+                <div style={{ flex: 2, marginRight: '0.5rem', marginLeft: '0.5rem',marginTop:'0.4%' }}>
                     <FormGroup>
                         <label htmlFor="puntosMedicion">Punto de medición:</label>
-                        <select className="custom-select" id="puntosMedicion" value={selectedPuntoMedicion} onChange={handlePuntoMedicionChange}>
+                        <select className="custom-select" id="puntosMedicion" value={selectedPuntoMedicion} onChange={handlePuntoMedicionChange} style={{height:'44px'}}>
                             <option key="default-puntoMedicion" value="">Seleccione...</option>
                             {puntosMedicion.map((puntoMedicion) => (
                                 <option key={`${puntoMedicion.idPuntoMedicion}-${puntoMedicion.codigo || 'undefined'}`} value={puntoMedicion.idPuntoMedicion}>{puntoMedicion.codigo || 'Undefined'}</option>
@@ -371,8 +371,8 @@ const InsertarContenidoDeClorofila: React.FC<InsertarContenidoDeClorofilaProps> 
                     </FormGroup>
                 </div>
             </div>
-            <div className='botonesN'>
-                <Button onClick={handleSubmit} className="btn-styled"><IoSave size={20} style={{marginRight: '2%'}}/>Guardar</Button>
+            <div className='botonesN'  style={{display:'flex', justifyContent:'center'}}>
+                <Button onClick={handleSubmit} className="btn-styled"style={{width:'50%'}}><IoSave size={20} style={{marginRight: '2%'}}/>Guardar</Button>
             </div>
         </div >
     );

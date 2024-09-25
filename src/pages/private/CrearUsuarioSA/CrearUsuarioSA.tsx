@@ -187,7 +187,7 @@ function CrearCuentaSA() {
         title="Insertar administrador"
         onCancel={abrirCerrarModalInsertar}
       >
-        <div className='form-container'>
+        <div className='form-container'  style={{ width: '95%' }}>
           <div className='form-group'>
             <CrearCuentaAdministrador
               onAdd={handleAgregarUsuario}
@@ -203,7 +203,7 @@ function CrearCuentaSA() {
         title="Editar administrador"
         onCancel={abrirCerrarModalEditar}
       >
-        <div className='form-container'>
+        <div className='form-container' style={{ width: '95%' }}>
           <div className='form-group'>
             <EditarCuentaAdministrador
               identificacion={selectedUsuario.identificacion}

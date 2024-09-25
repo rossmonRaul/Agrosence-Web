@@ -182,7 +182,7 @@ function AdministrarEmpresas() {
                 title="Insertar empresa"
                 onCancel={abrirCerrarModalInsertar}
             >
-                <div className='form-container'>
+                <div className='form-container' style={{ width: '95%' }}>
                     <div className='form-group'>
                         <CrearEmpresa
                             onAdd={handleAgregarEmpresa}
@@ -197,7 +197,7 @@ function AdministrarEmpresas() {
                 title="Editar empresa"
                 onCancel={abrirCerrarModalEditar}
             >
-                <div className='form-container'>
+                <div className='form-container' style={{ width: '95%' }}>
                     <div className='form-group'>
                         <EditarEmpresa
                             nombrebase={selectedEmpresa.nombre}

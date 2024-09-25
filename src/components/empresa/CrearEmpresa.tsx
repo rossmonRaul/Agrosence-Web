@@ -91,9 +91,10 @@ const CrearEmpresa: React.FC<AgregarEmpresa> = ({ onAdd }) => {
 
     // Renderizado del componente
     return (
-        <div>
-            <div className="form-container-fse">
-                <FormGroup row>
+        <div id='general' style={{ display: 'flex', flexDirection: 'column', paddingBottom: '0rem', width: '100%', margin: '0' }}>
+        <div style={{ display: 'flex', flexDirection: 'row', width: '96.5%',justifyContent: 'center', marginLeft: '9px',marginRight: '0', gap: '0'  }}>
+            <div style={{ flex: 1 }}>
+                <FormGroup row style={{display:'flex', alignItems:'center',justifyContent:'space-between'}}>
                     <Label for="nombre" sm={2} className="input-label">Nombre: </Label>
                     <Col sm={12}>
                         <Input
@@ -105,15 +106,16 @@ const CrearEmpresa: React.FC<AgregarEmpresa> = ({ onAdd }) => {
                             onChange={handleInputChange}
                             onBlur={() => handleInputBlur('nombre')} // Manejar blur para quitar el mensaje de error
                             className={errors.nombre ? 'input-styled input-error' : 'input-styled'} // Aplicar clase 'is-invalid' si hay un error
-                            style={{marginTop: '5%'}}
+                            style={{marginTop: '3%',width:'170%'}}
                         />
                         <FormFeedback>{errors.nombre}</FormFeedback>
                     </Col>
                 </FormGroup>
             </div>
-            <div className='botonesN'>
+            <div className='botonesN' style={{marginLeft:'25%', width:'25%', marginTop:'1%'}}>
                 <button onClick={handleSubmitConValidacion} className="btn-styled"><IoSave size={20} style={{marginRight: '3%'}}/>Guardar</button>
             </div>
+        </div>
         </div>
     );
 }

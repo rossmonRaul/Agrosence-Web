@@ -247,7 +247,7 @@ function Cultivos() {
                 onCancel={abrirCerrarModalEditar}
             >
                 <div className='form-container'>
-                    <div className='form-group'>
+                    <div className='form-group'  style={{ width: '95%' }}>
                         <EditarCultivo
                             idFinca={selectedDatos.idFinca}
                             idParcela={selectedDatos.idParcela}
@@ -264,7 +264,7 @@ function Cultivos() {
                 title="Crear cultivo"
                 onCancel={abrirCerrarModalCrearCultivo}
             >
-                <div className='form-container'>
+                <div className='form-container'  style={{ width: '95%' }}>
                     <div className='form-group'>
                         <CrearCultivo
                             onAdd={handleAgregarCultivo}

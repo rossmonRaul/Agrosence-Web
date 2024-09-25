@@ -358,7 +358,7 @@ function AdministrarManejoFertilizantes() {
                 title="Manejo de fertilizantes"
                 onCancel={abrirCerrarModalInsertar}
             >
-                <div className='form-container'>
+                <div className='form-container'  style={{  width: '97%' }}>
                     <div className='form-group'>
                         {/* este es el componente para crear el manejo fertilizante */}
                         <InsertarManejoFertilizante
@@ -374,7 +374,7 @@ function AdministrarManejoFertilizantes() {
                 title="Detalles manejo de fertilizantes"
                 onCancel={abrirCerrarModalDetalles}
             >
-                <div className='form-container'>
+                <div className='form-container'  style={{  width: '97%' }}>
                     <div className='form-group'>
                         <DetallesManejoFertilizantes
                             idFinca={selectedDatos.idFinca}
@@ -400,7 +400,7 @@ function AdministrarManejoFertilizantes() {
                 title="Editar manejo de fertilizantes"
                 onCancel={abrirCerrarModalEditar}
             >
-                <div className='form-container'>
+                <div className='form-container'  style={{  width: '97%' }}>
                     <div className='form-group'>
                         <ModificacionManejoFertilizante
                             idFinca={parseInt(selectedDatos.idFinca)}

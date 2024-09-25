@@ -381,8 +381,8 @@ const InsertarAlertaCatalogoComponent: React.FC<InsertarAlertaCatalogoProps> = (
                         </div>
                         {errors.rolesUsuario && <FormFeedback>{errors.rolesUsuario}</FormFeedback>}
 
-                        <div className='botonesN' style={{marginTop: '1%'}}>
-                            <Button onClick={handleSubmit} className="btn-styled">
+                        <div className='botonesN' style={{marginTop: '1%',display:'flex', justifyContent:'center'}}>
+                            <Button onClick={handleSubmit} className="btn-styled" style={{width:'50%'}}>
                                 <IoSaveOutline size={20} style={{ marginRight: '1%' }} />
                                 Guardar
                             </Button>

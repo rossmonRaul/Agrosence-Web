@@ -403,13 +403,13 @@ const EditarEntradaYSalida: React.FC<EntradaYSalidaSeleccionado> = ({
     };
 
     return (
-        <div id='general' style={{ display: 'flex', flexDirection: 'column', paddingBottom: '0rem', width: '90%', margin: '0 auto', minWidth: "590px", minHeight: "490px", flexGrow: 1 }}>
+        <div id='general' style={{ display: 'flex', flexDirection: 'column', paddingBottom: '0rem', width: '100%', margin: '0 auto', minWidth: "590px", minHeight: "490px", flexGrow: 1 }}>
 
             <div>
                 {step === 1 && (
                     <div>
                         <h2 style={{ marginBottom: '7px' }}>Entrada o Salida</h2>
-                        <div className="form-container-fse" style={{ display: 'flex', flexDirection: 'row', width: '100%' }}>
+                        <div className="form-container-fse" style={{ display: 'flex', flexDirection: 'row', width: '98.5%', marginLeft:'1%' }}>
                             <div style={{ marginRight: '10px', width: '50%' }}>
                                 <FormGroup>
                                     <label htmlFor="fincas">Finca:</label>
@@ -423,7 +423,7 @@ const EditarEntradaYSalida: React.FC<EntradaYSalidaSeleccionado> = ({
                                 </FormGroup>
                             </div>
                             <div className="col-sm-4" style={{ marginRight: "10px", width: '33%' }}>
-                                <FormGroup row>
+                                <FormGroup row style={{marginTop:'1%'}}>
                                     <label htmlFor="tipos">Tipo:</label>
                                     <select className={errors.tipo ? 'input-styled input-error' : 'input-styled'} style={{ fontSize: '16px', padding: '10px', width: '100%' }} id="tipo" value={selectedTipo} onChange={handleTipoChange}>
                                         <option key="default-tipo" value="">Seleccione un tipo...</option>
@@ -456,7 +456,7 @@ const EditarEntradaYSalida: React.FC<EntradaYSalidaSeleccionado> = ({
                         <div className="row" style={{ display: "flex", flexDirection: 'row', width: '100%' }}>
 
                             <div className="col-sm-4" style={{ width: '100%' }}>
-                                <FormGroup row>
+                                <FormGroup row style={{ width: '100%' }}>
                                     <Label for="detallesCompraVenta" sm={4} className="input-label">Detalles</Label>
                                     <Col sm={8}>
                                         <Input
@@ -467,6 +467,7 @@ const EditarEntradaYSalida: React.FC<EntradaYSalidaSeleccionado> = ({
                                             onChange={handleInputChange}
                                             className={errors.detalles ? 'input-styled input-error' : 'input-styled'}
                                             placeholder="Detalles"
+                                            style={{ width: '99%' }}
                                         />
                                         <FormFeedback>{errors.detalles}</FormFeedback>
                                     </Col>
@@ -498,7 +499,7 @@ const EditarEntradaYSalida: React.FC<EntradaYSalidaSeleccionado> = ({
 
                         </div>
 
-                        <div className="row" style={{ display: "flex", flexDirection: 'row', width: '100%' }}>
+                        <div className="row" style={{ display: "flex", flexDirection: 'row', width: '99%',marginLeft:'0.5%'  }}>
 
 
                             <div className="col-sm-4" style={{ marginRight: "10px", width: '50%' }}>
@@ -540,7 +541,7 @@ const EditarEntradaYSalida: React.FC<EntradaYSalidaSeleccionado> = ({
 
 
                         </div>
-                        <div className="row" style={{ display: "flex", flexDirection: 'row', width: '100%' }}>
+                        <div className="row" style={{ display: "flex", flexDirection: 'row', width: '99%',marginLeft:'0.5%' }}>
 
                             <div className="col-sm-4" style={{ marginRight: "10px", width: '50%' }}>
                                 <FormGroup row>
@@ -590,13 +591,13 @@ const EditarEntradaYSalida: React.FC<EntradaYSalidaSeleccionado> = ({
 
                         </div>
 
-                        <div className="btn-container">
+                        <div className="btn-container" style={{ display: "flex", flexDirection: 'row', width: '97%',marginLeft:'1.5%' }}>
 
-                            <Button className="btn-styled" onClick={handleAddProducto} style={{ display: 'flex', justifyContent: 'center', marginRight: "10px" }}>
+                            <Button className="btn-styled" onClick={handleAddProducto} style={{ display: 'flex', justifyContent: 'center', marginRight: "9px" }}>
                                 <IoAddCircleOutline size={27} />
                                 <span style={{ marginLeft: '5px' }}>Agregar Producto</span>
                             </Button>
-                            <Button className="btn-styled" onClick={handleNextStep} style={{ display: 'flex', justifyContent: 'center' }}>
+                            <Button className="btn-styled" onClick={handleNextStep} style={{ display: 'flex', justifyContent: 'center' , marginLeft: "2%" }}>
                                 <span style={{ marginRight: '5px' }}>Siguiente</span>
                                 <IoArrowForward size={27} />
                             </Button>

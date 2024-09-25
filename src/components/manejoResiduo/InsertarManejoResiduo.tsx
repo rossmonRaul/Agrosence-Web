@@ -269,10 +269,10 @@ const CrearManejoResiduos: React.FC<CrearManejoResiduosProps> = ({ onAdd }) => {
             {step === 1 && (
                 <div>
                     <div className="form-container-fse" style={{ display: 'flex', flexDirection: 'row', width: '100%' }}>
-                        <div style={{ marginRight: '10px', width: '50%' }}>
+                        <div style={{ marginRight: '6px', width: '50%' }}>
                             <FormGroup>
                                 <label htmlFor="fincas">Finca:</label>
-                                <select className="custom-select input-styled" id="fincas" value={selectedFinca} onChange={handleFincaChange} style={{marginTop: '2%'}}>
+                                <select className="custom-select input-styled" id="fincas" value={selectedFinca} onChange={handleFincaChange} style={{marginTop: '2%',height: '44px',width:'99.5%'}}>
                                     <option key="default-finca" value="">Seleccione...</option>
                                     {filteredFincas.map((finca) => (
                                         <option key={`${finca.idFinca}-${finca.nombre || 'undefined'}`} value={finca.idFinca}>{finca.nombre || 'Undefined'}</option>
@@ -284,7 +284,7 @@ const CrearManejoResiduos: React.FC<CrearManejoResiduosProps> = ({ onAdd }) => {
                         <div style={{ marginRight: '0px', width: '50%' }}>
                             <FormGroup>
                                 <label htmlFor="parcelas">Parcela:</label>
-                                <select className="custom-select input-styled" id="parcelas" value={selectedParcela} onChange={handleParcelaChange} style={{marginTop: '2%'}}>
+                                <select className="custom-select input-styled" id="parcelas" value={selectedParcela} onChange={handleParcelaChange} style={{marginTop: '2%',height: '44px'}}>
                                     <option key="default-parcela" value="">Seleccione...</option>
                                     {parcelasFiltradas.map((parcela) => (
                                         
@@ -297,7 +297,7 @@ const CrearManejoResiduos: React.FC<CrearManejoResiduosProps> = ({ onAdd }) => {
                     </div>
 
                     <div className="row" style={{ display: "flex", flexDirection: 'row', width: '100%' }}>
-                        <div className="col-sm-4" style={{ marginRight: "10px", width: '50%' }}>
+                        <div className="col-sm-4" style={{ marginRight: "7px", width: '50%' }}>
                             <FormGroup row>
                                 <Label for="cantidad" sm={4} className="input-label">Cantidad (kg)</Label>
                                 <Col sm={8}>
@@ -319,7 +319,7 @@ const CrearManejoResiduos: React.FC<CrearManejoResiduosProps> = ({ onAdd }) => {
                         <div className="col-sm-4" style={{ marginRight: "0px", width: '50%' }}>
                             <FormGroup row>
                                 <label htmlFor="residuos">Residuo:</label>
-                                <select className="custom-select" id="residuo" value={selectedResiduo} onChange={handleResiduoChange} style={{marginTop: '1%'}}>
+                                <select className="custom-select" id="residuo" value={selectedResiduo} onChange={handleResiduoChange} style={{marginTop: '1%', height: '44px'}}>
                                     <option key="default-residuo" value="">Seleccione un residuo...</option>
                                     <option key="organicos" value="Organicos">Orgánicos</option>
                                     <option key="inorganicos" value="Inorganicos">Inorgánicos</option>
@@ -336,7 +336,7 @@ const CrearManejoResiduos: React.FC<CrearManejoResiduosProps> = ({ onAdd }) => {
                     </div>
 
                     <div className="row" style={{ display: "flex" }}>
-                        <div style={{ flex: 1, marginRight:'10px' }}>
+                        <div style={{ flex: 1 }}>
                             <FormGroup row>
                                 <Label for="fechaGeneracion" sm={4} className="input-label">Fecha generación</Label>
                                 <Col sm={8}>
@@ -348,13 +348,13 @@ const CrearManejoResiduos: React.FC<CrearManejoResiduosProps> = ({ onAdd }) => {
                                         onChange={handleInputChange}
                                         className={errors.fechaGeneracion ? 'input-styled input-error' : 'input-styled'}
                                         placeholder="Selecciona una fecha"
-                                        style={{marginTop: '1%'}}
+                                        style={{marginTop: '1%',width:'101%'}}
                                     />
                                     <FormFeedback>{errors.fechaGeneracion}</FormFeedback>
                                 </Col>
                             </FormGroup>
                         </div>
-                        <div style={{ flex: 1,  }}>
+                        <div style={{ flex: 1, marginLeft:'10px' }}>
                             <FormGroup row>
                                 <Label for="fechaManejo" sm={4} className="input-label">Fecha manejo</Label>
                                 <Col sm={8}>
@@ -366,15 +366,15 @@ const CrearManejoResiduos: React.FC<CrearManejoResiduosProps> = ({ onAdd }) => {
                                         onChange={handleInputChange}
                                         className={errors.fechaManejo ? 'input-styled input-error' : 'input-styled'}
                                         placeholder="Selecciona una fecha"
-                                        style={{marginTop: '1%'}}
+                                        style={{marginTop: '1%',width:'103%'}}
                                     />
                                     <FormFeedback>{errors.fechaManejo}</FormFeedback>
                                 </Col>
                             </FormGroup>
                         </div>
                     </div>
-                    <div className='botonesN'>
-                        <button onClick={handleNextStep} className="btn-styled">Siguiente<IoArrowForward size={20} style={{marginLeft: '2%'}}/></button>
+                    <div className='botonesN' style={{display:'flex', justifyContent:'end', marginLeft:'22px'}}>
+                        <button onClick={handleNextStep} className="btn-styled" style={{width:'49.5%'}}>Siguiente<IoArrowForward size={20} style={{marginLeft: '2%'}}/></button>
                     </div>
                 </div>
             )}

@@ -319,7 +319,7 @@ function RegistroSensores() {
                 title="Insertar registro sensores"
                 onCancel={abrirCerrarModalInsertar}
             >
-                <div className='form-container'>
+                <div className='form-container' style={{ width: '90%' }}>
                     <div className='form-group'>
                         {/* este es el componente para crear los sensores*/}
                         <InsertarRegistroSensores
@@ -335,7 +335,7 @@ function RegistroSensores() {
                 title="Editar registro sensores"
                 onCancel={abrirCerrarModalEditar}
             >
-                <div className='form-container'>
+                <div className='form-container' style={{ width: '90%' }}>
                     <div className='form-group'>
 
                         <ModificarSensores

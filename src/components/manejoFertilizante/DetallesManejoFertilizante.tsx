@@ -140,94 +140,140 @@ const DetallesManejoFertilizantes: React.FC<ManejoFertilizantesSeleccionado> = (
     };
 
     return (
-        <div id='general' style={{ display: 'flex', flexDirection: 'column', paddingBottom: '0rem', width: '100%', margin: '0 auto' }}>
-            <div style={{ display: 'flex', flexDirection: 'row', marginBottom: '0rem' }}>
-                <div style={{ flex: 1, marginRight: '0.5rem', marginLeft: '0.5rem' }}>
+        <div id='general' style={{ display: 'flex', flexDirection: 'column', paddingBottom: '0rem', width: '100%', margin: '0 auto' }}> 
+            <div className="form-container-fse" style={{ display: 'flex', flexDirection: 'row', marginLeft:'1%', width:'97%' }}>
+                <div style={{ marginRight: '10px', width: '50%' }}>
                     <FormGroup>
                         <label htmlFor="fincas">Finca:</label>
-                        <select className="custom-select" id="fincas" value={selectedFinca} onChange={handleFincaChange} disabled>
+                        <select className="custom-select" id="fincas" value={selectedFinca} onChange={handleFincaChange} style={{height:'44px'}} disabled>
                             {filteredFincas.map((finca) => (
                                 <option key={`${finca.idFinca}-${finca.nombre || 'undefined'}`} value={finca.idFinca}>{finca.nombre || 'Undefined'}</option>
                             ))}
                         </select>
                     </FormGroup>
                 </div>
-                <div style={{ flex: 1, marginRight: '0.5rem', marginLeft: '0.5rem' }}>
+                <div style={{ marginRight: '0px', width: '50%' }}>
                     <FormGroup>
                         <label htmlFor="parcelas">Parcela:</label>
-                        <select className="custom-select" id="parcelas" value={selectedParcela} onChange={handleParcelaChange} disabled>
-                            {filteredParcelas.map((parcela) => (
+                        <select className="custom-select" id="parcelas" value={selectedParcela} onChange={handleParcelaChange} style={{height:'44px'}} disabled>
+                        {filteredParcelas.map((parcela) => (
                                 <option key={`${parcela.idParcela}-${parcela.nombre || 'undefined'}`} value={parcela.idParcela}>{parcela.nombre || 'Undefined'}</option>
                             ))}
                         </select>
                     </FormGroup>
                 </div>
             </div>
-            <div style={{ display: 'flex', flexDirection: 'row', marginBottom: '1.5rem' }}>
+            <div style={{ display: 'flex', flexDirection: 'row', marginBottom: '0rem' }}>
                 <div style={{ flex: 1, marginRight: '0.5rem', marginLeft: '0.5rem' }}>
                     <FormGroup row>
-                        <Label for="fertilizante" sm={4} className="input-label">Fertilizante</Label>
+                        <Label for="fechaCreacion" sm={4} className="input-label">Fecha</Label>
                         <Col sm={8}>
                             <Input
                                 type="text"
-                                id="fertilizante"
-                                name="fertilizante"
-                                value={formData.fertilizante}
+                                id="fechaCreacion"
+                                name="fechaCreacion"
+                                value={formData.fechaCreacion}
                                 onChange={handleInputChange}
                                 readOnly
+                                placeholder="Selecciona una fecha"
+                                style={{height:'30px'}}
                             />
+                           
                         </Col>
                     </FormGroup>
                 </div>
                 <div style={{ flex: 1, marginRight: '0.5rem', marginLeft: '0.5rem' }}>
-                    <FormGroup row>
-                        <Label for="aplicacion" sm={4} className="input-label">Aplicación</Label>
-                        <Col sm={8}>
-                            <Input
-                                type="text"
-                                id="aplicacion"
-                                name="aplicacion"
-                                value={formData.aplicacion}
-                                onChange={handleInputChange}
-                                readOnly
-                            />
-                        </Col>
-                    </FormGroup>
-                </div>
+                <FormGroup row>
+                <Label for="fertilizante" sm={4} className="input-label">fertilizante</Label>
+                <Col sm={8}>
+                    <Input
+                         type="text"
+                         id="fertilizante"
+                         name="fertilizante"
+                         value={formData.fertilizante}
+                         onChange={handleInputChange}
+                        style={{height:'30px'}}
+                        readOnly
+                    >
+                    </Input>
+                </Col>
+            </FormGroup>
+            
+        </div>
+
+        <div style={{ flex: 1, marginRight: '0.5rem', marginLeft: '0.5rem' }}>
+        <FormGroup row>
+                <Label for="aplicacion" sm={4} className="input-label">aplicación</Label>
+                <Col sm={8}>
+                    <Input
+                       type="text"
+                       id="aplicacion"
+                       name="aplicacion"
+                       value={formData.aplicacion}
+                       onChange={handleInputChange}
+                       style={{height:'30px'}}
+                        readOnly
+                        >
+                    </Input>
+                </Col>
+            </FormGroup>
+        </div>
             </div>
-            <div style={{ display: 'flex', flexDirection: 'row', marginBottom: '0rem', width: '100%' }}>
-                <div style={{ flex: 2, marginRight: '0.5rem', marginLeft: '0.5rem' }}>
+            <div style={{ display: 'flex', flexDirection: 'row', marginBottom: '0rem' }}>
+                <div style={{ flex: 1, marginRight: '0.5rem', marginLeft: '0.5rem' }}>
                     <FormGroup row>
                         <Label for="dosis" sm={4} className="input-label">Dosis</Label>
                         <Col sm={8}>
                             <Input
-                                type="number"
+                                type="text"
                                 id="dosis"
                                 name="dosis"
                                 value={formData.dosis}
                                 onChange={handleInputChange}
                                 readOnly
+                                placeholder="Cantidad de dosis"
+                                style={{height:'30px'}}
                             />
+                          
                         </Col>
                     </FormGroup>
                 </div>
-                <div style={{ flex: 2, marginRight: '0.5rem', marginLeft: '0.5rem' }}>
-                    <FormGroup row>
-                        <Label for="dosisUnidad" sm={4} className="input-label">Unidad de Dosis</Label>
-                        <Col sm={8}>
-                            <Input
-                                type="text"
-                                id="dosisUnidad"
-                                name="dosisUnidad"
-                                value={formData.dosisUnidad}
-                                onChange={handleInputChange}
-                                readOnly
-                            />
-                        </Col>
-                    </FormGroup>
-                </div>
-            </div>
-            <div style={{ display: 'flex', flexDirection: 'row', marginBottom: '0rem' }}>
+
+                <div style={{ flex: 1, marginRight: '0.5rem', marginLeft: '0.5rem' }}>
+            <FormGroup row>
+                <Label for="dosisUnidad" sm={4} className="input-label">Unidad de medida</Label>
+                <Col sm={8}>
+                    <Input
+                        type="select"
+                        id="dosisUnidad"
+                        name="dosisUnidad"
+                        value={formData.dosisUnidad}
+                        onChange={handleInputChange}
+                        className="input-styled"
+                        style={{height:'44px'}}
+                        disabled
+                    >
+                        <optgroup label="Peso">
+                            <option value="Kilogramos (kg)">Kilogramos (kg)</option>
+                            <option value="Gramos (g)">Gramos (g)</option>
+                            <option value="Toneladas (t)">Toneladas (t)</option>
+                        </optgroup>
+                        <optgroup label="Volumen">
+                            <option value="Litros (L)">Litros (L)</option>
+                            <option value="Mililitros (mL)">Mililitros (mL)</option>
+                        </optgroup>
+                        <optgroup label="Concentración">
+                            <option value="Partes por millón (ppm)">Partes por millón (ppm)</option>
+                            <option value="Porcentaje (%)">Porcentaje (%)</option>
+                        </optgroup>
+                        <optgroup label="Otros">
+                            <option value="Unidades internacionales (UI)">Unidades internacionales (UI)</option>
+                            <option value="Equivalentes (eq)">Equivalentes (eq)</option>
+                        </optgroup>
+                    </Input>
+                </Col>
+            </FormGroup>
+        </div>
                 <div style={{ flex: 1, marginRight: '0.5rem', marginLeft: '0.5rem' }}>
                     <FormGroup row>
                         <Label for="cultivoTratado" sm={4} className="input-label">Cultivo Tratado</Label>
@@ -238,33 +284,18 @@ const DetallesManejoFertilizantes: React.FC<ManejoFertilizantesSeleccionado> = (
                                 name="cultivoTratado"
                                 value={formData.cultivoTratado}
                                 onChange={handleInputChange}
+                                placeholder="Nombre del cultivo"
+                                maxLength={50}
                                 readOnly
+                                style={{height:'30px'}}
                             />
                         </Col>
                     </FormGroup>
                 </div>
+
             </div>
-            <div style={{ display: 'flex', flexDirection: 'row', marginBottom: '0rem' }}>
-                <div style={{ flex: 1, marginRight: '0.5rem', marginLeft: '0.5rem' }}>
-                    <FormGroup row>
-                        <Label for="condicionesAmbientales" sm={4} className="input-label">Condiciones Ambientales</Label>
-                        <Col sm={8}>
-                            <Input
-                                type="text"
-                                id="condicionesAmbientales"
-                                name="condicionesAmbientales"
-                                value={formData.condicionesAmbientales}
-                                onChange={handleInputChange}
-                                readOnly
-                            />
-                        </Col>
-                    </FormGroup>
-                </div>
-            </div>
-            <div style={{ display: 'flex', flexDirection: 'row', marginBottom: '0rem' }}>
-                <div style={{ flex: 1, marginRight: '0.5rem', marginLeft: '0.5rem' }}>
-                    <FormGroup row>
-                        <Label for="accionesAdicionales" sm={4} className="input-label">Acciones Adicionales</Label>
+            <FormGroup row style={{marginLeft:'1%', width:'97%'}}>
+                        <Label for="accionesAdicionales" sm={2} className="input-label">Acciones Adicionales</Label>
                         <Col sm={8}>
                             <Input
                                 type="text"
@@ -272,30 +303,50 @@ const DetallesManejoFertilizantes: React.FC<ManejoFertilizantesSeleccionado> = (
                                 name="accionesAdicionales"
                                 value={formData.accionesAdicionales}
                                 onChange={handleInputChange}
+                                className="input-styled"
+                                placeholder="Acciones adicionales"
+                                style={{ height: '75px', resize: "none" }}
+                                maxLength={200}
                                 readOnly
+                                
                             />
                         </Col>
                     </FormGroup>
-                </div>
-            </div>
-            <div style={{ display: 'flex', flexDirection: 'row', marginBottom: '0rem' }}>
-                <div style={{ flex: 1, marginRight: '0.5rem', marginLeft: '0.5rem' }}>
-                    <FormGroup row>
-                        <Label for="observaciones" sm={4} className="input-label">Observaciones</Label>
-                        <Col sm={8}>
-                            <Input
-                                type="text"
-                                id="observaciones"
-                                name="observaciones"
-                                value={formData.observaciones}
-                                onChange={handleInputChange}
-                                readOnly
-                            />
-                        </Col>
-                    </FormGroup>
-                </div>
-            </div>
-        </div>
+            <FormGroup row style={{marginLeft:'1%', width:'97%'}}>
+                <Label for="condicionesAmbientales" sm={2} className="input-label">Condiciones Ambientales</Label>
+                <Col sm={10}>
+                    <Input
+                        type="textarea"
+                        id="condicionesAmbientales"
+                        name="condicionesAmbientales"
+                        value={formData.condicionesAmbientales}
+                        onChange={handleInputChange}
+                        className="input-styled"
+                        style={{ height: '75px', resize: "none" }}
+                        placeholder="Descripción de las condiciones ambientales"
+                        maxLength={200}
+                        readOnly
+                    />
+                </Col>
+            </FormGroup>
+            <FormGroup row style={{marginLeft:'1%', width:'97%'}}>
+                <Label for="observaciones" sm={2} className="input-label">Observaciones</Label>
+                <Col sm={10}>
+                    <Input
+                        type="textarea"
+                        id="observaciones"
+                        name="observaciones"
+                        value={formData.observaciones}
+                        onChange={handleInputChange}
+                        className="input-styled"
+                        style={{ height: '75px', resize: "none" }}
+                        placeholder="Observaciones"
+                        maxLength={200}
+                        readOnly
+                    />
+                </Col>
+            </FormGroup>
+        </div >
     );
 };
 

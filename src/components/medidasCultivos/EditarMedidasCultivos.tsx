@@ -110,10 +110,11 @@ const EditarMedidasCultivos: React.FC<Props> = ({ idMedidasCultivo, medida, onEd
     };
 
     return (
-        <div>
-            <div className="form-container-fse">
-                <FormGroup row>
-                    <Label for="nombre" sm={2} className="input-label">Medida de cultivo: </Label>
+        <div id='general' style={{ display: 'flex', flexDirection: 'column', paddingBottom: '0rem', width: '100%', margin: '0' }}>
+        <div style={{ display: 'flex', flexDirection: 'row', width: '96.5%',justifyContent: 'center', marginLeft: '9px',marginRight: '0', gap: '0'  }}>
+            <div style={{ flex: 1 }}>
+                <FormGroup row style={{display:'flex', alignItems:'center',justifyContent:'space-between'}}>
+                    <Label for="nombre" sm={2} className="input-label">Nombre: </Label>
                     <Col sm={12}>
                         <Input
                             type="text"
@@ -124,15 +125,16 @@ const EditarMedidasCultivos: React.FC<Props> = ({ idMedidasCultivo, medida, onEd
                             onChange={handleInputChange}
                             onBlur={() => handleInputBlur('medida')} // Manejar blur para quitar el mensaje de error
                             className={errors.medida ? 'input-styled input-error' : 'input-styled'} // Aplicar clase 'is-invalid' si hay un error
-                            style={{marginTop: '3%'}}
+                            style={{marginTop: '3%',width:'170%'}}
                         />
                         <FormFeedback>{errors.medida}</FormFeedback>
                     </Col>
                 </FormGroup>
             </div>
-            <div className='botonesN'>
+            <div className='botonesN' style={{marginLeft:'25%', width:'25%', marginTop:'1%'}}>
                 <button onClick={handleSubmitConValidacion} className="btn-styled"><IoSave size={20} style={{marginRight: '2%'}}/>Actualizar</button>
             </div>
+        </div>
         </div>
     );
 }

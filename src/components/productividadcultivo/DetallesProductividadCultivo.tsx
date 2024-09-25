@@ -339,7 +339,7 @@ const DetallesCalidadCultivo: React.FC<Props> = ({
             <div style={{ flex: 1, marginRight: '0.5rem', marginLeft: '0.5rem' }}>
             <FormGroup>
                     <label htmlFor="fincas">Finca:</label>
-                    <select className="custom-select" id="fincas" value={selectedFinca} onChange={handleFincaChange} disabled>
+                    <select className="custom-select" id="fincas" value={selectedFinca} onChange={handleFincaChange} disabled style={{height:'44px'}}>
                         <option key="default-finca" value="">Seleccione...</option>
                         {filteredFincas.map((finca) => (
                             <option key={`${finca.idFinca}-${finca.nombre || 'undefined'}`} value={finca.idFinca}>{finca.nombre || 'Undefined'}</option>
@@ -351,7 +351,7 @@ const DetallesCalidadCultivo: React.FC<Props> = ({
                 <div style={{ flex: 1, marginRight: '0.5rem', marginLeft: '0.5rem' }}>
                 <FormGroup>
                     <label htmlFor="parcelas">Parcela:</label>
-                    <select className="custom-select" id="parcelas" value={selectedParcela} onChange={handleParcelaChange} disabled>
+                    <select className="custom-select" id="parcelas" value={selectedParcela} onChange={handleParcelaChange} disabled style={{height:'44px'}}>
                         <option key="default-parcela" value="">Seleccione...</option>
                         {filteredParcelas.map((parcela) => (
                             <option key={`${parcela.idParcela}-${parcela.nombre || 'undefined'}`} value={parcela.idParcela}>{parcela.nombre || 'Undefined'}</option>
@@ -365,7 +365,7 @@ const DetallesCalidadCultivo: React.FC<Props> = ({
             <div style={{ flex: 1, marginRight: '0.5rem', marginLeft: '0.5rem' }}>
             <FormGroup>
                     <label htmlFor="temporadas">Temporada:</label>
-                    <select className="custom-select" id="temporadas" value={selectedTemporada} onChange={handleTemporadaChange} disabled>
+                    <select className="custom-select" id="temporadas" value={selectedTemporada} onChange={handleTemporadaChange} disabled style={{height:'44px'}}>
                         <option key="default-temporada" value="">Seleccione...</option>
                         {temporadas.map((temporada) => (
                             <option key={`${temporada.nombre}}-${temporada.nombre || 'undefined'}`} value={temporada.nombre}>{temporada.nombre || 'Undefined'}</option>
@@ -419,7 +419,7 @@ const DetallesCalidadCultivo: React.FC<Props> = ({
                 <div style={{ flex: 1, marginRight: '0.5rem', marginLeft: '0.5rem' }}>
                 <FormGroup>
                     <label htmlFor="unidadArea">Unidad de Área:</label>
-                    <select className="custom-select" id="unidadArea" value={selectedMedidaArea} onChange={handleMedidaAreaChange} disabled>
+                    <select className="custom-select" id="unidadArea" value={selectedMedidaArea} onChange={handleMedidaAreaChange} disabled style={{height:'44px'}}>
                         <option key="default-objArea" value="">Seleccione...</option>
                         {medidaArea.map((objArea) => (
                             <option key={`${objArea.idMedidaArea}}-${objArea.medidaArea || 'undefined'}`} value={objArea.idMedidaArea}>{objArea.medidaArea || 'Undefined'}</option>
@@ -452,7 +452,7 @@ const DetallesCalidadCultivo: React.FC<Props> = ({
                     <div style={{ flex: 1, marginRight: '0.5rem', marginLeft: '0.5rem' }}>
                     <FormGroup>
                     <label htmlFor="medidaProduccion">Medida Producción:</label>
-                    <select className="custom-select" id="medidaProduccion" value={selectedMedidasCultivos} onChange={handleMedidasCultivosChange} disabled>
+                    <select className="custom-select" id="medidaProduccion" value={selectedMedidasCultivos} onChange={handleMedidasCultivosChange} disabled style={{height:'44px'}}>
                         <option key="default-medidaCultivo" value="">Seleccione...</option>
                         {medidasCultivos.map((medidaCultivo) => (
                             <option key={`${medidaCultivo.idMedidasCultivos}-${medidaCultivo.medida || 'undefined'}`} value={medidaCultivo.idMedidasCultivos}>{medidaCultivo.medida || 'Undefined'}</option>

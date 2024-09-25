@@ -338,10 +338,10 @@ const ModificacionContenidoDeAgua: React.FC<ContenidoDeAguaSeleccionado> = ({
         <div id='general' style={{ display: 'flex', flexDirection: 'column', paddingBottom: '0rem', width: '100%', margin: '0 auto' }}>
          <div>
             <div className="form-container-fse" style={{ display: 'flex', flexDirection: 'column', width: '95%', marginLeft: '0.5rem' }}>
-               <div style={{ flex: 1, marginRight: '0.5rem', marginLeft: '0.5rem' }}>
-                    <FormGroup>
+               <div className="form-container-fse" style={{ display: 'flex', flexDirection: 'row', width: '100%',justifyContent: 'center',marginRight: '0', gap: '0' }}>
+                    <FormGroup style={{ width: '65%',padding: '0px',flexGrow: '1', maxWidth:' 100%', marginLeft:'0.6%'}}>
                         <label htmlFor="fincas">Finca:</label>
-                        <select className="custom-select" id="fincas" value={selectedFinca} onChange={handleFincaChange}>
+                        <select className="custom-select" id="fincas" value={selectedFinca} onChange={handleFincaChange} style={{marginTop: '1%', height: '55%'}}>
                             <option key="default-finca" value="">Seleccione...</option>
                             {filteredFincas.map((finca) => (
                                 <option key={`${finca.idFinca}-${finca.nombre || 'undefined'}`} value={finca.idFinca}>{finca.nombre || 'Undefined'}</option>
@@ -349,11 +349,9 @@ const ModificacionContenidoDeAgua: React.FC<ContenidoDeAguaSeleccionado> = ({
                         </select>
                         {errors.finca && <FormFeedback>{errors.finca}</FormFeedback>}
                     </FormGroup>
-                </div>
-                <div style={{ flex: 1, marginRight: '0.5rem', marginLeft: '0.5rem' }}>
-                    <FormGroup>
+                    <FormGroup style={{ marginLeft:'2%',width: '65%',padding: '0px',flexGrow: '1', maxWidth:' 100%'}}>
                         <label htmlFor="parcelas">Parcela:</label>
-                        <select className="custom-select" id="parcelas" value={selectedParcela} onChange={handleParcelaChange}>
+                        <select className="custom-select" id="parcelas" value={selectedParcela} onChange={handleParcelaChange} style={{marginTop: '1%', height: '55%'}}>
                             <option key="default-parcela" value="">Seleccione...</option>
                             {filteredParcelas.map((parcela) => (
                                 <option key={`${parcela.idParcela}-${parcela.nombre || 'undefined'}`} value={parcela.idParcela}>{parcela.nombre || 'Undefined'}</option>
@@ -364,11 +362,11 @@ const ModificacionContenidoDeAgua: React.FC<ContenidoDeAguaSeleccionado> = ({
                     </div>
             </div>
                 
-            <div style={{ display: 'flex', flexDirection: 'row', marginBottom: '0rem' }}>
-                <div style={{ flex: 1, marginRight: '0.5rem', marginLeft: '0.5rem' }}>
+            <div style={{ display: 'flex', flexDirection: 'row', marginBottom: '0rem', width:'100%'  }}>
+                <div style={{  marginLeft: '0.5rem' ,width:'50%' }}>
                 <FormGroup row>
                          <label htmlFor="puntosMedicion">Punto de medición:</label>
-                          <select className="custom-select" id="puntosMedicion" value={selectedPuntoMedicion} onChange={handlePuntoMedicionChange}>
+                          <select className="custom-select" id="puntosMedicion" value={selectedPuntoMedicion} onChange={handlePuntoMedicionChange}style={{height:'44px'}}>
                             <option key="default-puntoMedicion" value="">Seleccione...</option>
                             {puntosMedicion.map((puntoMedicion) => (
                                 <option key={`${puntoMedicion.idPuntoMedicion}-${puntoMedicion.codigo || 'undefined'}`} value={puntoMedicion.idPuntoMedicion}>{puntoMedicion.codigo || 'Undefined'}</option>
@@ -378,7 +376,7 @@ const ModificacionContenidoDeAgua: React.FC<ContenidoDeAguaSeleccionado> = ({
                           </FormGroup>
                 </div>
 
-                <div style={{ flex: 1, marginRight: '0.5rem', marginLeft: '0.5rem' }}>
+                <div style={{ marginRight: '1.2rem',width:'50%' }}>
                 <FormGroup row>
                <Label for="fechaMuestreo" sm={4} className="input-label">Fecha Muestreo:</Label>
                                    <Col sm={4}>
@@ -398,8 +396,8 @@ const ModificacionContenidoDeAgua: React.FC<ContenidoDeAguaSeleccionado> = ({
                 </div>
             </div>
 
-            <div style={{ display: 'flex', flexDirection: 'row', marginBottom: '0rem' }}>
-                <div style={{ flex: 1, marginRight: '0.5rem', marginLeft: '0.5rem' }}>
+            <div style={{ display: 'flex', flexDirection: 'row', marginBottom: '0rem', width:'100%'  }}>
+                <div style={{ marginLeft: '0.5rem' ,width:'50%'}}>
                 <FormGroup row>
                         <Label for="contenidoDeAguaEnSuelo" sm={4} className="input-label">Contenido de Agua en el Suelo:</Label>
                         <Col sm={8}>
@@ -418,7 +416,7 @@ const ModificacionContenidoDeAgua: React.FC<ContenidoDeAguaSeleccionado> = ({
                     </FormGroup>
                 </div>
 
-                <div style={{ flex: 1, marginRight: '0.5rem', marginLeft: '0.5rem' }}>
+                <div style={{ marginRight: '1.2rem',width:'50%'  }}>
                 <FormGroup row>
                         <Label for="contenidoDeAguaEnPlanta" sm={4} className="input-label">Contenido De Agua en la Planta:</Label>
                         <Col sm={8}>
@@ -437,8 +435,8 @@ const ModificacionContenidoDeAgua: React.FC<ContenidoDeAguaSeleccionado> = ({
                     </FormGroup>
                 </div>
             </div>
-            <div style={{ display: 'flex', flexDirection: 'row', marginBottom: '0rem' }}>
-                <div style={{ flex: 1, marginRight: '0.5rem', marginLeft: '0.5rem' }}>
+            <div style={{ display: 'flex', flexDirection: 'row', marginBottom: '0rem', width:'100%' }}>
+                <div style={{ marginLeft: '0.5rem' ,width:'50%' }}>
                     <FormGroup row>
                     <Label for="metodoDeMedicion" sm={4} className="input-label">Metodo de Medicion:</Label>
                 <Col sm={8}>
@@ -457,11 +455,10 @@ const ModificacionContenidoDeAgua: React.FC<ContenidoDeAguaSeleccionado> = ({
                     </FormGroup>
                 </div>
 
-                <div style={{ flex: 1, marginRight: '0.5rem', marginLeft: '0.5rem' }}>
-                     <div style={{ flex: 1, marginRight: '0px' }}>
+                <div style={{ marginRight: '1.2rem',width:'50%' }}>
                             <FormGroup row>
                             <label htmlFor="condicionSuelo">Condicion del Suelo:</label>
-                            <select className="custom-select" id="condicionSuelo" value={selectedcondicionSuelo} onChange={handlecondicionSueloChange}>
+                            <select className="custom-select" id="condicionSuelo" value={selectedcondicionSuelo} onChange={handlecondicionSueloChange} style={{height:'44px'}}>
                                 <option key="compacto" value="Compacto">Compacto</option>
                                 <option key="suelto" value="Suelto">Suelto</option>
                                 <option key="erosionado" value="Erosionado">Erosionado</option>
@@ -470,13 +467,13 @@ const ModificacionContenidoDeAgua: React.FC<ContenidoDeAguaSeleccionado> = ({
                                 </select>
 
                             </FormGroup>
-                        </div>
+
                 </div>
             </div>
           </div>
 
-            <div className='botonesN'>
-                <Button onClick={handleSubmitConValidacion} className="btn-styled"><IoSave size={20} style={{marginRight: '1%'}}/>Actualizar datos</Button>
+            <div className='botonesN' style={{display:'flex', justifyContent:'center'}}>
+                <Button onClick={handleSubmitConValidacion} className="btn-styled" style={{width:'50%'}}><IoSave size={20} style={{marginRight: '1%'}}/>Actualizar datos</Button>
             </div>
         </div>
 

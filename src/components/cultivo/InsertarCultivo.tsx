@@ -186,11 +186,11 @@ const CrearCultivo: React.FC<CrearCultivoProps> = ({ onAdd }) => {
 
     return (
         <div id='general' style={{ display: 'flex', flexDirection: 'column', paddingBottom: '0rem', width: '100%', margin: '0 auto' }}>            
-            <div style={{ display: 'flex', flexDirection: 'row', marginBottom: '0rem' }}>
+            <div style={{ display: 'flex', flexDirection: 'row', marginBottom: '0rem', marginLeft:'0.6%',width:'97.6%' }}>
                 <div style={{ flex: 1, marginRight: '0.5rem', marginLeft: '0.5rem' }}>
                     <FormGroup>
                         <label htmlFor="fincas">Finca:</label>
-                        <select className="custom-select" id="fincas" value={selectedFinca} onChange={handleFincaChange}>
+                        <select className="custom-select" id="fincas" value={selectedFinca} onChange={handleFincaChange} style={{height:'44px'}}>
                             <option key="default-finca" value="">Seleccione...</option>
                             {filteredFincas.map((finca) => (
                                 <option key={`${finca.idFinca}-${finca.nombre || 'undefined'}`} value={finca.idFinca}>{finca.nombre || 'Undefined'}</option>
@@ -202,7 +202,7 @@ const CrearCultivo: React.FC<CrearCultivoProps> = ({ onAdd }) => {
                 <div style={{ flex: 1, marginRight: '0.5rem', marginLeft: '0.5rem' }}>
                     <FormGroup>
                         <label htmlFor="parcelas">Parcela:</label>
-                        <select className="custom-select" id="parcelas" value={selectedParcela} onChange={handleParcelaChange}>
+                        <select className="custom-select" id="parcelas" value={selectedParcela} onChange={handleParcelaChange} style={{height:'44px'}}>
                             <option key="default-parcela" value="">Seleccione...</option>
                             {parcelasFiltradas.map((parcela) => (
                                 <option key={`${parcela.idParcela}-${parcela.nombre || 'undefined'}`} value={parcela.idParcela}>{parcela.nombre || 'Undefined'}</option>
@@ -215,7 +215,7 @@ const CrearCultivo: React.FC<CrearCultivoProps> = ({ onAdd }) => {
             <div style={{ display: 'flex', flexDirection: 'row', marginBottom: '0rem' }}>
                 <div style={{ flex: 1, marginRight: '0.5rem', marginLeft: '0.5rem' }}>
                     <FormGroup row>
-                        <Label for="cultivo" sm={4} className="input-label">Cultivo</Label>
+                        <Label for="cultivo" sm={4} className="input-label">Nombre</Label>
                         <Col sm={8}>
                             <Input
                                 type="text"
@@ -232,12 +232,10 @@ const CrearCultivo: React.FC<CrearCultivoProps> = ({ onAdd }) => {
                     </FormGroup>
                 </div>
             </div>
-            <div className='botonesN'>
-                <FormGroup row>
-                    <Col sm={{ size: 10, offset: 2 }}>
-                        <Button onClick={handleSubmit} className="btn-styled"><IoSave size={20} style={{marginRight: '1%'}}/>Guardar</Button>
-                    </Col>
-                </FormGroup>
+            <div className='botonesN' style={{display:'flex', justifyContent:'center'}}>
+                
+                        <Button onClick={handleSubmit} className="btn-styled" style={{width:'50%'}}><IoSave size={20} style={{marginRight: '1%'}}/>Guardar</Button>
+
             </div>            
         </div >
     );

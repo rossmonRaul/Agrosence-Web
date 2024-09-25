@@ -15,6 +15,7 @@ import { ObtenerUsuariosAsignadosPorIdentificacion } from "../../../servicios/Se
 import { useSelector } from "react-redux";
 import { AppStore } from "../../../redux/Store";
 import '../../../css/FormSeleccionEmpresa.css';
+import { IoAddCircleOutline } from "react-icons/io5";
 
 interface AlertaCatalogoSeleccionado {
     idAlerta: number;
@@ -277,33 +278,30 @@ function AdministrarAlertasCatalogo() {
             <div className="main-container">
     <Topbar />
     <BordeSuperior text="Catálogo de Alertas" />
-    <div className="content col-md-12">
+    <div className="content" >
         
         
-        <div style={{ display: 'flex', justifyContent: 'space-between', gap: '5px', marginBottom: '1rem' }}>
-            <div className="filtro-container" style={{ flex: 1 }}>
-                <div>
+        {/* <div style={{ display: 'flex', justifyContent: 'space-between', gap: '5px', marginBottom: '1rem' }}> */}
+            <div className="filtro-container" style={{ display: 'flex', flexWrap: 'wrap', alignItems: 'center' }}>
+                <div  className="filtro-item" style={{ width: '300px', marginTop: '5px' }}>
                     <label>Finca:</label>
-                </div>
-                <select value={selectedFinca || ''} onChange={handleFincaChange} className="custom-select" style={{ width: '240px' }}>
+                    <select value={selectedFinca || ''} onChange={handleFincaChange} className="custom-select" style={{ height: '45px', fontSize: '16px', padding: '10px', minWidth: '200px', marginTop: '0px' }}>
                     <option value="">Seleccione la finca...</option>
                     {fincas.map((finca: any) => (
                         <option key={finca.idFinca} value={finca.idFinca}>{finca.nombre}</option>
                     ))}
                 </select>
-            </div>
-            <div className="filtro-container" style={{ flex: 1,  }}>
-                <div>
-                    <label>Parcela:</label>
                 </div>
-                <select value={selectedParcela ? selectedParcela : ''} onChange={handleParcelaChange} className="custom-select" style={{ width: '240px', left: ''}}>
+            <div className="filtro-item" style={{ width: '300px', marginTop: '5px' }}>
+                <label>Parcela:</label>
+                <select value={selectedParcela ? selectedParcela : ''} onChange={handleParcelaChange} className="custom-select" style={{ height: '45px', fontSize: '16px', padding: '10px', minWidth: '200px', marginTop: '0px' }}>
                     <option value="">Seleccione la parcela...</option>
                     {parcelasFiltradas.map((parcela: any) => (
                         <option key={parcela.idParcela} value={parcela.idParcela}>{parcela.nombre}</option>
                     ))}
                 </select>
             </div>
-            <div className="filtro-container" style={{ flex: 2, marginTop: '14px'}}>
+            <div className="filtro-item" style={{ marginBottom: '15px' }}>
                 <label htmlFor="filtroNombreAlerta" style={{marginBottom: '10px'}}>Filtrar por nombre de alerta:</label>
                 <input
                     type="text"
@@ -312,27 +310,21 @@ function AdministrarAlertasCatalogo() {
                     onChange={handleChangeFiltro}
                     placeholder="Ingrese el nombre de la alerta"
                     className="form-control"
-                    style={{ height: '20px', width: '215px', right: '10px'}}
+                    style={{ fontSize: '16px', padding: '10px', minWidth: '280px', marginTop: '0px' }}
                 />
             </div>
-            <div className="filtro-container" style={{ flex: 1, }}>
+            <div style={{marginLeft:'auto'}}>
             <button 
                 onClick={() => abrirCerrarModalInsertar()} 
-                className="btn-crear" 
-                style={{ 
-                    width: '230px', 
-                    marginTop: '20px', 
-                    display: 'flex', 
-                    alignItems: 'center', 
-                    justifyContent: 'center' ,
-                    backgroundColor: '#548454', color: 'white', borderColor: '#548454'
-                }}
+                className="btn-crear-style"
+                style={{ marginLeft: 'auto', display: 'flex', justifyContent: 'center', alignItems: 'center', marginTop: '10px',backgroundColor: '#548454', color: 'white', borderColor: '#548454' }}
             >
-                <AiOutlinePlusCircle  style={{ marginRight: '8px' }} />
-                Ingresar nueva alerta
+                <IoAddCircleOutline size={27} />
+                <span style={{ marginLeft: '5px' }}>Ingresar nueva alerta</span>
             </button>
             </div>
-        </div>
+            </div>
+        {/* </div> */}
         
         <TableResponsive 
             columns={columns} 
@@ -351,7 +343,7 @@ function AdministrarAlertasCatalogo() {
                 title="Ingresar nueva alerta"
                 onCancel={abrirCerrarModalInsertar}
             >
-                <div className='form-container' style={{ width: '600px', height: '400px' }}>
+                <div className='form-container' style={{ width: '90%'}}>
                     <div className='form-group'>
                         <InsertarAlertaCatalogoComponent onAdd={handleAgregarAlertaCatalogo} />
                     </div>
@@ -366,7 +358,7 @@ function AdministrarAlertasCatalogo() {
                 title="Editar alerta del catálogo"
                 onCancel={abrirCerrarModalEditar}
             >
-                <div className='form-container' style={{ width: '600px' }}>
+                <div className='form-container' style={{ width: '90%'}}>
                     <div className='form-group'>
                         <ModificacionAlertaCatalogoComponent
                             idAlerta={selectedDatos.idAlerta}
@@ -390,7 +382,7 @@ function AdministrarAlertasCatalogo() {
                 title="Detalles de la alerta del catálogo"
                 onCancel={abrirCerrarModalDetalles}
             >
-                <div className='form-container' style={{ width: '600px' }}>
+                <div className='form-container' style={{ width: '90%'}}>
                     <div className='form-group'>
                         <ModificacionAlertaCatalogoComponent
                             idAlerta={selectedDatos.idAlerta}

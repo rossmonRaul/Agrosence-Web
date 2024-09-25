@@ -431,7 +431,7 @@ const CrearOrdenCompra: React.FC<CrearOrdenCompraProps> = ({ onAdd }) => {
 
 
     return (
-        <div id='general' style={{ display: 'flex', flexDirection: 'column', paddingBottom: '0rem', width: '90%', minWidth: "560px", minHeight: "390px" }}>
+        <div id='general' style={{ display: 'flex', flexDirection: 'column', paddingBottom: '0rem', width: '100%', minWidth: "560px", minHeight: "390px" }}>
             {step === 1 && (
                 <div>
                     <h2>Orden de Compra</h2>
@@ -505,7 +505,7 @@ const CrearOrdenCompra: React.FC<CrearOrdenCompraProps> = ({ onAdd }) => {
 
                     </div>
 
-                    <div className="row" style={{ display: "flex" }}>
+                    <div className="row" style={{ display: "flex", width:'100%' }}>
                         <div style={{ flex: 1, marginRight: '10px' }}>
                             <FormGroup row>
                                 <Label for="FechaOrden" sm={4} className="input-label">Fecha Orden</Label>
@@ -543,7 +543,7 @@ const CrearOrdenCompra: React.FC<CrearOrdenCompraProps> = ({ onAdd }) => {
 
                     </div>
                     <div className="col-sm-4">
-                        <FormGroup row>
+                        <FormGroup row style={{ width:'100%' }}>
                             <Label for="Observaciones" sm={4} className="input-label">Observaciones</Label>
                             <Col sm={8}>
                                 <Input
@@ -561,10 +561,12 @@ const CrearOrdenCompra: React.FC<CrearOrdenCompraProps> = ({ onAdd }) => {
                             </Col>
                         </FormGroup>
                     </div>
-                    <Button className="btn-styled" onClick={handleValidateFirstStep} style={{ display: 'flex', justifyContent: 'center' }}>
+                    <div style={{display:'flex', justifyContent:'end'}}>
+                    <Button className="btn-styled" onClick={handleValidateFirstStep} style={{ display: 'flex', justifyContent: 'center',width:'48%' }}>
                         <span style={{ marginRight: '5px' }}>Siguiente</span>
                         <IoArrowForward size={27} />
                     </Button>
+                    </div>
                 </div>
             )}
             {step === 2 && (

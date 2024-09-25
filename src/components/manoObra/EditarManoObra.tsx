@@ -342,7 +342,7 @@ const EditarManoObra: React.FC<ManoObraSeleccionado> = ({
                 </div>
 
                 <div className="row" style={{ display: "flex", flexDirection: 'row', width: '100%' }}>
-                    <div style={{ marginRight: "10px", flex: 1 }}>
+                    <div style={{ marginRight: "10px", width: '50%'}}>
                         <FormGroup row>
                             <Label for="fecha" sm={4} className="input-label">Fecha</Label>
                             <Col sm={8}>
@@ -422,9 +422,11 @@ const EditarManoObra: React.FC<ManoObraSeleccionado> = ({
 
 
                 </div>
-                <div className='botonesN'>
-                    <Button onClick={handleSubmitConValidacion} className="btn-styled"><IoSave size={20} style={{marginRight: '2%'}}/>Actualizar datos</Button>
+                
+                <div className='botonesN'  style={{display:'flex', justifyContent:'center'}}>
+                    <Button onClick={handleSubmitConValidacion} className="btn-styled"  style={{width:'50%'}}><IoSave size={20} style={{marginRight: '2%'}}/>Actualizar datos</Button>
                 </div>
+
             </div>
 
 

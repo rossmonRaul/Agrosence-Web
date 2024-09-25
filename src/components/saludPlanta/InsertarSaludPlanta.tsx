@@ -418,7 +418,7 @@ const CrearSaludDeLaPlanta: React.FC<CrearSaludDeLaPlantaProps> = ({ onAdd }) =>
                         <div style={{ marginRight: '10px', width: '50%' }}>
                             <FormGroup>
                                 <label htmlFor="fincas">Finca:</label>
-                                <select className="custom-select input-styled" id="fincas" value={selectedFinca} onChange={handleFincaChange}>
+                                <select className="custom-select input-styled" id="fincas" value={selectedFinca} onChange={handleFincaChange} style={{ height: '44px'}}>
                                     <option key="default-finca" value="">Seleccione...</option>
                                     {filteredFincas.map((finca) => (
                                         <option key={`${finca.idFinca}-${finca.nombre || 'undefined'}`} value={finca.idFinca}>{finca.nombre || 'Undefined'}</option>
@@ -430,7 +430,7 @@ const CrearSaludDeLaPlanta: React.FC<CrearSaludDeLaPlantaProps> = ({ onAdd }) =>
                         <div style={{ marginRight: '0px', width: '50%' }}>
                             <FormGroup>
                                 <label htmlFor="parcelas">Parcela:</label>
-                                <select className="custom-select input-styled" id="parcelas" value={selectedParcela} onChange={handleParcelaChange}>
+                                <select className="custom-select input-styled" id="parcelas" value={selectedParcela} onChange={handleParcelaChange} style={{ height: '44px'}}>
                                     <option key="default-parcela" value="">Seleccione...</option>
                                     {parcelasFiltradas.map((parcela) => (
 
@@ -442,7 +442,7 @@ const CrearSaludDeLaPlanta: React.FC<CrearSaludDeLaPlantaProps> = ({ onAdd }) =>
                         </div>
                     </div>
 
-                    <div className="row" style={{ display: "flex" }}>
+                    <div className="row" style={{ display: "flex" , width:'97.5%' }}>
                         <div className="row" style={{ display: "flex", flexDirection: 'row', width: '50%' }}>
                             <div style={{ flex: 1, marginRight: '0px' }}>
                                 <FormGroup row>
@@ -464,7 +464,7 @@ const CrearSaludDeLaPlanta: React.FC<CrearSaludDeLaPlantaProps> = ({ onAdd }) =>
 
 
                         </div>
-                        <div style={{ flex: 1, marginRight: '0px' }}>
+                        <div style={{ flex: 1, marginLeft: '1%', marginTop:'0.3%'}}>
                             <FormGroup row>
                                 <Label for="cultivo" sm={4} className="input-label">Cultivo</Label>
                                 <Col sm={8}>
@@ -476,6 +476,7 @@ const CrearSaludDeLaPlanta: React.FC<CrearSaludDeLaPlantaProps> = ({ onAdd }) =>
                                         onChange={handleInputChange}
                                         className={errors.cultivo ? 'input-styled input-error' : 'input-styled'}
                                         placeholder="Cultivo"
+                                        style={{ height: '44px',width: '107%'}}
                                     />
                                     <FormFeedback>{errors.cultivo}</FormFeedback>
                                 </Col>
@@ -485,8 +486,8 @@ const CrearSaludDeLaPlanta: React.FC<CrearSaludDeLaPlantaProps> = ({ onAdd }) =>
                         </div>
 
                     </div>
-                    <div className='botonesN'>
-                        <button onClick={handleNextStep} className="btn-styled">Siguiente<IoArrowForward size={20} style={{marginLeft: '2%'}}/></button>
+                    <div className='botonesN' style={{display:'flex', justifyContent:'end', marginLeft:'22px'}}>
+                        <button onClick={handleNextStep} className="btn-styled" style={{width:'49.5%'}}>Siguiente<IoArrowForward size={20} style={{marginLeft: '2%'}}/></button>
                     </div>
                 </div>
             )}
@@ -498,7 +499,7 @@ const CrearSaludDeLaPlanta: React.FC<CrearSaludDeLaPlantaProps> = ({ onAdd }) =>
                         <FormGroup row>
                                 <Label for="colorHojas" sm={4} className="input-label">Color de las hojas</Label>
 
-                                <select className="custom-select" id="colorHojas" value={selectedColorHojas} onChange={handleColorHojasChange}>
+                                <select className="custom-select" id="colorHojas" value={selectedColorHojas} onChange={handleColorHojasChange} style={{height:'42px'}}>
                                     <option key="default-resultado" value="">Seleccione...</option>
                                     <option key="1" value="1">Verde Saludable</option>
                                     <option key="2" value="2">Amarillento (clorosis)</option>
@@ -509,27 +510,27 @@ const CrearSaludDeLaPlanta: React.FC<CrearSaludDeLaPlantaProps> = ({ onAdd }) =>
                             </FormGroup>
                         </div>
                         <div className="row" style={{ display: "flex", flexDirection: 'row', width: '50%' }}>
-                            <div style={{ flex: 1, marginRight: '0px' }}>
+
                             <FormGroup row>
                                 <Label for="tamanoFormaHoja" sm={4} className="input-label">Tamaño y forma de las hojas</Label>
 
-                                <select className="custom-select" id="tamanoFormaHoja" value={selectedTamanoFormaHoja} onChange={handleTamanoFormaHojaChange}>
+                                <select className="custom-select" id="tamanoFormaHoja" value={selectedTamanoFormaHoja} onChange={handleTamanoFormaHojaChange} style={{height:'42px'}}>
                                     <option key="default-resultado" value="">Seleccione...</option>
                                     <option key="1" value="1">Tamaño adecuado según la especie</option>
                                     <option key="2" value="2">Deformaciones o irregularidades</option>
                                 </select>
                                 {errors.idTamanoFormaHoja && <FormFeedback>{errors.idTamanoFormaHoja}</FormFeedback>}
                             </FormGroup>
-                            </div>
 
 
                         </div>
                     </div>
-                    <div className="col-sm-4" style={{ marginRight: "0px" }}>
+                    <div className="row" style={{ display: "flex" }}>
+                    <div className="col-sm-4" style={{ marginRight: '10px', width: '50%' }}>
                     <FormGroup row>
                                 <Label for="estadoTallo" sm={4} className="input-label">Estado del tallo</Label>
 
-                                <select className="custom-select" id="estadoTallo" value={selectedEstadoTallo} onChange={handleEstadoTalloChange}>
+                                <select className="custom-select" id="estadoTallo" value={selectedEstadoTallo} onChange={handleEstadoTalloChange} style={{height:'42px'}}>
                                     <option key="default-resultado" value="">Seleccione...</option>
                                     <option key="1" value="1">Fuerza y firmeza</option>
                                     <option key="2" value="2">Presencia de hongos o enfermedades</option>
@@ -538,11 +539,11 @@ const CrearSaludDeLaPlanta: React.FC<CrearSaludDeLaPlantaProps> = ({ onAdd }) =>
                                 {errors.idEstadoTallo && <FormFeedback>{errors.idEstadoTallo}</FormFeedback>}
                             </FormGroup>
                     </div>
-                    <div className="col-sm-4" style={{ marginRight: "0px" }}>
+                    <div className="col-sm-4" style={{ marginRight: "0px",width: '50%' }}>
                     <FormGroup row>
                                 <Label for="estadoRaiz" sm={4} className="input-label">Estado de las raíces</Label>
 
-                                <select className="custom-select" id="estadoRaiz" value={selectedEstadoRaiz} onChange={handleEstadoRaizChange}>
+                                <select className="custom-select" id="estadoRaiz" value={selectedEstadoRaiz} onChange={handleEstadoRaizChange} style={{height:'42px'}}>
                                     <option key="default-resultado" value="">Seleccione...</option>
                                     <option key="1" value="1">Salud (blancas y firmes)</option>
                                     <option key="2" value="2">Daños o pudrición</option>
@@ -550,6 +551,7 @@ const CrearSaludDeLaPlanta: React.FC<CrearSaludDeLaPlantaProps> = ({ onAdd }) =>
                                 </select>
                                 {errors.idEstadoRaiz && <FormFeedback>{errors.idEstadoRaiz}</FormFeedback>}
                             </FormGroup>
+                    </div>
                     </div>
                     <div className='botones'>
                         <button onClick={handlePreviousStep} className='btn-styled-danger'><IoArrowBack size={20} style={{marginRight: '2%'}}/>Anterior</button>

@@ -229,7 +229,7 @@ function ManejoResiduos() {
                 title="Editar manejo de residuo"
                 onCancel={abrirCerrarModalEditar}
             >
-                <div className='form-container'>
+                <div className='form-container'  style={{  width: '90%' }}>
                     <div className='form-group'>
                         {/* hay que modificar el nombre porque modifica mas datos */}
                         {/* <CambiarContrasenaAsignados */}
@@ -258,7 +258,7 @@ function ManejoResiduos() {
                 title="Crear manejo de residuo"
                 onCancel={abrirCerrarModalCrearManejoResiduo}
             >
-                <div className='form-container'>
+                <div className='form-container'  style={{  width: '90%' }}>
                     <div className='form-group'>
                         <CrearManejoResiduos
                             onAdd={handleAgregarMedicion}

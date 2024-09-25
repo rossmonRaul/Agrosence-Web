@@ -67,7 +67,6 @@ const Topbar: React.FC = () => {
                 const finca = fincas.find((f: { idFinca: any; }) => f.idFinca === notificacion.idFinca);
                 return finca && finca.idEmpresa === userState.idEmpresa;
             });
-            console.log(parcelas)
             // Enlazar las notificaciones filtradas con sus respectivas fincas y parcelas
             const notificacionesDetalladas = notificacionesFiltradas.map((notificacion: { idFinca: any; idParcela: any; }) => {
                 const finca = fincas.find((f: { idFinca: any; }) => f.idFinca === notificacion.idFinca);
@@ -79,7 +78,6 @@ const Topbar: React.FC = () => {
                     nombreParcela: parcela?.nombre || 'Parcela desconocida',
                 };
             });
-
             setNotifications(notificacionesDetalladas);
             setFincas(fincas);
             setParcelas(parcelas);

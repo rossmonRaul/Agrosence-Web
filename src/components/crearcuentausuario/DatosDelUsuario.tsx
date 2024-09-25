@@ -81,7 +81,8 @@ const DatosPersonales: React.FC<Props> = ({ formData, handleInputChange, nextSte
 
   return (
     <div>
-      <FormGroup row>
+      <div className="form-container-fse" style={{ display: 'flex', flexDirection: 'row', width: '96.5%',justifyContent: 'center', marginLeft: '9px',marginRight: '0', gap: '0' }}>
+      <FormGroup row style={{margin: '5px', width: '65%',padding: '0px',flexGrow: '1', maxWidth:' 100%'}}>
         <Label for="nombre" sm={2} className="input-label">Nombre</Label>
         <Col sm={12}>
           <Input
@@ -97,7 +98,9 @@ const DatosPersonales: React.FC<Props> = ({ formData, handleInputChange, nextSte
           <FormFeedback>{errors.nombre}</FormFeedback>
         </Col>
       </FormGroup>
-      <FormGroup row>
+      </div>
+      <div className="form-container-fse" style={{ display: 'flex', flexDirection: 'row', width: '96.5%',justifyContent: 'center', marginLeft: '9px',marginRight: '0', gap: '0' }}>
+      <FormGroup row style={{margin: '5px', width: '65%',padding: '0px',flexGrow: '1', maxWidth:' 100%'}}>
         <Label for="identificacion" sm={2} className="input-label">Identificación</Label>
         <Col sm={12}>
           <Input
@@ -114,7 +117,7 @@ const DatosPersonales: React.FC<Props> = ({ formData, handleInputChange, nextSte
           <FormFeedback>{errors.identificacion}</FormFeedback>
         </Col>
       </FormGroup>
-      <FormGroup row>
+      <FormGroup row style={{margin: '5px', width: '65%',padding: '0px',flexGrow: '1', maxWidth:' 100%'}}>
         <Label for="email" sm={2} className="input-label">Correo electrónico</Label>
         <Col sm={12}>
           <Input
@@ -130,7 +133,9 @@ const DatosPersonales: React.FC<Props> = ({ formData, handleInputChange, nextSte
           <FormFeedback>{errors.email}</FormFeedback>
         </Col>
       </FormGroup>
-      <FormGroup row>
+      </div>
+      <div className="form-container-fse" style={{ display: 'flex', flexDirection: 'row', width: '96.5%',justifyContent: 'center', marginLeft: '9px',marginRight: '0', gap: '0' }}>
+      <FormGroup row style={{margin: '5px', width: '65%',padding: '0px',flexGrow: '1', maxWidth:' 100%'}}>
         <Label for="contrasena" sm={2} className="input-label">Contraseña</Label>
         <Col sm={12}>
           <Input
@@ -146,7 +151,7 @@ const DatosPersonales: React.FC<Props> = ({ formData, handleInputChange, nextSte
           <FormFeedback>{errors.contrasena}</FormFeedback>
         </Col>
       </FormGroup>
-      <FormGroup row>
+      <FormGroup row style={{margin: '5px', width: '65%',padding: '0px',flexGrow: '1', maxWidth:' 100%'}}>
         <Label for="contrasenaConfirmar" sm={2} className="input-label">Repetir contraseña</Label>
         <Col sm={12}>
           <Input
@@ -162,9 +167,15 @@ const DatosPersonales: React.FC<Props> = ({ formData, handleInputChange, nextSte
           <FormFeedback>{errors.contrasenaConfirmar}</FormFeedback>
         </Col>
       </FormGroup>
+      </div>
+      
+      
+      
       <FormGroup row>
         <Col sm={{ size: 6 }}>    
-          <Button onClick={handleSubmit} className="btn-styled" style={{display: 'flex', alignItems: 'center', justifyContent: 'center'}}>Siguiente<IoArrowForward size={20} style={{marginLeft: '5%'}}/></Button>
+        <div className='botonesN' style={{display:'flex', justifyContent:'end', marginLeft:'22px'}}>
+          <Button onClick={handleSubmit} className="btn-styled" style={{width:'49.5%',marginRight:'1%'}}>Siguiente<IoArrowForward size={20} style={{marginLeft: '5%'}}/></Button>
+          </div>
         </Col>
       </FormGroup>
     </div>

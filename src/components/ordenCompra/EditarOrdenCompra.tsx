@@ -462,7 +462,7 @@ const EditarOrdenCompra: React.FC<OrdenCompraSeleccionado> = ({
     };
 
     return (
-        <div id='general' style={{ display: 'flex', flexDirection: 'column', paddingBottom: '0rem', width: '90%', minWidth: "560px" }}>
+        <div id='general' style={{ display: 'flex', flexDirection: 'column', paddingBottom: '0rem', width: '100%', minWidth: "560px", minHeight: "390px"  }}>
             {step === 1 && (
                 <div>
                     <h2>Orden de compra</h2>
@@ -470,7 +470,7 @@ const EditarOrdenCompra: React.FC<OrdenCompraSeleccionado> = ({
                         <div style={{ marginRight: '10px', width: '50%' }}>
                             <FormGroup>
                                 <label htmlFor="fincas">Finca:</label>
-                                <select className="custom-select input-styled" id="fincas" value={selectedFinca} onChange={handleFincaChange}>
+                                <select className="custom-select input-styled" id="fincas" value={selectedFinca} style={{ fontSize: '16px', padding: '10px', width: '100%' }}  onChange={handleFincaChange}>
                                     <option key="default-finca" value="">Seleccione...</option>
                                     {filteredFincas.map((finca) => (
                                         <option key={`${finca.idFinca}-${finca.nombre || 'undefined'}`} value={finca.idFinca}>{finca.nombre || 'Undefined'}</option>
@@ -534,7 +534,7 @@ const EditarOrdenCompra: React.FC<OrdenCompraSeleccionado> = ({
 
                     </div>
 
-                    <div className="row" style={{ display: "flex" }}>
+                    <div className="row" style={{ display: "flex",width:'100%' }}>
                         <div style={{ flex: 1, marginRight: '10px' }}>
                             <FormGroup row>
                                 <Label for="FechaOrden" sm={4} className="input-label">Fecha Orden</Label>
@@ -572,7 +572,7 @@ const EditarOrdenCompra: React.FC<OrdenCompraSeleccionado> = ({
 
                     </div>
                     <div className="col-sm-4">
-                        <FormGroup row>
+                        <FormGroup row style={{ width:'100%' }}>
                             <Label for="Observaciones" sm={4} className="input-label">Observaciones</Label>
                             <Col sm={8}>
                                 <Input
@@ -590,10 +590,12 @@ const EditarOrdenCompra: React.FC<OrdenCompraSeleccionado> = ({
                             </Col>
                         </FormGroup>
                     </div>
-                    <Button className="btn-styled" onClick={handleValidateFirstStep} style={{ display: 'flex', justifyContent: 'center' }}>
+                    <div style={{display:'flex', justifyContent:'end'}}>
+                    <Button className="btn-styled" onClick={handleValidateFirstStep} style={{ display: 'flex', justifyContent: 'center',width:'48%'  }}>
                         <span style={{ marginRight: '5px' }}>Siguiente</span>
                         <IoArrowForward size={27} />
                     </Button>
+                    </div>
                 </div>
             )}
             {step === 2 && (

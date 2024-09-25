@@ -217,11 +217,11 @@ const DetallesSaludDeLaPlanta: React.FC<SaludDeLaPlantaSeleccionado> = ({
         <div id='general' style={{ display: 'flex', flexDirection: 'column', paddingBottom: '0rem', width: '90%', margin: '0 auto', minWidth: '650px' }}>
             {step === 1 && (
                 <div>
-                    <div className="form-container-fse" style={{ display: 'flex', flexDirection: 'row', width: '100%' }}>
-                        <div style={{ marginRight: '10px', width: '50%' }}>
+                    <div className="form-container-fse" style={{ display: 'flex', flexDirection: 'row', width: '100%', marginLeft:'0.5%'}}>
+                        <div style={{ marginRight: '10px', width: '49%' }}>
                             <FormGroup>
                                 <label htmlFor="fincas">Finca:</label>
-                                <select className="custom-select input-styled" id="fincas" value={selectedFinca} disabled>
+                                <select className="custom-select input-styled" id="fincas" value={selectedFinca} disabled style={{height:'44px'}}>
                                     <option key="default-finca" value="">Seleccione...</option>
                                     {filteredFincas.map((finca) => (
                                         <option key={`${finca.idFinca}-${finca.nombre || 'undefined'}`} value={finca.idFinca}>{finca.nombre || 'Undefined'}</option>
@@ -233,7 +233,7 @@ const DetallesSaludDeLaPlanta: React.FC<SaludDeLaPlantaSeleccionado> = ({
                         <div style={{ marginRight: '0px', width: '50%' }}>
                             <FormGroup>
                                 <label htmlFor="parcelas">Parcela:</label>
-                                <select className="custom-select input-styled" id="parcelas" value={selectedParcela} disabled>
+                                <select className="custom-select input-styled" id="parcelas" value={selectedParcela} disabled style={{height:'44px'}}>
                                     <option key="default-parcela" value="">Seleccione...</option>
                                     {filteredParcelas.map((parcela) => (
 
@@ -245,9 +245,9 @@ const DetallesSaludDeLaPlanta: React.FC<SaludDeLaPlantaSeleccionado> = ({
                         </div>
                     </div>
 
-                    <div className="row" style={{ display: "flex", marginBottom: "30px", width: '100%' }}>
-                        <div className="row" style={{ marginRight: '10px', width: '50%' }}>
-                            <div style={{ marginRight: '10px', width: '98%' }}>
+                    <div className="row" style={{ display: "flex", width: '100%' }}>
+                        <div className="row" style={{  width: '50%' }}>
+                            <div style={{ marginRight: '10px',width: '99%' }}>
                                 <FormGroup row>
                                     <Label for="fecha" sm={4} className="input-label">Fecha</Label>
                                     <Col sm={4}>
@@ -256,6 +256,7 @@ const DetallesSaludDeLaPlanta: React.FC<SaludDeLaPlantaSeleccionado> = ({
                                             id="fecha"
                                             name="fecha"
                                             value={fecha}
+                                            style={{height:'32px'}}
                                             readOnly
                                         />
 
@@ -265,7 +266,8 @@ const DetallesSaludDeLaPlanta: React.FC<SaludDeLaPlantaSeleccionado> = ({
 
 
                         </div>
-                        <div style={{ flex: 1, marginRight: '0px' }}>
+                        <div className="row" style={{ display: "flex", flexDirection: 'row', width: '50%' }}>
+                        <div style={{  marginRight: '0px',width: '100%', marginLeft:'0.5%' }}>
                             <FormGroup row>
                                 <Label for="cultivo" sm={4} className="input-label">Cultivo</Label>
                                 <Col sm={4}>
@@ -275,21 +277,22 @@ const DetallesSaludDeLaPlanta: React.FC<SaludDeLaPlantaSeleccionado> = ({
                                         name="cultivo"
                                         value={cultivo}
                                         readOnly
+                                        style={{height:'32px', width:'96%'}}
                                     />
 
                                 </Col>
                             </FormGroup>
 
-
+                            </div>
                         </div>
 
                     </div>
-                    <div className="row" style={{ display: "flex" }}>
-                        <div className="col-sm-4" style={{ marginRight: '10px', width: '50%' }}>
+                    <div className="row" style={{ display: "flex",marginLeft:'0.5%', width: '100%' }}>
+                        <div className="col-sm-4" style={{ marginRight: '10px', width: '49%' }}>
                             <FormGroup row>
                                 <Label for="colorHojas" sm={4} className="input-label">Color de las hojas</Label>
 
-                                <select className="custom-select" id="colorHojas" value={selectedColorHojas} disabled>
+                                <select className="custom-select" id="colorHojas" value={selectedColorHojas} disabled style={{height:'44px'}}>
                                     <option key="default-resultado" value="">Seleccione...</option>
                                     <option key="1" value="1">Verde Saludable</option>
                                     <option key="2" value="2">Amarillento (clorosis)</option>
@@ -300,11 +303,11 @@ const DetallesSaludDeLaPlanta: React.FC<SaludDeLaPlantaSeleccionado> = ({
                             </FormGroup>
                         </div>
                         <div className="row" style={{ display: "flex", flexDirection: 'row', width: '50%' }}>
-                            <div style={{ flex: 1, marginRight: '0px' }}>
+                            <div style={{  marginRight: '0px' }}>
                                 <FormGroup row>
                                     <Label for="tamanoFormaHoja" sm={4} className="input-label">Tamaño y forma de las hojas</Label>
 
-                                    <select className="custom-select" id="tamanoFormaHoja" value={selectedTamanoFormaHoja} disabled>
+                                    <select className="custom-select" id="tamanoFormaHoja" value={selectedTamanoFormaHoja} disabled style={{height:'44px'}}>
                                         <option key="default-resultado" value="">Seleccione...</option>
                                         <option key="1" value="1">Tamaño adecuado según la especie</option>
                                         <option key="2" value="2">Deformaciones o irregularidades</option>
@@ -314,11 +317,11 @@ const DetallesSaludDeLaPlanta: React.FC<SaludDeLaPlantaSeleccionado> = ({
                             </div>
                         </div>
                     </div>
-                    <div className="row" style={{ display: "flex" }}>
-                        <div className="col-sm-4" style={{ marginRight: '10px', width: '50%' }}>
+                    <div className="row" style={{ display: "flex" ,marginLeft:'0.5%', width: '100%'}}>
+                        <div className="col-sm-4" style={{ marginRight: '10px', width: '49%' }}>
                             <FormGroup row>
                                 <Label for="estadoTallo" sm={4} className="input-label">Estado del tallo</Label>
-                                <select className="custom-select" id="estadoTallo" value={selectedEstadoTallo} disabled>
+                                <select className="custom-select" id="estadoTallo" value={selectedEstadoTallo} disabled style={{height:'44px'}}>
                                     <option key="default-resultado" value="">Seleccione...</option>
                                     <option key="1" value="1">Fuerza y firmeza</option>
                                     <option key="2" value="2">Presencia de hongos o enfermedades</option>
@@ -332,7 +335,7 @@ const DetallesSaludDeLaPlanta: React.FC<SaludDeLaPlantaSeleccionado> = ({
                                 <FormGroup row>
                                     <Label for="estadoRaiz" sm={4} className="input-label">Estado de las raíces</Label>
 
-                                    <select className="custom-select" id="estadoRaiz" value={selectedEstadoRaiz} disabled>
+                                    <select className="custom-select" id="estadoRaiz" value={selectedEstadoRaiz} disabled style={{height:'44px'}}>
                                         <option key="default-resultado" value="">Seleccione...</option>
                                         <option key="1" value="1">Salud (blancas y firmes)</option>
                                         <option key="2" value="2">Daños o pudrición</option>
@@ -343,8 +346,8 @@ const DetallesSaludDeLaPlanta: React.FC<SaludDeLaPlantaSeleccionado> = ({
                             </div>
                         </div>
                     </div>
-                    <div className='botonesN'>
-                        <button onClick={handleNextStep} className="btn-styled">Siguiente<IoArrowForward size={20} style={{marginLeft: '2%'}}/></button>
+                    <div className='botonesN' style={{display:'flex', justifyContent:'end', marginLeft:'22px'}}>
+                        <button onClick={handleNextStep} className="btn-styled" style={{width:'49.5%'}}>Siguiente<IoArrowForward size={20} style={{marginLeft: '2%'}}/></button>
                     </div>
                 </div>
             )}

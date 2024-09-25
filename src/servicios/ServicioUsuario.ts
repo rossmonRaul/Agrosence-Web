@@ -155,3 +155,8 @@ export const EliminarPermisosRolMenu = async (data: any) => {
     const url = `${baseURL}/api/v1.0/${controlador}/EliminarPermisosRolMenu`;
     return await ProcesarDatosApi('POST', url, data);
 }
+
+export const ObtenerRolesAsignablesUsuarios = async () => {
+    const url = `${baseURL}/api/v1.0/${controlador}/ObtenerRolesAsignablesUsuarios`;
+    return await ProcesarDatosApi('POST', url, null);
+}

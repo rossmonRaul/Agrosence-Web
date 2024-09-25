@@ -199,21 +199,21 @@ const DetallesCoberturaVegetal: React.FC<CoberturaVegetalSeleccionada> = ({
 
     return (
         <div id='general' style={{ display: 'flex', flexDirection: 'column', paddingBottom: '0rem', width: '100%', margin: '0 auto' }}>
-            <div style={{ display: 'flex', flexDirection: 'row', marginBottom: '0rem' }}>
-                <div style={{ flex: 1, marginRight: '0.5rem', marginLeft: '0.5rem' }}>
+            <div style={{ display: 'flex', flexDirection: 'row', marginBottom: '0rem',marginLeft:'0.5%'}}>
+                <div style={{ flex: 1, marginLeft: '0.5rem'}}>
                     <FormGroup>
                         <label htmlFor="fincas">Finca:</label>
-                        <select className="custom-select" id="fincas" value={selectedFinca} onChange={handleFincaChange} disabled>
+                        <select className="custom-select" id="fincas" value={selectedFinca} onChange={handleFincaChange} style={{height:'44px'}} disabled>
                             {filteredFincas.map((finca) => (
                                 <option key={`${finca.idFinca}-${finca.nombre || 'undefined'}`} value={finca.idFinca}>{finca.nombre || 'Undefined'}</option>
                             ))}
                         </select>
                     </FormGroup>
                 </div>
-                <div style={{ flex: 1, marginRight: '0.5rem', marginLeft: '0.5rem' }}>
+                <div style={{flex: 1, marginRight: '0.5rem', marginLeft: '0.5rem' }}>
                     <FormGroup>
                         <label htmlFor="parcelas">Parcela:</label>
-                        <select className="custom-select" id="parcelas" value={selectedParcela} onChange={handleParcelaChange} disabled>
+                        <select className="custom-select" id="parcelas" value={selectedParcela} onChange={handleParcelaChange} style={{height:'44px'}} disabled>
                             {filteredParcelas.map((parcela) => (
                                 <option key={`${parcela.idParcela}-${parcela.nombre || 'undefined'}`} value={parcela.idParcela}>{parcela.nombre || 'Undefined'}</option>
                             ))}
@@ -221,8 +221,8 @@ const DetallesCoberturaVegetal: React.FC<CoberturaVegetalSeleccionada> = ({
                     </FormGroup>
                 </div>
             </div>
-            <div style={{ display: 'flex', flexDirection: 'row', marginBottom: '1.5rem' }}>
-                <div style={{ flex: 1, marginRight: '0.5rem', marginLeft: '0.5rem' }}>
+            <div style={{ display: 'flex', flexDirection: 'row',marginBottom: '0rem',marginLeft:'0.5%', width:'100%' }}>
+                <div style={{ marginLeft: '0.5rem',width:'50%', marginTop:'0.2%' }}>
                     <FormGroup row>
                         <Label for="cultivo" sm={4} className="input-label">Cultivo</Label>
                         <Col sm={8}>
@@ -238,7 +238,7 @@ const DetallesCoberturaVegetal: React.FC<CoberturaVegetalSeleccionada> = ({
                         </Col>
                     </FormGroup>
                 </div>
-                <div style={{ flex: 1, marginRight: '0.5rem', marginLeft: '0.5rem' }}>
+                <div style={{ marginRight: '1.1rem',width:'50%' }}>
                     <FormGroup row>
                         <Label for="alturaMaleza" sm={4} className="input-label">Altura Maleza</Label>
                         <Col sm={8}>
@@ -255,8 +255,8 @@ const DetallesCoberturaVegetal: React.FC<CoberturaVegetalSeleccionada> = ({
                 </div>
 
             </div>
-            <div style={{ display: 'flex', flexDirection: 'row', marginBottom: '0rem', width: '100%' }}>
-                <div style={{ flex: 2, marginRight: '0.5rem', marginLeft: '0.5rem' }}>
+            <div style={{ display: 'flex', flexDirection: 'row', marginBottom: '0rem', width: '100%',marginLeft:'0.5%' }}>
+                <div style={{ flex: 2,  marginLeft: '0.5rem' }}>
                     <FormGroup row>
                         <Label for="densidadMaleza" sm={4} className="input-label">Densidad de Maleza</Label>
                         <Col sm={8}>
@@ -266,15 +266,16 @@ const DetallesCoberturaVegetal: React.FC<CoberturaVegetalSeleccionada> = ({
                                 name="densidadMaleza"
                                 value={convertToDescription(formData.densidadMaleza)}
                                 readOnly
+                                style={{height:'28px'}}
                             />
                             <FormFeedback>{errors.densidadMaleza}</FormFeedback>
                         </Col>
                     </FormGroup>
                 </div>
-                <div style={{ flex: 2, marginRight: '0.5rem', marginLeft: '0.5rem' }}>
+                <div style={{ flex: 2, marginRight: '1.1rem', marginTop:'0.1%' }}>
                     <FormGroup>
                         <label htmlFor="puntosMedicion">Punto de medición:</label>
-                        <select className="custom-select" id="puntosMedicion" value={selectedPuntoMedicion} onChange={handlePuntoMedicionChange} disabled>
+                        <select className="custom-select" id="puntosMedicion" value={selectedPuntoMedicion} onChange={handlePuntoMedicionChange} style={{height:'44px'}} disabled>
                             {puntosMedicion.map((puntoMedicion) => (
                                 <option key={`${puntoMedicion.idPuntoMedicion}-${puntoMedicion.codigo || 'undefined'}`} value={puntoMedicion.idPuntoMedicion}>{puntoMedicion.codigo || 'Undefined'}</option>
                             ))}
@@ -283,9 +284,9 @@ const DetallesCoberturaVegetal: React.FC<CoberturaVegetalSeleccionada> = ({
                 </div>
             </div>
 
-            <div style={{ display: 'flex', flexDirection: 'row', marginBottom: '0rem' }}>
+            <div style={{display: 'flex', flexDirection: 'row', marginBottom: '0rem',width:'100%'}}>
 
-                <div style={{ flex: 1, marginRight: '0.5rem', marginLeft: '0.5rem' }}>
+                <div style={{ flex: 1, marginRight: '0.5rem', marginLeft: '0.5rem'  }}>
                     <FormGroup row>
                         <Label for="humedadObservable" sm={4} className="input-label">Humedad Observable</Label>
                         <Col sm={8}>
@@ -294,7 +295,7 @@ const DetallesCoberturaVegetal: React.FC<CoberturaVegetalSeleccionada> = ({
                                 id="humedadObservable"
                                 name="humedadObservable"
                                 value={convertToDescription(formData.humedadObservable)}
-                                style={{ minWidth: '350px' }}
+                                style={{ minWidth: '350px',height:'44px' }}
                                 readOnly
                             />
                             <FormFeedback>{errors.humedadObservable}</FormFeedback>

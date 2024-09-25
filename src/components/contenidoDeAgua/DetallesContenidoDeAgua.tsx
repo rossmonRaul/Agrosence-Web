@@ -226,10 +226,10 @@ const DetallesContenidoDeAgua: React.FC<ContenidoDeAguaSeleccionado> = ({
         <div id='general' style={{ display: 'flex', flexDirection: 'column', paddingBottom: '0rem', width: '100%', margin: '0 auto' }}>
      <div>
         <div className="form-container-fse" style={{ display: 'flex', flexDirection: 'column', width: '95%', marginLeft: '0.5rem' }}>
-           <div style={{ flex: 1, marginRight: '0.5rem', marginLeft: '0.5rem' }}>
-           <FormGroup>
+           <div className="form-container-fse" style={{ display: 'flex', flexDirection: 'row', width: '100%',justifyContent: 'center',marginRight: '0', gap: '0' }}>
+           <FormGroup style={{ width: '65%',padding: '0px',flexGrow: '1', maxWidth:' 100%', marginLeft:'0.6%'}}>
                         <label htmlFor="fincas">Finca:</label>
-                        <select className="custom-select input-styled" id="fincas" value={selectedFinca} disabled>
+                        <select className="custom-select input-styled" id="fincas" value={selectedFinca} style={{marginTop: '1%', height: '55%'}} disabled>
                             <option key="default-finca" value="">Seleccione...</option>
                             {filteredFincas.map((finca) => (
                                 <option key={`${finca.idFinca}-${finca.nombre || 'undefined'}`} value={finca.idFinca}>{finca.nombre || 'Undefined'}</option>
@@ -237,11 +237,9 @@ const DetallesContenidoDeAgua: React.FC<ContenidoDeAguaSeleccionado> = ({
                         </select>
                         
                     </FormGroup>
-            </div>
-            <div style={{ flex: 1, marginRight: '0.5rem', marginLeft: '0.5rem' }}>
-            <FormGroup>
+            <FormGroup style={{ marginLeft:'2%',width: '65%',padding: '0px',flexGrow: '1', maxWidth:' 100%'}}>
                         <label htmlFor="parcelas">Parcela:</label>
-                        <select className="custom-select input-styled" id="parcelas" value={selectedParcela} disabled>
+                        <select className="custom-select input-styled" id="parcelas" value={selectedParcela} style={{marginTop: '1%', height: '55%'}} disabled>
                             <option key="default-parcela" value="">Seleccione...</option>
                             {filteredParcelas.map((parcela) => (
 
@@ -253,11 +251,11 @@ const DetallesContenidoDeAgua: React.FC<ContenidoDeAguaSeleccionado> = ({
                 </div>
         </div>
             
-        <div style={{ display: 'flex', flexDirection: 'row', marginBottom: '0rem' }}>
-            <div style={{ flex: 1, marginRight: '0.5rem', marginLeft: '0.5rem' }}>
+        <div  style={{ display: 'flex', flexDirection: 'row', marginBottom: '0rem', width:'100%'  }}>
+            <div style={{  marginLeft: '0.5rem' ,width:'50%' }}>
             <FormGroup>
                    <label htmlFor="puntosMedicion">Punto de medición:</label>
-                    <select className="custom-select" id="puntosMedicion" value={selectedPuntoMedicion} onChange={handlePuntoMedicionChange} disabled>
+                    <select className="custom-select" id="puntosMedicion" value={selectedPuntoMedicion} onChange={handlePuntoMedicionChange} style={{height:'44px'}} disabled>
                    {puntosMedicion.map((puntoMedicion) => (
                      <option key={`${puntoMedicion.idPuntoMedicion}-${puntoMedicion.codigo || 'undefined'}`} value={puntoMedicion.idPuntoMedicion}>{puntoMedicion.codigo || 'Undefined'}</option>
                    ))}
@@ -265,7 +263,7 @@ const DetallesContenidoDeAgua: React.FC<ContenidoDeAguaSeleccionado> = ({
                   </FormGroup>
             </div>
 
-            <div style={{ flex: 1, marginRight: '0.5rem', marginLeft: '0.5rem' }}>
+            <div  style={{ marginRight: '1.2rem',width:'50%' }}>
             <FormGroup row>
                  <Label for="fechaMuestreo" sm={4} className="input-label">Fecha Muestreo:</Label>
                   <Col sm={4}>
@@ -275,6 +273,7 @@ const DetallesContenidoDeAgua: React.FC<ContenidoDeAguaSeleccionado> = ({
                       name="fechaMuestreo"
                       value={formData.fechaMuestreo}
                       readOnly
+                      style={{height:'28px'}} 
                   />
                  
                      
@@ -283,8 +282,8 @@ const DetallesContenidoDeAgua: React.FC<ContenidoDeAguaSeleccionado> = ({
             </div>
         </div>
 
-        <div style={{ display: 'flex', flexDirection: 'row', marginBottom: '0rem' }}>
-            <div style={{ flex: 1, marginRight: '0.5rem', marginLeft: '0.5rem' }}>
+        <div style={{ display: 'flex', flexDirection: 'row', marginBottom: '0rem', width:'100%' }}>
+            <div style={{ marginLeft: '0.5rem' ,width:'50%'}}>
             <FormGroup row>
                   <Label for="contenidoDeAguaenSuelo" sm={4} className="input-label">Contenido de Agua en el Suelo:</Label>
                  <Col sm={8}>
@@ -294,13 +293,14 @@ const DetallesContenidoDeAgua: React.FC<ContenidoDeAguaSeleccionado> = ({
                       name="contenidoDeAguaenSuelo"
                     value={formData.contenidoDeAguaEnSuelo}
                     readOnly
+                    style={{height:'28px'}} 
                       />
         
                    </Col>
                     </FormGroup>
             </div>
 
-            <div style={{ flex: 1, marginRight: '0.5rem', marginLeft: '0.5rem' }}>
+            <div style={{ marginRight: '1.2rem',width:'50%'  }}>
             <FormGroup row>
                      <Label for="contenidoDeAguaenPlanta" sm={4} className="input-label">Contenido De Agua en la Planta:</Label>
                        <Col sm={8}>
@@ -311,15 +311,15 @@ const DetallesContenidoDeAgua: React.FC<ContenidoDeAguaSeleccionado> = ({
                          name="contenidoDeAguaenPlanta"
                           value={formData.contenidoDeAguaEnPlanta}
                            readOnly
-       
+                           style={{height:'28px'}} 
                          />
                    
                      </Col>
                     </FormGroup>
             </div>
         </div>
-        <div style={{ display: 'flex', flexDirection: 'row', marginBottom: '0rem' }}>
-            <div style={{ flex: 1, marginRight: '0.5rem', marginLeft: '0.5rem' }}>
+        <div style={{ display: 'flex', flexDirection: 'row', marginBottom: '0rem', width:'100%' }}>
+            <div style={{ marginLeft: '0.5rem' ,width:'50%' }}>
             <FormGroup row>
                   <Label for="metodoDeMedicion" sm={4} className="input-label">Metodo de Medicion:</Label>
                   <Col sm={8}>
@@ -329,18 +329,18 @@ const DetallesContenidoDeAgua: React.FC<ContenidoDeAguaSeleccionado> = ({
                    name="metodoDeMedicion"
                     value={formData.metodoDeMedicion}
                     readOnly
-                
+                    style={{height:'28px'}} 
                   />
            
                </Col>
              </FormGroup>
             </div>
 
-            <div style={{ flex: 1, marginRight: '0.5rem', marginLeft: '0.5rem' }}>
-                 <div style={{ flex: 1, marginRight: '0px' }}>
+            <div style={{ marginRight: '1.2rem',width:'50%' }}>
+                
                  <FormGroup row>
                                 <Label for="condicionSuelo" sm={4} className="input-label">Condicion del Suelo</Label>
-                                <select className="custom-select" id="condicionSuelo" value={selectedcondicionSuelo} disabled>
+                                <select className="custom-select" id="condicionSuelo" value={selectedcondicionSuelo} style={{height:'44px'}}  disabled>
                                     <option key="compacto" value="Compacto">Compacto</option>
                                     <option key="suelto" value="Suelto">Suelto</option>
                                     <option key="erosionado" value="Erosionado">Erosionado</option>
@@ -350,7 +350,7 @@ const DetallesContenidoDeAgua: React.FC<ContenidoDeAguaSeleccionado> = ({
 
                             </FormGroup>
             
-                    </div>
+                    
             </div>
         </div>
       </div>

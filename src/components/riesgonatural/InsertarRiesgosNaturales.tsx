@@ -394,11 +394,11 @@ const CrearRiesgosNaturales: React.FC<CrearRiesgosNaturalesProps> = ({ onAdd }) 
         <div id='general' style={{ display: 'flex', flexDirection: 'column', paddingBottom: '0rem', width: '90%', margin: '0 auto', minWidth: '650px' }}>
             {step === 1 && (
                 <div>
-                    <div className="form-container-fse" style={{ display: 'flex', flexDirection: 'row', width: '100%' }}>
+                    <div className="form-container-fse" style={{ display: 'flex', flexDirection: 'row', width: '97.5%', marginLeft:'0.6%' }}>
                         <div style={{ marginRight: '10px', width: '50%' }}>
                             <FormGroup>
                                 <label htmlFor="fincas">Finca:</label>
-                                <select className="custom-select input-styled" id="fincas" value={selectedFinca} onChange={handleFincaChange}>
+                                <select className="custom-select input-styled" id="fincas" value={selectedFinca} onChange={handleFincaChange} style={{height:'44px'}}>
                                     <option key="default-finca" value="">Seleccione...</option>
                                     {filteredFincas.map((finca) => (
                                         <option key={`${finca.idFinca}-${finca.nombre || 'undefined'}`} value={finca.idFinca}>{finca.nombre || 'Undefined'}</option>
@@ -410,7 +410,7 @@ const CrearRiesgosNaturales: React.FC<CrearRiesgosNaturalesProps> = ({ onAdd }) 
                         <div style={{ marginRight: '0px', width: '50%' }}>
                             <FormGroup>
                                 <label htmlFor="parcelas">Parcela:</label>
-                                <select className="custom-select input-styled" id="parcelas" value={selectedParcela} onChange={handleParcelaChange}>
+                                <select className="custom-select input-styled" id="parcelas" value={selectedParcela} onChange={handleParcelaChange} style={{height:'44px'}}>
                                     <option key="default-parcela" value="">Seleccione...</option>
                                     {parcelasFiltradas.map((parcela) => (
 
@@ -423,11 +423,11 @@ const CrearRiesgosNaturales: React.FC<CrearRiesgosNaturalesProps> = ({ onAdd }) 
                     </div>
 
 
-                    <div className="row" style={{ display: "flex" }}>
-                        <div className="col-sm-4" style={{ marginRight: '10px', width: '50%' }}>
+                    <div className="row" style={{ display: 'flex', flexDirection: 'row', width: '97.5%',marginLeft:'0.6%' }}>
+                        <div  style={{ marginRight: '10px', width: '50%', marginTop:'0.8%'}}>
                             <FormGroup row>
                                 <label htmlFor="riesgos">Riesgo Natural:</label>
-                                <select className="custom-select" id="riesgoNatural" value={selectedRiesgo} onChange={handleRiesgoChange}>
+                                <select className="custom-select" id="riesgoNatural" value={selectedRiesgo} onChange={handleRiesgoChange} style={{height:'42px'}}>
                                     <option key="default-riesgos" value="">Seleccione...</option>
                                     <option key="terremoto" value="Terremoto">Terremoto</option>
                                     <option key="deslizamiento" value="Deslizamiento">Deslizamiento</option>
@@ -492,11 +492,11 @@ const CrearRiesgosNaturales: React.FC<CrearRiesgosNaturalesProps> = ({ onAdd }) 
             {step === 2 && (
                 <div>
                     <div className="row" style={{ display: "flex" }}>
-                        <div className="col-sm-4" style={{ marginRight: '10px', width: '50%' }}>
+                        <div style={{ marginRight: '10px', width: '50%',marginTop:'0.6%' }}>
                             <FormGroup row>
                                 <Label for="resultadoPractica" sm={4} className="input-label">Resultado Practica Preventiva</Label>
 
-                                <select className="custom-select" id="resultadoPractica" value={selectedResultadoPractica} onChange={handleResultadoPracticaChange}>
+                                <select className="custom-select" id="resultadoPractica" value={selectedResultadoPractica} onChange={handleResultadoPracticaChange} style={{height:'42px'}}>
                                     <option key="default-resultado" value="">Seleccione...</option>
                                     <option key="bueno" value="Bueno">Bueno</option>
                                     <option key="regular" value="Regular">Regular</option>

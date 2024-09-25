@@ -136,7 +136,7 @@ function MedicionesSensor() {
 
     return (
         <Sidebar>
-            <div className="main-container">
+            <div className="main-container" style={{  width: '90%' }}>
                 <Topbar />
                 <BordeSuperior text="Mediciones de Sensor" />
                 <div className="content">
@@ -169,7 +169,7 @@ function MedicionesSensor() {
                 title="Insertar medición"
                 onCancel={abrirCerrarModalInsertar}
             >
-                <div className='form-container'>
+                <div className='form-container' style={{  width: '90%' }}>
                     <div className='form-group'>
                         <InsertarMedicionSensor
                             onAdd={handleAgregarMedicion}

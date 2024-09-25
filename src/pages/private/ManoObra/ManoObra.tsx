@@ -229,7 +229,7 @@ function ManoObra() {
                 title="Editar mano de obra"
                 onCancel={abrirCerrarModalEditar}
             >
-                <div className='form-container'>
+                <div className='form-container' style={{  width: '90%' }}>
                     <div className='form-group'>
                         {/* modal para editar  */}
                         <EditarManoObra
@@ -255,7 +255,7 @@ function ManoObra() {
                 title="Crear mano de obra"
                 onCancel={abrirCerrarModalCrearManoObra}
             >
-                <div className='form-container'>
+                <div className='form-container' style={{  width: '90%' }}>
                     <div className='form-group'>
                         <CrearManoObra
                             onAdd={handleAgregarMedicion}

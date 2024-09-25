@@ -341,14 +341,14 @@ const CrearEntradasSalidas: React.FC<CrearEntradasYSalidasProps> = ({ onAdd }) =
     };
 
     return (
-        <div id='general' style={{ display: 'flex', flexDirection: 'column', paddingBottom: '0rem', width: '90%', margin: '0 auto', minWidth: "590px", minHeight: "490px", flexGrow: 1 }}>
+        <div id='general' style={{ display: 'flex', flexDirection: 'column', paddingBottom: '0rem', width: '100%', margin: '0 auto', minWidth: "590px", minHeight: "490px", flexGrow: 1 }}>
 
             {step === 1 && (
                 <div>
                     <h2 style={{ marginBottom: '7px' }}>Entrada o Salida</h2>
-                    <div className="form-container-fse" style={{ display: 'flex', flexDirection: 'row', width: '100%' }}>
+                    <div className="form-container-fse" style={{ display: 'flex', flexDirection: 'row', width: '98.5%', marginLeft:'1%' }}>
                         <div style={{ marginRight: '10px', width: '50%' }}>
-                            <FormGroup>
+                            <FormGroup style={{marginTop:'0.6%'}}>
                                 <label htmlFor="fincas">Finca:</label>
                                 <select className={errors.finca ? 'input-styled input-error' : 'input-styled'} style={{ fontSize: '16px', padding: '11px', width: '100%' }} id="fincas" value={selectedFinca} onChange={handleFincaChange}>
                                     <option key="default-finca" value="">Seleccione...</option>
@@ -361,7 +361,7 @@ const CrearEntradasSalidas: React.FC<CrearEntradasYSalidasProps> = ({ onAdd }) =
                         </div>
 
                         <div className="col-sm-4" style={{ marginRight: "10px", width: '33%' }}>
-                            <FormGroup row>
+                            <FormGroup row style={{marginTop:'1%'}}>
                                 <label htmlFor="tipos">Tipo:</label>
                                 <select className={errors.tipo ? 'input-styled input-error' : 'input-styled'} style={{ fontSize: '16px', padding: '11px', width: '100%', minWidth: '180px' }} id="tipo" value={selectedTipo} onChange={handleTipoChange}>
                                     <option key="default-tipo" value="">Seleccione...</option>
@@ -372,8 +372,8 @@ const CrearEntradasSalidas: React.FC<CrearEntradasYSalidasProps> = ({ onAdd }) =
 
                             </FormGroup>
                         </div>
-                        <div style={{ marginRight: "0px", width: '33%' }}>
-                            <FormGroup row>
+                        <div style={{ marginRight: "0px", width: '33%'  }}>
+                            <FormGroup row >
                                 <Label for="fecha" sm={4} className="input-label">Fecha</Label>
                                 <Col sm={8}>
                                     <Input
@@ -384,6 +384,7 @@ const CrearEntradasSalidas: React.FC<CrearEntradasYSalidasProps> = ({ onAdd }) =
                                         onChange={handleInputChange}
                                         className={errors.fecha ? 'input-styled input-error' : 'input-styled'}
                                         placeholder="Selecciona una fecha"
+                                        
                                     />
                                     <FormFeedback>{errors.fecha}</FormFeedback>
                                 </Col>
@@ -394,7 +395,7 @@ const CrearEntradasSalidas: React.FC<CrearEntradasYSalidasProps> = ({ onAdd }) =
                     <div className="row" style={{ display: "flex", flexDirection: 'row', width: '100%' }}>
 
                         <div className="col-sm-4" style={{ width: '100%' }}>
-                            <FormGroup row>
+                            <FormGroup row style={{ width: '100%' }}>
                                 <Label for="detallesCompraVenta" sm={4} className="input-label">Detalles</Label>
                                 <Col sm={8}>
                                     <Input
@@ -405,6 +406,7 @@ const CrearEntradasSalidas: React.FC<CrearEntradasYSalidasProps> = ({ onAdd }) =
                                         onChange={handleInputChange}
                                         className={errors.detallesCompraVenta ? 'input-styled input-error' : 'input-styled'}
                                         placeholder="Detalles"
+                                        style={{ width: '99%' }}
                                     />
                                     <FormFeedback>{errors.detallesCompraVenta}</FormFeedback>
                                 </Col>
@@ -416,7 +418,7 @@ const CrearEntradasSalidas: React.FC<CrearEntradasYSalidasProps> = ({ onAdd }) =
                     <div className="row" style={{ display: "flex", flexDirection: 'row', width: '100%' }}>
 
                         <div className="col-sm-4" style={{ width: '100%' }}>
-                            <FormGroup row>
+                            <FormGroup row style={{ width: '99%' }}>
                                 <Label for="producto" sm={4} className="input-label">Producto</Label>
                                 <Col sm={8}>
                                     <Input
@@ -437,7 +439,7 @@ const CrearEntradasSalidas: React.FC<CrearEntradasYSalidasProps> = ({ onAdd }) =
 
                     </div>
 
-                    <div className="row" style={{ display: "flex", flexDirection: 'row', width: '100%' }}>
+                    <div className="row" style={{ display: "flex", flexDirection: 'row', width: '99%',marginLeft:'0.5%' }}>
 
                         <div className="col-sm-4" style={{ marginRight: "10px", width: '50%' }}>
                             <FormGroup row>
@@ -481,7 +483,7 @@ const CrearEntradasSalidas: React.FC<CrearEntradasYSalidasProps> = ({ onAdd }) =
 
 
                     </div>
-                    <div className="row" style={{ display: "flex", flexDirection: 'row', width: '100%' }}>
+                    <div className="row" style={{ display: "flex", flexDirection: 'row', width: '99%',marginLeft:'0.5%'}}>
                         <div className="col-sm-4" style={{ marginRight: "10px", width: '50%' }}>
                             <FormGroup row>
                                 <label htmlFor="iva">IVA:</label>
@@ -531,13 +533,13 @@ const CrearEntradasSalidas: React.FC<CrearEntradasYSalidasProps> = ({ onAdd }) =
 
                     </div>
 
-                    <div className="btn-container">
+                    <div className="btn-container" style={{ display: "flex", flexDirection: 'row', width: '97%',marginLeft:'1.5%' }}>
 
-                        <Button className="btn-styled" onClick={handleAddProducto} style={{ display: 'flex', justifyContent: 'center', marginRight: "10px" }}>
+                        <Button className="btn-styled" onClick={handleAddProducto} style={{ display: 'flex', justifyContent: 'center', marginRight: "9px" }}>
                             <IoAddCircleOutline size={27} />
                             <span style={{ marginLeft: '5px' }}>Agregar Producto</span>
                         </Button>
-                        <Button className="btn-styled" onClick={handleNextStep} style={{ display: 'flex', justifyContent: 'center' }}>
+                        <Button className="btn-styled" onClick={handleNextStep} style={{ display: 'flex', justifyContent: 'center', marginLeft: "2%"  }}>
                             <span style={{ marginRight: '5px' }}>Siguiente</span>
                             <IoArrowForward size={27} />
                         </Button>

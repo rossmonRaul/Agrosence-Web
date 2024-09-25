@@ -75,7 +75,7 @@
     font-size: 1.2em;
     cursor: pointer;
     width: 40px; /* Ajusta según el espacio disponible */
-    height: 100%; /* Ocupa toda la altura del contenedor */
+    height: 40px; /* Ocupa toda la altura del contenedor */
     display: flex;
     align-items: center;
     justify-content: center;

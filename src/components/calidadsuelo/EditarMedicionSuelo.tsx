@@ -370,11 +370,10 @@ const EditarMedicionSuelo: React.FC<FertilizanteSeleccionado> = ({
         <div id='general' style={{ display: 'flex', flexDirection: 'column', paddingBottom: '0rem', width: '90%', margin: '0 auto' }}>
             {step === 1 && (
                 <div>
-                    <div className="form-container-fse" style={{ display: 'flex', flexDirection: 'row', width: '100%' }}>
-                        <div style={{ marginRight: '10px', width: '50%' }}>
-                            <FormGroup>
+                    <div className="form-container-fse" style={{ display: 'flex', flexDirection: 'row', width: '96.5%',justifyContent: 'center', marginLeft: '9px',marginRight: '0', gap: '0' }}>
+                            <FormGroup style={{margin: '5px', width: '65%',padding: '0px',flexGrow: '1', maxWidth:' 100%'}}>
                                 <label htmlFor="fincas">Finca:</label>
-                                <select className="custom-select" id="fincas" value={selectedFinca} onChange={handleFincaChange}>
+                                <select className="custom-select" id="fincas" value={selectedFinca} onChange={handleFincaChange} style={{marginTop: '1%', height: '55%'}}>
                                     <option key="default-finca" value="">Seleccione...</option>
                                     {filteredFincas.map((finca) => (
                                         <option key={`${finca.idFinca}-${finca.nombre || 'undefined'}`} value={finca.idFinca}>{finca.nombre || 'Undefined'}</option>
@@ -382,11 +381,9 @@ const EditarMedicionSuelo: React.FC<FertilizanteSeleccionado> = ({
                                 </select>
                                 {errors.finca && <FormFeedback>{errors.finca}</FormFeedback>}
                             </FormGroup>
-                        </div>
-                        <div style={{ marginRight: '0px', width: '50%' }}>
-                            <FormGroup>
+                            <FormGroup style={{margin: '5px', width: '65%',padding: '0px',flexGrow: '1', maxWidth:' 100%'}} >
                                 <label htmlFor="parcelas">Parcela:</label>
-                                <select className="custom-select" id="parcelas" value={selectedParcela} onChange={handleParcelaChange}>
+                                <select className="custom-select" id="parcelas" value={selectedParcela} onChange={handleParcelaChange} style={{marginTop: '1%', height: '55%'}}>
                                     <option key="default-parcela" value="">Seleccione...</option>
                                     {filteredParcelas.map((parcela) => (
                                         <option key={`${parcela.idParcela}-${parcela.nombre || 'undefined'}`} value={parcela.idParcela}>{parcela.nombre || 'Undefined'}</option>
@@ -394,12 +391,10 @@ const EditarMedicionSuelo: React.FC<FertilizanteSeleccionado> = ({
                                 </select>
                                 {errors.parcela && <FormFeedback>{errors.parcela}</FormFeedback>}
                             </FormGroup>
-                        </div>
                     </div>
 
-                    <div className="row">
-                        <div style={{ marginRight: "10px" }}>
-                            <FormGroup row>
+                    <div className="form-container-fse" style={{ display: 'flex', flexDirection: 'row', width: '96.5%',justifyContent: 'center', marginLeft: '9px',marginRight: '0', gap: '0' }}>
+                            <FormGroup row style={{margin: '5px', width: '65%',padding: '0px',flexGrow: '1', maxWidth:' 100%'}}>
                                 <Label for="medicionesCalidadSuelo" sm={4} className="input-label">Mediciones de Calidad de suelo</Label>
                                 <Col sm={8}>
                                     <Input
@@ -416,12 +411,11 @@ const EditarMedicionSuelo: React.FC<FertilizanteSeleccionado> = ({
                                     <FormFeedback>{errors.fertilizante}</FormFeedback>
                                 </Col>
                             </FormGroup>
-                        </div>
                     </div>
 
-                    <div className="row" style={{ display: "flex" }}>
-                        <div className="col-sm-4" style={{ marginRight: "10px" }}>
-                            <FormGroup row>
+                    <div className="form-container-fse" style={{ display: 'flex', flexDirection: 'row', width: '96.5%',justifyContent: 'center', marginLeft: '9px',marginRight: '0', gap: '0' }}>
+                        
+                            <FormGroup row style={{margin: '5px', width: '65%',padding: '0px',flexGrow: '1', maxWidth:' 100%'}}>
                                 <Label for="respiracionSuelo" sm={4} className="input-label">Ensayo de respiración de suelo (mg CO2-C/g)</Label>
                                 <Col sm={8}>
                                     <Input
@@ -436,9 +430,8 @@ const EditarMedicionSuelo: React.FC<FertilizanteSeleccionado> = ({
                                     />
                                 </Col>
                             </FormGroup>
-                        </div>
-                        <div className="col-sm-4" >
-                            <FormGroup row>
+                        
+                            <FormGroup row style={{margin: '5px', width: '65%',padding: '0px',flexGrow: '1', maxWidth:' 100%'}}>
                                 <Label for="infiltracion" sm={4} className="input-label">Ensayo de infiltración (mm/hora)</Label>
                                 <Col sm={8}>
                                     <Input
@@ -453,13 +446,11 @@ const EditarMedicionSuelo: React.FC<FertilizanteSeleccionado> = ({
                                     <FormFeedback>{errors.infiltracion}</FormFeedback>
                                 </Col>
                             </FormGroup>
-                        </div>
+                        
                     </div>
 
-
-                    <div className="row" style={{ display: "flex" }}>
-                        <div className="col-sm-4" style={{ marginRight: "10px" }}>
-                            <FormGroup row className="d-flex align-items-center">
+                    <div className="form-container-fse" style={{ display: 'flex', flexDirection: 'row', width: '96.5%',justifyContent: 'center', marginLeft: '9px',marginRight: '0', gap: '0' }}>
+                            <FormGroup row style={{margin: '5px', width: '65%',padding: '0px',flexGrow: '1', maxWidth:' 100%'}}>
                                 <Label for="densidadAparente" sm={4} className="input-label flex-grow-1">Ensayo de densidad aparente (g/cm<sup>3</sup>)</Label>
                                 <Col sm={8}>
                                     <Input
@@ -475,9 +466,7 @@ const EditarMedicionSuelo: React.FC<FertilizanteSeleccionado> = ({
                                     <FormFeedback>{errors.densidadAparente}</FormFeedback>
                                 </Col>
                             </FormGroup>
-                        </div>
-                        <div className="col-sm-4" style={{ marginRight: "10px" }}>
-                            <FormGroup row className="d-flex align-items-center">
+                            <FormGroup row style={{margin: '5px', width: '65%',padding: '0px',flexGrow: '1', maxWidth:' 100%',marginTop:'1%'}}>
                                 <Label for="conductividadElectrica" sm={4} className="input-label flex-grow-1">Ensayo de conductividad eléctrica (dS/m)</Label>
                                 <Col sm={8}>
                                     <Input
@@ -491,10 +480,17 @@ const EditarMedicionSuelo: React.FC<FertilizanteSeleccionado> = ({
                                         maxLength={50}
                                     />
                                 </Col>
-                            </FormGroup>
-                        </div>
-                        <div className="col-sm-4" >
-                            <FormGroup row className="d-flex align-items-center">
+                            </FormGroup>                    
+                    </div>
+                    <div className='botonesN' style={{display:'flex', justifyContent:'end', marginLeft:'13px'}}>
+                        <button onClick={handleNextStep} className="btn-styled" style={{width:'48%',marginRight:'2%'}}>Siguiente<IoArrowForward size={20} style={{marginLeft: '2%'}}/></button>
+                    </div>
+                </div>
+            )}
+            {step === 2 && (
+                <div>
+                   <div className="form-container-fse" style={{ display: 'flex', flexDirection: 'row', marginLeft:'1%', width:'97%' }}>
+                            <FormGroup row style={{margin: '5px', width: '65%',padding: '0px',flexGrow: '1', maxWidth:' 100%'}}>
                                 <Label for="pH" sm={4} className="input-label flex-grow-1">Ensayo de pH (unidad de pH)</Label>
                                 <Col sm={8}>
                                     <Input
@@ -509,19 +505,7 @@ const EditarMedicionSuelo: React.FC<FertilizanteSeleccionado> = ({
                                     <FormFeedback>{errors.pH}</FormFeedback>
                                 </Col>
                             </FormGroup>
-                        </div>
-                    </div>
-                    <div className='botonesN'>
-                        <button onClick={handleNextStep} className="btn-styled">Siguiente<IoArrowForward size={20} style={{marginLeft: '2%'}}/></button>
-                    </div>
-                </div>
-            )}
-            {step === 2 && (
-                <div>
-                    <div className="form-container-fse" style={{ display: 'flex', flexDirection: 'column', width: '100%' }}>
-                        <div className="row" style={{ display: "flex" }}>
-                            <div className="col-sm-4" style={{ marginRight: "10px" }}>
-                                <FormGroup row>
+                            <FormGroup row style={{margin: '5px', width: '65%',padding: '0px',flexGrow: '1', maxWidth:' 100%'}}>
                                     <Label for="nitratosSuelo" sm={4} className="input-label">Ensayo de nitratos del suelo (mg/kg)</Label>
                                     <Col sm={8}>
                                         <Input
@@ -537,9 +521,9 @@ const EditarMedicionSuelo: React.FC<FertilizanteSeleccionado> = ({
                                         <FormFeedback>{errors.nitratosSuelo}</FormFeedback>
                                     </Col>
                                 </FormGroup>
-                            </div>
-                            <div className="col-sm-4" style={{ marginRight: "10px" }}>
-                                <FormGroup row>
+                    </div>
+                        <div className="form-container-fse" style={{ display: 'flex', flexDirection: 'row', marginLeft:'1%', width:'97%' }}>
+                                <FormGroup row style={{margin: '5px', width: '65%',padding: '0px',flexGrow: '1', maxWidth:' 100%'}}>
                                     <Label for="estabilidadAgregados" sm={4} className="input-label">Ensayo de estabilidad de Agregados (%)</Label>
                                     <Col sm={8}>
                                         <Input
@@ -554,9 +538,7 @@ const EditarMedicionSuelo: React.FC<FertilizanteSeleccionado> = ({
                                         />
                                     </Col>
                                 </FormGroup>
-                            </div>
-                            <div className="col-sm-4">
-                                <FormGroup row>
+                                <FormGroup row style={{margin: '5px', width: '65%',padding: '0px',flexGrow: '1', maxWidth:' 100%'}}>
                                     <Label for="desleimiento" sm={4} className="input-label">Ensayo de desleimiento (%)</Label>
                                     <Col sm={8}>
                                         <Input
@@ -571,14 +553,12 @@ const EditarMedicionSuelo: React.FC<FertilizanteSeleccionado> = ({
                                         <FormFeedback>{errors.desleimiento}</FormFeedback>
                                     </Col>
                                 </FormGroup>
-                            </div>
                         </div>
 
 
 
-                        <div className="row" style={{ display: 'flex', justifyContent: 'space-between' }}>
-                            <div className="col-sm-6" style={{ marginRight: "10px" }}>
-                                <FormGroup row>
+                        <div className="form-container-fse" style={{ display: 'flex', flexDirection: 'row', marginLeft:'1%', width:'97%' }}>
+                                <FormGroup row style={{margin: '5px', width: '65%',padding: '0px',flexGrow: '1', maxWidth:' 100%'}}>
                                     <Label for="lombrices" sm={4} className="input-label">Ensayo de lombrices (número de lombrices/m<sup>2</sup>)</Label>
                                     <Col sm={8}>
                                         <Input
@@ -590,13 +570,12 @@ const EditarMedicionSuelo: React.FC<FertilizanteSeleccionado> = ({
                                             className={errors.lombrices ? 'input-styled input-error' : 'input-styled'}
                                             placeholder="0"
                                             maxLength={50}
+                                            style={{marginTop: '2%'}}
                                         />
                                         <FormFeedback>{errors.lombrices}</FormFeedback>
                                     </Col>
                                 </FormGroup>
-                            </div>
-                            <div className="col-sm-6">
-                                <FormGroup row>
+                                <FormGroup row style={{margin: '5px', width: '65%',padding: '0px',flexGrow: '1', maxWidth:' 100%',marginTop:'1%'}}>
                                     <Label for="calidadAgua" sm={4} className="input-label">Ensayo de la calidad del agua (mg/L)</Label>
                                     <Col sm={8}>
                                         <Input
@@ -608,14 +587,14 @@ const EditarMedicionSuelo: React.FC<FertilizanteSeleccionado> = ({
                                             className="input-styled"
                                             placeholder="0.0"
                                             maxLength={200}
+                                            style={{marginTop: '2.3%'}}
                                         />
                                         <FormFeedback>{errors.calidadAgua}</FormFeedback>
                                     </Col>
                                 </FormGroup>
-                            </div>
                         </div>
-
-                        <FormGroup row>
+                        <div className="form-container-fse" style={{ display: 'flex', flexDirection: 'row', marginLeft:'1%', width:'97%' }}>
+                        <FormGroup row style={{margin: '5px', width: '65%',padding: '0px',flexGrow: '1', maxWidth:' 100%'}}>
                             <Label for="observaciones" sm={4} className="input-label">Estimaciones y observaciones de fisica del suelo</Label>
                             <Col sm={8}>
                                 <Input
@@ -627,15 +606,16 @@ const EditarMedicionSuelo: React.FC<FertilizanteSeleccionado> = ({
                                     className="input-styled"
                                     placeholder="Estimaciones y observaciones de fisica del suelo"
                                     maxLength={200}
+                                    
                                 />
                                 <FormFeedback>{errors.observaciones}</FormFeedback>
                             </Col>
                         </FormGroup>
-                        <div className='botones'>
+                        </div>
+                        <div className='botones' style={{width:'99%'}}>
                             <button onClick={handlePreviousStep} className='btn-styled-danger'><IoArrowBack size={20} style={{marginRight: '2%'}}/>Anterior</button>
                             <Button onClick={handleSubmitConValidacion} className="btn-styled"><IoSave size={20} style={{marginRight: '2%'}}/>Actualizar datos</Button>                            
                         </div>
-                    </div>
                 </div>
             )}
         </div>

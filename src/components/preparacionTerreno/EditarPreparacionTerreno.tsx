@@ -315,10 +315,10 @@ const ModificacionPreparacionTerreno: React.FC<PreparacionTerrenoSeleccionado> =
 
     return (
         <div id='general' style={{ display: 'flex', flexDirection: 'column', paddingBottom: '0rem', width: '100%', margin: '0 auto' }}>
-            <div className="form-container-fse" style={{ display: 'flex', flexDirection: 'column', width: '100%' }}>
-                <FormGroup>
+            <div className="form-container-fse" style={{display: 'flex', flexDirection: 'row', width: '96.5%',justifyContent: 'center', marginLeft: '9px',marginRight: '0', gap: '0' }}>
+                <FormGroup style={{margin: '5px', width: '65%',padding: '0px',flexGrow: '1', maxWidth:' 100%'}}>
                     <label htmlFor="fincas">Finca:</label>
-                    <select className="custom-select" id="fincas" value={selectedFinca} onChange={handleFincaChange} disabled={readOnly} style={{marginTop: '1%'}}>
+                    <select className="custom-select" id="fincas" value={selectedFinca} onChange={handleFincaChange} disabled={readOnly} style={{marginTop: '1%', height: '55%'}}>
                         <option key="default-finca" value="">Seleccione...</option>
                         {filteredFincas.map((finca) => (
                             <option key={`${finca.idFinca}-${finca.nombre || 'undefined'}`} value={finca.idFinca}>{finca.nombre || 'Undefined'}</option>
@@ -327,9 +327,9 @@ const ModificacionPreparacionTerreno: React.FC<PreparacionTerrenoSeleccionado> =
                     {errors.finca && <FormFeedback>{errors.finca}</FormFeedback>}
                 </FormGroup>
 
-                <FormGroup>
+                <FormGroup style={{margin: '5px', width: '65%',padding: '0px',flexGrow: '1', maxWidth:' 100%'}}>
                     <label htmlFor="parcelas">Parcela:</label>
-                    <select className="custom-select" id="parcelas" value={selectedParcela} onChange={handleParcelaChange} disabled={readOnly} style={{marginTop: '1%'}}>
+                    <select className="custom-select" id="parcelas" value={selectedParcela} onChange={handleParcelaChange} disabled={readOnly} style={{marginTop: '1%',height: '55%'}}>
                         <option key="default-parcela" value="">Seleccione...</option>
                         {filteredParcelas.map((parcela) => (
                             <option key={`${parcela.idParcela}-${parcela.nombre || 'undefined'}`} value={parcela.idParcela}>{parcela.nombre || 'Undefined'}</option>
@@ -369,7 +369,7 @@ const ModificacionPreparacionTerreno: React.FC<PreparacionTerrenoSeleccionado> =
                                 value={formData.idActividad}
                                 onChange={handleInputChange}
                                 disabled={readOnly}
-                                style={{marginTop: '1%'}}
+                                style={{marginTop: '1%', height:'44px'}}
                             >
                                 <option value="">Seleccione...</option>
                                 {actividades.map((actividad) => (
@@ -391,7 +391,7 @@ const ModificacionPreparacionTerreno: React.FC<PreparacionTerrenoSeleccionado> =
                                 value={formData.idMaquinaria}
                                 onChange={handleInputChange}
                                 disabled={readOnly}
-                                style={{marginTop: '1%'}}
+                                style={{marginTop: '1%', height:'44px'}}
                             >
                                 <option value="">Seleccione...</option>
                                 {maquinarias.map((maquinaria) => (
@@ -481,7 +481,7 @@ const ModificacionPreparacionTerreno: React.FC<PreparacionTerrenoSeleccionado> =
                 </div>
             </div>
 
-            <FormGroup row>
+            <FormGroup row style={{width:'97%',marginLeft:'8px'}}>
                 <Label for="observaciones" sm={2} className="input-label">Observaciones</Label>
                 <Col sm={10}>
                     <Input
@@ -501,8 +501,8 @@ const ModificacionPreparacionTerreno: React.FC<PreparacionTerrenoSeleccionado> =
             </FormGroup>
 
             {!readOnly && (
-                <div className='botonesN'>
-                    <Button onClick={handleSubmitConValidacion} className="btn-styled"><IoSave size={20} style={{marginRight: '1%'}}/>Actualizar datos</Button>
+                <div className='botonesN' style={{display:'flex', justifyContent:'center'}}>
+                    <Button onClick={handleSubmitConValidacion} className="btn-styled" style={{width:'50%'}}><IoSave size={20} style={{marginRight: '1%'}}/>Actualizar datos</Button>
                 </div>
             )}
         </div>

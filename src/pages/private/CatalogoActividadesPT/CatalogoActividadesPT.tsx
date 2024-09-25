@@ -194,7 +194,7 @@ function CatalogoActividadesPT() {
                 title="Agregar nueva actividad"
                 onCancel={abrirCerrarModalInsertar}
             >
-                <div className='form-container' style={{ width: '350px' }}>
+                <div className='form-container' style={{ width: '95%'  }}>
                     <div className='form-group'>
                         <InsertarCatalogoActividades onAdd={handleInsertarActividad} />
                     </div>
@@ -207,7 +207,7 @@ function CatalogoActividadesPT() {
                 title="Editar actividad"
                 onCancel={abrirCerrarModalEditar}
             >
-                <div className='form-container' style={{ width: '350px' }}>
+                <div className='form-container' style={{ width: '95%' }}>
                     <div className='form-group'>
                         <EditarCatalogoActividades
                             idActividad={selectedActividad.idActividad}

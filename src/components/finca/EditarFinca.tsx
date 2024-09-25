@@ -117,8 +117,8 @@ const EditarFinca: React.FC<Props> = ({ idFinca, nombreEditar,ubicacion, onEdit 
 
     return (
         <div>
-            <div className="form-container-fse">
-                <FormGroup row>
+            <div className="form-container-fse" style={{ display: 'flex', flexDirection: 'row', width: '96.5%',justifyContent: 'center', marginLeft: '9px',marginRight: '0', gap: '0' }}>
+                <FormGroup row style={{margin: '5px', width: '65%',padding: '0px',flexGrow: '1', maxWidth:' 100%'}}>
                     <Label for="nombre" sm={2} className="input-label">Nombre: </Label>
                     <Col sm={12}>
                         <Input
@@ -134,7 +134,7 @@ const EditarFinca: React.FC<Props> = ({ idFinca, nombreEditar,ubicacion, onEdit 
                         <FormFeedback>{errors.nombre}</FormFeedback>
                     </Col>
                 </FormGroup>
-                <FormGroup row>
+                <FormGroup row style={{margin: '5px', width: '65%',padding: '0px',flexGrow: '1', maxWidth:' 100%'}}>
                     <Label for="ubicacion" sm={2} className="input-label">Ubicación: </Label>
                     <Col sm={12}>
                         <Input
@@ -151,8 +151,8 @@ const EditarFinca: React.FC<Props> = ({ idFinca, nombreEditar,ubicacion, onEdit 
                     </Col>
                 </FormGroup>
             </div>
-            <div className='botonesN'>
-                <button onClick={handleSubmitConValidacion} className="btn-styled"><IoSave size={20} style={{marginRight: '2%'}}/>Actualizar</button>
+            <div className='botonesN' style={{display:'flex', justifyContent:'center'}}>
+                <button onClick={handleSubmitConValidacion} className="btn-styled" style={{width:'50%'}}><IoSave size={20} style={{marginRight: '2%'}}/>Actualizar</button>
             </div>            
         </div>
     );

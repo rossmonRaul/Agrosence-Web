@@ -157,13 +157,13 @@ const DetallesContenidoDeNitrogeno: React.FC<ContenidoDeNitrogenoSeleccionado> =
                 <div style={{ flex: 1, marginRight: '0.5rem', marginLeft: '0.5rem' }}>
                     <FormGroup>
                         <label htmlFor="fincas">Finca:</label>
-                        <Input type="text" id="fincas" value={selectedFinca} readOnly />
+                        <Input type="text" id="fincas" value={selectedFinca}  style={{height:'26px'}} readOnly />
                     </FormGroup>
                 </div>
                 <div style={{ flex: 1, marginRight: '0.5rem', marginLeft: '0.5rem' }}>
                     <FormGroup>
                         <label htmlFor="parcelas">Parcela:</label>
-                        <Input type="text" id="parcelas" value={selectedParcela} readOnly />
+                        <Input type="text" id="parcelas" value={selectedParcela}  style={{height:'26px'}} readOnly />
                     </FormGroup>
                 </div>
             </div>
@@ -171,7 +171,7 @@ const DetallesContenidoDeNitrogeno: React.FC<ContenidoDeNitrogenoSeleccionado> =
                 <div style={{ flex: 1, marginRight: '0.5rem', marginLeft: '0.5rem' }}>
                     <FormGroup>
                         <label htmlFor="puntosMedicion">Punto de medición:</label>
-                        <Input type="text" id="puntosMedicion" value={selectedPuntoMedicion} readOnly />
+                        <Input type="text" id="puntosMedicion" value={selectedPuntoMedicion}  style={{height:'26px'}} readOnly />
                     </FormGroup>
                 </div>
                 <div style={{ flex: 1, marginRight: '0.5rem', marginLeft: '0.5rem' }}>
@@ -184,12 +184,13 @@ const DetallesContenidoDeNitrogeno: React.FC<ContenidoDeNitrogenoSeleccionado> =
                                 name="fechaMuestreo"
                                 value={formData.fechaMuestreo}
                                 readOnly
+                                style={{height:'26px'}}
                             />
                         </Col>
                     </FormGroup>
                 </div>
             </div>
-            <div style={{ display: 'flex', flexDirection: 'row', marginBottom: '0rem', width: '100%' }}>
+            <div style={{ display: 'flex', flexDirection: 'row', marginBottom: '0rem', width: '99%' }}>
                 <div style={{ flex: 2, marginRight: '0.5rem', marginLeft: '0.5rem' }}>
                     <FormGroup row>
                         <Label for="contenidoNitrogenoSuelo" sm={4} className="input-label">Contenido de Nitrógeno en Suelo (%)</Label>
@@ -200,6 +201,7 @@ const DetallesContenidoDeNitrogeno: React.FC<ContenidoDeNitrogenoSeleccionado> =
                                 name="contenidoNitrogenoSuelo"
                                 value={formData.contenidoNitrogenoSuelo}
                                 readOnly
+                                style={{height:'26px'}}
                             />
                         </Col>
                     </FormGroup>
@@ -214,6 +216,7 @@ const DetallesContenidoDeNitrogeno: React.FC<ContenidoDeNitrogenoSeleccionado> =
                                 name="contenidoNitrogenoPlanta"
                                 value={formData.contenidoNitrogenoPlanta}
                                 readOnly
+                                style={{height:'26px'}}
                             />
                         </Col>
                     </FormGroup>
@@ -230,6 +233,7 @@ const DetallesContenidoDeNitrogeno: React.FC<ContenidoDeNitrogenoSeleccionado> =
                                 name="metodoAnalisis"
                                 value={formData.metodoAnalisis}
                                 readOnly
+                                style={{height:'26px'}}
                             />
                         </Col>
                     </FormGroup>
@@ -244,6 +248,7 @@ const DetallesContenidoDeNitrogeno: React.FC<ContenidoDeNitrogenoSeleccionado> =
                                 name="humedadObservable"
                                 value={formData.humedadObservable}
                                 readOnly
+                                style={{height:'26px'}}
                             />
                         </Col>
                     </FormGroup>
@@ -260,6 +265,7 @@ const DetallesContenidoDeNitrogeno: React.FC<ContenidoDeNitrogenoSeleccionado> =
                                 name="condicionSuelo"
                                 value={formData.condicionSuelo}
                                 readOnly
+                                style={{height:'26px'}}
                             />
                         </Col>
                     </FormGroup>
@@ -274,6 +280,7 @@ const DetallesContenidoDeNitrogeno: React.FC<ContenidoDeNitrogenoSeleccionado> =
                                 name="observaciones"
                                 value={formData.observaciones}
                                 readOnly
+                                style={{height:'26px'}}
                             />
                         </Col>
                     </FormGroup>

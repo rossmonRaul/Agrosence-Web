@@ -183,7 +183,7 @@ function MedidasCultivos() {
                 title="Insertar medida"
                 onCancel={abrirCerrarModalInsertar}
             >
-                <div className='form-container'>
+                <div className='form-container' style={{  width: '90%' }}>
                     <div className='form-group'>
                         <CrearMedidasCultivos
                             onAdd={handleAgregarMedidasCultivo}
@@ -198,7 +198,7 @@ function MedidasCultivos() {
                 title="Editar medida"
                 onCancel={abrirCerrarModalEditar}
             >
-                <div className='form-container'>
+                <div className='form-container' style={{  width: '90%' }}>
                     <div className='form-group'>
                         <EditarMedidasCultivos
                             medida={selectedMedidasCultivo.medida}

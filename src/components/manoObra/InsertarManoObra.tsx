@@ -370,8 +370,8 @@ const CrearManoObra: React.FC<CrearManoObraProps> = ({ onAdd }) => {
 
 
                 </div>
-                <div className='botonesN'>
-                    <Button onClick={handleSubmit} className="btn-styled"><IoSave size={20} style={{marginRight: '2%'}}/>Guardar</Button>
+                <div className='botonesN' style={{display:'flex', justifyContent:'center'}}>
+                    <Button onClick={handleSubmit} className="btn-styled"  style={{display:'flex', justifyContent:'center'}}><IoSave size={20} style={{marginRight: '2%'}}/>Guardar</Button>
                 </div>
             </div>
         </div>

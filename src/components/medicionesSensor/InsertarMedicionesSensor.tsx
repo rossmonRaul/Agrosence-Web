@@ -172,8 +172,8 @@ const InsertarMedicionSensor: React.FC<AgregarMedicion> = ({ onAdd }) => {
                     </Col>
                 </FormGroup>
             </div>
-            <div className='botonesN'>
-                <button onClick={handleSubmitConValidacion} className="btn-styled"><IoSave size={20} style={{marginRight: '2%'}}/>Guardar medición</button>
+            <div className='botonesN' style={{display:'flex', justifyContent:'center'}}>
+                <button onClick={handleSubmitConValidacion} className="btn-styled" style={{width:'50%'}}><IoSave size={20} style={{marginRight: '2%'}}/>Guardar medición</button>
             </div>
         </div>
     );

@@ -436,11 +436,11 @@ const CrearProblemaPlagas: React.FC<CrearProblemaPlagasProps> = ({ onAdd }) => {
         <div id='general' style={{ display: 'flex', flexDirection: 'column', paddingBottom: '0rem', width: '90%', margin: '0 auto', minWidth: '650px' }}>
             {step === 1 && (
                 <div>
-                    <div className="form-container-fse" style={{ display: 'flex', flexDirection: 'row', width: '100%' }}>
+                    <div className="form-container-fse" style={{ display: 'flex', flexDirection: 'row', width: '99%',marginLeft:'0.6%' }}>
                         <div style={{ marginRight: '10px', width: '50%' }}>
                             <FormGroup>
                                 <label htmlFor="fincas">Finca:</label>
-                                <select className="custom-select input-styled" id="fincas" value={selectedFinca} onChange={handleFincaChange}>
+                                <select className="custom-select input-styled" id="fincas" value={selectedFinca} onChange={handleFincaChange} style={{height:'44px'}}>
                                     <option key="default-finca" value="">Seleccione...</option>
                                     {filteredFincas.map((finca) => (
                                         <option key={`${finca.idFinca}-${finca.nombre || 'undefined'}`} value={finca.idFinca}>{finca.nombre || 'Undefined'}</option>
@@ -452,7 +452,7 @@ const CrearProblemaPlagas: React.FC<CrearProblemaPlagasProps> = ({ onAdd }) => {
                         <div style={{ marginRight: '0px', width: '50%' }}>
                             <FormGroup>
                                 <label htmlFor="parcelas">Parcela:</label>
-                                <select className="custom-select input-styled" id="parcelas" value={selectedParcela} onChange={handleParcelaChange}>
+                                <select className="custom-select input-styled" id="parcelas" value={selectedParcela} onChange={handleParcelaChange} style={{height:'44px'}}>
                                     <option key="default-parcela" value="">Seleccione...</option>
                                     {parcelasFiltradas.map((parcela) => (
 
@@ -465,8 +465,8 @@ const CrearProblemaPlagas: React.FC<CrearProblemaPlagasProps> = ({ onAdd }) => {
                     </div>
 
 
-                    <div className="row" style={{ display: "flex", flexDirection: 'row', width: '100%' }}>
-    <div style={{ flex: 1, marginRight: '10px', width: '50%' }}>
+                    <div className="row" style={{ display: "flex", flexDirection: 'row', width: '99%',marginLeft:'0.6%'  }}>
+    <div style={{ flex: 1,  width: '50%' }}>
         <FormGroup row>
             <Label for="fecha" sm={4} className="input-label">Fecha</Label>
             <Col sm={8}>
@@ -495,6 +495,7 @@ const CrearProblemaPlagas: React.FC<CrearProblemaPlagasProps> = ({ onAdd }) => {
                     onChange={handleInputChange}
                     className={errors.cultivo ? 'input-styled input-error' : 'input-styled'}
                     placeholder="Cultivo"
+                    style={{width:'100.5%'}}
                 />
                 <FormFeedback>{errors.cultivo}</FormFeedback>
             </Col>
@@ -502,8 +503,8 @@ const CrearProblemaPlagas: React.FC<CrearProblemaPlagasProps> = ({ onAdd }) => {
     </div>
 </div>
 
-<div className="row" style={{ display: "flex", flexDirection: 'row', width: '100%' }}>
-<div style={{ flex: 1, marginRight: '10px', width: '50%' }}>
+<div className="row" style={{ display: "flex", flexDirection: 'row',  width: '99%',marginLeft:'0.6%' }}>
+<div style={{ flex: 1, width: '50%' }}>
                             <FormGroup row>
                                  <Label for="incidencia" sm={4} className="input-label">Valoración:</Label>
                                       <Col sm={8}>
@@ -538,6 +539,7 @@ const CrearProblemaPlagas: React.FC<CrearProblemaPlagasProps> = ({ onAdd }) => {
                     placeholder="Valor"
                     min="0"
                     max="100"
+                    style={{width:'100.5%'}}
                 />
                 <FormFeedback>{errors.valor}</FormFeedback>
             </Col>
@@ -565,8 +567,8 @@ const CrearProblemaPlagas: React.FC<CrearProblemaPlagasProps> = ({ onAdd }) => {
     </div>
 </div>
 
-                    <div className='botonesN'>
-                        <button onClick={handleNextStep} className="btn-styled">Siguiente<IoArrowForward size={20} style={{marginLeft: '2%'}}/></button>
+                    <div className='botonesN' style={{display:'flex', justifyContent:'end', marginLeft:'22px'}}>
+                        <button onClick={handleNextStep} className="btn-styled" style={{width:'49.5%'}}>Siguiente<IoArrowForward size={20} style={{marginLeft: '2%'}}/></button>
                     </div>
                 </div>//cierra principal
             )}
@@ -574,7 +576,7 @@ const CrearProblemaPlagas: React.FC<CrearProblemaPlagasProps> = ({ onAdd }) => {
                 <div>
                     <div className="row" style={{ display: "flex" }}>
                         <div className="row" style={{ display: "flex", flexDirection: 'row', width: '100%' }}>
-                            <div style={{ flex: 1 }}>
+                            <div style={{ width:'100%' }}>
                                 <FormGroup row>
                                     <Label for="metodologiaEstimacion" sm={4} className="input-label">Metodologia de Estimacion</Label>
                                     <Col sm={8}>
@@ -586,6 +588,7 @@ const CrearProblemaPlagas: React.FC<CrearProblemaPlagasProps> = ({ onAdd }) => {
                                             onChange={handleInputChange}
                                             className={errors.metodologiaEstimacion ? 'input-styled input-error' : 'input-styled'}
                                             placeholder="Metodologia de Estimacion"
+                                            style={{ width:'101%' }}
                                         />
                                         <FormFeedback>{errors.metodologiaEstimacion}</FormFeedback>
                                     </Col>
@@ -595,7 +598,7 @@ const CrearProblemaPlagas: React.FC<CrearProblemaPlagasProps> = ({ onAdd }) => {
                         
 
                     </div>
-                    <div className="col-sm-4" style={{ marginRight: "0px" }}>
+                    <div className="col-sm-4" style={{ marginRight: "0px",width:'98%',marginLeft:'1%' }}>
                         <FormGroup row>
                             <Label for="problema" sm={4} className="input-label">Problema</Label>
                             <Col sm={8}>
@@ -614,7 +617,7 @@ const CrearProblemaPlagas: React.FC<CrearProblemaPlagasProps> = ({ onAdd }) => {
                             </Col>
                         </FormGroup>
                     </div>
-                    <div className="col-sm-4" style={{ marginRight: "0px" }}>
+                    <div className="col-sm-4" style={{ marginRight: "0px" ,width:'98%',marginLeft:'1%' }}>
                         <FormGroup row>
                             <Label for="accionTomada" sm={4} className="input-label">Accion Tomada</Label>
                             <Col sm={8}>

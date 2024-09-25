@@ -370,12 +370,12 @@ const ModificacionAlertaCatalogo: React.FC<AlertaCatalogoSeleccionado> = ({
                 </div>
                 {!readOnly && (
                     <FormGroup row>
-                        <Col sm={{ size: 10, offset: 2 }}>
-                            <Button onClick={handleSubmitConValidacion} className="btn-styled" style={{ marginTop: '20px', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-                                <IoSaveOutline size={20} style={{ marginRight: '8px' }} />
-                                Guardar
+                          <div className='botonesN' style={{display:'flex', justifyContent:'center'}}>
+                            <Button onClick={handleSubmitConValidacion} className="btn-styled"  style={{width:'50%'}}>
+                                <IoSaveOutline size={20}  />
+                                Actualizar datos
                             </Button>
-                        </Col>
+                            </div>
                     </FormGroup>
                 )}
             </div>

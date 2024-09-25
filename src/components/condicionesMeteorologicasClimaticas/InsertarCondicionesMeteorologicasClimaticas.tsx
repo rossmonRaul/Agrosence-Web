@@ -260,11 +260,10 @@ const InsertarCondicionesMeteorologicasClimaticas: React.FC<InsertarManejoFertil
     };
     return (
         <div id='general' style={{ display: 'flex', flexDirection: 'column', paddingBottom: '0rem', width: '100%', margin: '0 auto' }}>
-            <div className="form-container-fse" style={{ display: 'flex', flexDirection: 'column', width: '95%', marginLeft: '0.5rem' }}>
-                <div style={{ flex: 1, marginRight: '0.5rem', marginLeft: '0.5rem' }}>
-                    <FormGroup>
+            <div className="form-container-fse" style={{ display: 'flex', flexDirection: 'row', width: '91.5%',justifyContent: 'center', marginLeft: '2.5%',marginRight: '0', gap: '0' }}>
+                    <FormGroup style={{margin: '5px', width: '61.5%',padding: '0px',flexGrow: '1', maxWidth:' 100%'}}>
                         <label htmlFor="fincas">Finca:</label>
-                        <select className="custom-select" id="fincas" value={selectedFinca} onChange={handleFincaChange}>
+                        <select className="custom-select" id="fincas" value={selectedFinca} onChange={handleFincaChange} style={{height:'44px'}}>
                             <option key="default-finca" value="">Seleccione...</option>
                             {filteredFincas.map((finca) => (
                                 <option key={`${finca.idFinca}-${finca.nombre || 'undefined'}`} value={finca.idFinca}>{finca.nombre || 'Undefined'}</option>
@@ -272,11 +271,9 @@ const InsertarCondicionesMeteorologicasClimaticas: React.FC<InsertarManejoFertil
                         </select>
                         {errors.finca && <FormFeedback>{errors.finca}</FormFeedback>}
                     </FormGroup>
-                </div>
-                <div style={{ flex: 1, marginRight: '0.5rem', marginLeft: '0.5rem' }}>
-                    <FormGroup>
+                    <FormGroup style={{margin: '5px', width: '61.5%',padding: '0px',flexGrow: '1', maxWidth:' 100%',marginLeft:'3%'}}>
                         <label htmlFor="parcelas">Parcela:</label>
-                        <select className="custom-select" id="parcelas" value={selectedParcela} onChange={handleParcelaChange}>
+                        <select className="custom-select" id="parcelas" value={selectedParcela} onChange={handleParcelaChange} style={{height:'44px'}}>
                             <option key="default-parcela" value="">Seleccione...</option>
                             {parcelasFiltradas.map((parcela) => (
                                 <option key={`${parcela.idParcela}-${parcela.nombre || 'undefined'}`} value={parcela.idParcela}>{parcela.nombre || 'Undefined'}</option>
@@ -285,6 +282,8 @@ const InsertarCondicionesMeteorologicasClimaticas: React.FC<InsertarManejoFertil
                         {errors.parcela && <FormFeedback>{errors.parcela}</FormFeedback>}
                     </FormGroup>
                 </div>
+            <div className="form-container-fse" style={{ display: 'flex', flexDirection: 'column', width: '95%', marginLeft: '0.5rem' }}>
+                
                 <div style={{ display: 'flex', flexDirection: 'row', marginBottom: '0rem' }}>
                     <div style={{ flex: 1, marginRight: '0.5rem', marginLeft: '0.5rem' }}>
                         <FormGroup row>
@@ -397,8 +396,8 @@ const InsertarCondicionesMeteorologicasClimaticas: React.FC<InsertarManejoFertil
                 </div>
             </div>
 
-            <div className='botonesN'>
-                <Button onClick={handleSubmitConValidacion} className="btn-styled btn btn-secondary"><IoSave size={20} style={{marginRight: '1%'}}/>Guardar</Button>                    
+            <div className='botonesN' style={{display:'flex', justifyContent:'center'}}>
+                <Button onClick={handleSubmitConValidacion} className="btn-styled btn btn-secondary" style={{width:'50%'}}><IoSave size={20} style={{marginRight: '1%'}}/>Guardar</Button>                    
             </div>
         </div>
     );

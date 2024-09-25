@@ -72,9 +72,11 @@ const InsertarCatalogoActividades: React.FC<InsertarCatalogoActividadesProps> = 
 
     return (
         <div id='general' style={{ display: 'flex', flexDirection: 'column', paddingBottom: '0rem', width: '100%', margin: '0 auto' }}>
-            <div className="form-container-fse" style={{ display: 'flex', flexDirection: 'column', width: '100%' }}>                
-                <FormGroup>
-                    <Label for="nombre">Nombre</Label>
+            <div style={{ display: 'flex', flexDirection: 'row', width: '96.5%',justifyContent: 'center', marginLeft: '9px',marginRight: '0', gap: '0'  }}>     
+            <div style={{ flex: 1 }}>           
+                <FormGroup style={{display:'flex', alignItems:'center',justifyContent:'space-between'}}>
+                    <Label for="nombre" sm={4} className="input-label">Nombre</Label>
+                    <Col sm={8}>
                     <Input
                         type="text"
                         id="nombre"
@@ -84,18 +86,18 @@ const InsertarCatalogoActividades: React.FC<InsertarCatalogoActividadesProps> = 
                         className={errors.nombre ? 'input-styled input-error' : 'input-styled'}
                         placeholder="Nombre de la actividad"
                         maxLength={50}
+                        style={{marginTop: '3%',width:'170%'}}
                     />
                     <FormFeedback>{errors.nombre}</FormFeedback>
+                    </Col>
+                    <div className='botonesN' style={{marginLeft:'25%', width:'25%', marginTop:'1%'}}>
+
+                            <Button onClick={handleSubmit} className="btn-styled"><IoSave size={20} style={{marginRight: '2%'}}/>Guardar</Button>
+                </div>
                 </FormGroup>
 
-                <div className='botonesN'>
-                    <FormGroup row>
-                        <Col sm={{ size: 10, offset: 2 }}>
-                            <Button onClick={handleSubmit} className="btn-styled"><IoSave size={20} style={{marginRight: '2%'}}/>Guardar</Button>
-                        </Col>
-                    </FormGroup>
-                </div>
-                
+
+                </div> 
             </div>
         </div>
     );

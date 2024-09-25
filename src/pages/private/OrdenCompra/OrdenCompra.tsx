@@ -301,7 +301,7 @@ function OrdenCompra() {
                 title="Editar orden de compra"
                 onCancel={abrirCerrarModalEditar}
             >
-                <div className='form-container'>
+                <div className='form-container' style={{  width: '90%' }}>
                     <div className='form-group'>
                         {/* hay que modificar el nombre porque modifica mas datos */}
                         {/* <CambiarContrasenaAsignados */}
@@ -330,7 +330,7 @@ function OrdenCompra() {
                 title="Crear orden de compra"
                 onCancel={abrirCerrarModalCrearOrdenCompra}
             >
-                <div className='form-container'>
+                <div className='form-container' style={{  width: '90%' }}>
                     <div className='form-group'>
                         <CrearOrdenCompra
                             onAdd={handleAgregarMedicion}

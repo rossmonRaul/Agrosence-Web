@@ -202,7 +202,7 @@ const InsertarPuntoMedicion: React.FC<InsertarPuntoMedicionProps> = ({ onAdd }) 
                 <div style={{ flex: 1, marginRight: '0.5rem', marginLeft: '0.5rem' }}>
                 <FormGroup> 
                     <label htmlFor="fincas">Finca:</label>
-                    <select className="custom-select" id="fincas" value={selectedFinca} onChange={handleFincaChange}>
+                    <select className="custom-select" id="fincas" value={selectedFinca} onChange={handleFincaChange} style={{height:'44px'}}>
                         <option key="default-finca" value="">Seleccione...</option>
                         {filteredFincas.map((finca) => (
                             <option key={`${finca.idFinca}-${finca.nombre || 'undefined'}`} value={finca.idFinca}>{finca.nombre || 'Undefined'}</option>
@@ -214,7 +214,7 @@ const InsertarPuntoMedicion: React.FC<InsertarPuntoMedicionProps> = ({ onAdd }) 
                 <div style={{ flex: 1, marginRight: '0.5rem', marginLeft: '0.5rem' }}>
                 <FormGroup>
                     <label htmlFor="parcelas">Parcela:</label>
-                    <select className="custom-select" id="parcelas" value={selectedParcela} onChange={handleParcelaChange}>
+                    <select className="custom-select" id="parcelas" value={selectedParcela} onChange={handleParcelaChange} style={{height:'44px'}}>
                         <option key="default-parcela" value="">Seleccione...</option>
                         {parcelasFiltradas.map((parcela) => (
                             <option key={`${parcela.idParcela}-${parcela.nombre || 'undefined'}`} value={parcela.idParcela}>{parcela.nombre || 'Undefined'}</option>
@@ -302,8 +302,8 @@ const InsertarPuntoMedicion: React.FC<InsertarPuntoMedicionProps> = ({ onAdd }) 
                 </div>
                 
             </div>
-            <div className='botonesN'>
-                <Button onClick={handleSubmit} className="btn-styled"><IoSave size={20} style={{marginRight: '1%'}}/>Guardar</Button>
+            <div className='botonesN' style={{display:'flex', justifyContent:'center'}}>
+                <Button onClick={handleSubmit} className="btn-styled" style={{width:'50%'}}><IoSave size={20} style={{marginRight: '1%'}}/>Guardar</Button>
             </div>                    
         </div>
     );

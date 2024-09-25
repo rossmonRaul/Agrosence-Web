@@ -284,7 +284,7 @@ function EntradasYSalidas() {
                 title="Editar entrada o salida"
                 onCancel={abrirCerrarModalEditar}
             >
-                <div className='form-container'>
+                <div className='form-container' style={{  width: '90%' }}>
                     <div className='form-group'>
 
                         <EditarEntradaYSalida
@@ -309,7 +309,7 @@ function EntradasYSalidas() {
                 title="Crear entrada o salida"
                 onCancel={abrirCerrarModalCrearEntradasYSalidas}
             >
-                <div className='form-container'>
+                <div className='form-container' style={{  width: '90%' }}>
                     <div className='form-group'>
                         <CrearEntradasSalidas
                             onAdd={handleAgregarEntradasYSalidas}

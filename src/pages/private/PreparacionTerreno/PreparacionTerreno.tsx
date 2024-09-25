@@ -321,7 +321,7 @@ function AdministrarPreparacionTerreno() {
                 title="Crear preparación de terreno "
                 onCancel={abrirCerrarModalInsertar}
             >
-                <div className='form-container' style={{ width: '600px' }}>
+                <div className='form-container' style={{ width: '90%' }}>
                     <div className='form-group'>
                         <InsertarPreparacionTerreno onAdd={handleAgregarPreparacionTerreno} />
                     </div>
@@ -334,7 +334,7 @@ function AdministrarPreparacionTerreno() {
                 title="Editar preparación de terreno"
                 onCancel={abrirCerrarModalEditar}
             >
-                <div className='form-container' style={{ width: '600px' }}>
+                <div className='form-container' style={{ width: '85%' }}>
                     <div className='form-group'>
                         <ModificacionPreparacionTerreno
                             idFinca={parseInt(selectedDatos.idFinca)}
@@ -360,7 +360,7 @@ function AdministrarPreparacionTerreno() {
                 title="Detalles de la preparación de terreno"
                 onCancel={abrirCerrarModalDetalles}
             >
-                <div className='form-container' style={{ width: '600px' }}>
+                <div className='form-container' style={{  width: '85%' }}>
                     <div className='form-group'>
                         <ModificacionPreparacionTerreno
                             idFinca={parseInt(selectedDatos.idFinca)}

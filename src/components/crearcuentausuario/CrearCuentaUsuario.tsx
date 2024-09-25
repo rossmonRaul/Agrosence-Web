@@ -23,6 +23,7 @@ const CrearCuentaUsuario: React.FC<Props> = ({ toggleForm }) => {
     setStep(prevStep => prevStep - 1);
   };
 
+  
 
   const [formData, setFormData] = useState<any>({
     identificacion: '',
@@ -32,7 +33,8 @@ const CrearCuentaUsuario: React.FC<Props> = ({ toggleForm }) => {
     contrasenaConfirmar: '',
     empresa: '',
     finca: '',
-    parcela: ''
+    parcela: '',
+    rol:''
   });
 
   const handleInputChange = (event: React.ChangeEvent<HTMLInputElement>) => {
@@ -52,10 +54,12 @@ const CrearCuentaUsuario: React.FC<Props> = ({ toggleForm }) => {
       contrasena: formData.contrasena,
       idEmpresa: formData.empresa,
       idFinca: formData.finca,
-      idParcela: formData.parcela
+      idParcela: formData.parcela,
+      idRol:formData.rol
     };
     try {
       const resultado = await InsertarUsuario(datos);
+      
       if (parseInt(resultado.indicador) === 0) {
         Swal.fire({
           icon: 'success',
@@ -65,6 +69,7 @@ const CrearCuentaUsuario: React.FC<Props> = ({ toggleForm }) => {
         toggleForm() 
         localStorage.removeItem('selectedFinca');
         localStorage.removeItem('selectedParcela');
+        localStorage.removeItem('selectedRoles');
       } else {
         Swal.fire({
           icon: 'error',

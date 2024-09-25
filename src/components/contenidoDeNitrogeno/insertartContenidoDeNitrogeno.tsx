@@ -243,7 +243,7 @@ const InsertarContenidoDeNitrogeno: React.FC<InsertarContenidoDeNitrogenoProps> 
                 <div style={{ flex: 1, marginRight: '0.5rem', marginLeft: '0.5rem' }}>
                     <FormGroup>
                         <label htmlFor="fincas">Finca:</label>
-                        <select className="custom-select" id="fincas" value={selectedFinca} onChange={handleFincaChange}>
+                        <select className="custom-select" id="fincas" value={selectedFinca} onChange={handleFincaChange} style={{height:'44px'}}>
                             <option key="default-finca" value="">Seleccione...</option>
                             {filteredFincas.map((finca) => (
                                 <option key={`${finca.idFinca}-${finca.nombre || 'undefined'}`} value={finca.idFinca}>{finca.nombre || 'Undefined'}</option>
@@ -255,7 +255,7 @@ const InsertarContenidoDeNitrogeno: React.FC<InsertarContenidoDeNitrogenoProps> 
                 <div style={{ flex: 1, marginRight: '0.5rem', marginLeft: '0.5rem' }}>
                     <FormGroup>
                         <label htmlFor="parcelas">Parcela:</label>
-                        <select className="custom-select" id="parcelas" value={selectedParcela} onChange={handleParcelaChange}>
+                        <select className="custom-select" id="parcelas" value={selectedParcela} onChange={handleParcelaChange} style={{height:'44px'}}>
                             <option key="default-parcela" value="">Seleccione...</option>
                             {parcelasFiltradas.map((parcela) => (
                                 <option key={`${parcela.idParcela}-${parcela.nombre || 'undefined'}`} value={parcela.idParcela}>{parcela.nombre || 'Undefined'}</option>
@@ -266,10 +266,10 @@ const InsertarContenidoDeNitrogeno: React.FC<InsertarContenidoDeNitrogenoProps> 
                 </div>
             </div>
             <div style={{ display: 'flex', flexDirection: 'row', marginBottom: '0rem' }}>
-                <div style={{ flex: 1, marginRight: '0.5rem', marginLeft: '0.5rem' }}>
+                <div style={{ flex: 1, marginRight: '0.5rem', marginLeft: '0.5rem', marginTop:'0.3%' }}>
                     <FormGroup>
                         <label htmlFor="puntosMedicion">Punto de medición:</label>
-                        <select className="custom-select" id="puntosMedicion" value={selectedPuntoMedicion} onChange={handlePuntoMedicionChange}>
+                        <select className="custom-select" id="puntosMedicion" value={selectedPuntoMedicion} onChange={handlePuntoMedicionChange} style={{height:'44px'}}>
                             <option key="default-puntoMedicion" value="">Seleccione...</option>
                             {puntosMedicion.map((puntoMedicion) => (
                                 <option key={`${puntoMedicion.idPuntoMedicion}-${puntoMedicion.codigo || 'undefined'}`} value={puntoMedicion.idPuntoMedicion}>{puntoMedicion.codigo || 'Undefined'}</option>
@@ -296,7 +296,7 @@ const InsertarContenidoDeNitrogeno: React.FC<InsertarContenidoDeNitrogenoProps> 
                     </FormGroup>
                 </div>
             </div>
-            <div style={{ display: 'flex', flexDirection: 'row', marginBottom: '0rem', width: '100%' }}>
+            <div style={{ display: 'flex', flexDirection: 'row', marginBottom: '0rem', width: '99%' }}>
                 <div style={{ flex: 2, marginRight: '0.5rem', marginLeft: '0.5rem' }}>
                     <FormGroup row>
                         <Label for="contenidoNitrogenoSuelo" sm={4} className="input-label">Contenido de Nitrógeno en Suelo (%)</Label>
@@ -364,6 +364,7 @@ const InsertarContenidoDeNitrogeno: React.FC<InsertarContenidoDeNitrogenoProps> 
                                 value={formData.humedadObservable}
                                 onChange={handleInputChange}
                                 className={errors.humedadObservable ? 'input-styled input-error' : 'input-styled'}
+                                style={{height:'42px'}}
                             >
                                 <option value="">Seleccione...</option>
                                 <option value="alta">Alta</option>
@@ -387,6 +388,7 @@ const InsertarContenidoDeNitrogeno: React.FC<InsertarContenidoDeNitrogenoProps> 
                                 value={formData.condicionSuelo}
                                 onChange={handleInputChange}
                                 className={errors.condicionSuelo ? 'input-styled input-error' : 'input-styled'}
+                                style={{height:'44px'}}
                             >
                                 <option value="">Seleccione...</option>
                                 <option value="compacto">Compacto</option>
@@ -410,14 +412,15 @@ const InsertarContenidoDeNitrogeno: React.FC<InsertarContenidoDeNitrogenoProps> 
                                 className={errors.observaciones ? 'input-styled input-error' : 'input-styled'}
                                 placeholder="Observaciones"
                                 maxLength={2000}
+                                style={{height:'44px'}}
                             />
                             <FormFeedback>{errors.observaciones}</FormFeedback>
                         </Col>
                     </FormGroup>
                 </div>
             </div>
-            <div className='botonesN'>
-                <Button onClick={handleSubmit} className="btn-styled"><IoSave size={20} style={{marginRight: '1%'}}/>Guardar</Button>
+            <div className='botonesN' style={{display:'flex', justifyContent:'center'}}>
+                <Button onClick={handleSubmit} className="btn-styled" style={{width:'50%'}}><IoSave size={20} style={{marginRight: '1%'}}/>Guardar</Button>
             </div>
         </div>
     );

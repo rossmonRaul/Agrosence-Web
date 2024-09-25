@@ -167,7 +167,7 @@ function AdministrarRoles() {
                 title="Crear rol"
                 onCancel={abrirCerrarModalInsertar}
             >
-                <div className='form-container'>
+                <div className='form-container'style={{ width: '85%' }}>
                     <div className='form-group'>
                         <CrearRol
                             onAdd={handleAgregarRol}
@@ -182,7 +182,7 @@ function AdministrarRoles() {
                 title="Editar rol"
                 onCancel={abrirCerrarModalEditar}
             >
-                <div className='form-container'>
+                <div className='form-container' style={{ width: '85%' }}>
                     <div className='form-group'>
                         <EditarRol
                             rol={selectedRol}

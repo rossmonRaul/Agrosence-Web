@@ -484,11 +484,11 @@ const Dashboard: React.FC = () => {
         )
       ).map(date => formatDateToLocalString(date));
       
-      const puntosMedicionUnicosTs = Array.from(new Set(mediciones.filter(obj => obj.idMedicion === 10).map(obj => obj.codigo)));
+      const puntosMedicionUnicosTs = Array.from(new Set(mediciones.filter(obj => obj.idMedicion === 8).map(obj => obj.codigo)));
       const fechasMedicionUnicasTs = Array.from(
         new Set(
           mediciones
-            .filter((obj) => obj.idMedicion === 10)
+            .filter((obj) => obj.idMedicion === 8)
             .map((obj) => new Date(obj.fechaMedicion))
         )
       ).map((date) => formatDateToLocalString(date));
@@ -503,7 +503,7 @@ const Dashboard: React.FC = () => {
       const fechasMedicionUnicasTa = Array.from(
         new Set(
           mediciones
-            .filter((obj) => obj.idMedicion === 10)
+            .filter((obj) => obj.idMedicion === 20)
             .map((obj) => new Date(obj.fechaMedicion))
         )
       ).map((date) => formatDateToLocalString(date));
@@ -589,7 +589,7 @@ const Dashboard: React.FC = () => {
             };
             ArrayLinealTa.push(existingItem);
           }
-        } else if (idMedicion === 10) {
+        } else if (idMedicion === 8) {
           ArrayLinealTs = TsData;
           existingItem = ArrayLinealTs.find(
             (obj) => obj.name === puntoMedicion
@@ -1048,14 +1048,14 @@ const Dashboard: React.FC = () => {
       const puntosMedicionUnicosTs = Array.from(
         new Set(
           mediciones
-            .filter((obj) => obj.idMedicion === 10)
+            .filter((obj) => obj.idMedicion === 8)
             .map((obj) => obj.codigo)
         )
       );
       const fechasMedicionUnicasTs = Array.from(
         new Set(
           mediciones
-            .filter((obj) => obj.idMedicion === 10)
+            .filter((obj) => obj.idMedicion === 8)
             .map((obj) => new Date(obj.fechaMedicion))
         )
       ).map((date) => formatDateToLocalString(date));
@@ -1070,7 +1070,7 @@ const Dashboard: React.FC = () => {
       const fechasMedicionUnicasTa = Array.from(
         new Set(
           mediciones
-            .filter((obj) => obj.idMedicion === 10)
+            .filter((obj) => obj.idMedicion === 20)
             .map((obj) => new Date(obj.fechaMedicion))
         )
       ).map(date => formatDateToLocalString(date));
@@ -1221,7 +1221,7 @@ const Dashboard: React.FC = () => {
             ArrayLinealTa.push(existingItem);
           }
         } 
-        else if (idMedicion === 10) {
+        else if (idMedicion === 8) {
           ArrayLinealTs = TsData;
           existingItem = ArrayLinealTs.find(obj => obj.name === puntoMedicion);
           if (!existingItem) {
@@ -1686,7 +1686,7 @@ const Dashboard: React.FC = () => {
               <Input 										  
                 type="date"
                 id="fechaInicio"
-                style={{width:"86%"}}
+                style={{width:"100%"}}
                 name="fechaInicio"
                 value={formData.fechaInicio}
                 onChange={handleInputChange}
@@ -1702,7 +1702,7 @@ const Dashboard: React.FC = () => {
                 type="date"
                 id="fechaFin"
                 name="fechaFin"
-                style={{width:"93%"}}
+                style={{width:"100%"}}
                 value={formData.fechaFin}
                 onChange={handleInputChange}
                 className={errors.fechaFin ? 'input-styled input-error' : 'input-styled'}
@@ -1713,12 +1713,12 @@ const Dashboard: React.FC = () => {
               <FormFeedback>{errors.fechaFin}</FormFeedback>
 				  
           </FormGroup>
-          <FormGroup className='form-group'>			
+          <FormGroup className='form-group' style={{display:'flex',justifyContent:'center'}}>			
             <Button style={{
-              backgroundColor: '#a5cf60',
+              backgroundColor: '#548454',
               color: 'white',
               marginTop: "22px",
-              marginLeft: "60px",
+              marginBottom: '6px',
               padding: '10px 20px',
               border: 'none',
               borderRadius: '4px',
@@ -1728,7 +1728,8 @@ const Dashboard: React.FC = () => {
               display: 'flex',
               justifyContent: 'center',
               flexDirection: 'row',
-              alignItems: 'center'
+              alignItems: 'center',
+              width:'99%',
             }} onClick={handleObtenerMedicionesSensores}><IoSearch size={20} />{loading ? `Cargando${loadingPuntos}` : 'Obtener mediciones'}</Button>
           </FormGroup>
       </div>
@@ -1958,7 +1959,13 @@ const Dashboard: React.FC = () => {
       break;
     default:
       dashboardContent = (
-        <div>No se encontró un dashboard para este rol de usuario.</div>
+        <Sidebar>
+          <div className="main-container">
+            <Topbar />
+            <BordeSuperior text="Comunidad" />
+            {/* <div className="content">{renderComboboxes()}</div> */}
+          </div>
+        </Sidebar>
       );
       break;
   }

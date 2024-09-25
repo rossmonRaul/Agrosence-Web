@@ -166,10 +166,10 @@ const CrearParcela: React.FC<AgregarParcela> = ({ onAdd }) => {
     // Renderizado del componente
     return (
         <div>
-            <div className="form-container-fse">
-                <FormGroup>
+            <div className="form-container-fse" style={{ display: 'flex', flexDirection: 'row', width: '96.5%',justifyContent: 'center', marginLeft: '9px',marginRight: '0', gap: '0' }}>
+                <FormGroup  style={{margin: '5px', width: '65%',padding: '0px',flexGrow: '1', maxWidth:' 100%', marginTop:'0.7%'}}>
                     <label htmlFor="fincas">Finca:</label>
-                    <select className="custom-select" id="fincas" value={selectedFinca} onChange={handleFincaChange}>
+                    <select className="custom-select" id="fincas" value={selectedFinca} onChange={handleFincaChange} style={{height:'44px'}}>
                         <option key="default-finca" value="">Seleccione...</option>
                         {filteredFincas.map((finca) => (
                             <option key={`${finca.idFinca}-${finca.nombre || 'undefined'}`} value={finca.idFinca}>{finca.nombre || 'Undefined'}</option>
@@ -177,7 +177,7 @@ const CrearParcela: React.FC<AgregarParcela> = ({ onAdd }) => {
                     </select>
                     {errors.finca && <FormFeedback>{errors.finca}</FormFeedback>}
                 </FormGroup>
-                <FormGroup row>
+                <FormGroup row  style={{margin: '5px', width: '65%',padding: '0px',flexGrow: '1', maxWidth:' 100%'}}>
                     <Label for="nombre" sm={2} className="input-label">Nombre: </Label>
                     <Col sm={12}>
                         <Input
@@ -194,8 +194,8 @@ const CrearParcela: React.FC<AgregarParcela> = ({ onAdd }) => {
                     </Col>
                 </FormGroup>
             </div>
-            <div className='botonesN'>
-                <button onClick={handleSubmitConValidacion} className="btn-styled"><IoSave size={20} style={{marginRight: '2%'}}/>Guardar</button>
+            <div className='botonesN' style={{display:'flex', justifyContent:'center'}}>
+                <button onClick={handleSubmitConValidacion} className="btn-styled" style={{width:'50%'}}><IoSave size={20} style={{marginRight: '2%'}}/>Guardar</button>
             </div>            
         </div>
     );

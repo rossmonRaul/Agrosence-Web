@@ -357,11 +357,11 @@ const ModificacionManejoFertilizante: React.FC<FertilizanteSeleccionado> = ({
 
     return (
         <div id='general' style={{ display: 'flex', flexDirection: 'column', paddingBottom: '0rem', width: '100%', margin: '0 auto' }}> 
-            <div className="form-container-fse" style={{ display: 'flex', flexDirection: 'row', width: '100%' }}>
+            <div className="form-container-fse" style={{ display: 'flex', flexDirection: 'row', marginLeft:'1%', width:'97%' }}>
                 <div style={{ marginRight: '10px', width: '50%' }}>
                     <FormGroup>
                         <label htmlFor="fincas">Finca:</label>
-                        <select className="custom-select" id="fincas" value={selectedFinca} onChange={handleFincaChange}>
+                        <select className="custom-select" id="fincas" value={selectedFinca} onChange={handleFincaChange} style={{height:'44px'}}>
                             <option key="default-finca" value="">Seleccione...</option>
                             {filteredFincas.map((finca) => (
                                 <option key={`${finca.idFinca}-${finca.nombre || 'undefined'}`} value={finca.idFinca}>{finca.nombre || 'Undefined'}</option>
@@ -373,7 +373,7 @@ const ModificacionManejoFertilizante: React.FC<FertilizanteSeleccionado> = ({
                 <div style={{ marginRight: '0px', width: '50%' }}>
                     <FormGroup>
                         <label htmlFor="parcelas">Parcela:</label>
-                        <select className="custom-select" id="parcelas" value={selectedParcela} onChange={handleParcelaChange}>
+                        <select className="custom-select" id="parcelas" value={selectedParcela} onChange={handleParcelaChange} style={{height:'44px'}}>
                             <option key="default-parcela" value="">Seleccione...</option>
                             {filteredParcelas.map((parcela) => (
                                 <option key={`${parcela.idParcela}-${parcela.nombre || 'undefined'}`} value={parcela.idParcela}>{parcela.nombre || 'Undefined'}</option>
@@ -412,6 +412,7 @@ const ModificacionManejoFertilizante: React.FC<FertilizanteSeleccionado> = ({
                         value={formData.fertilizante}
                         onChange={handleInputChange}
                         className="input-styled"
+                        style={{height:'44px'}}
                     >{tiposFertilizantes.map((fertilizante) => (
                         <option key={fertilizante} value={fertilizante}>
                             {fertilizante}
@@ -425,7 +426,7 @@ const ModificacionManejoFertilizante: React.FC<FertilizanteSeleccionado> = ({
 
         <div style={{ flex: 1, marginRight: '0.5rem', marginLeft: '0.5rem' }}>
         <FormGroup row>
-                <Label for="aplicacion" sm={4} className="input-label">aplicacion</Label>
+                <Label for="aplicacion" sm={4} className="input-label">aplicación</Label>
                 <Col sm={8}>
                     <Input
                         type="select"
@@ -434,6 +435,7 @@ const ModificacionManejoFertilizante: React.FC<FertilizanteSeleccionado> = ({
                         value={formData.aplicacion}
                         onChange={handleInputChange}
                         className="input-styled"
+                        style={{height:'44px'}}
                     >{TipoAplicacion.map((aplicacion) => (
                         <option key={aplicacion} value={aplicacion}>
                             {aplicacion}
@@ -474,6 +476,7 @@ const ModificacionManejoFertilizante: React.FC<FertilizanteSeleccionado> = ({
                         value={formData.dosisUnidad}
                         onChange={handleInputChange}
                         className="input-styled"
+                        style={{height:'44px'}}
                     >
                         <optgroup label="Peso">
                             <option value="Kilogramos (kg)">Kilogramos (kg)</option>
@@ -514,9 +517,10 @@ const ModificacionManejoFertilizante: React.FC<FertilizanteSeleccionado> = ({
                         </Col>
                     </FormGroup>
                 </div>
-                <div style={{ flex: 1, marginRight: '0.5rem', marginLeft: '0.5rem' }}>
-                    <FormGroup row>
-                        <Label for="accionesAdicionales" sm={4} className="input-label">Acciones Adicionales</Label>
+
+            </div>
+                    <FormGroup row style={{marginLeft:'1%', width:'97%'}}>
+                        <Label for="accionesAdicionales" sm={2} className="input-label">Acciones Adicionales</Label>
                         <Col sm={8}>
                             <Input
                                 type="text"
@@ -525,15 +529,15 @@ const ModificacionManejoFertilizante: React.FC<FertilizanteSeleccionado> = ({
                                 value={formData.accionesAdicionales}
                                 onChange={handleInputChange}
                                 className="input-styled"
+                                style={{ height: '75px', resize: "none" }}
                                 placeholder="Acciones adicionales"
                                 maxLength={200}
                             />
                             <FormFeedback>{errors.accionesAdicionales}</FormFeedback>
                         </Col>
                     </FormGroup>
-                </div>
-            </div>
-            <FormGroup row>
+   
+            <FormGroup row style={{marginLeft:'1%', width:'97%'}}>
                 <Label for="condicionesAmbientales" sm={2} className="input-label">Condiciones Ambientales</Label>
                 <Col sm={10}>
                     <Input
@@ -550,7 +554,7 @@ const ModificacionManejoFertilizante: React.FC<FertilizanteSeleccionado> = ({
                     <FormFeedback>{errors.condicionesAmbientales}</FormFeedback>
                 </Col>
             </FormGroup>
-            <FormGroup row>
+            <FormGroup row style={{marginLeft:'1%', width:'97%'}}>
                 <Label for="observaciones" sm={2} className="input-label">Observaciones</Label>
                 <Col sm={10}>
                     <Input
@@ -568,8 +572,8 @@ const ModificacionManejoFertilizante: React.FC<FertilizanteSeleccionado> = ({
                     <FormFeedback>{errors.observaciones}</FormFeedback>
                 </Col>
             </FormGroup>
-            <div className='botonesN'>
-                <Button onClick={handleSubmitConValidacion} className="btn-styled"><IoSave size={20} style={{marginRight: '1%'}}/>Actualizar</Button>
+            <div className='botonesN' style={{display:'flex', justifyContent:'center'}}>
+                <Button onClick={handleSubmitConValidacion} className="btn-styled" style={{width:'50%'}}><IoSave size={20} style={{marginRight: '1%'}}/>Actualizar</Button>
             </div>
         </div >
     );
