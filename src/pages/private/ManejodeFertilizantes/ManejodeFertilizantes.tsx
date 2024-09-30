@@ -1,12 +1,11 @@
 import React, { useEffect, useState } from "react";
 import Sidebar from "../../../components/sidebar/Sidebar";
-import TableResponsive from "../../../components/table/table.tsx";
+//import TableResponsive from "../../../components/table/table.tsx";
+import TableResponsiveDetalles from "../../../components/table/tableDetails.tsx";
 import BordeSuperior from "../../../components/bordesuperior/BordeSuperior.tsx";
 import Modal from "../../../components/modal/Modal.tsx";
 import Topbar from "../../../components/topbar/Topbar.tsx";
 import { CambiarEstadoParcelas, ObtenerParcelas } from "../../../servicios/ServicioParcelas.ts";
-import EditarParcela from "../../../components/parcela/EditarParcela.tsx";
-import CrearParcela from "../../../components/parcela/CrearParcela.tsx";
 import Swal from "sweetalert2";
 import { ObtenerFincas } from "../../../servicios/ServicioFincas.ts";
 import { ObtenerManejoFertilizantes, CambiarEstadoManejoFertilizantes } from "../../../servicios/ServicioFertilizantes.ts";
@@ -14,12 +13,15 @@ import InsertarManejoFertilizante from "../../../components/manejoFertilizante/I
 import ModificacionManejoFertilizante from "../../../components/manejoFertilizante/EditarManejoFertilizante.tsx";
 import { ObtenerUsuariosAsignadosPorIdentificacion } from '../../../servicios/ServicioUsuario.ts';
 import '../../../css/FormSeleccionEmpresa.css'
+import DetallesManejoFertilizantes from "../../../components/manejoFertilizante/DetallesManejoFertilizante.tsx";
 
 function AdministrarManejoFertilizantes() {
     const [filtroNombreFertilizante, setFiltroNombreFertilizante] = useState('');
     const [datosFertilizantesOriginales, setDatosFertilizantesOriginales] = useState<any[]>([]);
     const [modalEditar, setModalEditar] = useState(false);
     const [modalInsertar, setModalInsertar] = useState(false);
+    const [modalDetalles, setmodalDetalles] = useState(false);
+
     const [selectedParcela, setSelectedParcela] = useState<number | null>(null);
     const [selectedDatos, setSelectedDatos] = useState({
         idFinca: '',
@@ -29,6 +31,7 @@ function AdministrarManejoFertilizantes() {
         fertilizante: '',
         aplicacion: '',
         dosis: '',
+        dosisUnidad: '',
         cultivoTratado: '',
         condicionesAmbientales: '',
         accionesAdicionales: '',
@@ -203,6 +206,19 @@ function AdministrarManejoFertilizantes() {
         abrirCerrarModalEditar();
     };
 
+
+
+
+    const openModalDetalles = (CoberturaVegetal: any) => {
+        setSelectedDatos(CoberturaVegetal);
+        abrirCerrarModalDetalles();
+    };
+
+        // Abrir/cerrar modal de edición
+        const abrirCerrarModalDetalles = () => {
+            setmodalDetalles(!modalDetalles);
+        };
+
     const toggleStatus = async (parcela: any) => {
         Swal.fire({
             title: "Cambiar Estado",
@@ -221,19 +237,19 @@ function AdministrarManejoFertilizantes() {
                     if (parseInt(resultado.indicador) === 1) {
                         Swal.fire({
                             icon: 'success',
-                            title: '¡Estado Actualizado! ',
-                            text: 'Actualización exitosa.',
+                            title: '¡Registro eliminado! ',
+                            text: 'Eliminación exitosa.',
                         });
                         await obtenerInfo();
                     } else {
                         Swal.fire({
                             icon: 'error',
-                            title: 'Error al actualizar el estado.',
+                            title: 'Error al eliminar el registro.',
                             text: resultado.mensaje,
                         });
                     };
                 } catch (error) {
-                    Swal.fire("Error al actualizar el estado", "", "error");
+                    Swal.fire("Error al eliminar el registro", "", "error");
                 }
             }
         });
@@ -249,18 +265,22 @@ function AdministrarManejoFertilizantes() {
         abrirCerrarModalInsertar();
     };
 
+    
     const columns2 = [
         { key: 'fecha', header: 'Fecha' },
         { key: 'fertilizante', header: 'Fertilizante' },
         { key: 'aplicacion', header: 'Aplicación' },
-        { key: 'dosis', header: 'Dosis' },
         { key: 'cultivoTratado', header: 'Cultivo Tratado' },
-        { key: 'condicionesAmbientales', header: 'Condiciones Ambientales' },
-        { key: 'accionesAdicionales', header: 'Acciones Adicionales' },
-        { key: 'observaciones', header: 'Observaciones' },
-        { key: 'sEstado', header: 'Estado' },
+
         { key: 'acciones', header: 'Acciones', actions: true }
     ];
+        // Dentro de renderHeader, si necesitas algún formato especial, puedes ajustarlo según tus necesidades
+        const renderHeader = (header: any) => {
+            if (header === 'Densidad Maleza') {
+                return <span>Densidad Maleza</span>;
+            }
+            return header;
+        };
 
     return (
         <Sidebar>
@@ -296,7 +316,17 @@ function AdministrarManejoFertilizantes() {
                             className="form-control"
                         />
                     </div>
-                    <TableResponsive columns={columns2} data={datosFertilizantesFiltrados} openModal={openModal} btnActionName={"Editar"} toggleStatus={toggleStatus} />
+
+                    {/* openModalDetalles */}
+
+                    <TableResponsiveDetalles 
+                    columns={columns2.map(col => ({ ...col, header: renderHeader(col.header) }))}
+                    data={datosFertilizantesFiltrados}
+                    openModalDetalles={openModalDetalles}
+                    btnActionNameDetails={"Detalles"}
+                    openModal={openModal} 
+                    btnActionName={"Editar"} 
+                    toggleStatus={toggleStatus} />
                 </div>
             </div>
 
@@ -316,6 +346,32 @@ function AdministrarManejoFertilizantes() {
                 </div>
             </Modal>
 
+            {<Modal
+                isOpen={modalDetalles}
+                toggle={abrirCerrarModalDetalles}
+                title="Detalles Manejo de Fertilizantes"
+                onCancel={abrirCerrarModalDetalles}
+            >
+                <div className='form-container'>
+                    <div className='form-group'>
+                        <DetallesManejoFertilizantes
+                            idFinca={selectedDatos.idFinca}
+                            idParcela={selectedDatos.idParcela}
+                            idManejoFertilizantes={selectedDatos.idManejoFertilizantes}
+                            fechaCreacion={selectedDatos.fecha.toString()}
+                            fertilizante={selectedDatos.fertilizante}
+                            aplicacion={selectedDatos.aplicacion}
+                            dosis={parseInt(selectedDatos.dosis)}
+                            dosisUnidad={selectedDatos.dosisUnidad}
+                            cultivoTratado={selectedDatos.cultivoTratado}
+                            condicionesAmbientales={selectedDatos.condicionesAmbientales}
+                            accionesAdicionales={selectedDatos.accionesAdicionales}
+                            observaciones={selectedDatos.observaciones}
+                        />
+                    </div>
+                </div>
+            </Modal>}
+
             <Modal
                 isOpen={modalEditar}
                 toggle={abrirCerrarModalEditar}
@@ -332,6 +388,7 @@ function AdministrarManejoFertilizantes() {
                             fertilizante={selectedDatos.fertilizante}
                             aplicacion={selectedDatos.aplicacion}
                             dosis={parseInt(selectedDatos.dosis)}
+                            dosisUnidad={selectedDatos.dosisUnidad}
                             cultivoTratado={selectedDatos.cultivoTratado}
                             condicionesAmbientales={selectedDatos.condicionesAmbientales}
                             accionesAdicionales={selectedDatos.accionesAdicionales}

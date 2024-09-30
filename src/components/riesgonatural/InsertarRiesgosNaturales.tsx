@@ -429,7 +429,7 @@ const CrearRiesgosNaturales: React.FC<CrearRiesgosNaturalesProps> = ({ onAdd }) 
                                     <option key="default-riesgos" value="">Seleccione...</option>
                                     <option key="terremoto" value="Terremoto">Terremoto</option>
                                     <option key="deslizamiento" value="Deslizamiento">Deslizamiento</option>
-                                    <option key="deslizamiento" value="Deslizamiento">Inundacion</option>
+                                    <option key="inundacion" value="Inundacion">Inundacion</option>
                                     <option key="incendio" value="Incendio">Incendio</option>
                                     <option key="sequia" value="Sequia">Sequía</option>
                                     <option key="huracan" value="Huracan">Huracan</option>
@@ -488,7 +488,7 @@ const CrearRiesgosNaturales: React.FC<CrearRiesgosNaturalesProps> = ({ onAdd }) 
             )}
             {step === 2 && (
                 <div>
-                    <h2>Riesgos Naturales</h2>
+                    <h2>Salud de la Planta</h2>
                     <div className="row" style={{ display: "flex" }}>
                         <div className="col-sm-4" style={{ marginRight: '10px', width: '50%' }}>
                             <FormGroup row>
@@ -549,7 +549,7 @@ const CrearRiesgosNaturales: React.FC<CrearRiesgosNaturalesProps> = ({ onAdd }) 
                             <Label for="observaciones" sm={4} className="input-label">Observaciones</Label>
                             <Col sm={8}>
                                 <Input
-                                    type="text"
+                                    type="textarea"
                                     id="observaciones"
                                     name="observaciones"
                                     value={formData.observaciones}
@@ -557,7 +557,7 @@ const CrearRiesgosNaturales: React.FC<CrearRiesgosNaturalesProps> = ({ onAdd }) 
                                     className={errors.observaciones ? 'input-styled input-error' : 'input-styled'}
                                     style={{ minWidth: '350px' }}
                                     placeholder="Observaciones"
-                                    maxLength={100}
+                                    maxLength={2000}
                                 />
                                 <FormFeedback>{errors.observaciones}</FormFeedback>
                             </Col>

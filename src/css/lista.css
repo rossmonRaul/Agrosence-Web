@@ -1,0 +1,26 @@
+.list {
+    margin-top: 20px;
+    max-height: 200px;
+    /* Altura máxima de la lista de archivos */
+    overflow-y: auto;
+    /* Agregar scroll vertical si el contenido excede la altura máxima */
+}
+
+.item {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 5px;
+    background-color: #f0f0f0;
+    border-radius: 5px;
+    margin-bottom: 5px;
+}
+
+.item span {
+    margin-right: 10px;
+}
+
+.button {
+    background-color: #FAB1B1;
+    color: black;
+}

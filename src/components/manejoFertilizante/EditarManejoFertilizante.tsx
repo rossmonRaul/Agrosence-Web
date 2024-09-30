@@ -3,6 +3,8 @@ import { FormGroup, Label, Input, Col, FormFeedback, Button } from 'reactstrap';
 import Swal from 'sweetalert2';
 import { ObtenerFincas } from '../../servicios/ServicioFincas.ts';
 import { ObtenerParcelas } from '../../servicios/ServicioParcelas.ts';
+import { ObtenerTipoFertilizantes } from '../../servicios/ServicioTipoFertilizante.ts';
+import { ObtenerTipoAplicacion } from '../../servicios/ServicioTipoAplicacion.ts';
 import { ObtenerUsuariosAsignadosPorIdentificacion } from '../../servicios/ServicioUsuario.ts';
 import { EditarManejoFertilizantes } from "../../servicios/ServicioFertilizantes.ts";
 import '../../css/CrearCuenta.css';
@@ -16,6 +18,7 @@ interface FertilizanteSeleccionado {
     fertilizante: string;
     aplicacion: string;
     dosis: number;
+    dosisUnidad: string;
     cultivoTratado: string;
     condicionesAmbientales: string;
     accionesAdicionales: string;
@@ -39,6 +42,7 @@ const ModificacionManejoFertilizante: React.FC<FertilizanteSeleccionado> = ({
     fertilizante,
     aplicacion,
     dosis,
+    dosisUnidad,
     cultivoTratado,
     condicionesAmbientales,
     accionesAdicionales,
@@ -48,6 +52,8 @@ const ModificacionManejoFertilizante: React.FC<FertilizanteSeleccionado> = ({
 
     const [fincas, setFincas] = useState<Option[]>([]);
     const [parcelas, setParcelas] = useState<Option[]>([]);
+    const [tiposFertilizantes, setTiposFertilizantes] = useState<string[]>([]);
+    const [TipoAplicacion, setTipoAplicacion] = useState<string[]>([]);
 
     //esto rellena los select de finca y parcela cuando se carga el modal
     const [selectedFinca, setSelectedFinca] = useState<string>(() => idFinca ? idFinca.toString() : '');
@@ -62,6 +68,7 @@ const ModificacionManejoFertilizante: React.FC<FertilizanteSeleccionado> = ({
         fertilizante: '',
         aplicacion: '',
         dosis: '',
+        dosisUnidad:'',
         cultivoTratado: '',
         condicionesAmbientales: '',
         accionesAdicionales: '',
@@ -76,6 +83,7 @@ const ModificacionManejoFertilizante: React.FC<FertilizanteSeleccionado> = ({
         fertilizante: '',
         aplicacion: '',
         dosis: 0,
+        dosisUnidad:'',
         cultivoTratado: '',
         condicionesAmbientales: '',
         accionesAdicionales: '',
@@ -106,6 +114,7 @@ const ModificacionManejoFertilizante: React.FC<FertilizanteSeleccionado> = ({
             fertilizante: fertilizante,
             aplicacion: aplicacion,
             dosis: dosis,
+            dosisUnidad: dosisUnidad,
             cultivoTratado: cultivoTratado,
             condicionesAmbientales: condicionesAmbientales,
             accionesAdicionales: accionesAdicionales,
@@ -136,6 +145,14 @@ const ModificacionManejoFertilizante: React.FC<FertilizanteSeleccionado> = ({
                     //se filtran las parcelas
                     const parcelasUsuario = parcelasResponse.filter((parcela: any) => idParcelasUsuario.includes(parcela.idParcela));
                     setParcelas(parcelasUsuario)
+
+                    // Obtener tipos de fertilizantes
+                    const tiposFertilizantesResponse = await ObtenerTipoFertilizantes();
+                    setTiposFertilizantes(tiposFertilizantesResponse.map((fertilizante: any) => fertilizante.nombre));
+
+                    // Obtener tipos de fertilizantes
+                    const TipoAplicacionResponse = await ObtenerTipoAplicacion();
+                    setTipoAplicacion(TipoAplicacionResponse.map((aplicacion: any) => aplicacion.nombre));
                 } else {
                     console.error('La identificación y/o el ID de la empresa no están disponibles en el localStorage.');
                 }
@@ -230,6 +247,14 @@ const ModificacionManejoFertilizante: React.FC<FertilizanteSeleccionado> = ({
             newErrors.dosis = '';
         }
 
+        if (!formData.dosisUnidad.trim()) {
+            newErrors.dosisUnidad = 'la unidad de medida es requerida';
+        } else if (formData.dosisUnidad.length > 50) {
+            newErrors.dosisUnidad = 'La unidad de medida no puede tener más de 50 caracteres';
+        } else {
+            newErrors.dosisUnidad = '';
+        }
+
         if (!formData.cultivoTratado.trim()) {
             newErrors.cultivoTratado = 'El nombre del cultivo es requerido';
         } else if (formData.cultivoTratado.length > 50) {
@@ -293,6 +318,7 @@ const ModificacionManejoFertilizante: React.FC<FertilizanteSeleccionado> = ({
             fertilizante: formData.fertilizante,
             aplicacion: formData.aplicacion,
             dosis: formData.dosis,
+            dosisUnidad: formData.dosisUnidad,
             cultivoTratado: formData.cultivoTratado,
             condicionesAmbientales: formData.condicionesAmbientales,
             accionesAdicionales: formData.accionesAdicionales,
@@ -374,40 +400,47 @@ const ModificacionManejoFertilizante: React.FC<FertilizanteSeleccionado> = ({
                     </FormGroup>
                 </div>
                 <div style={{ flex: 1, marginRight: '0.5rem', marginLeft: '0.5rem' }}>
-                    <FormGroup row>
-                        <Label for="fertilizante" sm={4} className="input-label">Fertilizante</Label>
-                        <Col sm={8}>
-                            <Input
-                                type="text"
-                                id="fertilizante"
-                                name="fertilizante"
-                                value={formData.fertilizante}
-                                onChange={handleInputChange}
-                                className={errors.fertilizante ? 'input-styled input-error' : 'input-styled'}
-                                placeholder="Tipo de fertilizante"
-                                maxLength={50}
-                            />
-                            <FormFeedback>{errors.fertilizante}</FormFeedback>
-                        </Col>
-                    </FormGroup>
-                </div>
-                <div style={{ flex: 1, marginRight: '0.5rem', marginLeft: '0.5rem' }}>
-                    <FormGroup row>
-                        <Label for="aplicacion" sm={4} className="input-label">Aplicación</Label>
-                        <Col sm={8}>
-                            <Input
-                                type="text"
-                                id="aplicacion"
-                                name="aplicacion"
-                                value={formData.aplicacion}
-                                onChange={handleInputChange}
-                                className="input-styled"
-                                placeholder="Método de aplicación"
-                                maxLength={50}
-                            />
-                        </Col>
-                    </FormGroup>
-                </div>
+                <FormGroup row>
+                <Label for="fertilizante" sm={4} className="input-label">fertilizante</Label>
+                <Col sm={8}>
+                    <Input
+                        type="select"
+                        id="fertilizante"
+                        name="fertilizante"
+                        value={formData.fertilizante}
+                        onChange={handleInputChange}
+                        className="input-styled"
+                    >{tiposFertilizantes.map((fertilizante) => (
+                        <option key={fertilizante} value={fertilizante}>
+                            {fertilizante}
+                        </option>
+                    ))}
+                    </Input>
+                </Col>
+            </FormGroup>
+            
+        </div>
+
+        <div style={{ flex: 1, marginRight: '0.5rem', marginLeft: '0.5rem' }}>
+        <FormGroup row>
+                <Label for="aplicacion" sm={4} className="input-label">aplicacion</Label>
+                <Col sm={8}>
+                    <Input
+                        type="select"
+                        id="aplicacion"
+                        name="aplicacion"
+                        value={formData.aplicacion}
+                        onChange={handleInputChange}
+                        className="input-styled"
+                    >{TipoAplicacion.map((aplicacion) => (
+                        <option key={aplicacion} value={aplicacion}>
+                            {aplicacion}
+                        </option>
+                    ))}
+                    </Input>
+                </Col>
+            </FormGroup>
+        </div>
             </div>
             <div style={{ display: 'flex', flexDirection: 'row', marginBottom: '0rem' }}>
                 <div style={{ flex: 1, marginRight: '0.5rem', marginLeft: '0.5rem' }}>
@@ -427,6 +460,40 @@ const ModificacionManejoFertilizante: React.FC<FertilizanteSeleccionado> = ({
                         </Col>
                     </FormGroup>
                 </div>
+
+                <div style={{ flex: 1, marginRight: '0.5rem', marginLeft: '0.5rem' }}>
+            <FormGroup row>
+                <Label for="dosisUnidad" sm={4} className="input-label">Unidad de medida</Label>
+                <Col sm={8}>
+                    <Input
+                        type="select"
+                        id="dosisUnidad"
+                        name="dosisUnidad"
+                        value={formData.dosisUnidad}
+                        onChange={handleInputChange}
+                        className="input-styled"
+                    >
+                        <optgroup label="Peso">
+                            <option value="Kilogramos (kg)">Kilogramos (kg)</option>
+                            <option value="Gramos (g)">Gramos (g)</option>
+                            <option value="Toneladas (t)">Toneladas (t)</option>
+                        </optgroup>
+                        <optgroup label="Volumen">
+                            <option value="Litros (L)">Litros (L)</option>
+                            <option value="Mililitros (mL)">Mililitros (mL)</option>
+                        </optgroup>
+                        <optgroup label="Concentración">
+                            <option value="Partes por millón (ppm)">Partes por millón (ppm)</option>
+                            <option value="Porcentaje (%)">Porcentaje (%)</option>
+                        </optgroup>
+                        <optgroup label="Otros">
+                            <option value="Unidades internacionales (UI)">Unidades internacionales (UI)</option>
+                            <option value="Equivalentes (eq)">Equivalentes (eq)</option>
+                        </optgroup>
+                    </Input>
+                </Col>
+            </FormGroup>
+        </div>
                 <div style={{ flex: 1, marginRight: '0.5rem', marginLeft: '0.5rem' }}>
                     <FormGroup row>
                         <Label for="cultivoTratado" sm={4} className="input-label">Cultivo Tratado</Label>

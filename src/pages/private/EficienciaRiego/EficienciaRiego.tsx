@@ -1,12 +1,13 @@
 import React, { useEffect, useState } from "react";
 import Sidebar from "../../../components/sidebar/Sidebar";
 import TableResponsive from "../../../components/table/table.tsx";
+import TableResponsiveDetalles from "../../../components/table/tableDetails.tsx";
 import BordeSuperior from "../../../components/bordesuperior/BordeSuperior.tsx";
 import Modal from "../../../components/modal/Modal.tsx";
 import Topbar from "../../../components/topbar/Topbar.tsx";
 import Swal from "sweetalert2";
 import { ObtenerFincas } from "../../../servicios/ServicioFincas.ts";
-import { ObtenerUsuariosAsignadosPorIdentificacion } from '../../../servicios/ServicioUsuario.ts';
+import { ObtenerUsuariosAsignadosPorIdentificacion,ObtenerUsuariosAsignados  } from '../../../servicios/ServicioUsuario.ts';
 import '../../../css/FormSeleccionEmpresa.css'
 import CrearEficienciaRiegos from "../../../components/eficienciaRiego/InsertarEficienciaRiego.tsx";
 import { ObtenerParcelas } from "../../../servicios/ServicioParcelas.ts";
@@ -25,9 +26,15 @@ function AdministrarEficienciaRiegos() {
         volumenAguaUtilizado: '',
         estadoTuberiasYAccesorios: false,
         uniformidadRiego: false,
-        estadoAspersores: false,
+      //  estadoAspersores: false,
         estadoCanalesRiego: false,
         nivelFreatico: '',
+        uniformidadalerta:'',
+        uniformidaddetalles:'',
+        fugasalerta:'',
+        fugasdetalles:'',
+        canalesalerta:'',
+        canalesdetalles:'',
     });
     const [parcelas, setParcelas] = useState<any[]>([]);
     const [parcelasFiltradas, setParcelasFiltradas] = useState<any[]>([]);
@@ -96,31 +103,81 @@ function AdministrarEficienciaRiegos() {
     }, [selectedFinca]);
     
 
-    const obtenerInfo = async () => {
-        try {
-            const datosRiegos = await ObtenerEficienciaRiego();
-            // Convertir los datos bit en legibles
-            const datosRiegosConSEstado = datosRiegos.map((dato: any) => ({
-                ...dato,
-                sEstado: dato.estado === 1 ? 'Activo' : 'Inactivo',
-                sFugas: dato.estadoTuberiasYAccesorios === true ? 'Tiene Fugas' : 'No Tiene Fugas',
-                sUniformidadRiego: dato.uniformidadRiego === true ? 'Tiene Uniformidad' : 'No Tiene Uniformidad',
-                sEstadoAspersores: dato.estadoAspersores === true ? 'Tiene Obstrucciones' : 'No Tiene Obstrucciones',
-                sEstadoCanalesRiego: dato.estadoCanalesRiego === true ? 'Tiene Obstrucciones' : 'No Tiene Obstrucciones'
-            }));
+    // const obtenerInfo = async () => {
+    //     try {
+    //         const datosRiegos = await ObtenerEficienciaRiego();
+    //         // Convertir los datos bit en legibles
+    //         const datosRiegosConSEstado = datosRiegos.map((dato: any) => ({
+    //             ...dato,
+    //             sEstado: dato.estado === 1 ? 'Activo' : 'Inactivo',
+    //             sFugas: dato.estadoTuberiasYAccesorios === true ? 'Tiene Fugas' : 'No Tiene Fugas',
+    //             sUniformidadRiego: dato.uniformidadRiego === true ? 'Tiene Uniformidad' : 'No Tiene Uniformidad',
+    //           //  sEstadoAspersores: dato.estadoAspersores === true ? 'Tiene Obstrucciones' : 'No Tiene Obstrucciones',
+    //             sEstadoCanalesRiego: dato.estadoCanalesRiego === true ? 'Tiene Obstrucciones' : 'No Tiene Obstrucciones'
+    //         }));
             
-            // Filtrar los datos para mostrar solo los correspondientes a la finca y parcela seleccionadas
+    //         // Filtrar los datos para mostrar solo los correspondientes a la finca y parcela seleccionadas
+    //         const datosFiltrados = datosRiegosConSEstado.filter((dato: any) => {
+    //             //aca se hace el filtro y hasta que elija la parcela funciona
+    //             return dato.idFinca === selectedFinca && dato.idParcela === selectedParcela;
+    //         });
+           
+
+    //         setdatosRiegosFiltrados(datosFiltrados);
+    //     } catch (error) {
+    //         console.error('Error al obtener los datos de los riegos:', error);
+    //     }
+    // };
+
+
+    const obtenerInfo = async () => {
+      
+        try {
+            const idEmpresa = localStorage.getItem('empresaUsuario');
+            const idUsuario = localStorage.getItem('identificacionUsuario');
+
+            if (idEmpresa) {
+
+                const datosUsuarios = await ObtenerUsuariosAsignados({ idEmpresa: idEmpresa });
+
+                const datosRiegos = await ObtenerEficienciaRiego();
+                const usuarioActual = datosUsuarios.find((usuario: any) => usuario.identificacion === idUsuario);
+
+                if (!usuarioActual) {
+                    console.error('No se encontró el usuario actual');
+                    return;
+                }
+
+                // devuelve las parcelas del usuario
+                // const parcelasUsuarioActual = datosUsuarios.filter((usuario: any) => usuario.identificacion === idUsuario).map((usuario: any) => usuario.idParcela);
+
+             const datosRiegosConSEstado = datosRiegos.map((dato: any) => ({
+                        ...dato,
+                        sEstado: dato.estado === 1 ? 'Activo' : 'Inactivo',
+                        sFugas: dato.estadoTuberiasYAccesorios === true ? 'Tiene Fugas' : 'No Tiene Fugas',
+                        sUniformidadRiego: dato.uniformidadRiego === true ? 'Tiene Uniformidad' : 'No Tiene Uniformidad',
+                      //  sEstadoAspersores: dato.estadoAspersores === true ? 'Tiene Obstrucciones' : 'No Tiene Obstrucciones',
+                        sEstadoCanalesRiego: dato.estadoCanalesRiego === true ? 'Tiene Obstrucciones' : 'No Tiene Obstrucciones'
+                    }));
+                    
+               
+
+              
+                 // Filtrar los datos para mostrar solo los correspondientes a la finca y parcela seleccionadas
             const datosFiltrados = datosRiegosConSEstado.filter((dato: any) => {
                 //aca se hace el filtro y hasta que elija la parcela funciona
                 return dato.idFinca === selectedFinca && dato.idParcela === selectedParcela;
             });
            
 
-            setdatosRiegosFiltrados(datosFiltrados);
+             
+                setdatosRiegosFiltrados(datosFiltrados);
+            }
         } catch (error) {
-            console.error('Error al obtener los datos de los riegos:', error);
+            console.error('Error al obtener los contenidos de Agua:', error);
         }
     };
+
 
     //esto carga la tabla al momento de hacer cambios en el filtro
     //carga los datos de la tabla al momento de cambiar los datos de selected parcela
@@ -142,10 +199,10 @@ function AdministrarEficienciaRiegos() {
         abrirCerrarModalEditar();
     };
 
-    const toggleStatus = async (riego: any) => {
+    const toggleStatus = async (eficienciaRiego: any) => {
         Swal.fire({
-            title: "Cambiar Estado",
-            text: "¿Estás seguro de que deseas actualizar el estado?",
+            title: "Eliminar",
+            text: "¿Estás seguro de que deseas eliminar la Eficiencia de Riego?",
             icon: "warning",
             showCancelButton: true,
             confirmButtonText: "Sí",
@@ -154,21 +211,22 @@ function AdministrarEficienciaRiegos() {
             if (result.isConfirmed) {
                 try {
                     const datos = {
-                        idMonitoreoEficienciaRiego: riego.idMonitoreoEficienciaRiego
+                        idMonitoreoEficienciaRiego: eficienciaRiego.idMonitoreoEficienciaRiego
                     };
-                    console.log(datos)
-                    const resultado = await CambiarEstadoEficienciaRiego(datos);
+
+                    const resultado = await  CambiarEstadoEficienciaRiego(datos);
+
                     if (parseInt(resultado.indicador) === 1) {
                         Swal.fire({
                             icon: 'success',
-                            title: '¡Estado Actualizado! ',
-                            text: 'Actualización exitosa.',
+                            title: '¡Eliminacion exitosa! ',
+                            text: 'Se eliminó el registro de Eficiencia de Riego.',
                         });
                         await obtenerInfo();
                     } else {
                         Swal.fire({
                             icon: 'error',
-                            title: 'Error al actualizar el estado.',
+                            title: 'Error al eliminar',
                             text: resultado.mensaje,
                         });
                     };
@@ -178,6 +236,9 @@ function AdministrarEficienciaRiegos() {
             }
         });
     };
+
+
+
 
     const handleEditarRiego = async () => {
         await obtenerInfo();
@@ -194,7 +255,7 @@ function AdministrarEficienciaRiegos() {
         { key: 'nivelFreatico', header: 'Nivel Freático' },
         { key: 'sFugas', header: 'Fugas' },
         { key: 'sUniformidadRiego', header: 'Uniformidad Riego' },
-        { key: 'sEstadoAspersores', header: 'Obstrucciones en Aspersores' },
+     //   { key: 'sEstadoAspersores', header: 'Obstrucciones en Aspersores' },
         { key: 'sEstadoCanalesRiego', header: 'Obstrucciones en Canales' },
         { key: 'acciones', header: 'Acciones', actions: true }
     ];
@@ -222,7 +283,12 @@ function AdministrarEficienciaRiegos() {
                             ))}
                         </select>
                     </div>
-                    <TableResponsive columns={columns2} data={datosRiegosFiltrados} openModal={openModal} btnActionName={"Editar"} toggleStatus={toggleStatus} />
+                    <TableResponsive
+                    columns={columns2} 
+                    data={datosRiegosFiltrados}
+                     openModal={openModal} 
+                     btnActionName={"Editar"} 
+                     toggleStatus={toggleStatus} />
                 </div>
             </div>
 
@@ -257,9 +323,16 @@ function AdministrarEficienciaRiegos() {
                             volumenAguaUtilizado={selectedDatos.volumenAguaUtilizado}
                             estadoTuberiasYAccesorios={selectedDatos.estadoTuberiasYAccesorios}
                             uniformidadRiego={selectedDatos.uniformidadRiego}
-                            estadoAspersores={selectedDatos.estadoAspersores}
+                          //  estadoAspersores={selectedDatos.estadoAspersores}
                             estadoCanalesRiego={selectedDatos.estadoCanalesRiego}
                             nivelFreatico={selectedDatos.nivelFreatico}
+                            uniformidadalerta={selectedDatos.uniformidadalerta}
+                            uniformidaddetalles={selectedDatos.uniformidaddetalles}
+                            fugasalerta={selectedDatos.fugasalerta}
+                            fugasdetalles={selectedDatos.fugasdetalles}
+                            canalesalerta={selectedDatos.canalesalerta}
+                            canalesdetalles={selectedDatos.canalesdetalles}
+
                             onEdit={handleEditarRiego}
                         />
                     </div>

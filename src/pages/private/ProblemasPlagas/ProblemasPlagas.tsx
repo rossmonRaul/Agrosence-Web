@@ -1,23 +1,28 @@
+
 import React, { useEffect, useState } from "react";
 import Sidebar from "../../../components/sidebar/Sidebar";
-import TableResponsive from "../../../components/table/table.tsx";
+import TableResponsiveDetalles from "../../../components/table/tableDetails.tsx";
 import BordeSuperior from "../../../components/bordesuperior/BordeSuperior.tsx";
 import Modal from "../../../components/modal/Modal.tsx";
 import Topbar from "../../../components/topbar/Topbar.tsx";
 import Swal from "sweetalert2";
 import { ObtenerFincas } from "../../../servicios/ServicioFincas.ts";
-import { ObtenerUsuariosAsignadosPorIdentificacion } from '../../../servicios/ServicioUsuario.ts';
+import { ObtenerUsuariosAsignadosPorIdentificacion,ObtenerUsuariosAsignados } from '../../../servicios/ServicioUsuario.ts';
 import '../../../css/FormSeleccionEmpresa.css'
 import { ObtenerParcelas } from "../../../servicios/ServicioParcelas.ts";
 import EditarProblemaPlagas from "../../../components/problemasPlagas/EditarProblemaPlagas.tsx";
 import { CambiarEstadoRegistroSeguimientoPlagasyEnfermedades, ObtenerRegistroSeguimientoPlagasyEnfermedades } from "../../../servicios/ServicioProblemas.ts";
 import CrearProblemaPlagas from "../../../components/problemasPlagas/InsertarProblemasPlagas.tsx";
+import DetallesProblemasPlagas from "../../../components/problemasPlagas/DetallesProblemasPlagas.tsx";
+
 
 function ProblemasPlagas() {
-
+    const [filtroNombre, setFiltroNombre] = useState('');
     const [modalEditar, setModalEditar] = useState(false);
+    const [modalDetalles, setmodalDetalles] = useState(false);
     const [modalInsertar, setModalInsertar] = useState(false);
-    const [selectedParcela, setSelectedParcela] = useState<number | null>(null);
+
+    //Datos Por Editar 
     const [selectedDatos, setSelectedDatos] = useState({
         idFinca: '',
         idParcela: '',
@@ -30,16 +35,27 @@ function ProblemasPlagas() {
         problema: '',
         accionTomada: '',
         estado: '',
+        valor: '',
     });
+
     const [parcelas, setParcelas] = useState<any[]>([]);
+    const [selectedParcela, setSelectedParcela] = useState<number | null>(null);
     const [parcelasFiltradas, setParcelasFiltradas] = useState<any[]>([]);
-    const [datosProblemasFiltrados, setdatosProblemasFiltrados] = useState<any[]>([]);
+    /////////////////////////////////////////////////////
+    const [problemasPlagasFiltrados, setProblemasPlagasFiltrados] = useState<any[]>([]);
+
+    ///////////////////////////////////////////////
+
     const [selectedFinca, setSelectedFinca] = useState<number | null>(null);
     const [fincas, setFincas] = useState<any[]>([]);
 
+    /////////////////////////////////////
+    const [problemasPlagas, setProblemasplagas] = useState<any[]>([]);
+    ////////////////////////////////////////////
+
+
     const handleFincaChange = async (e: React.ChangeEvent<HTMLSelectElement>) => {
         const value = parseInt(e.target.value);
-
         setSelectedFinca(value);
         setSelectedParcela(null);
     };
@@ -71,6 +87,7 @@ function ProblemasPlagas() {
                     const parcelasResponse = await ObtenerParcelas();
                     //se filtran las parcelas con los idparcelasusuario
                     const parcelasUsuario = parcelasResponse.filter((parcela: any) => idParcelasUsuario.includes(parcela.idParcela));
+
                     setParcelas(parcelasUsuario)
                 } else {
                     console.error('La identificación y/o el ID de la empresa no están disponibles en el localStorage.');
@@ -81,6 +98,47 @@ function ProblemasPlagas() {
         };
         obtenerFincas();
     }, []);
+
+
+    const handleChangeFiltro = (e: React.ChangeEvent<HTMLInputElement>) => {
+        setFiltroNombre(e.target.value);
+    };
+
+
+    // Obtener parcelas cuando cambie la finca seleccionada
+    useEffect(() => {
+        ObtenerInfo();
+    }, [selectedParcela]);
+
+
+
+    // Filtrar parcelas cuando cambien la finca seleccionada, las parcelas o el filtro por nombre
+    useEffect(() => {
+        filtrarParcelas();
+    }, [selectedFinca,problemasPlagas, filtroNombre]);
+
+
+
+
+    // Función para filtrar las parcelas
+    const filtrarParcelas = () => {
+
+        const problemasPlagasFiltrados = filtroNombre
+
+
+
+
+            ? problemasPlagas.filter((problemasPlagas: any) =>
+                problemasPlagas.cultivo.toLowerCase().includes(filtroNombre.toLowerCase()) ||
+                problemasPlagas.codigo.toLowerCase().includes(filtroNombre.toLowerCase())
+            )
+            : problemasPlagas;
+
+            setProblemasPlagasFiltrados(problemasPlagasFiltrados);
+    };
+   
+
+
 
 
     useEffect(() => {
@@ -98,52 +156,132 @@ function ProblemasPlagas() {
     }, [selectedFinca]);
 
 
-    const obtenerInfo = async () => {
+    const ObtenerInfo = async () => {
+      
         try {
-            const datosRiegos = await ObtenerRegistroSeguimientoPlagasyEnfermedades();
-            // Convertir los datos bit en legibles
-            const datosRiegosConSEstado = datosRiegos.map((dato: any) => ({
-                ...dato,
-                sEstado: dato.estado === 1 ? 'Activo' : 'Inactivo',
-            }));
+            const idEmpresa = localStorage.getItem('empresaUsuario');
+            const idUsuario = localStorage.getItem('identificacionUsuario');
 
-            // Filtrar los datos para mostrar solo los correspondientes a la finca y parcela seleccionadas
-            const datosFiltrados = datosRiegosConSEstado.filter((dato: any) => {
-                //aca se hace el filtro y hasta que elija la parcela funciona
-                return dato.idFinca === selectedFinca && dato.idParcela === selectedParcela;
-            });
+            if (idEmpresa) {
+
+                const datosUsuarios = await ObtenerUsuariosAsignados({ idEmpresa: idEmpresa });
+
+                const problemaPlagasResponse = await ObtenerRegistroSeguimientoPlagasyEnfermedades();
+                console.log("obj",problemaPlagasResponse) 
+                const usuarioActual = datosUsuarios.find((usuario: any) => usuario.identificacion === idUsuario);
+
+                if (!usuarioActual) {
+                    console.error('No se encontró el usuario actual');
+                    return;
+                }
+
+                // devuelve las parcelas del usuario
+                // const parcelasUsuarioActual = datosUsuarios.filter((usuario: any) => usuario.identificacion === idUsuario).map((usuario: any) => usuario.idParcela);
+
+                const problemasPlagasConEstado = problemaPlagasResponse.map((datoproblemasPlagas: any) => ({
+                    ...datoproblemasPlagas,
+                    sEstado: datoproblemasPlagas.estado === 1 ? 'Activo' : 'Inactivo'
+                }));
+
+                const problemasPlagasFiltrados = problemasPlagasConEstado.filter((problemasPlagas: any) => {
 
 
-            setdatosProblemasFiltrados(datosFiltrados);
+                    return problemasPlagas.idFinca === selectedFinca && problemasPlagas.idParcela === selectedParcela;
+
+                });
+
+                setProblemasplagas(problemasPlagasFiltrados);
+                setProblemasPlagasFiltrados(problemasPlagasFiltrados);
+            }
         } catch (error) {
-            console.error('Error al obtener los datos de los riegos:', error);
+            console.error('Error al obtener los contenidos de Agua:', error);
         }
     };
 
-    //esto carga la tabla al momento de hacer cambios en el filtro
-    //carga los datos de la tabla al momento de cambiar los datos de selected parcela
-    //cada vez que selected parcela cambie de datos este use effect obtiene datos
-    useEffect(() => {
-        obtenerInfo();
-    }, [selectedParcela]);
+   
 
+    // Abrir/cerrar modal de inserción
     const abrirCerrarModalInsertar = () => {
         setModalInsertar(!modalInsertar);
     };
 
+    // Abrir/cerrar modal de edición
     const abrirCerrarModalEditar = () => {
         setModalEditar(!modalEditar);
     };
 
-    const openModal = (datos: any) => {
-        setSelectedDatos(datos);
+    // Abrir modal de edición
+    const openModal = (problemasPlagas: any) => {
+        setSelectedDatos(problemasPlagas);
         abrirCerrarModalEditar();
     };
 
-    const toggleStatus = async (riego: any) => {
+    const openModalDetalles = (problemasPlagas: any) => {
+        setSelectedDatos(problemasPlagas);
+        abrirCerrarModalDetalles();
+    };
+
+
+    // Abrir/cerrar modal de edición
+    const abrirCerrarModalDetalles = () => {
+        setmodalDetalles(!modalDetalles);
+    };
+
+    const handleAgregarProblema = async () => {
+        await ObtenerInfo();
+        abrirCerrarModalInsertar();
+    };
+
+    const handleEditarProblema = async () => {
+        await ObtenerInfo();
+        abrirCerrarModalEditar();
+    };
+
+
+    // // Cambiar estado de la parcela
+    // const toggleStatus = async (problemasPlagas: any) => {
+    //     Swal.fire({
+    //         title: "Eliminar",
+    //         text: "¿Estás seguro de que deseas eliminar el Problema de Plagas o Enfermedad  ?",
+    //         icon: "warning",
+    //         showCancelButton: true,
+    //         confirmButtonText: "Sí",
+    //         cancelButtonText: "No"
+    //     }).then(async (result) => {
+    //         if (result.isConfirmed) {
+    //             try {
+    //                 const datos = {
+    //                     idRegistroSeguimientoPlagasYEnfermedades: problemasPlagas.idRegistroSeguimientoPlagasYEnfermedades,
+    //                 };
+    
+    //                 const resultado = await CambiarEstadoRegistroSeguimientoPlagasyEnfermedades(datos);
+    
+    //                 if (parseInt(resultado.indicador) === 1) {
+    
+    //                     /*este await recarga la tabla con los nuevos datos actualizados*/
+    //                     await ObtenerRegistroSeguimientoPlagasyEnfermedades();
+    //                     Swal.fire({
+    //                         icon: 'success',
+    //                         title: '¡Eliminacion exitosa! ',
+    //                         text: 'Se eliminó el Problema.',
+    //                     });
+    //                 } else {
+    //                     Swal.fire({
+    //                         icon: 'error',
+    //                         title: 'Error al eliminar',
+    //                         text: resultado.mensaje,
+    //                     });
+    //                 };
+    //             } catch (error) {
+    //                 Swal.fire("Error al actualizar el estado", "", "error");
+    //             }
+    //         }
+    //     });
+    // };
+    const toggleStatus = async (problemasPlagas: any) => {
         Swal.fire({
-            title: "Cambiar Estado",
-            text: "¿Estás seguro de que deseas actualizar el estado?",
+            title: "Eliminar",
+            text: "¿Estás seguro de que deseas eliminar el Problema Plagas o Enfermedad?",
             icon: "warning",
             showCancelButton: true,
             confirmButtonText: "Sí",
@@ -152,21 +290,22 @@ function ProblemasPlagas() {
             if (result.isConfirmed) {
                 try {
                     const datos = {
-                        idRegistroSeguimientoPlagasYEnfermedades: riego.idRegistroSeguimientoPlagasYEnfermedades
+                        idRegistroSeguimientoPlagasYEnfermedades: problemasPlagas.idRegistroSeguimientoPlagasYEnfermedades,
                     };
-                    
+
                     const resultado = await CambiarEstadoRegistroSeguimientoPlagasyEnfermedades(datos);
+
                     if (parseInt(resultado.indicador) === 1) {
                         Swal.fire({
                             icon: 'success',
-                            title: '¡Estado Actualizado! ',
-                            text: 'Actualización exitosa.',
+                            title: '¡Eliminacion exitosa! ',
+                            text: 'Se eliminó el registro de problema de plagas o enfermedad.',
                         });
-                        await obtenerInfo();
+                        await ObtenerInfo();
                     } else {
                         Swal.fire({
                             icon: 'error',
-                            title: 'Error al actualizar el estado.',
+                            title: 'Error al eliminar',
                             text: resultado.mensaje,
                         });
                     };
@@ -177,34 +316,28 @@ function ProblemasPlagas() {
         });
     };
 
-    const handleEditarProblema = async () => {
-        await obtenerInfo();
-        abrirCerrarModalEditar();
-    };
 
-    const handleAgregarProblema = async () => {
-        await obtenerInfo();
-        abrirCerrarModalInsertar();
-    };
 
+    
     const columns2 = [
         { key: 'fecha', header: 'Fecha' },
         { key: 'cultivo', header: 'Cultivo' },
         { key: 'plagaEnfermedad', header: 'Plaga o Enfermedad' },
-        { key: 'incidencia', header: 'Incidencia' },
+        { key: 'incidencia', header: 'Valoracion' },
         { key: 'acciones', header: 'Acciones', actions: true }
     ];
+
 
     return (
         <Sidebar>
             <div className="main-container">
                 <Topbar />
                 <BordeSuperior text="Problemas de Plagas o Enfermedades" />
-                <div className="content col-md-12">
-                    <button onClick={() => abrirCerrarModalInsertar()} className="btn-crear">Crear Problema</button>
+                <div className="content" col-md-12>
+                    <button onClick={() => abrirCerrarModalInsertar()} className="btn-crear">Crear Problema o Enfermedad</button>
                     <div className="filtro-container" style={{ width: '300px' }}>
                         <select value={selectedFinca || ''} onChange={handleFincaChange} className="custom-select">
-                            <option value="">Seleccione la finca...</option>
+                            <option value={0}>Seleccione una finca</option>
                             {fincas.map(finca => (
                                 <option key={finca.idFinca} value={finca.idFinca}>{finca.nombre}</option>
                             ))}
@@ -218,7 +351,18 @@ function ProblemasPlagas() {
                             ))}
                         </select>
                     </div>
-                    <TableResponsive columns={columns2} data={datosProblemasFiltrados} openModal={openModal} btnActionName={"Editar"} toggleStatus={toggleStatus} />
+                    
+
+                    {/* openModalDetalles */}
+
+                    <TableResponsiveDetalles
+                      columns={columns2}
+                        data={problemasPlagasFiltrados}
+                        openModalDetalles={openModalDetalles}
+                        btnActionNameDetails={"Detalles"}
+                        openModal={openModal}
+                        btnActionName={"Editar"}
+                        toggleStatus={toggleStatus} />
                 </div>
             </div>
 
@@ -230,7 +374,6 @@ function ProblemasPlagas() {
             >
                 <div className='form-container'>
                     <div className='form-group'>
-                        {/* este es el componente para crear la eficiencia del residuo*/}
                         <CrearProblemaPlagas
                             onAdd={handleAgregarProblema}
                         />
@@ -238,7 +381,7 @@ function ProblemasPlagas() {
                 </div>
             </Modal>
 
-            <Modal
+            {<Modal
                 isOpen={modalEditar}
                 toggle={abrirCerrarModalEditar}
                 title="Editar Problema de plagas o enfermedades"
@@ -246,22 +389,48 @@ function ProblemasPlagas() {
             >
                 <div className='form-container'>
                     <div className='form-group'>
-                        <EditarProblemaPlagas
-                            idFinca={parseInt(selectedDatos.idFinca)}
-                            idParcela={parseInt(selectedDatos.idParcela)}
-                            idRegistroSeguimientoPlagasYEnfermedades={selectedDatos.idRegistroSeguimientoPlagasYEnfermedades}
-                            fecha={selectedDatos.fecha}
-                            cultivo={selectedDatos.cultivo}
-                            plagaEnfermedad={selectedDatos.plagaEnfermedad}
-                            incidencia={selectedDatos.incidencia}
-                            metodologiaEstimacion={selectedDatos.metodologiaEstimacion}
-                            problema={selectedDatos.problema}
-                            accionTomada={selectedDatos.accionTomada}
-                            onEdit={handleEditarProblema}
-                        />
+                    <EditarProblemaPlagas
+                    idFinca={parseInt(selectedDatos.idFinca)}
+                    idParcela={parseInt(selectedDatos.idParcela)}
+                    idRegistroSeguimientoPlagasYEnfermedades={selectedDatos.idRegistroSeguimientoPlagasYEnfermedades}
+                    fecha={selectedDatos.fecha}
+                    cultivo={selectedDatos.cultivo}
+                    plagaEnfermedad={selectedDatos.plagaEnfermedad}
+                    incidencia={selectedDatos.incidencia}
+                    metodologiaEstimacion={selectedDatos.metodologiaEstimacion}
+                    problema={selectedDatos.problema}
+                    accionTomada={selectedDatos.accionTomada}
+                    valor={selectedDatos.valor}
+                    onEdit={handleEditarProblema}
+                />
                     </div>
                 </div>
-            </Modal>
+            </Modal>}
+            {<Modal
+                isOpen={modalDetalles}
+                toggle={abrirCerrarModalDetalles}
+                title="Detalles Problema Plagas o Enfermedades"
+                onCancel={abrirCerrarModalDetalles}
+            >
+                <div className='form-container'>
+                    <div className='form-group'>
+                    <DetallesProblemasPlagas
+                        
+                    idFinca={parseInt(selectedDatos.idFinca)}
+                        idParcela={parseInt(selectedDatos.idParcela)}
+                        idRegistroSeguimientoPlagasYEnfermedades={selectedDatos.idRegistroSeguimientoPlagasYEnfermedades}
+                        fecha={selectedDatos.fecha}
+                        cultivo={selectedDatos.cultivo}
+                        plagaEnfermedad={selectedDatos.plagaEnfermedad}
+                        incidencia={selectedDatos.incidencia}
+                        metodologiaEstimacion={selectedDatos.metodologiaEstimacion}
+                        problema={selectedDatos.problema}
+                        accionTomada={selectedDatos.accionTomada}
+                        valor={selectedDatos.valor}
+                    />
+                    </div>
+                </div>
+            </Modal>}
         </Sidebar>
     );
 }

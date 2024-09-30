@@ -1,13 +1,13 @@
-import React, { useEffect, useState } from 'react';
-import { FormGroup, Label, Input, Col, FormFeedback, Button } from 'reactstrap';
+import React, { useCallback, useEffect, useState } from 'react';
+import { FormGroup, Label, Input, Col, FormFeedback, Button,InputGroup, InputGroupText } from 'reactstrap';
 import Swal from 'sweetalert2';
 import { ObtenerFincas } from '../../servicios/ServicioFincas.ts';
 import { ObtenerParcelas } from '../../servicios/ServicioParcelas.ts';
 import { ObtenerUsuariosAsignadosPorIdentificacion } from '../../servicios/ServicioUsuario.ts';
 import '../../css/CrearCuenta.css';
 import { ModificarRegistroSeguimientoPlagasyEnfermedades } from '../../servicios/ServicioProblemas.ts';
-
-
+import { useDropzone } from 'react-dropzone';
+import {InsertarDocumentacionProblemasDePlagas, DesactivarDocumentoProblemasDePlagas,ObtenerDocumentacionProblemasDePlagas } from '../../servicios/ServicioProblemas.ts';
 // Interfaz para las propiedades del componente
 interface ProblemaSeleccionado {
     idFinca: number;
@@ -20,9 +20,15 @@ interface ProblemaSeleccionado {
     metodologiaEstimacion: string,
     problema: string,
     accionTomada: string,
+    valor: string,
     onEdit?: () => void; // Hacer onEdit opcional agregando "?"
 }
 
+interface Documento {
+    idDocumento: number;
+    documento: string;
+    nombreDocumento: string;
+}
 
 interface Option {
     identificacion: string;
@@ -43,6 +49,7 @@ const EditarProblemaPlagas: React.FC<ProblemaSeleccionado> = ({
     metodologiaEstimacion,
     problema,
     accionTomada,
+    valor,
     onEdit
 }) => {
 
@@ -52,6 +59,12 @@ const EditarProblemaPlagas: React.FC<ProblemaSeleccionado> = ({
     //esto rellena los select de finca y parcela cuando se carga el modal
     const [selectedFinca, setSelectedFinca] = useState<string>(() => idFinca ? idFinca.toString() : '');
     const [selectedParcela, setSelectedParcela] = useState<string>(() => idParcela ? idParcela.toString() : '');
+
+    const [files, setFiles] = useState<{ file: File; idDocumento?: number }[]>([]);
+    const [addFiles, setAddFiles] = useState<File[]>([]);
+    const [deletefiles, setDeleteFiles] = useState<{ idDocumento?: number }[]>([]);
+
+    const [selectedincidencia, setSelectedincidencia] = useState<string>('');
     // Estado para almacenar los errores de validación del formulario
     const [errors, setErrors] = useState<Record<string, string>>({
         idFinca: '',
@@ -63,6 +76,7 @@ const EditarProblemaPlagas: React.FC<ProblemaSeleccionado> = ({
         incidencia: '',
         metodologiaEstimacion: '',
         accionTomada: '',
+        valor: '',
         usuarioCreacionModificacion: ''
     });
 
@@ -77,9 +91,17 @@ const EditarProblemaPlagas: React.FC<ProblemaSeleccionado> = ({
         problema: '',
         accionesCorrectivas: '',
         accionTomada: '',
+        valor:'',
         usuarioCreacionModificacion: '',
     });
 
+    const [formDataDocument] = useState({
+        idRegistroSeguimientoPlagasYEnfermedades: '',
+        Documento: '',
+        NombreDocumento: '',
+        usuarioCreacionModificacion: ''
+
+    });
     const [step, setStep] = useState(1);
 
     const handleNextStep = () => {
@@ -91,15 +113,46 @@ const EditarProblemaPlagas: React.FC<ProblemaSeleccionado> = ({
     };
 
     // Función para manejar cambios en los inputs del formulario
+    // const handleInputChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    //     const { name, value } = event.target;
+    //     setFormData((prevState: any) => ({
+    //         ...prevState,
+    //         [name]: value
+    //     }));
+    // };
+    
     const handleInputChange = (event: React.ChangeEvent<HTMLInputElement>) => {
         const { name, value } = event.target;
-        setFormData((prevState: any) => ({
+        
+        // Remove the '%' sign before processing
+        let processedValue = value.replace('%', '');
+      
+        if (name === 'valor') {
+          // Allow empty value to enable deletion
+          if (processedValue === '') {
+        setFormData((prevState: FormData) => ({
             ...prevState,
-            [name]: value
+            [name]: ''
+          }));
+          return;
+        }
+    
+       
+        const numericValue = parseInt(processedValue, 10);
+        processedValue = Math.max(0, Math.min(100, isNaN(numericValue) ? 1 : numericValue)).toString();
+      }
+        setFormData((prevState: FormData) => ({
+          ...prevState,
+          [name]: processedValue
         }));
+      };
+     
+      
+    const handleincidenciaChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
+        const value = e.target.value;
+        formData.incidencia = value;
+        setSelectedincidencia(value);
     };
-
-
 
 
     // Obtener las fincas al cargar la página
@@ -125,6 +178,29 @@ const EditarProblemaPlagas: React.FC<ProblemaSeleccionado> = ({
                     const parcelasUsuario = parcelasResponse.filter((parcela: any) => idParcelasUsuario.includes(parcela.idParcela));
                     setParcelas(parcelasUsuario)
 
+
+                    const documentos = await ObtenerDocumentacionProblemasDePlagas({ idRegistroSeguimientoPlagasYEnfermedades: idRegistroSeguimientoPlagasYEnfermedades })
+
+
+                    const archivos = documentos.map((doc: Documento) => {
+                        // Convertir los datos base64 a un blob
+                        const byteCharacters = atob(doc.documento.split(',')[1]);
+                        const byteNumbers = new Array(byteCharacters.length);
+                        for (let i = 0; i < byteCharacters.length; i++) {
+                            byteNumbers[i] = byteCharacters.charCodeAt(i);
+                        }
+                        const byteArray = new Uint8Array(byteNumbers);
+                        const blob = new Blob([byteArray], { type: 'application/octet-stream' });
+
+                        // Crear un archivo a partir del blob
+                        const archivo = new File([blob], doc.nombreDocumento);
+
+                        // Devolver un objeto que incluya el archivo y su ID asociado
+                        return { file: archivo, idDocumento: doc.idDocumento };
+                    });
+
+
+                    setFiles(archivos);
 
                 } else {
                     console.error('La identificación y/o el ID de la empresa no están disponibles en el localStorage.');
@@ -171,7 +247,8 @@ const EditarProblemaPlagas: React.FC<ProblemaSeleccionado> = ({
         const month = parts[1];
         const year = parts[2];
         const fechaFormateada = year + '-' + month + '-' + day;
-
+       
+        setSelectedincidencia(incidencia)
         setFormData({
             idFinca: idFinca,
             idParcela: idParcela,
@@ -183,6 +260,7 @@ const EditarProblemaPlagas: React.FC<ProblemaSeleccionado> = ({
             metodologiaEstimacion: metodologiaEstimacion,
             problema: problema,
             accionTomada: accionTomada,
+            valor: valor,
         });
 
     }, [idRegistroSeguimientoPlagasYEnfermedades]);
@@ -293,30 +371,169 @@ const EditarProblemaPlagas: React.FC<ProblemaSeleccionado> = ({
 
             const resultado = await ModificarRegistroSeguimientoPlagasyEnfermedades(formData);
 
-
+              
+            let errorEnviandoArchivos = false; // Variable para rastrear si hubo un error al enviar archivos
 
             if (resultado.indicador === 1) {
-                Swal.fire({
-                    icon: 'success',
-                    title: '¡Registro editado!',
-                    text: 'Se ha editado un problema'
-                });
 
+                formDataDocument.idRegistroSeguimientoPlagasYEnfermedades = idRegistroSeguimientoPlagasYEnfermedades
+
+                for (let documento of addFiles) {
+                    const reader = new FileReader();
+
+                    reader.onload = async () => {
+                        // Convierte el resultado a una cadena base64
+                        const contenidoArchivo = reader.result;
+                        formDataDocument.NombreDocumento = documento.name;
+                        formDataDocument.Documento = contenidoArchivo as string;
+
+
+                        const resultadoDocumento = await InsertarDocumentacionProblemasDePlagas(formDataDocument)
+
+                        if (resultadoDocumento.indicador !== 1) {
+                            errorEnviandoArchivos = true; // Marcar que hubo un error
+                        }
+                    };
+
+                    reader.readAsDataURL(documento); // Lee el archivo como una URL de datos
+                }
+
+                for (let documento of deletefiles) {
+
+                    const resultadoDocumento = await DesactivarDocumentoProblemasDePlagas({ idDocumento: documento.idDocumento})
+
+                    if (resultadoDocumento.indicador !== 1) {
+                        errorEnviandoArchivos = true; // Marcar que hubo un error
+                    }
+
+                }
+
+                if (errorEnviandoArchivos) {
+                    Swal.fire({
+                        icon: 'error',
+                        title: 'Error al insertar uno o varios documentos',
+                        text: resultado.message
+                    });
+                } else {
+                    Swal.fire({
+                        icon: 'success',
+                        title: '¡Registro editado!',
+                        text: 'Se ha editado un registro de Problema de Plagas o Enfermdedad'
+                    });
+                };
                 if (onEdit) {
                     onEdit();
                 };
             };
         } catch (error) {
-            console.error('Error al editar:', error);
+            console.error('Error al editar un Problema de Plagas o Enfermdedad:', error);
             Swal.fire({
                 icon: 'error',
-                title: 'Error al editar',
+                title: 'Error al editar un Problema de Plagas o Enfermdedad',
                 text: 'Ocurrió un error. Por favor, inténtelo de nuevo más tarde.'
             });
         }
     };
 
 
+    const DropZoneComponent = () => {
+
+
+        const onDrop = useCallback((acceptedFiles: File[]) => {
+            // Validar que no se exceda el límite de 3 archivos
+            if (files.length + acceptedFiles.length > 3) {
+                Swal.fire({
+                    icon: 'error',
+                    title: 'Error',
+                    text: 'No se puede ingresar más de 3 archivos'
+                });
+                return;
+            }
+            const newFiles: { file: File; }[] = [];
+            acceptedFiles.forEach(file => {
+                // Validar el tamaño del archivo (máximo 5 MB)
+                if (file.size > 5 * 1024 * 1024) {
+                    Swal.fire({
+                        icon: 'error',
+                        title: 'Error',
+                        text: 'El tamaño del archivo no debe exceder los 5 MB'
+                    });
+                    return;
+                }
+                let fileName = file.name;
+                let index = 1;
+                while (files.some(fileObj => fileObj.file.name === fileName)) {
+                    const parts = file.name.split('.');
+                    const name = parts.slice(0, -1).join('.');
+                    const extension = parts[parts.length - 1];
+                    fileName = `${name}(${index}).${extension}`;
+                    index++;
+
+                }
+                const renamedFile = new File([file], fileName); // Crear un nuevo objeto de archivo con el nombre modificado
+                newFiles.push({ file: renamedFile });
+            });
+
+            setFiles(prevFiles => [...prevFiles, ...newFiles]);
+            const addNewFiles = [...addFiles, ...newFiles.map(({ file }) => file)];
+            setAddFiles(addNewFiles);
+        }, [files, addFiles]);
+
+        const handleRemoveFile = (idDocumentoToRemove?: number, index?: number) => {
+            if (index !== undefined) {
+
+                // Eliminar el archivo de files
+                const newFiles = files.filter((_, idx) => idx !== index);
+
+                setFiles(newFiles);
+
+                // Obtener el nombre del archivo correspondiente en files
+                const fileNameToDelete = files[index].file.name;
+
+                // Buscar el archivo correspondiente en addFiles y eliminarlo
+                const addNewFiles = addFiles.filter(file => file.name !== fileNameToDelete);
+
+                setAddFiles(addNewFiles);
+
+                // Si idDocumentoToRemove según sea necesario
+                if (idDocumentoToRemove !== undefined) {
+
+                    setDeleteFiles(prevDeleteFiles => [...prevDeleteFiles, { idDocumento: idDocumentoToRemove }]);
+                }
+            }
+        };
+
+        const { getRootProps, getInputProps } = useDropzone({
+            onDrop,
+            accept: {
+                'image/*': [],  // Permite todos los tipos de imagen
+                'video/*': []   // Permite todos los tipos de video
+            }
+        });
+
+        return (
+            <div>
+                <div {...getRootProps()} className="dropzone">
+                    <input {...getInputProps()} />
+                    {
+                        <p>Haz clic o arrastra y suelta los archivos aquí.</p>
+                    }
+                </div>
+
+                <div className="file-list">
+                    {files.map(({ file, idDocumento }, index) => (
+                        <div className="file-item" key={index}>
+                            <a href={URL.createObjectURL(file)} download={file.name}>
+                                {file.name.length > 30 ? file.name.substring(0, 30) + '...' : file.name}
+                            </a>
+                            <button className='button' onClick={() => handleRemoveFile(idDocumento, index)}>X</button>
+                        </div>
+                    ))}
+                </div>
+
+            </div>
+        );
+    };
 
 
 
@@ -393,45 +610,68 @@ const EditarProblemaPlagas: React.FC<ProblemaSeleccionado> = ({
 
                     </div>
 
-                    <div className="row" style={{ display: "flex" }}>
-                        <div className="row" style={{ display: "flex", flexDirection: 'row', width: '50%' }}>
-                            <div style={{ flex: 1, marginRight: '10px' }}>
-                                <FormGroup row>
-                                    <Label for="plagaEnfermedad" sm={4} className="input-label">Plaga o Enfermedad</Label>
-                                    <Col sm={8}>
-                                        <Input
-                                            type="text"
-                                            id="plagaEnfermedad"
-                                            name="plagaEnfermedad"
-                                            value={formData.plagaEnfermedad}
-                                            onChange={handleInputChange}
-                                            className={errors.plagaEnfermedad ? 'input-styled input-error' : 'input-styled'}
-                                            placeholder="Plaga o Enfermedad"
-                                        />
-                                        <FormFeedback>{errors.plagaEnfermedad}</FormFeedback>
-                                    </Col>
-                                </FormGroup>
-                            </div>
-                        </div>
-                        <div className="col-sm-4" style={{ marginRight: '0px', width: '50%' }}>
+                    <div className="row" style={{ display: "flex", flexDirection: 'row', width: '100%' }}>
+                    <div style={{ flex: 1, marginRight: '10px'  }}>
                             <FormGroup row>
-                                <Label for="incidencia" sm={4} className="input-label">Indidencia</Label>
-                                <Col sm={8}>
-                                    <Input
-                                        type="text"
-                                        id="incidencia"
-                                        name="incidencia"
-                                        value={formData.incidencia}
-                                        onChange={handleInputChange}
-                                        className={errors.incidencia ? 'input-styled input-error' : 'input-styled'}
-                                        placeholder="Incidencia"
-                                    />
-                                    <FormFeedback>{errors.cultivo}</FormFeedback>
-                                </Col>
-                            </FormGroup>
-                        </div>
+                                 <Label for="incidencia" sm={4} className="input-label">Valoración:</Label>
+                                      <Col sm={8}>
+                             <Input
+                    type="select" 
+                    style={{ width: '100%', height: '2.6rem' }}
+                    id="incidencia"
+                    name="incidencia"
+                    value={formData.incidencia}
+                    onChange={handleInputChange}
+                    className={errors.incidencia ? 'input-styled input-error' : 'input-styled'}
+                >
+                    <option key="default-resultado" value="">Seleccione...</option>
+                    <option key="incidencia" value="Incidencia">Incidencia</option>
+                    <option key="severidad" value="Severidad">Severidad</option>
+                </Input>
+                <FormFeedback>{errors.incidencia}</FormFeedback>
+            </Col>
+        </FormGroup>
+    </div>
+    <div style={{ marginRight: '0px', width: '50%'}}>
+        <FormGroup row>
+            <Label for="valor" sm={4} className="input-label">Valor (%)</Label>
+            <Col sm={8}>
+                <Input
+                    type="text"
+                    id="valor"
+                    name="valor"
+                    value={formData.valor !== '' ? `${formData.valor}%` : ''}
+                    onChange={handleInputChange}
+                    className={errors.valor ? 'input-styled input-error' : 'input-styled'}
+                    placeholder="Valor"
+                    min="0"
+                    max="100"
+                />
+                <FormFeedback>{errors.valor}</FormFeedback>
+            </Col>
+        </FormGroup>
+    </div>
+</div>
 
-                    </div>
+<div className="row" style={{ display: "flex", flexDirection: 'row', width: '100%' }}>
+    <div style={{ flex: 1, flexDirection: 'row', width: '100%' }}>
+        <FormGroup row>
+            <Label for="plagaEnfermedad" sm={4} className="input-label">Plaga o Enfermedad</Label>
+            <Col sm={8}>
+                <Input
+                    type="text"
+                    id="plagaEnfermedad"
+                    name="plagaEnfermedad"
+                    value={formData.plagaEnfermedad}
+                    onChange={handleInputChange}
+                    className={errors.plagaEnfermedad ? 'input-styled input-error' : 'input-styled'}
+                    placeholder="Plaga o Enfermedad"
+                />
+                <FormFeedback>{errors.plagaEnfermedad}</FormFeedback>
+            </Col>
+        </FormGroup>
+    </div>
+</div>
 
 
                     <button onClick={handleNextStep} className="btn-styled">Siguiente</button>
@@ -501,6 +741,22 @@ const EditarProblemaPlagas: React.FC<ProblemaSeleccionado> = ({
                             </Col>
                         </FormGroup>
                     </div>
+
+                    <button onClick={handlePreviousStep} className='btn-styled-danger'>Anterior</button>
+                    <button onClick={handleNextStep} className="btn-styled">Siguiente</button>
+                </div>
+
+            )}
+             {step === 3 && (
+                <div>
+                    <h2>Problemas Plagas</h2>
+
+                    <div className="row" style={{ display: "flex", marginTop: "10px" }}>
+                        <div className="col-sm-4" style={{ marginRight: '0px', width: '100%' }}>
+                            <DropZoneComponent />
+                        </div>
+                    </div>
+
 
                     <FormGroup row>
                         <Col sm={{ size: 10, offset: 2 }}>

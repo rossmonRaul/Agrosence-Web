@@ -1,3 +1,4 @@
+import ReportePlanilla from "../pages/private/ReportePlanilla/ReportePlanilla";
 
 
 export const PublicRoutes = {
@@ -12,6 +13,7 @@ export const PrivateRoutes = {
     ASIGNAREMPRESA: 'asignarempresa',
     //
     ASIGNARFINCAPARCELA: 'asignarfincaparcela',
+    SENSORES: 'administrarsensores',
     // pagina de sa para administrar las empresas ↓
     ADMINISTRAREMPRESAS: 'administrarempresas',
     MATENIMIENTOUSUARIOSASIGNADOS: 'administrarusuariosasignados',
@@ -25,9 +27,31 @@ export const PrivateRoutes = {
     PRODUCCIONCULTIVOS: 'productividadcultivos',
     RESIDUOS: 'manejoresiduos',
     RIEGOS: 'eficienciariego',
+    TIPOAPLICACION: 'tipoaplicacion',
     CONDUCTIVIDADELECTRICA: 'conductividadelectrica',
     PRONOSTICOMETEOROLOGICO: 'pronosticometereologico',
-    RIESGOSNATURALES:'riesgonatural',
+    RIESGOSNATURALES: 'riesgonatural',
     CONDICIONESMETEOROLOGICASCLIMATICAS: 'condicionesmetereologicasclimaticas',
-    PROBLEMASPLAGAS: 'problemasplagas'
+    PROBLEMASPLAGAS: 'problemasplagas',
+    MEDICIONESSENSOR: 'medicionessensor',
+    PUNTOMEDICION: 'puntomedicion',
+    ORDENCOMPRA: 'ordencompra',
+    ENTRADAYSALIDA: 'entradasysalidas',
+    MANOOBRA: 'manoobra',
+    REPORTEENTRADASYSALIDAS: 'reporteentradasysalidas',
+    REPORTESALIDAS: 'reportesalidas',
+    REPORTEENTRADAS: 'reporteentradas',
+    REPORTEPLANILLA: 'reporteplanilla',
+    REPORTEORDENCOMPRA: 'reporteordendecompra',
+    REPORTESENSORES: 'reportesensores',
+    REPORTEMEDICIONESSENSOR: 'reportemedicionessensor',
+    CONTENIDODECLOROFILA: "contenidodeclorofila",
+    SALUDPLANTA: "saludplanta",
+    CANTIDADDEPLANTAS: "cantidaddeplantas",
+   CONTENIDODEAGUA: 'contenidodeagua',
+   COBERTURAVEGETAL: "CoberturaVegetal",
+   CONTENIDODENITROGENO: 'contenidodenitrogeno',
+   CATALOGOACTIVIDADESPT: 'catalogoactividadespt',
+   MEDIDASCULTIVOS: "medidascultivos",
+   CULTIVOS: 'cultivos',
 };

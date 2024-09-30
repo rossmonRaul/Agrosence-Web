@@ -28,11 +28,17 @@ const CrearEficienciaRiegos: React.FC<CrearEficienciaRiegoProps> = ({ onAdd }) =
         idParcela: '',
         estadoTuberiasYAccesorios: false,
         uniformidadRiego: false,
-        estadoAspersores: false,
+       // estadoAspersores: false,
         estadoCanalesRiego: false,
         volumenAguaUtilizado: '',
         nivelFreatico: '',
         usuarioCreacionModificacion: '',
+        uniformidadalerta:'',
+        uniformidaddetalles:'',
+        fugasalerta:'',
+        fugasdetalles:'',
+        canalesalerta:'',
+        canalesdetalles:'',
     });
     const [errors, setErrors] = useState<Record<string, string>>({});
 
@@ -42,17 +48,74 @@ const CrearEficienciaRiegos: React.FC<CrearEficienciaRiegoProps> = ({ onAdd }) =
     const [parcelasFiltradas, setParcelasFiltradas] = useState<Option[]>([]);
     const [selectedFinca, setSelectedFinca] = useState<string>('');
     const [selectedParcela, setSelectedParcela] = useState<string>('');
+    const [selecteduniformidadalerta, setSelecteduniformidadalerta] = useState<string>('');
+    const [selectedfugasalerta, setSelectedfugasalerta] = useState<string>('');
+    const [selectedcanalesalerta, setSelectedcanalesalerta] = useState<string>('');
+    const [step, setStep] = useState(1);
 
 
-    const handleInputChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-        const { name, value, type, checked } = event.target;
-        const newValue = type === 'checkbox' ? checked : value;
-    
-        setFormData((prevState: any) => ({
-            ...prevState,
-            [name]: newValue
-        }));
+    const handleNextStep = () => {
+        setStep(prevStep => prevStep + 1);
     };
+
+    const handlePreviousStep = () => {
+        setStep(prevStep => prevStep - 1);
+    };
+
+    const handleInputChange = (event: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
+        const target = event.target;
+        const { name, value, type } = target;
+        const checked = (target as HTMLInputElement).checked; // Cast target to HTMLInputElement to access 'checked'
+    
+        setFormData((prevState: any) => {
+            const newValue = type === 'checkbox' ? checked : value;
+            const updatedFormData = {
+                ...prevState,
+                [name]: newValue
+            };
+    
+            // Limpiar los campos si el checkbox correspondiente se desmarca
+            if (type === 'checkbox' && !checked) {
+                if (name === 'uniformidadRiego') {
+                    updatedFormData.uniformidadalerta = '';
+                    updatedFormData.uniformidaddetalles = '';
+                } else if (name === 'estadoCanalesRiego') {
+                    updatedFormData.canalesalerta = '';
+                    updatedFormData.canalesdetalles = '';
+                } else if (name === 'estadoTuberiasYAccesorios') {
+                    updatedFormData.fugasalerta = '';
+                    updatedFormData.fugasdetalles = '';
+                }
+            }
+    
+            return updatedFormData;
+        });
+    };
+    
+
+
+
+
+
+    const handleuniformidadalertaChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
+        const value = e.target.value;
+        formData.uniformidadalerta = value;
+        setSelecteduniformidadalerta(value);
+    };
+
+    const handlefugasalertaChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
+        const value = e.target.value;
+        formData.fugasalerta = value;
+        setSelectedfugasalerta(value);
+    };
+
+
+    const handlecanalesalertaChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
+        const value = e.target.value;
+        formData.canalesalerta = value;
+        setSelectedcanalesalerta(value);
+    };
+
     useEffect(() => {
         const obtenerDatosUsuario = async () => {
             try {
@@ -191,6 +254,8 @@ const CrearEficienciaRiegos: React.FC<CrearEficienciaRiegoProps> = ({ onAdd }) =
     return (
         <div id='general' style={{ display: 'flex', flexDirection: 'column', paddingBottom: '0rem', width: '90%', margin: '0 auto', minWidth:'700px' }}>
 
+            
+        {step === 1 && (
             <div>
                 <h2>Eficiencia de riego</h2>
                 <div className="form-container-fse" style={{ display: 'flex', flexDirection: 'row', width: '100%' }}>
@@ -263,90 +328,211 @@ const CrearEficienciaRiegos: React.FC<CrearEficienciaRiegoProps> = ({ onAdd }) =
                     </div>
 
                 </div>
+                <button onClick={handleNextStep} className="btn-styled">Siguiente</button>
+         </div>
 
-                <div className="row" style={{ display: "flex", flexDirection: 'row', width: '100%', marginTop: '5px' }}>
-                    <div className="col-sm-4" style={{ marginRight: "10px", width: '100%' }}>
-                        <FormGroup row style={{ display: 'flex' }}>
-                            <Label for="uniformidadRiego" className="input-label" style={{ width: '100%', textAlign: 'left' }}>Uniformidad de Riego</Label>
-                            <Col >
-                                <Input
-                                    type="checkbox"
-                                    id="uniformidadRiego"
-                                    name="uniformidadRiego"
-                                    checked={formData.uniformidadRiego}
-                                    onChange={handleInputChange}
-                                    className={errors.uniformidadRiego ? 'input-styled input-error' : 'input-styled'}
-                                    style={{ transform: 'scale(1.2)', marginLeft: '40px', marginTop:'10px' }}
-                                />
-                            </Col>
-                            <FormFeedback>{errors.uniformidadRiego}</FormFeedback>
-                        </FormGroup>
-                    </div>
-                    <div className="col-sm-4" style={{ marginRight: "10px", width: '100%' }}>
-                        <FormGroup row style={{ display: 'flex' }}>
-                            <Label for="estadoAspersores" className="input-label" style={{ width: '100%', textAlign: 'left' }}>Obstruccion en Aspersores</Label>
-                            <Col >
-                                <Input
-                                    type="checkbox"
-                                    id="estadoAspersores"
-                                    name="estadoAspersores"
-                                    checked={formData.estadoAspersores}
-                                    onChange={handleInputChange}
-                                    className={errors.estadoAspersores ? 'input-styled input-error' : 'input-styled'}
-                                    style={{ transform: 'scale(1.2)', marginLeft: '40px', marginTop:'10px' }}
-                                />
-                            </Col>
-                            <FormFeedback>{errors.estadoAspersores}</FormFeedback>
-                        </FormGroup>
-                    </div>
+        )}
+        {step === 2 && (
+    <div>
+        <h2>Problemas Plagas</h2>
+        
+       
+        <div className="row" style={{ marginTop: '5px' }}>
+    <div className="col-sm-4" style={{ marginRight: "10px" }}>
+      <FormGroup row style={{ display: 'flex' }}>
+        <Label for="uniformidadRiego" className="input-label" style={{ width: '100%', textAlign: 'left', fontSize: '1.25rem' }}>
+          Uniformidad de Riego
+        </Label>
+        <Col>
+          <Input
+            type="checkbox"
+            id="uniformidadRiego"
+            name="uniformidadRiego"
+            checked={formData.uniformidadRiego}
+            onChange={handleInputChange}
+            className={errors.uniformidadRiego ? 'input-styled input-error' : 'input-styled'}
+            style={{ transform: 'scale(1.2)', marginLeft: '40px', marginTop: '10px' }}
+          />
+        </Col>
+        <FormFeedback>{errors.uniformidadRiego}</FormFeedback>
+      </FormGroup>
 
-                </div>
+      {formData.uniformidadRiego && (
+        <>
+          <FormGroup row>
+            <Label for="uniformidadalerta" sm={4} className="input-label">
+              Rango de alertas de Uniformidad de Riego:
+            </Label>
+            <Col sm={8}>
+              <select
+                className="custom-select"
+                id="uniformidadalerta"
+                value={formData.uniformidadalerta}
+                onChange={handleInputChange}
+                name="uniformidadalerta"
+              >
+                <option key="default-resultado" value="">Seleccione...</option>
+                <option key="bajo" value="Bajo">Bajo</option>
+                <option key="medio" value="Medio">Medio</option>
+                <option key="alto" value="Alto">Alto</option>
+              </select>
+              {errors.uniformidadalerta && <FormFeedback>{errors.uniformidadalerta}</FormFeedback>}
+            </Col>
+          </FormGroup>
+          <FormGroup row>
+            <Label for="uniformidaddetalles" sm={4} className="input-label">
+              Detalles de Uniformidad de Riego:
+            </Label>
+            <Col sm={8}>
+              <Input
+                type="text"
+                id="uniformidaddetalles"
+                name="uniformidaddetalles"
+                value={formData.uniformidaddetalles}
+                onChange={handleInputChange}
+                className={errors.uniformidaddetalles ? 'input-styled input-error' : 'input-styled'}
+                placeholder="Detalles"
+              />
+              <FormFeedback>{errors.uniformidaddetalles}</FormFeedback>
+            </Col>
+          </FormGroup>
+        </>
+      )}
+    </div>
 
-                <div className="row" style={{ display: "flex", flexDirection: 'row', width: '100%', marginTop: '5px' }}>
-                    <div className="col-sm-4" style={{ marginRight: "10px", width: '100%' }}>
-                        <FormGroup row style={{ display: 'flex' }}>
-                            <Label for="estadoTuberiasYAccesorios" className="input-label" style={{ width: '100%', textAlign: 'left' }}>Fugas en el Sistema de Riego</Label>
-                            <Col >
-                                <Input
-                                    type="checkbox"
-                                    id="estadoTuberiasYAccesorios"
-                                    name="estadoTuberiasYAccesorios"
-                                    checked={formData.estadoTuberiasYAccesorios}
-                                    onChange={handleInputChange}
-                                    className={errors.estadoTuberiasYAccesorios ? 'input-styled input-error' : 'input-styled'}
-                                    style={{ transform: 'scale(1.2)', marginLeft: '40px', marginTop:'10px' }}
-                                />
-                            </Col>
-                            <FormFeedback>{errors.estadoTuberiasYAccesorios}</FormFeedback>
-                        </FormGroup>
-                    </div>
-                    <div className="col-sm-4" style={{ marginRight: "10px", width: '100%' }}>
-                        <FormGroup row style={{ display: 'flex' }}>
-                            <Label for="estadoCanalesRiego" className="input-label" style={{ width: '100%', textAlign: 'left' }}>Obstrucción en Canales de Riego</Label>
-                            <Col >
-                                <Input
-                                    type="checkbox"
-                                    id="estadoCanalesRiego"
-                                    name="estadoCanalesRiego"
-                                    checked={formData.estadoCanalesRiego}
-                                    onChange={handleInputChange}
-                                    className={errors.estadoCanalesRiego ? 'input-styled input-error' : 'input-styled'}
-                                    style={{ transform: 'scale(1.2)', marginLeft: '40px', marginTop:'10px' }}
-                                />
-                            </Col>
-                            <FormFeedback>{errors.estadoCanalesRiego}</FormFeedback>
-                        </FormGroup>
-                    </div>
+    <div className="col-sm-4" style={{ marginRight: "10px" }}>
+      <FormGroup row style={{ display: 'flex' }}>
+        <Label for="estadoCanalesRiego" className="input-label" style={{ width: '100%', textAlign: 'left', fontSize: '1.25rem' }}>
+          Obstrucción en Canales de Riego
+        </Label>
+        <Col>
+          <Input
+            type="checkbox"
+            id="estadoCanalesRiego"
+            name="estadoCanalesRiego"
+            checked={formData.estadoCanalesRiego}
+            onChange={handleInputChange}
+            className={errors.estadoCanalesRiego ? 'input-styled input-error' : 'input-styled'}
+            style={{ transform: 'scale(1.2)', marginLeft: '40px', marginTop: '10px' }}
+          />
+        </Col>
+        <FormFeedback>{errors.estadoCanalesRiego}</FormFeedback>
+      </FormGroup>
 
-                </div>
+      {formData.estadoCanalesRiego && (
+        <>
+          <FormGroup row>
+            <Label for="canalesalerta" sm={4} className="input-label">
+              Rango de alertas de Obstrucción en Canales de Riego:
+            </Label>
+            <Col sm={8}>
+              <select
+                className="custom-select"
+                id="canalesalerta"
+                value={formData.canalesalerta}
+                onChange={handleInputChange}
+                name="canalesalerta"
+              >
+                <option key="default-resultado" value="">Seleccione...</option>
+                <option key="bajo" value="Bajo">Bajo</option>
+                <option key="medio" value="Medio">Medio</option>
+                <option key="alto" value="Alto">Alto</option>
+              </select>
+              {errors.canalesalerta && <FormFeedback>{errors.canalesalerta}</FormFeedback>}
+            </Col>
+          </FormGroup>
+          <FormGroup row>
+            <Label for="canalesdetalles" sm={4} className="input-label">
+              Detalles de Obstrucción en Canales de Riego:
+            </Label>
+            <Col sm={8}>
+              <Input
+                type="text"
+                id="canalesdetalles"
+                name="canalesdetalles"
+                value={formData.canalesdetalles}
+                onChange={handleInputChange}
+                className={errors.canalesdetalles ? 'input-styled input-error' : 'input-styled'}
+                placeholder="Detalles"
+              />
+              <FormFeedback>{errors.canalesdetalles}</FormFeedback>
+            </Col>
+          </FormGroup>
+        </>
+      )}
+    </div>
 
-                <FormGroup row>
-                    <Col sm={{ size: 10, offset: 2 }}>
-                        {/* Agregar aquí el botón de cancelar proporcionado por el modal */}
-                        <Button onClick={handleSubmit} className="btn-styled">Guardar</Button>
-                    </Col>
-                </FormGroup>
-            </div>
+    <div className="col-sm-4" style={{ marginRight: "10px" }}>
+      <FormGroup row style={{ display: 'flex' }}>
+        <Label for="estadoTuberiasYAccesorios" className="input-label" style={{ width: '100%', textAlign: 'left', fontSize: '1.25rem' }}>
+          Fugas en el Sistema de Riego
+        </Label>
+        <Col>
+          <Input
+            type="checkbox"
+            id="estadoTuberiasYAccesorios"
+            name="estadoTuberiasYAccesorios"
+            checked={formData.estadoTuberiasYAccesorios}
+            onChange={handleInputChange}
+            className={errors.estadoTuberiasYAccesorios ? 'input-styled input-error' : 'input-styled'}
+            style={{ transform: 'scale(1.2)', marginLeft: '40px', marginTop: '10px' }}
+          />
+        </Col>
+        <FormFeedback>{errors.estadoTuberiasYAccesorios}</FormFeedback>
+      </FormGroup>
+
+      {formData.estadoTuberiasYAccesorios && (
+        <>
+          <FormGroup row>
+            <Label for="fugasalerta" sm={4} className="input-label">
+              Rango de alertas Fugas en el Sistema de Riego:
+            </Label>
+            <Col sm={8}>
+              <select
+                className="custom-select"
+                id="fugasalerta"
+                value={formData.fugasalerta}
+                onChange={handleInputChange}
+                name="fugasalerta"
+              >
+                <option key="default-resultado" value="">Seleccione...</option>
+                <option key="bajo" value="Bajo">Bajo</option>
+                <option key="medio" value="Medio">Medio</option>
+                <option key="alto" value="Alto">Alto</option>
+              </select>
+              {errors.fugasalerta && <FormFeedback>{errors.fugasalerta}</FormFeedback>}
+            </Col>
+          </FormGroup>
+          <FormGroup row>
+            <Label for="fugasdetalles" sm={4} className="input-label">
+              Detalles Fugas en el Sistema de Riego:
+            </Label>
+            <Col sm={8}>
+              <Input
+                type="text"
+                id="fugasdetalles"
+                name="fugasdetalles"
+                value={formData.fugasdetalles}
+                onChange={handleInputChange}
+                className={errors.fugasdetalles ? 'input-styled input-error' : 'input-styled'}
+                placeholder="Detalles"
+              />
+              <FormFeedback>{errors.fugasdetalles}</FormFeedback>
+            </Col>
+          </FormGroup>
+        </>
+      )}
+    </div>
+  </div>
+        <FormGroup row>
+            <Col sm={{ size: 10, offset: 2 }}>
+                {/* Agregar aquí el botón de cancelar proporcionado por el modal */}
+                <button onClick={handlePreviousStep} className='btn-styled-danger'>Anterior</button>
+                <Button onClick={handleSubmit} className="btn-styled">Guardar</Button>
+            </Col>
+        </FormGroup>
+    </div>
+)}
 
 
         </div>

@@ -21,7 +21,7 @@ interface RiesgoSeleccionado {
     accionesCorrectivas: string,
     observaciones: string,
     onEdit?: () => void; // Hacer onEdit opcional agregando "?"
-}
+}   
 interface Documento {
     idDocumento: number;
     documento: string;
@@ -131,8 +131,8 @@ const EditarRiesgoNatural: React.FC<RiesgoSeleccionado> = ({
     };
 
     // Obtener las fincas al cargar la página
-    useEffect(() => {
-        const obtenerFincas = async () => {
+    useEffect(() => { 
+        const obtenerFincas = async () => { 
             try {
                 const idEmpresaString = localStorage.getItem('empresaUsuario');
                 const identificacionString = localStorage.getItem('identificacionUsuario');
@@ -359,7 +359,7 @@ const EditarRiesgoNatural: React.FC<RiesgoSeleccionado> = ({
 
 
                         const resultadoDocumento = await InsertarDocumentacionRiesgoNatural(formDataDocument)
-
+                        
                         if (resultadoDocumento.indicador !== 1) {
                             errorEnviandoArchivos = true; // Marcar que hubo un error
                         }
