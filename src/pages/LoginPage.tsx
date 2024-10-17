@@ -13,8 +13,9 @@ import { useNavigate } from 'react-router-dom';
 import { clearSessionStorage } from '../utilities/SessionStorageUtility.tsx';
 import { PrivateRoutes, PublicRoutes } from '../models/routes.ts';
 import CrearCuentaUsuario from '../components/crearcuentausuario/CrearCuentaUsuario.tsx';
-import { IoLockClosed, IoLogIn, IoPerson} from 'react-icons/io5';
-
+import { IoLanguageSharp, IoLockClosed, IoLogIn, IoPerson} from 'react-icons/io5';
+import { useTranslation } from 'react-i18next';
+import LanguageSelector from '../components/languageSelector/LanguageSelector.tsx';
 /**
  * Interfaz para el estado del formulario de inicio de sesión.
  */
@@ -50,26 +51,26 @@ const FormularioInicioSesion: React.FC<{
     }
   }, []);
 
-
+  const { t } = useTranslation();  // Hook para acceder a las traducciones
   const [empresaUsuario, setEmpresaUsuario] = useState<string>(() => localStorage.getItem('empresaUsuario') || '');
 
   return (
     <>
     {sessionExpired && <p style={{ color: 'red', fontSize:15}}>Tu sesión ha expirado. Por favor, inicia sesión nuevamente.</p>}
       <div className="form-header">
-        <h2>Iniciar Sesión</h2>
-        <p>Inicia sesión en tu cuenta</p>
+        <h2>{t('login.title')}</h2>
+        <p>{t('login.sub_title')}</p>
       </div>
       <form onSubmit={handleSubmit}>
         <FormGroup row>
-            <Label style={{display: 'flex', alignItems: 'center', flexDirection: 'row' }} for="usuario" sm={2} className="input-label"><IoPerson size={20} style={{marginRight: '1%'}}/>Usuario</Label>
+            <Label style={{display: 'flex', alignItems: 'center', flexDirection: 'row' }} for="usuario" sm={2} className="input-label"><IoPerson size={20} style={{marginRight: '1%'}}/>{t('login.user')}</Label>
           <Col sm={12}>
             <Input
               type="text"
               id="usuario"
               name="usuario"
               value={formData.usuario}
-              placeholder="Identificación o correo"
+              placeholder={t('login.placeholder_user')}
               onChange={handleInputChange}
               onBlur={() => handleInputBlur('usuario')} // Llama a handleInputBlur cuando se dispara el evento onBlur
               className={errors.usuario ? 'input-styled input-error' : 'input-styled'}
@@ -79,13 +80,13 @@ const FormularioInicioSesion: React.FC<{
           </Col>
         </FormGroup>
         <FormGroup row>
-          <Label style={{display: 'flex', alignItems: 'center', flexDirection: 'row' }} for="contrasena" sm={2} className="input-label"><IoLockClosed size={20} style={{marginRight: '1%'}}/>Contraseña</Label>
+          <Label style={{display: 'flex', alignItems: 'center', flexDirection: 'row' }} for="contrasena" sm={2} className="input-label"><IoLockClosed size={20} style={{marginRight: '1%'}}/>{t('login.password')}</Label>
           <Col sm={12}>
             <Input
               type="password"
               id="contrasena"
               name="contrasena"
-              placeholder='Tu contraseña'
+              placeholder={t('login.placeholder_password')}
               value={formData.contrasena}
               onChange={handleInputChange}
               onBlur={() => handleInputBlur('contrasena')} // Llama a handleInputBlur cuando se dispara el evento onBlur
@@ -95,8 +96,12 @@ const FormularioInicioSesion: React.FC<{
           </Col>
           <FormFeedback>{errors.contrasena}</FormFeedback>
         </FormGroup>
+        <div className='botonesN' style={{marginBottom:"10%"}}>
+        <Label style={{display: 'flex', alignItems: 'center', flexDirection: 'row', marginBottom: '5%'}} for="language" sm={2} className="input-label"><IoLanguageSharp size={20} style={{marginRight: '1%'}}/>{t('login.language')}</Label>
+        <LanguageSelector />
+        </div>
         <div className='botonesN'>
-            <Button type="submit" color="primary" className="btn-styled"><IoLogIn size={20} style={{marginRight: '5%'}}/>Iniciar sesión</Button>
+            <Button type="submit" color="primary" className="btn-styled"><IoLogIn size={20} style={{marginRight: '5%'}}/>{t('login.submit_button')}</Button>
         </div>
       </form>
       {/* boton para crear cuenta */}
@@ -280,6 +285,7 @@ const Login: React.FC = () => {
   };
 
   return (
+    
     <div className={`container ${isLoggedIn ? '' : 'login-bg'}`}>
       <div className="container-lg">
         <div className="form-container">

@@ -77,6 +77,10 @@ function App() {
           <RoutesWithNotFound>
             {/* Ruta por defecto redirige a la ruta privada */}
             <Route path="/" element={<Navigate to={PrivateRoutes.PRIVATE} />} />
+                  {/* Agrega el selector de idioma */}
+
+            
+
             {/* Ruta pública para el inicio de sesión */}
             <Route path={PublicRoutes.LOGIN} element={<Login />} />
 

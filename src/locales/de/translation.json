@@ -1,0 +1,12 @@
+{
+  "login": {
+    "title": "Anmelden",
+    "sub_title": "Melde dich bei deinem Konto an",
+    "user": "Benutzer",
+    "placeholder_user": "Benutzername oder E-Mail",
+    "password": "Passwort",
+    "placeholder_password": "Dein Passwort",
+    "submit_button": "Anmelden",
+    "language": "Sprache"
+  }
+}

@@ -9,6 +9,7 @@ import { ObtenerFincas } from '../../servicios/ServicioFincas';
 import { ObtenerParcelas } from '../../servicios/ServicioParcelas';
 import { ObtenerMedicionesSensor } from '../../servicios/ServicioMedicionesSensor';
 import { ObtenerUsuariosPorEmpresa } from '../../servicios/ServicioUsuario';
+import LanguageSelector from '../languageSelector/LanguageSelector';
 
 interface Notificacion {
     nombreFinca: ReactNode;
@@ -101,6 +102,10 @@ const Topbar: React.FC = () => {
     return (
         <div className="top-bar">
             <div className="user-info">
+            <div style={{display:"inline-flex",justifyContent:"center", alignItems:'center'}}>
+            <div className="user-name">Idioma</div>
+            <LanguageSelector /></div>
+            
                 <div className="notifications">
                     <FaRegBell onClick={toggleNotifications} />
                     {notifications.length > 0 && (

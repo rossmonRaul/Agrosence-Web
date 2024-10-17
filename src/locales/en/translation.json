@@ -1,0 +1,12 @@
+{
+    "login": {
+      "title": "Login",
+      "sub_title": "Login to your account",
+      "user": "User",
+      "placeholder_user": "ID or email",
+      "password": "Password",
+      "placeholder_password": "Your Password",
+      "submit_button": "Log In",
+      "language":"language"
+    }
+}
